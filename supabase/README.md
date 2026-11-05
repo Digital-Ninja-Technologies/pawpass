@@ -4,14 +4,17 @@ Database schema, row level security, storage rules and seed data for PawPass.
 
 ## Layout
 
-| Path                                               | What it holds                                                                           |
-| -------------------------------------------------- | --------------------------------------------------------------------------------------- |
-| `migrations/20261105100000_core_tables.sql`        | All tables from `docs/data-model.md`, plus the single row `settings` table              |
-| `migrations/20261105110000_functions_triggers.sql` | RLS helper functions (schema `private`), `updated_at`, guards, lost alert defaults      |
-| `migrations/20261105120000_rls.sql`                | Row Level Security policies, column grants and the `public_profiles` view               |
-| `migrations/20261105130000_storage_realtime.sql`   | Storage buckets and policies, realtime publication                                      |
-| `seed.sql`                                         | Sample data from the designs (Tolu, Bingo, Mimi and the three partners). Local dev only |
-| `tests/rls.test.sql`                               | Plain SQL tests for the privacy and business rules                                      |
+| Path                                               | What it holds                                                                                |
+| -------------------------------------------------- | -------------------------------------------------------------------------------------------- |
+| `migrations/20261105100000_core_tables.sql`        | All tables from `docs/data-model.md`, plus the single row `settings` table                   |
+| `migrations/20261105110000_functions_triggers.sql` | RLS helper functions (schema `private`), `updated_at`, guards, lost alert defaults           |
+| `migrations/20261105120000_rls.sql`                | Row Level Security policies, column grants and the `public_profiles` view                    |
+| `migrations/20261105130000_storage_realtime.sql`   | Storage buckets and policies, realtime publication                                           |
+| `migrations/20261105140000_admin_console.sql`      | Staff read views (`admin_*_v`) and audited write functions (`admin_*`) for the admin console |
+| `migrations/20261105150000_waitlist.sql`           | Public waitlist table for the landing page                                                   |
+| `seed.sql`                                         | Sample data from the designs (Tolu, Bingo, Mimi and the three partners). Local dev only      |
+| `tests/rls.test.sql`                               | Plain SQL tests for the privacy and business rules                                           |
+| `tests/admin.test.sql`                             | Tests for the admin functions: roles, state changes, audit trail, invites                    |
 
 ## How access works
 
@@ -28,6 +31,14 @@ Database schema, row level security, storage rules and seed data for PawPass.
 - Phone numbers live in `profiles`, which is readable by the owner only. Other users read
   `public_profiles`, which has no phone column.
 - Business rules (commission, escrow fee, deposit, windows, radius, payout day) are in `settings`.
+
+## Admin console access
+
+- Staff read through views with `security_invoker`, so each role sees only what RLS allows it.
+- Staff write only through `admin_*` functions. Each checks the role, changes the data and writes `audit_log`.
+  The web app uses the signed in user's session and never needs the service role key.
+- Reviewer notes live in `partner_reviews` (staff only), not on `partner_accounts`, because partner owners can read their own row.
+- Suspending a user sets `auth.users.banned_until`, flags the profile, suspends their partner accounts and removes live listings.
 
 ## Not done yet
 
