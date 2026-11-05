@@ -1,0 +1,366 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>PawPass · download the app</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700;12..96,800&amp;family=Plus+Jakarta+Sans:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0}
+a{color:#0B5650}a:hover{color:#0E6B63}
+@keyframes pp-float{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
+@keyframes pp-float2{0%,100%{transform:translateY(0) rotate(-3deg)}50%{transform:translateY(8px) rotate(2deg)}}
+@keyframes pp-marquee{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+@keyframes pp-wag{0%,100%{transform:rotate(-8deg)}50%{transform:rotate(8deg)}}
+@keyframes pp-pop{0%{transform:scale(.92);opacity:0}100%{transform:scale(1);opacity:1}}
+@keyframes pp-ping{0%{transform:scale(.6);opacity:.7}100%{transform:scale(2.2);opacity:0}}
+.pp-float{animation:pp-float 5s ease-in-out infinite}
+.pp-float2{animation:pp-float2 6s ease-in-out infinite}
+.pp-marquee{animation:pp-marquee 28s linear infinite}
+.pp-wag{animation:pp-wag 1.6s ease-in-out infinite;transform-origin:50% 90%}
+.pp-pop{animation:pp-pop .35s ease-out both}
+.pp-ping{animation:pp-ping 1.8s ease-out infinite}
+.pp-burger{display:none}
+@container pp (max-width: 760px){.pp-navlinks{display:none !important}.pp-burger{display:flex !important}}
+@container pp (min-width: 761px){.pp-mobilemenu{display:none !important}}
+@media (prefers-reduced-motion: reduce){.pp-float,.pp-float2,.pp-marquee,.pp-wag,.pp-pop,.pp-ping{animation:none}}
+</style>
+</helmet>
+<div style="container-type: inline-size; container-name: pp; background: #FFF8F1; font-family: 'Plus Jakarta Sans', system-ui, sans-serif; color: #1F1A17; overflow: hidden">
+
+<header style="max-width: 1200px; margin: 0 auto; padding: 20px 24px; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 16px">
+<a href="#top" style="display: flex; align-items: center; gap: 10px; text-decoration: none; color: #1F1A17">
+<span aria-hidden="true" style="width: 40px; height: 40px; border-radius: 12px; background: #0E6B63; display: flex; align-items: center; justify-content: center"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="1.8"><circle cx="7" cy="10" r="2"></circle><circle cx="17" cy="10" r="2"></circle><circle cx="10" cy="6" r="2"></circle><circle cx="14" cy="6" r="2"></circle><path d="M12 12c-3 0-5 3.5-5 5.5S9 20 12 20s5-.5 5-2.5S15 12 12 12z"></path></svg></span>
+<span style="font-family: 'Bricolage Grotesque', sans-serif; font-weight: 800; font-size: 22px">PawPass</span>
+</a>
+<nav class="pp-navlinks" aria-label="Main" style="display: flex; flex-wrap: wrap; align-items: center; gap: 6px; font-size: 15px; font-weight: 600">
+<a href="#features" style="color: #1F1A17; text-decoration: none; padding: 10px 12px">Features</a>
+<a href="#lost" style="color: #1F1A17; text-decoration: none; padding: 10px 12px">Lost &amp; found</a>
+<a href="#partners" style="color: #1F1A17; text-decoration: none; padding: 10px 12px">For vets &amp; breeders</a>
+<a href="#faq" style="color: #1F1A17; text-decoration: none; padding: 10px 12px">FAQ</a>
+<a href="#download" style="margin-left: 6px; height: 44px; padding: 0 20px; border-radius: 22px; background: #1F1A17; color: #FFFFFF; display: flex; align-items: center; text-decoration: none; font-weight: 700">Get the app</a>
+</nav>
+<button class="pp-burger" onClick="{{ toggleMenu }}" aria-label="{{ menuLabel }}" aria-expanded="{{ menuOpen }}" aria-controls="pp-mobile-menu" style="width: 48px; height: 48px; border-radius: 24px; border: none; background: {{ burgerBg }}; color: {{ burgerFg }}; align-items: center; justify-content: center; cursor: pointer; padding: 0">
+<sc-if value="{{ menuClosed }}" hint-placeholder-val="{{ true }}"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"></path></svg></sc-if>
+<sc-if value="{{ menuOpen }}"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"></path></svg></sc-if>
+</button>
+</header>
+<sc-if value="{{ menuOpen }}">
+<nav id="pp-mobile-menu" class="pp-mobilemenu pp-pop" aria-label="Mobile" style="margin: 0 16px 16px; background: #FFFFFF; border: 1px solid #EDE3D9; border-radius: 24px; padding: 8px; display: flex; flex-direction: column; box-shadow: 0 16px 40px rgba(31,26,23,0.12)">
+<a href="#features" onClick="{{ closeMenu }}" style="min-height: 52px; padding: 0 16px; display: flex; align-items: center; border-radius: 16px; color: #1F1A17; text-decoration: none; font-size: 17px; font-weight: 700">Features</a>
+<a href="#lost" onClick="{{ closeMenu }}" style="min-height: 52px; padding: 0 16px; display: flex; align-items: center; border-radius: 16px; color: #1F1A17; text-decoration: none; font-size: 17px; font-weight: 700">Lost &amp; found</a>
+<a href="#partners" onClick="{{ closeMenu }}" style="min-height: 52px; padding: 0 16px; display: flex; align-items: center; border-radius: 16px; color: #1F1A17; text-decoration: none; font-size: 17px; font-weight: 700">For vets &amp; breeders</a>
+<a href="#faq" onClick="{{ closeMenu }}" style="min-height: 52px; padding: 0 16px; display: flex; align-items: center; border-radius: 16px; color: #1F1A17; text-decoration: none; font-size: 17px; font-weight: 700">FAQ</a>
+<a href="#download" onClick="{{ closeMenu }}" style="margin: 8px; height: 52px; border-radius: 26px; background: #0E6B63; color: #FFFFFF; display: flex; align-items: center; justify-content: center; text-decoration: none; font-size: 16px; font-weight: 700">Get the app</a>
+</nav>
+</sc-if>
+
+<section id="top" style="max-width: 1200px; margin: 0 auto; padding: 32px 24px 64px; display: flex; flex-wrap: wrap; align-items: center; gap: 48px">
+<div style="flex: 1 1 460px; min-width: 0; display: flex; flex-direction: column; gap: 22px">
+<span style="align-self: flex-start; display: flex; align-items: center; gap: 8px; padding: 8px 14px; border-radius: 20px; background: #FFEBD9; color: #9A3F0F; font-size: 13px; font-weight: 700"><span class="pp-wag" aria-hidden="true" style="display: inline-flex"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><circle cx="6" cy="10" r="2.2"></circle><circle cx="18" cy="10" r="2.2"></circle><circle cx="9.5" cy="5.5" r="2.2"></circle><circle cx="14.5" cy="5.5" r="2.2"></circle><path d="M12 11.5c-3.2 0-5.5 3.6-5.5 5.8S9 20.5 12 20.5s5.5-1 5.5-3.2-2.3-5.8-5.5-5.8z"></path></svg></span>Made in Lagos, for pets everywhere</span>
+<h1 style="margin: 0; font-family: 'Bricolage Grotesque', sans-serif; font-size: clamp(2.6rem, 5vw, 4.4rem); line-height: 1.02; font-weight: 800; letter-spacing: -0.02em">Every pet's life,<br><span style="color: #0E6B63">in one place.</span></h1>
+<p style="margin: 0; font-size: 1.15rem; line-height: 1.55; color: #4A433E; max-width: 540px">Vaccine reminders, trusted vets and groomers, lost pet alerts and verified breeders. One free app for every dog, cat and furry family member.</p>
+
+<div style="display: flex; flex-direction: column; gap: 10px">
+<span id="pet-pick" style="font-size: 14px; font-weight: 700; color: #4A433E">Who's your best friend?</span>
+<div role="radiogroup" aria-labelledby="pet-pick" style="display: flex; flex-wrap: wrap; gap: 10px">
+<sc-for list="{{ pets }}" as="p" hint-placeholder-count="3">
+<button role="radio" aria-checked="{{ p.checked }}" onClick="{{ p.pick }}" style="height: 48px; padding: 0 20px; border-radius: 24px; border: 2px solid {{ p.border }}; background: {{ p.bg }}; color: {{ p.fg }}; font: 700 15px 'Plus Jakarta Sans', sans-serif; cursor: pointer">{{ p.label }}</button>
+</sc-for>
+</div>
+</div>
+
+<div id="download-hero" style="display: flex; flex-wrap: wrap; align-items: center; gap: 12px">
+<a href="#download" style="height: 56px; padding: 0 20px; border-radius: 16px; background: #1F1A17; color: #FFFFFF; display: flex; align-items: center; gap: 12px; text-decoration: none"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="6" y="2" width="12" height="20" rx="3"></rect><path d="M11 18h2"></path></svg><span style="display: flex; flex-direction: column; line-height: 1.1"><span style="font-size: 11px; opacity: 0.8">Download for</span><span style="font-size: 17px; font-weight: 700">iPhone</span></span></a>
+<a href="#download" style="height: 56px; padding: 0 20px; border-radius: 16px; background: #1F1A17; color: #FFFFFF; display: flex; align-items: center; gap: 12px; text-decoration: none"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 3l14 9-14 9z"></path></svg><span style="display: flex; flex-direction: column; line-height: 1.1"><span style="font-size: 11px; opacity: 0.8">Get it for</span><span style="font-size: 17px; font-weight: 700">Android</span></span></a>
+<span style="font-size: 13px; color: #6B625B; font-weight: 600">Free · iOS and Android</span>
+</div>
+</div>
+
+<div style="flex: 1 1 400px; min-width: 0; display: flex; justify-content: center; position: relative; min-height: 640px">
+<span aria-hidden="true" style="position: absolute; width: 440px; height: 440px; border-radius: 220px; background: #E3F1EE; top: 90px"></span>
+<span aria-hidden="true" style="position: absolute; width: 180px; height: 180px; border-radius: 90px; background: #FFEBD9; top: 20px; right: 20px"></span>
+
+<div class="pp-float" style="position: relative; width: 300px; height: 620px; border-radius: 46px; background: #1F1A17; padding: 12px; box-sizing: border-box; box-shadow: 0 30px 60px rgba(31,26,23,0.22)">
+<div style="width: 100%; height: 100%; border-radius: 36px; background: #FFF8F1; overflow: hidden; padding: 36px 16px 16px; box-sizing: border-box; display: flex; flex-direction: column; gap: 12px">
+<p style="margin: 0; font-size: 11px; color: #6B625B">Good morning, Tolu</p>
+<div style="background: #FFFFFF; border: 1px solid #EDE3D9; border-radius: 20px; padding: 12px; display: flex; gap: 12px; align-items: center">
+<sc-if value="{{ isDog }}" hint-placeholder-val="{{ true }}"><img src="../assets/bingo.jpg" alt="Bingo the Boerboel" style="width: 64px; height: 64px; border-radius: 16px; object-fit: cover; display: block"></sc-if>
+<sc-if value="{{ isCat }}"><img src="../assets/mimi.jpg" alt="Mimi the cat" style="width: 64px; height: 64px; border-radius: 16px; object-fit: cover; display: block"></sc-if>
+<sc-if value="{{ isBoth }}"><span style="width: 64px; height: 64px; position: relative; display: block; flex-shrink: 0"><img src="../assets/bingo.jpg" alt="Bingo" style="position: absolute; left: 0; top: 0; width: 44px; height: 44px; border-radius: 14px; object-fit: cover; border: 2px solid #FFFFFF"><img src="../assets/mimi.jpg" alt="Mimi" style="position: absolute; right: 0; bottom: 0; width: 44px; height: 44px; border-radius: 14px; object-fit: cover; border: 2px solid #FFFFFF"></span></sc-if>
+<span style="display: flex; flex-direction: column; gap: 4px"><span style="font-family: 'Bricolage Grotesque', sans-serif; font-size: 20px; font-weight: 700">{{ petName }}</span><span style="font-size: 11px; color: #6B625B">{{ petBreed }}</span><span style="align-self: flex-start; font-size: 10px; font-weight: 700; color: #0B5650; background: #E3F1EE; padding: 3px 8px; border-radius: 8px">✓ Passport up to date</span></span>
+</div>
+<div class="pp-pop" style="background: #FFEBD9; border-radius: 18px; padding: 12px; display: flex; flex-direction: column; gap: 8px">
+<span style="font-size: 10px; font-weight: 700; color: #9A3F0F; letter-spacing: 0.05em">{{ reminderWhen }}</span>
+<span style="font-size: 14px; font-weight: 700">{{ reminderText }}</span>
+<span style="height: 34px; border-radius: 17px; background: #0E6B63; color: #FFFFFF; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 700">Book a vet</span>
+</div>
+<div style="display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 6px; text-align: center; font-size: 9px; font-weight: 600">
+<span style="display: flex; flex-direction: column; gap: 4px; align-items: center"><span style="width: 44px; height: 44px; border-radius: 14px; background: #E3F1EE"></span>Vet</span>
+<span style="display: flex; flex-direction: column; gap: 4px; align-items: center"><span style="width: 44px; height: 44px; border-radius: 14px; background: #F1E8FB"></span>Grooming</span>
+<span style="display: flex; flex-direction: column; gap: 4px; align-items: center"><span style="width: 44px; height: 44px; border-radius: 14px; background: #FFEBD9"></span>Lost</span>
+<span style="display: flex; flex-direction: column; gap: 4px; align-items: center"><span style="width: 44px; height: 44px; border-radius: 14px; background: #DCE7F7"></span>Adopt</span>
+</div>
+<div style="background: #FDEAE7; color: #A3261B; border-radius: 16px; padding: 10px 12px; font-size: 12px; font-weight: 700">Emergency vet · open now near you</div>
+<img src="../assets/clinic.jpg" alt="A vet examining a dog" style="width: 100%; height: 120px; border-radius: 16px; object-fit: cover; display: block">
+</div>
+</div>
+
+<div class="pp-float2" style="position: absolute; left: 0; top: 150px; background: #FFFFFF; border-radius: 16px; padding: 10px 14px; box-shadow: 0 12px 30px rgba(31,26,23,0.14); display: flex; align-items: center; gap: 8px; font-size: 13px; font-weight: 700"><span style="width: 26px; height: 26px; border-radius: 13px; background: #E3F1EE; color: #0B5650; display: flex; align-items: center; justify-content: center">✓</span>Vet verified</div>
+<div class="pp-float" style="position: absolute; right: 0; top: 330px; background: #FFFFFF; border-radius: 16px; padding: 10px 14px; box-shadow: 0 12px 30px rgba(31,26,23,0.14); display: flex; align-items: center; gap: 8px; font-size: 13px; font-weight: 700"><span style="width: 26px; height: 26px; border-radius: 13px; background: #FFEBD9; color: #9A3F0F; display: flex; align-items: center; justify-content: center">₦</span>Payment held safely</div>
+<div class="pp-float2" style="position: absolute; left: 20px; bottom: 60px; background: #1F1A17; color: #FFFFFF; border-radius: 16px; padding: 10px 14px; box-shadow: 0 12px 30px rgba(31,26,23,0.2); display: flex; align-items: center; gap: 10px; font-size: 13px; font-weight: 700"><span style="position: relative; width: 12px; height: 12px"><span class="pp-ping" style="position: absolute; inset: 0; border-radius: 6px; background: #E0662A"></span><span style="position: absolute; inset: 2px; border-radius: 4px; background: #E0662A"></span></span>Lost alert sent within 5 km</div>
+</div>
+</section>
+
+<section aria-label="Cities we serve" style="background: #0E6B63; color: #FFFFFF; padding: 18px 0; overflow: hidden">
+<div class="pp-marquee" style="display: flex; gap: 40px; width: max-content; font-family: 'Bricolage Grotesque', sans-serif; font-size: 24px; font-weight: 700; white-space: nowrap">
+<span>Lagos</span><span aria-hidden="true" style="display: inline-flex; align-items: center; color: #F3D9C4"><svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><circle cx="6" cy="10" r="2.2"></circle><circle cx="18" cy="10" r="2.2"></circle><circle cx="9.5" cy="5.5" r="2.2"></circle><circle cx="14.5" cy="5.5" r="2.2"></circle><path d="M12 11.5c-3.2 0-5.5 3.6-5.5 5.8S9 20.5 12 20.5s5.5-1 5.5-3.2-2.3-5.8-5.5-5.8z"></path></svg></span><span>Abuja</span><span aria-hidden="true" style="display: inline-flex; align-items: center; color: #F3D9C4"><svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><circle cx="6" cy="10" r="2.2"></circle><circle cx="18" cy="10" r="2.2"></circle><circle cx="9.5" cy="5.5" r="2.2"></circle><circle cx="14.5" cy="5.5" r="2.2"></circle><path d="M12 11.5c-3.2 0-5.5 3.6-5.5 5.8S9 20.5 12 20.5s5.5-1 5.5-3.2-2.3-5.8-5.5-5.8z"></path></svg></span><span>Port Harcourt</span><span aria-hidden="true" style="display: inline-flex; align-items: center; color: #F3D9C4"><svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><circle cx="6" cy="10" r="2.2"></circle><circle cx="18" cy="10" r="2.2"></circle><circle cx="9.5" cy="5.5" r="2.2"></circle><circle cx="14.5" cy="5.5" r="2.2"></circle><path d="M12 11.5c-3.2 0-5.5 3.6-5.5 5.8S9 20.5 12 20.5s5.5-1 5.5-3.2-2.3-5.8-5.5-5.8z"></path></svg></span><span>Ibadan</span><span aria-hidden="true" style="display: inline-flex; align-items: center; color: #F3D9C4"><svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><circle cx="6" cy="10" r="2.2"></circle><circle cx="18" cy="10" r="2.2"></circle><circle cx="9.5" cy="5.5" r="2.2"></circle><circle cx="14.5" cy="5.5" r="2.2"></circle><path d="M12 11.5c-3.2 0-5.5 3.6-5.5 5.8S9 20.5 12 20.5s5.5-1 5.5-3.2-2.3-5.8-5.5-5.8z"></path></svg></span><span>Enugu</span><span aria-hidden="true" style="display: inline-flex; align-items: center; color: #F3D9C4"><svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><circle cx="6" cy="10" r="2.2"></circle><circle cx="18" cy="10" r="2.2"></circle><circle cx="9.5" cy="5.5" r="2.2"></circle><circle cx="14.5" cy="5.5" r="2.2"></circle><path d="M12 11.5c-3.2 0-5.5 3.6-5.5 5.8S9 20.5 12 20.5s5.5-1 5.5-3.2-2.3-5.8-5.5-5.8z"></path></svg></span><span>Benin City</span><span aria-hidden="true" style="display: inline-flex; align-items: center; color: #F3D9C4"><svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><circle cx="6" cy="10" r="2.2"></circle><circle cx="18" cy="10" r="2.2"></circle><circle cx="9.5" cy="5.5" r="2.2"></circle><circle cx="14.5" cy="5.5" r="2.2"></circle><path d="M12 11.5c-3.2 0-5.5 3.6-5.5 5.8S9 20.5 12 20.5s5.5-1 5.5-3.2-2.3-5.8-5.5-5.8z"></path></svg></span><span>Kano</span><span aria-hidden="true" style="display: inline-flex; align-items: center; color: #F3D9C4"><svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><circle cx="6" cy="10" r="2.2"></circle><circle cx="18" cy="10" r="2.2"></circle><circle cx="9.5" cy="5.5" r="2.2"></circle><circle cx="14.5" cy="5.5" r="2.2"></circle><path d="M12 11.5c-3.2 0-5.5 3.6-5.5 5.8S9 20.5 12 20.5s5.5-1 5.5-3.2-2.3-5.8-5.5-5.8z"></path></svg></span><span>Abeokuta</span><span aria-hidden="true" style="display: inline-flex; align-items: center; color: #F3D9C4"><svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><circle cx="6" cy="10" r="2.2"></circle><circle cx="18" cy="10" r="2.2"></circle><circle cx="9.5" cy="5.5" r="2.2"></circle><circle cx="14.5" cy="5.5" r="2.2"></circle><path d="M12 11.5c-3.2 0-5.5 3.6-5.5 5.8S9 20.5 12 20.5s5.5-1 5.5-3.2-2.3-5.8-5.5-5.8z"></path></svg></span><span>Uyo</span><span aria-hidden="true" style="display: inline-flex; align-items: center; color: #F3D9C4"><svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><circle cx="6" cy="10" r="2.2"></circle><circle cx="18" cy="10" r="2.2"></circle><circle cx="9.5" cy="5.5" r="2.2"></circle><circle cx="14.5" cy="5.5" r="2.2"></circle><path d="M12 11.5c-3.2 0-5.5 3.6-5.5 5.8S9 20.5 12 20.5s5.5-1 5.5-3.2-2.3-5.8-5.5-5.8z"></path></svg></span><span>Kaduna</span><span aria-hidden="true" style="display: inline-flex; align-items: center; color: #F3D9C4"><svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><circle cx="6" cy="10" r="2.2"></circle><circle cx="18" cy="10" r="2.2"></circle><circle cx="9.5" cy="5.5" r="2.2"></circle><circle cx="14.5" cy="5.5" r="2.2"></circle><path d="M12 11.5c-3.2 0-5.5 3.6-5.5 5.8S9 20.5 12 20.5s5.5-1 5.5-3.2-2.3-5.8-5.5-5.8z"></path></svg></span>
+<span aria-hidden="true">Lagos</span><span aria-hidden="true" style="display: inline-flex; align-items: center; color: #F3D9C4"><svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><circle cx="6" cy="10" r="2.2"></circle><circle cx="18" cy="10" r="2.2"></circle><circle cx="9.5" cy="5.5" r="2.2"></circle><circle cx="14.5" cy="5.5" r="2.2"></circle><path d="M12 11.5c-3.2 0-5.5 3.6-5.5 5.8S9 20.5 12 20.5s5.5-1 5.5-3.2-2.3-5.8-5.5-5.8z"></path></svg></span><span aria-hidden="true">Abuja</span><span aria-hidden="true" style="display: inline-flex; align-items: center; color: #F3D9C4"><svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><circle cx="6" cy="10" r="2.2"></circle><circle cx="18" cy="10" r="2.2"></circle><circle cx="9.5" cy="5.5" r="2.2"></circle><circle cx="14.5" cy="5.5" r="2.2"></circle><path d="M12 11.5c-3.2 0-5.5 3.6-5.5 5.8S9 20.5 12 20.5s5.5-1 5.5-3.2-2.3-5.8-5.5-5.8z"></path></svg></span><span aria-hidden="true">Port Harcourt</span><span aria-hidden="true" style="display: inline-flex; align-items: center; color: #F3D9C4"><svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><circle cx="6" cy="10" r="2.2"></circle><circle cx="18" cy="10" r="2.2"></circle><circle cx="9.5" cy="5.5" r="2.2"></circle><circle cx="14.5" cy="5.5" r="2.2"></circle><path d="M12 11.5c-3.2 0-5.5 3.6-5.5 5.8S9 20.5 12 20.5s5.5-1 5.5-3.2-2.3-5.8-5.5-5.8z"></path></svg></span><span aria-hidden="true">Ibadan</span><span aria-hidden="true" style="display: inline-flex; align-items: center; color: #F3D9C4"><svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><circle cx="6" cy="10" r="2.2"></circle><circle cx="18" cy="10" r="2.2"></circle><circle cx="9.5" cy="5.5" r="2.2"></circle><circle cx="14.5" cy="5.5" r="2.2"></circle><path d="M12 11.5c-3.2 0-5.5 3.6-5.5 5.8S9 20.5 12 20.5s5.5-1 5.5-3.2-2.3-5.8-5.5-5.8z"></path></svg></span><span aria-hidden="true">Enugu</span><span aria-hidden="true" style="display: inline-flex; align-items: center; color: #F3D9C4"><svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><circle cx="6" cy="10" r="2.2"></circle><circle cx="18" cy="10" r="2.2"></circle><circle cx="9.5" cy="5.5" r="2.2"></circle><circle cx="14.5" cy="5.5" r="2.2"></circle><path d="M12 11.5c-3.2 0-5.5 3.6-5.5 5.8S9 20.5 12 20.5s5.5-1 5.5-3.2-2.3-5.8-5.5-5.8z"></path></svg></span><span aria-hidden="true">Benin City</span><span aria-hidden="true" style="display: inline-flex; align-items: center; color: #F3D9C4"><svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><circle cx="6" cy="10" r="2.2"></circle><circle cx="18" cy="10" r="2.2"></circle><circle cx="9.5" cy="5.5" r="2.2"></circle><circle cx="14.5" cy="5.5" r="2.2"></circle><path d="M12 11.5c-3.2 0-5.5 3.6-5.5 5.8S9 20.5 12 20.5s5.5-1 5.5-3.2-2.3-5.8-5.5-5.8z"></path></svg></span><span aria-hidden="true">Kano</span><span aria-hidden="true" style="display: inline-flex; align-items: center; color: #F3D9C4"><svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><circle cx="6" cy="10" r="2.2"></circle><circle cx="18" cy="10" r="2.2"></circle><circle cx="9.5" cy="5.5" r="2.2"></circle><circle cx="14.5" cy="5.5" r="2.2"></circle><path d="M12 11.5c-3.2 0-5.5 3.6-5.5 5.8S9 20.5 12 20.5s5.5-1 5.5-3.2-2.3-5.8-5.5-5.8z"></path></svg></span><span aria-hidden="true">Abeokuta</span><span aria-hidden="true" style="display: inline-flex; align-items: center; color: #F3D9C4"><svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><circle cx="6" cy="10" r="2.2"></circle><circle cx="18" cy="10" r="2.2"></circle><circle cx="9.5" cy="5.5" r="2.2"></circle><circle cx="14.5" cy="5.5" r="2.2"></circle><path d="M12 11.5c-3.2 0-5.5 3.6-5.5 5.8S9 20.5 12 20.5s5.5-1 5.5-3.2-2.3-5.8-5.5-5.8z"></path></svg></span><span aria-hidden="true">Uyo</span><span aria-hidden="true" style="display: inline-flex; align-items: center; color: #F3D9C4"><svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><circle cx="6" cy="10" r="2.2"></circle><circle cx="18" cy="10" r="2.2"></circle><circle cx="9.5" cy="5.5" r="2.2"></circle><circle cx="14.5" cy="5.5" r="2.2"></circle><path d="M12 11.5c-3.2 0-5.5 3.6-5.5 5.8S9 20.5 12 20.5s5.5-1 5.5-3.2-2.3-5.8-5.5-5.8z"></path></svg></span><span aria-hidden="true">Kaduna</span><span aria-hidden="true" style="display: inline-flex; align-items: center; color: #F3D9C4"><svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><circle cx="6" cy="10" r="2.2"></circle><circle cx="18" cy="10" r="2.2"></circle><circle cx="9.5" cy="5.5" r="2.2"></circle><circle cx="14.5" cy="5.5" r="2.2"></circle><path d="M12 11.5c-3.2 0-5.5 3.6-5.5 5.8S9 20.5 12 20.5s5.5-1 5.5-3.2-2.3-5.8-5.5-5.8z"></path></svg></span>
+</div>
+</section>
+
+<section style="max-width: 1200px; margin: 0 auto; padding: 88px 24px 48px; display: flex; flex-direction: column; gap: 32px">
+<h2 style="margin: 0; font-family: 'Bricolage Grotesque', sans-serif; font-size: clamp(2rem, 3.6vw, 3rem); font-weight: 800; max-width: 760px; line-height: 1.08; width: 668px">Pet parenting in Lagos and beyond, minus the stress.</h2>
+<div style="display: flex; flex-wrap: wrap; gap: 20px">
+<article style="flex: 1 1 300px; background: #FFFFFF; border: 1px solid #EDE3D9; border-radius: 24px; padding: 24px; display: flex; flex-direction: column; gap: 14px">
+<p style="margin: 0; font-size: 15px; color: #6B625B; text-decoration: line-through">"Where did I keep that vaccine card?"</p>
+<h3 style="margin: 0; font-size: 22px; font-weight: 700">Every record, in your phone</h3>
+<p style="margin: 0; font-size: 15px; line-height: 1.55; color: #4A433E">Snap the old paper card once. We set the reminders for boosters, deworming and flea treatment.</p>
+</article>
+<article style="flex: 1 1 300px; background: #FFFFFF; border: 1px solid #EDE3D9; border-radius: 24px; padding: 24px; display: flex; flex-direction: column; gap: 14px">
+<p style="margin: 0; font-size: 15px; color: #6B625B; text-decoration: line-through">"Which vet is open at this hour?"</p>
+<h3 style="margin: 0; font-size: 22px; font-weight: 700">Emergency vets, one tap</h3>
+<p style="margin: 0; font-size: 15px; line-height: 1.55; color: #4A433E">See clinics open near you right now, call them, and send your pet's history before you arrive.</p>
+</article>
+<article style="flex: 1 1 300px; background: #FFFFFF; border: 1px solid #EDE3D9; border-radius: 24px; padding: 24px; display: flex; flex-direction: column; gap: 14px">
+<p style="margin: 0; font-size: 15px; color: #6B625B; text-decoration: line-through">"Is this Instagram breeder legit?"</p>
+<h3 style="margin: 0; font-size: 22px; font-weight: 700">Verified breeders, safe payment</h3>
+<p style="margin: 0; font-size: 15px; line-height: 1.55; color: #4A433E">We check every breeder. Your money stays on hold until you meet your puppy and a vet checks them.</p>
+</article>
+</div>
+</section>
+
+<section id="features" style="max-width: 1200px; margin: 0 auto; padding: 48px 24px 88px; display: flex; flex-wrap: wrap; gap: 48px; align-items: center">
+<div style="flex: 1 1 460px; min-width: 0; display: flex; flex-direction: column; gap: 22px">
+<span style="font-size: 13px; font-weight: 800; letter-spacing: 0.08em; color: #9A3F0F">TAP TO EXPLORE</span>
+<h2 style="margin: 0; font-family: 'Bricolage Grotesque', sans-serif; font-size: clamp(2rem, 3.6vw, 3rem); font-weight: 800; line-height: 1.08">Four things PawPass does for you</h2>
+<div role="tablist" aria-label="Features" style="display: flex; flex-wrap: wrap; gap: 10px">
+<sc-for list="{{ tabs }}" as="t" hint-placeholder-count="4">
+<button role="tab" aria-selected="{{ t.selected }}" onClick="{{ t.pick }}" style="height: 48px; padding: 0 18px; border-radius: 24px; border: none; background: {{ t.bg }}; color: {{ t.fg }}; font: 700 15px 'Plus Jakarta Sans', sans-serif; cursor: pointer">{{ t.label }}</button>
+</sc-for>
+</div>
+<div class="pp-pop" style="display: flex; flex-direction: column; gap: 12px">
+<h3 style="margin: 0; font-size: 26px; font-weight: 700">{{ tab.title }}</h3>
+<p style="margin: 0; font-size: 16px; line-height: 1.6; color: #4A433E">{{ tab.body }}</p>
+<ul style="margin: 0; padding: 0; list-style: none; display: flex; flex-direction: column; gap: 10px">
+<sc-for list="{{ tab.points }}" as="pt" hint-placeholder-count="3">
+<li style="display: flex; gap: 10px; align-items: flex-start; font-size: 15px; font-weight: 600"><span aria-hidden="true" style="width: 22px; height: 22px; border-radius: 11px; background: #E3F1EE; color: #0B5650; display: flex; align-items: center; justify-content: center; flex-shrink: 0; font-size: 12px">✓</span>{{ pt }}</li>
+</sc-for>
+</ul>
+</div>
+</div>
+
+<div style="flex: 1 1 380px; min-width: 0; display: flex; justify-content: center">
+<div style="width: 300px; height: 560px; border-radius: 46px; background: #1F1A17; padding: 12px; box-sizing: border-box; box-shadow: 0 30px 60px rgba(31,26,23,0.18)">
+<div class="pp-pop" style="width: 100%; height: 100%; border-radius: 36px; background: #FFF8F1; overflow: hidden; padding: 32px 16px 16px; box-sizing: border-box; display: flex; flex-direction: column; gap: 10px">
+
+<sc-if value="{{ tabHealth }}" hint-placeholder-val="{{ true }}">
+<p style="margin: 0; font-family: 'Bricolage Grotesque', sans-serif; font-size: 20px; font-weight: 700">Bingo's Passport</p>
+<div style="background: #0E6B63; color: #FFFFFF; border-radius: 18px; padding: 12px; display: flex; gap: 10px; align-items: center"><img src="../assets/bingo.jpg" alt="Bingo" style="width: 48px; height: 48px; border-radius: 12px; object-fit: cover"><span style="font-size: 12px"><b style="font-size: 15px">Bingo</b><br>Boerboel · Tag PP-4821</span></div>
+<div style="background: #FFFFFF; border: 1px solid #EDE3D9; border-radius: 14px; padding: 10px 12px; font-size: 12px; display: flex; justify-content: space-between"><b>Rabies booster</b><span style="color: #9A3F0F; font-weight: 700">Due 12 Nov</span></div>
+<div style="background: #FFFFFF; border: 1px solid #EDE3D9; border-radius: 14px; padding: 10px 12px; font-size: 12px; display: flex; justify-content: space-between"><b>DHPP vaccine</b><span style="color: #0B5650; font-weight: 700">✓ Vet verified</span></div>
+<div style="background: #FFFFFF; border: 1px solid #EDE3D9; border-radius: 14px; padding: 10px 12px; font-size: 12px; display: flex; justify-content: space-between"><b>Deworming</b><span style="color: #6B625B">Done</span></div>
+<div style="margin-top: auto; height: 40px; border-radius: 20px; background: #1F1A17; color: #FFFFFF; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 700">Share with a vet (QR)</div>
+</sc-if>
+
+<sc-if value="{{ tabBook }}">
+<p style="margin: 0; font-family: 'Bricolage Grotesque', sans-serif; font-size: 20px; font-weight: 700">Book care</p>
+<img src="../assets/clinic.jpg" alt="Vet clinic" style="width: 100%; height: 110px; border-radius: 14px; object-fit: cover">
+<div style="font-size: 13px"><b>Paws &amp; Claws Vet Clinic</b><br><span style="color: #6B625B; font-size: 11px">★ 4.8 · 2.1 km · Verified</span></div>
+<div style="display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 6px; font-size: 11px; font-weight: 700; text-align: center"><span style="padding: 8px 0; border-radius: 10px; border: 1px solid #EDE3D9">3:00</span><span style="padding: 8px 0; border-radius: 10px; background: #E3F1EE; border: 2px solid #0E6B63">4:30</span><span style="padding: 8px 0; border-radius: 10px; border: 1px solid #EDE3D9">5:00</span><span style="padding: 8px 0; border-radius: 10px; border: 1px solid #EDE3D9">6:30</span></div>
+<div style="font-size: 11px; color: #0B5650; background: #E3F1EE; padding: 8px 10px; border-radius: 10px; font-weight: 600">Payment held until your visit is done</div>
+<div style="margin-top: auto; height: 40px; border-radius: 20px; background: #0E6B63; color: #FFFFFF; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 700">Pay ₦15,000 &amp; book</div>
+</sc-if>
+
+<sc-if value="{{ tabCommunity }}">
+<p style="margin: 0; font-family: 'Bricolage Grotesque', sans-serif; font-size: 20px; font-weight: 700">Community</p>
+<div style="background: #FFEBD9; border-radius: 14px; padding: 10px; display: flex; gap: 10px; align-items: center"><img src="../assets/bruno.jpg" alt="Bruno" style="width: 44px; height: 44px; border-radius: 10px; object-fit: cover"><span style="font-size: 11px"><b style="color: #9A3F0F">LOST NEAR YOU</b><br><b>Bruno</b> · Jack Russell</span></div>
+<div style="background: #FFFFFF; border: 1px solid #EDE3D9; border-radius: 16px; overflow: hidden"><img src="../assets/luna.jpg" alt="Luna the Persian cat" style="width: 100%; height: 170px; object-fit: cover; display: block"><p style="margin: 0; padding: 8px 10px; font-size: 11px"><b>Luna</b> has claimed the new sofa. ♥ 248</p></div>
+</sc-if>
+
+<sc-if value="{{ tabTrust }}">
+<p style="margin: 0; font-family: 'Bricolage Grotesque', sans-serif; font-size: 20px; font-weight: 700">Find a pet</p>
+<img src="../assets/duke.jpg" alt="Duke, a Boerboel puppy" style="width: 100%; height: 160px; border-radius: 14px; object-fit: cover">
+<div style="font-size: 13px; display: flex; justify-content: space-between"><b>Duke · 9 weeks</b><b>₦450,000</b></div>
+<div style="font-size: 11px; color: #0B5650; font-weight: 700">✓ Royal Paws Kennels · verified breeder</div>
+<div style="font-size: 11px; color: #4A433E; background: #F3EBE2; padding: 8px 10px; border-radius: 10px">Deposit → meet → 72 hour vet check → breeder paid</div>
+<div style="margin-top: auto; height: 40px; border-radius: 20px; background: #0E6B63; color: #FFFFFF; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 700">Pay deposit safely</div>
+</sc-if>
+
+</div>
+</div>
+</div>
+</section>
+
+<section id="lost" style="background: #1F1A17; color: #FFFFFF">
+<div style="max-width: 1200px; margin: 0 auto; padding: 88px 24px; display: flex; flex-wrap: wrap; gap: 48px; align-items: center">
+<div style="flex: 1 1 440px; min-width: 0; display: flex; flex-direction: column; gap: 18px">
+<span style="font-size: 13px; font-weight: 800; letter-spacing: 0.08em; color: #F3D9C4">LOST &amp; FOUND</span>
+<h2 style="margin: 0; font-family: 'Bricolage Grotesque', sans-serif; font-size: clamp(2rem, 3.6vw, 3rem); font-weight: 800; line-height: 1.08">If they ever wander off, the whole neighbourhood helps.</h2>
+<p style="margin: 0; font-size: 16px; line-height: 1.6; color: #E9E1D8">Report a lost pet and everyone within 5 km gets an alert with a photo. Anyone who scans the PawPass collar tag can reach you in the app. Your phone number stays private.</p>
+<p style="margin: 0; font-size: 14px; color: #CFC3B7; font-weight: 600">Try it: tap the collar tag.</p>
+</div>
+<div style="flex: 1 1 380px; min-width: 0; display: flex; flex-direction: column; align-items: center; gap: 20px">
+<button onClick="{{ toggleLost }}" aria-pressed="{{ lost }}" aria-label="Collar tag. Tap to switch lost mode" style="width: 160px; height: 160px; border-radius: 80px; border: 6px solid {{ tagRing }}; background: #FFF8F1; cursor: pointer; display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 4px; padding: 36px; box-sizing: border-box">
+<span style="background: #1F1A17"></span><span style="background: #1F1A17"></span><span></span><span style="background: #1F1A17"></span><span style="background: #1F1A17"></span>
+<span style="background: #1F1A17"></span><span></span><span style="background: #1F1A17"></span><span></span><span style="background: #1F1A17"></span>
+<span></span><span style="background: #1F1A17"></span><span style="background: #1F1A17"></span><span style="background: #1F1A17"></span><span></span>
+<span style="background: #1F1A17"></span><span></span><span style="background: #1F1A17"></span><span></span><span style="background: #1F1A17"></span>
+<span style="background: #1F1A17"></span><span style="background: #1F1A17"></span><span></span><span style="background: #1F1A17"></span><span style="background: #1F1A17"></span>
+</button>
+<sc-if value="{{ notLost }}" hint-placeholder-val="{{ true }}">
+<div class="pp-pop" style="width: 100%; max-width: 360px; background: #FFF8F1; color: #1F1A17; border-radius: 22px; padding: 16px; display: flex; gap: 12px; align-items: center">
+<img src="../assets/bingo.jpg" alt="Bingo" style="width: 56px; height: 56px; border-radius: 14px; object-fit: cover">
+<span style="display: flex; flex-direction: column; gap: 2px"><b style="font-size: 16px">Hi, I'm Bingo!</b><span style="font-size: 13px; color: #4A433E">I'm safe at home. Thanks for checking my tag.</span></span>
+</div>
+</sc-if>
+<sc-if value="{{ lost }}">
+<div class="pp-pop" style="width: 100%; max-width: 360px; background: #FFF8F1; color: #1F1A17; border-radius: 22px; padding: 16px; display: flex; flex-direction: column; gap: 12px">
+<span style="align-self: flex-start; font-size: 11px; font-weight: 800; color: #FFFFFF; background: #B4501C; padding: 4px 10px; border-radius: 10px">LOST MODE</span>
+<span style="display: flex; gap: 12px; align-items: center"><img src="../assets/bingo.jpg" alt="Bingo" style="width: 56px; height: 56px; border-radius: 14px; object-fit: cover"><span style="display: flex; flex-direction: column; gap: 2px"><b style="font-size: 16px">You found Bingo!</b><span style="font-size: 13px; color: #4A433E">His family is looking for him. Message them, no number needed.</span></span></span>
+<span style="height: 44px; border-radius: 22px; background: #B4501C; color: #FFFFFF; display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 700">Message Bingo's family</span>
+</div>
+</sc-if>
+</div>
+</div>
+</section>
+
+<section style="max-width: 1200px; margin: 0 auto; padding: 88px 24px; display: flex; flex-direction: column; gap: 32px">
+<h2 style="margin: 0; font-family: 'Bricolage Grotesque', sans-serif; font-size: clamp(2rem, 3.6vw, 3rem); font-weight: 800">Set up in 2 minutes</h2>
+<ol style="margin: 0; padding: 0; list-style: none; display: flex; flex-wrap: wrap; gap: 20px">
+<li style="flex: 1 1 260px; display: flex; flex-direction: column; gap: 10px"><span style="font-family: 'Bricolage Grotesque', sans-serif; font-size: 56px; font-weight: 800; color: #0E6B63; line-height: 1">1</span><b style="font-size: 20px">Download PawPass</b><span style="font-size: 15px; color: #4A433E; line-height: 1.5">Free on iPhone and Android. Sign in with your email, no password.</span></li>
+<li style="flex: 1 1 260px; display: flex; flex-direction: column; gap: 10px"><span style="font-family: 'Bricolage Grotesque', sans-serif; font-size: 56px; font-weight: 800; color: #B4501C; line-height: 1">2</span><b style="font-size: 20px">Add your pet</b><span style="font-size: 15px; color: #4A433E; line-height: 1.5">Photo, name, breed and past vaccines. Their passport is ready.</span></li>
+<li style="flex: 1 1 260px; display: flex; flex-direction: column; gap: 10px"><span style="font-family: 'Bricolage Grotesque', sans-serif; font-size: 56px; font-weight: 800; color: #23407A; line-height: 1">3</span><b style="font-size: 20px">Relax</b><span style="font-size: 15px; color: #4A433E; line-height: 1.5">Reminders arrive on time, care is a tap away, and help is nearby if they get lost.</span></li>
+</ol>
+</section>
+
+<section id="partners" style="max-width: 1200px; margin: 0 auto 88px; padding: 0 24px">
+<div style="background: #E3F1EE; border-radius: 32px; padding: 48px; display: flex; flex-wrap: wrap; gap: 32px; align-items: center">
+<div style="flex: 2 1 420px; display: flex; flex-direction: column; gap: 14px">
+<span style="font-size: 13px; font-weight: 800; letter-spacing: 0.08em; color: #0B5650">FOR VETS, GROOMERS, TRAINERS, BREEDERS &amp; SHELTERS</span>
+<h2 style="margin: 0; font-family: 'Bricolage Grotesque', sans-serif; font-size: clamp(1.8rem, 3vw, 2.6rem); font-weight: 800; line-height: 1.1">Become a partner</h2>
+<p style="margin: 0; font-size: 16px; line-height: 1.6; color: #2F4A46">Get bookings and enquiries from pet owners near you, with weekly payouts every Monday and a verified badge owners trust.</p>
+<ol style="margin: 6px 0 0; padding: 0; list-style: none; display: flex; flex-direction: column; gap: 12px">
+<li style="display: flex; gap: 12px; align-items: center; font-size: 15px; font-weight: 600; color: #1F1A17"><span aria-hidden="true" style="width: 32px; height: 32px; border-radius: 16px; background: #0E6B63; color: #FFFFFF; display: flex; align-items: center; justify-content: center; flex-shrink: 0; font-weight: 800; font-size: 14px">1</span>Download PawPass and sign up with your email</li>
+<li style="display: flex; gap: 12px; align-items: center; font-size: 15px; font-weight: 600; color: #1F1A17"><span aria-hidden="true" style="width: 32px; height: 32px; border-radius: 16px; background: #0E6B63; color: #FFFFFF; display: flex; align-items: center; justify-content: center; flex-shrink: 0; font-weight: 800; font-size: 14px">2</span>Go to Profile and tap “Become a partner”</li>
+<li style="display: flex; gap: 12px; align-items: center; font-size: 15px; font-weight: 600; color: #1F1A17"><span aria-hidden="true" style="width: 32px; height: 32px; border-radius: 16px; background: #0E6B63; color: #FFFFFF; display: flex; align-items: center; justify-content: center; flex-shrink: 0; font-weight: 800; font-size: 14px">3</span>Add your business details and ID, and we verify you</li>
+</ol>
+</div>
+<div style="flex: 1 1 240px; display: flex; flex-direction: column; gap: 10px">
+<a href="#download" style="height: 52px; border-radius: 26px; background: #0E6B63; color: #FFFFFF; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 15px; text-decoration: none">Download the app to join</a>
+<span style="font-size: 13px; color: #2F4A46; text-align: center">Free to join · verification takes up to 48 hours</span>
+</div>
+</div>
+</section>
+
+<section id="faq" style="max-width: 860px; margin: 0 auto; padding: 0 24px 88px; display: flex; flex-direction: column; gap: 20px">
+<h2 style="margin: 0; font-family: 'Bricolage Grotesque', sans-serif; font-size: clamp(2rem, 3.6vw, 3rem); font-weight: 800">Questions pet parents ask</h2>
+<div style="display: flex; flex-direction: column; gap: 10px">
+<sc-for list="{{ faqs }}" as="f" hint-placeholder-count="5">
+<div style="background: #FFFFFF; border: 1px solid #EDE3D9; border-radius: 18px; overflow: hidden">
+<button onClick="{{ f.toggle }}" aria-expanded="{{ f.open }}" style="width: 100%; min-height: 60px; padding: 0 20px; border: none; background: transparent; display: flex; align-items: center; justify-content: space-between; gap: 12px; font: 700 16px 'Plus Jakarta Sans', sans-serif; color: #1F1A17; text-align: left; cursor: pointer">{{ f.q }}<span aria-hidden="true" style="width: 30px; height: 30px; border-radius: 15px; background: #F3EBE2; display: flex; align-items: center; justify-content: center; flex-shrink: 0; font-size: 18px">{{ f.sign }}</span></button>
+<sc-if value="{{ f.open }}"><p class="pp-pop" style="margin: 0; padding: 0 20px 18px; font-size: 15px; line-height: 1.6; color: #4A433E">{{ f.a }}</p></sc-if>
+</div>
+</sc-for>
+</div>
+</section>
+
+<section id="download" style="background: #0E6B63; color: #FFFFFF">
+<div style="max-width: 1200px; margin: 0 auto; padding: 88px 24px; display: flex; flex-wrap: wrap; gap: 40px; align-items: center; height: 182px">
+<div style="flex: 2 1 460px; display: flex; flex-direction: column; gap: 20px">
+<h2 style="margin: 0; font-family: 'Bricolage Grotesque', sans-serif; font-size: clamp(2.2rem, 4.2vw, 3.6rem); font-weight: 800; line-height: 1.04">Your pet deserves a passport.</h2>
+<p style="margin: 0; font-size: 17px; line-height: 1.55; color: #E3F1EE">Download free, or get the link by email and open it on your phone.</p>
+<div style="display: flex; flex-wrap: wrap; gap: 12px">
+<a href="#ios" style="height: 56px; padding: 0 20px; border-radius: 16px; background: #FFFFFF; color: #1F1A17; display: flex; align-items: center; gap: 12px; text-decoration: none"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="6" y="2" width="12" height="20" rx="3"></rect><path d="M11 18h2"></path></svg><span style="display: flex; flex-direction: column; line-height: 1.1"><span style="font-size: 11px; color: #4A433E">Download for</span><span style="font-size: 17px; font-weight: 700">iPhone</span></span></a>
+<a href="#android" style="height: 56px; padding: 0 20px; border-radius: 16px; background: #FFFFFF; color: #1F1A17; display: flex; align-items: center; gap: 12px; text-decoration: none"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 3l14 9-14 9z"></path></svg><span style="display: flex; flex-direction: column; line-height: 1.1"><span style="font-size: 11px; color: #4A433E">Get it for</span><span style="font-size: 17px; font-weight: 700">Android</span></span></a>
+</div>
+<sc-if value="{{ notSent }}" hint-placeholder-val="{{ true }}">
+
+</sc-if>
+<sc-if value="{{ sent }}"><p class="pp-pop" role="status" style="margin: 0; font-size: 16px; font-weight: 700; background: rgba(255,255,255,0.12); padding: 14px 18px; border-radius: 16px; max-width: 520px">Check your inbox. The download link is on its way.</p></sc-if>
+</div>
+<div style="flex: 1 1 240px; display: flex; flex-direction: column; align-items: center; gap: 12px">
+<div role="img" aria-label="QR code to download PawPass" style="width: 180px; height: 180px; background: #FFFFFF; border-radius: 24px; padding: 22px; box-sizing: border-box; display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 4px">
+<span style="background: #1F1A17"></span><span style="background: #1F1A17"></span><span></span><span style="background: #1F1A17"></span><span></span><span style="background: #1F1A17"></span>
+<span style="background: #1F1A17"></span><span></span><span style="background: #1F1A17"></span><span style="background: #1F1A17"></span><span></span><span style="background: #1F1A17"></span>
+<span></span><span style="background: #1F1A17"></span><span></span><span></span><span style="background: #1F1A17"></span><span></span>
+<span style="background: #1F1A17"></span><span></span><span style="background: #1F1A17"></span><span style="background: #1F1A17"></span><span></span><span style="background: #1F1A17"></span>
+<span style="background: #1F1A17"></span><span style="background: #1F1A17"></span><span></span><span></span><span style="background: #1F1A17"></span><span style="background: #1F1A17"></span>
+<span></span><span style="background: #1F1A17"></span><span style="background: #1F1A17"></span><span style="background: #1F1A17"></span><span></span><span style="background: #1F1A17"></span>
+</div>
+<span style="font-size: 14px; font-weight: 700">Scan to download</span>
+</div>
+</div>
+</section>
+
+<footer style="max-width: 1200px; margin: 0 auto; padding: 32px 24px 40px; display: flex; flex-wrap: wrap; justify-content: space-between; gap: 16px; font-size: 14px; color: #4A433E">
+<span><b style="font-family: 'Bricolage Grotesque', sans-serif; color: #1F1A17">PawPass</b> · a Digital Ninja Technologies product · Lagos, Nigeria</span>
+<span style="display: flex; flex-wrap: wrap; gap: 18px"><a href="#privacy">Privacy</a><a href="#terms">Terms</a><a href="#contact">Contact</a></span>
+</footer>
+
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":6400}}'>
+class Component extends DCLogic {
+constructor(props) {
+super(props);
+this.state = { pet: 'dog', tab: 'health', faq: 0, lost: false, sent: false, menu: false };
+}
+renderVals() {
+const s = this.state;
+const petOpts = [{ id: 'dog', label: 'A dog' }, { id: 'cat', label: 'A cat' }, { id: 'both', label: 'Both!' }];
+const pets = petOpts.map((p) => {
+const on = p.id === s.pet;
+return { label: p.label, checked: on ? 'true' : 'false', border: on ? '#0E6B63' : '#EDE3D9', bg: on ? '#0E6B63' : '#FFFFFF', fg: on ? '#FFFFFF' : '#1F1A17', pick: () => this.setState({ pet: p.id }) };
+});
+const petInfo = {
+dog: { petName: 'Bingo', petBreed: 'Boerboel · 2 yrs', reminderWhen: 'DUE IN 7 DAYS', reminderText: "Bingo's rabies booster" },
+cat: { petName: 'Mimi', petBreed: 'Tabby cat · 1 yr', reminderWhen: 'DUE FRIDAY', reminderText: "Mimi's flea treatment" },
+both: { petName: 'Bingo & Mimi', petBreed: '1 dog · 1 cat', reminderWhen: 'THIS WEEK', reminderText: '2 reminders for your crew' }
+}[s.pet];
+const tabData = {
+health: { label: 'Health', title: 'A passport for every pet', body: 'All their vaccines, treatments and vet visits in one place, with reminders that actually arrive on time.', points: ['Snap the paper card, we read the dates', 'Reminders by push, email or WhatsApp', 'Share records with any vet by QR code'] },
+book: { label: 'Book care', title: 'Trusted vets and groomers nearby', body: 'Book verified clinics, groomers, trainers and boarding in Lagos and cities across Nigeria. Pay in the app, safely.', points: ['Real time slots, no back and forth calls', 'Your money is held until the visit is done', 'Emergency vets open now, one tap away'] },
+community: { label: 'Community', title: 'Your pet, the neighbourhood star', body: 'Share photos, follow pet friends nearby and help reunite lost pets with their families.', points: ['Lost pet alerts within 5 km', 'Chat with finders, no phone number shared', 'Pet profiles for show offs'] },
+trust: { label: 'Find a pet', title: 'Buy or adopt without the fear', body: 'Every breeder and shelter is verified, and every pet comes with a passport that moves to you.', points: ['Verified breeders and rescues', 'Escrow payment with a 72 hour vet check', 'Adopt from shelters near you for free'] }
+};
+const tabs = Object.keys(tabData).map((k) => {
+const on = k === s.tab;
+return { label: tabData[k].label, selected: on ? 'true' : 'false', bg: on ? '#1F1A17' : '#F3EBE2', fg: on ? '#FFFFFF' : '#1F1A17', pick: () => this.setState({ tab: k }) };
+});
+const faqList = [
+{ q: 'Is PawPass free?', a: 'Yes. Records, reminders, community and lost pet alerts are free. You only pay for services you book, like a vet visit or grooming.' },
+{ q: 'Is my money safe when I book or buy a puppy?', a: 'Your payment is held by PawPass and only released when you confirm the visit, or after the 72 hour vet check for a puppy. If something goes wrong, report it and we step in.' },
+{ q: "Who can see my pet's health records?", a: 'Only you, unless you choose to share. Sharing with a vet uses a link or QR code that expires, and you pick what they can see.' },
+{ q: 'Is PawPass only for Lagos?', a: 'No. PawPass is for pet owners wherever you are. Health records, reminders, the community and lost pet alerts work in any city. We started in Lagos and are adding vets, groomers, breeders and shelters in Abuja, Port Harcourt, Ibadan and more.' },
+{ q: 'Does it work for cats and other pets?', a: 'Yes. Dogs and cats get suggested vaccine schedules, and you can add any pet and set your own reminders.' }
+];
+const faqs = faqList.map((f, i) => ({ q: f.q, a: f.a, open: s.faq === i, sign: s.faq === i ? '−' : '+', toggle: () => this.setState({ faq: s.faq === i ? -1 : i }) }));
+return {
+pets, isDog: s.pet === 'dog', isCat: s.pet === 'cat', isBoth: s.pet === 'both', ...petInfo,
+tabs, tab: tabData[s.tab], tabHealth: s.tab === 'health', tabBook: s.tab === 'book', tabCommunity: s.tab === 'community', tabTrust: s.tab === 'trust',
+faqs,
+lost: s.lost, notLost: !s.lost, tagRing: s.lost ? '#B4501C' : '#0E6B63', toggleLost: () => this.setState({ lost: !s.lost }),
+sent: s.sent, notSent: !s.sent, send: () => this.setState({ sent: true }),
+menuOpen: s.menu, menuClosed: !s.menu, menuLabel: s.menu ? 'Close menu' : 'Open menu', burgerBg: s.menu ? '#1F1A17' : '#F3EBE2', burgerFg: s.menu ? '#FFFFFF' : '#1F1A17',
+toggleMenu: () => this.setState({ menu: !s.menu }), closeMenu: () => this.setState({ menu: false })
+};
+}
+}
+</script>
+</body>
+</html>

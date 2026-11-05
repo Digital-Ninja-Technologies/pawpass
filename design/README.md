@@ -101,3 +101,13 @@ Exported from the PawPass design canvas. One file per screen in `screens/`, phot
 | `screens/AdminNav.dc.html` | Admin sidebar component (prop active) |
 | `screens/NavMap.dc.html` | Navigation map of the mobile app |
 | `screens/Specs.dc.html` | Design tokens and components |
+
+## Landing page (app download)
+
+`design/landing/` holds the marketing landing page design (live canvas: https://claude.ai/artifact/QTLMDYBXEsLxcYcUMs2v22).
+
+- `Main.dc.html`: fluid page, responsive via a container query at 760px (hamburger menu below it). Sections: nav, hero with dog/cat/both pet picker, city marquee, pain-point cards, feature tabs (Health, Book care, Community, Find a pet), lost & found tag demo, 3-step setup, partner section (download the app, then Profile > Become a partner), FAQ accordion, download CTA with email form and QR, footer.
+- `Mobile.dc.html`: the same page at 390px.
+- Images point to `../assets/*.jpg`.
+- Placeholders to replace before launch: store badges, QR code, email form backend.
+- Positioning: made in Lagos, for pet owners in Lagos and beyond.
