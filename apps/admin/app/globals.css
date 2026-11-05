@@ -762,3 +762,23 @@ th.num {
     animation: none !important;
   }
 }
+
+.flash {
+  position: sticky;
+  top: 12px;
+  z-index: 20;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  box-shadow: 0 6px 24px rgba(31, 26, 23, 0.12);
+  border: 1px solid var(--primary);
+}
+.flash .dismiss {
+  color: var(--primary-text);
+  font-size: 22px;
+  line-height: 1;
+  width: 32px;
+  height: 32px;
+  flex: none;
+}

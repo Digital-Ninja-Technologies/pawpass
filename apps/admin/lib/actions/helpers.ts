@@ -1,4 +1,5 @@
 import { revalidatePath } from "next/cache";
+import { cookies } from "next/headers";
 import { requireAction, type Staff } from "../auth";
 import type { Action } from "../roles";
 
@@ -19,10 +20,20 @@ export async function runRpc(
   const { error } = await (ctx as Staff).supabase.rpc(fn, args);
   if (error) return { ok: false, message: friendly(error.message) };
   for (const p of opts.paths) revalidatePath(p);
+  await flash(opts.success);
   return { ok: true, message: opts.success };
 }
 
 /** Database errors raised by our functions are already written for people; hide anything else. */
+/** Shows a short message after the next render, even if the form that sent it has gone away. */
+export async function flash(message: string): Promise<void> {
+  (await cookies()).set("flash", encodeURIComponent(message), {
+    maxAge: 30,
+    path: "/",
+    sameSite: "lax",
+  });
+}
+
 export function friendly(message: string): string {
   if (/permission denied|row-level security/i.test(message)) return "Your role cannot do this.";
   if (/violates check constraint/i.test(message)) return "That value is outside the allowed range.";

@@ -40,6 +40,12 @@ Database schema, row level security, storage rules and seed data for PawPass.
 - Reviewer notes live in `partner_reviews` (staff only), not on `partner_accounts`, because partner owners can read their own row.
 - Suspending a user sets `auth.users.banned_until`, flags the profile, suspends their partner accounts and removes live listings.
 
+## Demo data
+
+`supabase/demo/demo_data.sql` (run after `seed.sql`) adds the sample numbers from the admin designs: partners waiting for
+review, escrow in every state, disputes, reports, lost alerts, QR orders and support tickets. `supabase/demo/cleanup.sql`
+removes everything `seed.sql` and the demo script created. Do not load either into production.
+
 ## Not done yet
 
 - `status` transitions on `bookings` and `escrow_transactions` are not enforced in the database. The

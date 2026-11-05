@@ -1,11 +1,10 @@
 "use client";
 
-import { useActionState, useState } from "react";
-import { useFormStatus } from "react-dom";
+import { useState } from "react";
 import { acceptInvite, type AcceptState } from "@/lib/actions/invite";
+import { useFormAction } from "@/components/useFormAction";
 
-function Submit({ label }: { label: string }) {
-  const { pending } = useFormStatus();
+function Submit({ label, pending }: { label: string; pending: boolean }) {
   return (
     <button type="submit" className="btn primary block" disabled={pending} aria-busy={pending}>
       {pending ? "Working…" : label}
@@ -14,10 +13,10 @@ function Submit({ label }: { label: string }) {
 }
 
 export function AcceptForm({ token, email }: { token: string; email: string }) {
-  const [state, action] = useActionState<AcceptState | null, FormData>(acceptInvite, null);
+  const { state, onSubmit, pending } = useFormAction<AcceptState>(acceptInvite);
   const [mode, setMode] = useState<"new" | "existing">("new");
   return (
-    <form action={action} className="stack" style={{ gap: 16 }}>
+    <form onSubmit={onSubmit} className="stack" style={{ gap: 16 }}>
       <input type="hidden" name="token" value={token} />
       <input type="hidden" name="mode" value={mode} />
       <label className="field">
@@ -51,7 +50,7 @@ export function AcceptForm({ token, email }: { token: string; email: string }) {
           {state.message}
         </div>
       ) : null}
-      <Submit label={mode === "new" ? "Accept & continue" : "Sign in & accept"} />
+      <Submit pending={pending} label={mode === "new" ? "Accept & continue" : "Sign in & accept"} />
       <button
         type="button"
         className="btn secondary"

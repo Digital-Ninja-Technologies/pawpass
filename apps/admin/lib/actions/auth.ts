@@ -17,8 +17,16 @@ export async function signIn(_prev: ActionState, form: FormData): Promise<Action
   const supabase = await createClient();
   const { error } = await supabase.auth.signInWithPassword({ email, password });
   if (error) {
-    // One message for wrong password and unknown email, so the form cannot be used to find accounts.
-    return { ok: false, message: "That email and password did not match. Try again." };
+    // Wrong credentials and unknown emails share one message, so the form cannot be used to find accounts.
+    if (error.code === "invalid_credentials" || error.status === 400) {
+      return { ok: false, message: "That email and password did not match. Try again." };
+    }
+    if (error.code === "user_banned")
+      return { ok: false, message: "This account has been suspended." };
+    return {
+      ok: false,
+      message: "We could not sign you in just now. Check your connection and try again.",
+    };
   }
 
   const { data: me } = await supabase.from("admin_me_v").select("*").maybeSingle<MeRow>();

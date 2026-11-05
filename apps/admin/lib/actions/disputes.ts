@@ -3,7 +3,7 @@
 import { revalidatePath } from "next/cache";
 import { requireAction } from "../auth";
 import { parseNairaToKobo } from "../format";
-import { friendly, text, type ActionState } from "./helpers";
+import { flash, friendly, text, type ActionState } from "./helpers";
 
 export async function decideDispute(_prev: ActionState, form: FormData): Promise<ActionState> {
   const ctx = await requireAction("decide_dispute");
@@ -26,5 +26,7 @@ export async function decideDispute(_prev: ActionState, form: FormData): Promise
   revalidatePath("/disputes");
   revalidatePath("/payouts");
   revalidatePath("/");
-  return { ok: true, message: "Decision recorded. The payout is no longer paused." };
+  const message = "Decision recorded. The payout is no longer paused.";
+  await flash(message);
+  return { ok: true, message };
 }

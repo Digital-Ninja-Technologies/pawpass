@@ -3,7 +3,7 @@
 import { revalidatePath } from "next/cache";
 import { requireAction } from "../auth";
 import { KYC_CHECKS } from "../kyc";
-import { friendly, text, type ActionState } from "./helpers";
+import { flash, friendly, text, type ActionState } from "./helpers";
 
 /** One form, four buttons: save notes, approve, ask for more info, reject. */
 export async function reviewPartner(_prev: ActionState, form: FormData): Promise<ActionState> {
@@ -41,5 +41,7 @@ export async function reviewPartner(_prev: ActionState, form: FormData): Promise
     needs_info: "Asked the partner for more information.",
     reject: "Application rejected.",
   } as const;
-  return { ok: true, message: done[intent as keyof typeof done] ?? "Done." };
+  const message = done[intent as keyof typeof done] ?? "Done.";
+  await flash(message);
+  return { ok: true, message };
 }

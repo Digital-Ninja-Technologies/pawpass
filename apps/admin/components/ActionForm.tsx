@@ -1,10 +1,12 @@
 "use client";
 
-import { useActionState, type ReactNode } from "react";
-import { useFormStatus } from "react-dom";
+import { createContext, useContext, type ReactNode } from "react";
 import type { ActionState } from "@/lib/actions/helpers";
+import { useFormAction } from "./useFormAction";
 
 type Action = (prev: ActionState, formData: FormData) => Promise<ActionState>;
+
+const PendingContext = createContext(false);
 
 /** A form wired to a server action with a pending state and a visible result message. */
 export function ActionForm({
@@ -18,16 +20,18 @@ export function ActionForm({
   className?: string;
   hideSuccess?: boolean;
 }) {
-  const [state, formAction] = useActionState(action, null);
+  const { state, onSubmit, pending } = useFormAction<ActionState>(action);
   return (
-    <form action={formAction} className={className ?? "stack"}>
-      {children}
-      {state && !(state.ok && hideSuccess) ? (
-        <div className={`notice ${state.ok ? "ok" : "err"}`} role={state.ok ? "status" : "alert"}>
-          {state.message}
-        </div>
-      ) : null}
-    </form>
+    <PendingContext.Provider value={pending}>
+      <form onSubmit={onSubmit} className={className ?? "stack"}>
+        {children}
+        {state && !(state.ok && hideSuccess) ? (
+          <div className={`notice ${state.ok ? "ok" : "err"}`} role={state.ok ? "status" : "alert"}>
+            {state.message}
+          </div>
+        ) : null}
+      </form>
+    </PendingContext.Provider>
   );
 }
 
@@ -47,7 +51,7 @@ export function SubmitButton({
   /** Ask before sending, for actions that are hard to undo. */
   confirm?: string;
 }) {
-  const { pending } = useFormStatus();
+  const pending = useContext(PendingContext);
   return (
     <button
       type="submit"

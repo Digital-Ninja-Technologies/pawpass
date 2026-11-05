@@ -1,11 +1,10 @@
 "use client";
 
-import { useActionState, useState } from "react";
-import { useFormStatus } from "react-dom";
+import { useState } from "react";
 import { signIn } from "@/lib/actions/auth";
+import { useFormAction } from "@/components/useFormAction";
 
-function Submit() {
-  const { pending } = useFormStatus();
+function Submit({ pending }: { pending: boolean }) {
   return (
     <button type="submit" className="btn primary block" disabled={pending} aria-busy={pending}>
       {pending ? "Signing in…" : "Sign in"}
@@ -14,10 +13,10 @@ function Submit() {
 }
 
 export function LoginForm({ next }: { next: string }) {
-  const [state, action] = useActionState(signIn, null);
+  const { state, onSubmit, pending } = useFormAction(signIn);
   const [show, setShow] = useState(false);
   return (
-    <form action={action} className="stack" style={{ gap: 16 }}>
+    <form onSubmit={onSubmit} className="stack" style={{ gap: 16 }}>
       <input type="hidden" name="next" value={next} />
       <label className="field">
         Work email
@@ -55,7 +54,7 @@ export function LoginForm({ next }: { next: string }) {
           {state.message}
         </div>
       ) : null}
-      <Submit />
+      <Submit pending={pending} />
     </form>
   );
 }

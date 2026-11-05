@@ -1,13 +1,12 @@
 "use client";
 
-import { useActionState, useState } from "react";
-import { useFormStatus } from "react-dom";
+import { useState } from "react";
 import Link from "next/link";
+import { useFormAction } from "@/components/useFormAction";
 import { createInvite, type InviteState } from "@/lib/actions/invite";
 import { ROLES, ROLE_DESCRIPTIONS, ROLE_LABELS, roleCapabilities, type Role } from "@/lib/roles";
 
-function Submit() {
-  const { pending } = useFormStatus();
+function Submit({ pending }: { pending: boolean }) {
   return (
     <button type="submit" className="btn primary" disabled={pending} aria-busy={pending}>
       {pending ? "Creating…" : "Create invite"}
@@ -16,7 +15,7 @@ function Submit() {
 }
 
 export function InviteForm({ domain }: { domain: string | null }) {
-  const [state, action] = useActionState<InviteState | null, FormData>(createInvite, null);
+  const { state, onSubmit, pending } = useFormAction<InviteState>(createInvite);
   const [role, setRole] = useState<Role>("support_reports");
   const caps = roleCapabilities(role);
 
@@ -60,7 +59,7 @@ export function InviteForm({ domain }: { domain: string | null }) {
       className="grid"
       style={{ gridTemplateColumns: "minmax(0, 1.4fr) minmax(260px, 1fr)", alignItems: "start" }}
     >
-      <form action={action} className="card stack">
+      <form onSubmit={onSubmit} className="card stack">
         <label className="field">
           Work email
           <input className="input" type="email" name="email" required autoComplete="off" />
@@ -103,7 +102,7 @@ export function InviteForm({ domain }: { domain: string | null }) {
           <Link href="/settings" className="btn secondary">
             Cancel
           </Link>
-          <Submit />
+          <Submit pending={pending} />
         </div>
       </form>
       <aside className="card stack" aria-live="polite">

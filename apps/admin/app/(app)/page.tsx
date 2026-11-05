@@ -41,6 +41,8 @@ interface Overview {
   reports_open: number;
 }
 
+const count = (n: number, word: string) => `${n} ${word}${n === 1 ? "" : "s"}`;
+
 function change(now: number, before: number) {
   if (!before) return null;
   const pct = ((now - before) / before) * 100;
@@ -190,7 +192,7 @@ export default async function OverviewPage({
         <Stat
           label="Verified partners"
           value={verifiedTotal}
-          note={`${(partners.vet ?? 0) + (partners.service ?? 0)} providers · ${partners.breeder ?? 0} breeders · ${partners.shelter ?? 0} shelters`}
+          note={`${count((partners.vet ?? 0) + (partners.service ?? 0), "provider")} · ${count(partners.breeder ?? 0, "breeder")} · ${count(partners.shelter ?? 0, "shelter")}`}
         />
       </section>
 

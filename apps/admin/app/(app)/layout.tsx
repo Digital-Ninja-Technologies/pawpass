@@ -1,4 +1,6 @@
 import type { ReactNode } from "react";
+import { cookies } from "next/headers";
+import { Flash } from "@/components/Flash";
 import { requireStaff } from "@/lib/auth";
 import { canView, ROLE_LABELS, type Section } from "@/lib/roles";
 import { initials } from "@/lib/format";
@@ -25,6 +27,8 @@ const NAV: { section: Section; href: string; label: string; icon: IconName }[] =
 
 export default async function AppLayout({ children }: { children: ReactNode }) {
   const { supabase, staff } = await requireStaff();
+  const raw = (await cookies()).get("flash")?.value;
+  const flashMessage = raw ? decodeURIComponent(raw) : null;
 
   const head = (table: string) => supabase.from(table).select("*", { count: "exact", head: true });
   const [kyc, disputes, reports, tickets] = await Promise.all([
@@ -78,6 +82,7 @@ export default async function AppLayout({ children }: { children: ReactNode }) {
         </div>
       </aside>
       <main id="main" className="main" tabIndex={-1}>
+        {flashMessage ? <Flash key={flashMessage} message={flashMessage} /> : null}
         {children}
       </main>
     </div>
