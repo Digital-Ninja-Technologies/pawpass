@@ -4,7 +4,7 @@ Work through these milestones in order. Start each one in a fresh Claude Code se
 
 ## 0. Foundations
 
-> Read CLAUDE.md, docs/PRD.md and docs/data-model.md. Set up a pnpm workspace with apps/mobile (Expo, TypeScript, Expo Router), apps/admin (Next.js App Router, TypeScript) and packages/shared (types, design tokens, Supabase client). Add ESLint, Prettier, Vitest/Jest and a GitHub Actions workflow that runs lint, type check and tests. Add .env.example files. Do not build screens yet.
+> Read CLAUDE.md, docs/PRD.md and docs/data-model.md. Set up a pnpm workspace with apps/mobile (Flutter, Dart, go_router), apps/admin (Next.js App Router, TypeScript) and packages/shared (TypeScript types, design tokens, Supabase client for the admin app). Add ESLint, Prettier, Vitest/Jest and a GitHub Actions workflow that runs lint, type check and tests. Add .env.example files. Do not build screens yet.
 
 > Create the Supabase schema from docs/data-model.md as migrations in supabase/migrations, with Row Level Security policies for owners, partners and staff, and a seed file using the sample data from the designs (Tolu, Bingo, Mimi, Paws & Claws Vet Clinic, Royal Paws Kennels, Lagos Paws Rescue).
 

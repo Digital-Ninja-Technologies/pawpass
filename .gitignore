@@ -3,7 +3,6 @@ node_modules/
 dist/
 build/
 .next/
-.expo/
 .turbo/
 coverage/
 *.log
@@ -11,6 +10,6 @@ coverage/
 .env.local
 .env.*.local
 .DS_Store
-ios/
-android/
 supabase/.temp/
+*.tsbuildinfo
+.dart_tool/

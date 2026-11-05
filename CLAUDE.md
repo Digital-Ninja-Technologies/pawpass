@@ -12,26 +12,26 @@ Full product requirements: `docs/PRD.md`. Data model: `docs/data-model.md`. Buil
 ## Repository layout
 
 ```
-apps/mobile     Expo (React Native, TypeScript) app for owners and partners
+apps/mobile     Flutter (Dart) app for owners and partners
 apps/admin      Next.js (App Router, TypeScript) admin web app
 supabase        migrations, seed data, RLS policies, edge functions
 design          source designs exported from the PawPass canvas (read only)
 docs            PRD, data model, build plan
 ```
 
-Use one package manager across the repo (pnpm workspaces). Shared code (types, design tokens, Supabase client, validation schemas) goes in `packages/` when it is needed by both apps.
+Use one package manager across the repo (pnpm workspaces). pnpm covers the TypeScript side (`apps/admin`, `packages/shared`); the Flutter app uses `pub` and sits outside the pnpm workspace. Types and design tokens cannot be shared across Dart and TypeScript, so the Flutter tokens in `apps/mobile/lib/theme/tokens.dart` mirror `packages/shared/src/tokens.ts`; keep the two in step.
 
 ## Stack
 
-| Layer | Choice |
-| --- | --- |
-| Mobile | Expo SDK (latest), Expo Router, TypeScript, React Native Reanimated, expo-image |
-| Admin web | Next.js App Router, TypeScript, server components where possible |
-| Backend | Supabase: Postgres, Auth, Storage, Realtime, Edge Functions |
-| Auth | Email one-time code (6 digits, no password) for app users; Google/Apple optional. Admin staff use work email + password, invite only |
-| Payments | Paystack (card, bank transfer, USSD). Funds are held by PawPass and released by a payout run; never pay partners directly at checkout |
-| Notifications | Expo push; WhatsApp and email reminders through a provider called from an edge function |
-| Maps | Google Maps (expo-maps or react-native-maps) |
+| Layer         | Choice                                                                                                                                |
+| ------------- | ------------------------------------------------------------------------------------------------------------------------------------- |
+| Mobile        | Flutter (stable), Dart, go_router, supabase_flutter                                                                                   |
+| Admin web     | Next.js App Router, TypeScript, server components where possible                                                                      |
+| Backend       | Supabase: Postgres, Auth, Storage, Realtime, Edge Functions                                                                           |
+| Auth          | Email one-time code (6 digits, no password) for app users; Google/Apple optional. Admin staff use work email + password, invite only  |
+| Payments      | Paystack (card, bank transfer, USSD). Funds are held by PawPass and released by a payout run; never pay partners directly at checkout |
+| Notifications | Firebase Cloud Messaging push; WhatsApp and email reminders through a provider called from an edge function                           |
+| Maps          | Google Maps (google_maps_flutter)                                                                                                     |
 
 Confirm any new dependency is actively maintained before adding it. Do not add a UI kit; build components from the design tokens below.
 
@@ -54,7 +54,7 @@ Colours: ground `#FFF8F1`, surface `#FFFFFF`, ink `#1F1A17`, ink2 `#4A433E`, mut
 
 Type: headings Bricolage Grotesque 700 (36, 30, 28, 22); body Plus Jakarta Sans (16 and 15 buttons at 700; 15 and 14 body at 500 to 600; 13 and 12 meta; overline 12 at 700 with 4% tracking).
 
-Layout: mobile base frame 390 × 844; side padding 20 (onboarding 24); touch targets at least 44; primary buttons 52 to 54 tall, pill shaped; inputs radius 16; cards radius 18 to 24; bottom tab bar 80 tall. Icons are 24px line icons, 1.8 stroke, round caps (lucide-react-native fits).
+Layout: mobile base frame 390 × 844; side padding 20 (onboarding 24); touch targets at least 44; primary buttons 52 to 54 tall, pill shaped; inputs radius 16; cards radius 18 to 24; bottom tab bar 80 tall. Icons are 24px line icons, 1.8 stroke, round caps (the lucide_icons_flutter package fits).
 
 Accessibility: text contrast WCAG AA, real buttons and labels, screen reader labels on icon buttons, never colour alone for status.
 
