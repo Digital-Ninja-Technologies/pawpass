@@ -4,7 +4,10 @@ import localFont from "next/font/local";
 import "./globals.css";
 
 const heading = localFont({
-  src: [{ path: "./fonts/BricolageGrotesque-Bold.ttf", weight: "700", style: "normal" }],
+  src: [
+    { path: "./fonts/BricolageGrotesque-Bold.ttf", weight: "700", style: "normal" },
+    { path: "./fonts/BricolageGrotesque-ExtraBold.ttf", weight: "800", style: "normal" },
+  ],
   variable: "--font-heading",
   display: "swap",
 });
@@ -19,9 +22,9 @@ const body = localFont({
 });
 
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://pawpass.example";
-const title = "PawPass: every pet's life, in one place";
+const title = "PawPass · every pet's life, in one place";
 const description =
-  "One passport for your pet's health records, trusted vets and groomers, and a community that helps when a pet goes missing. Coming to Lagos. Join the waitlist.";
+  "Vaccine reminders, trusted vets and groomers, lost pet alerts and verified breeders. One free app for every dog, cat and furry family member. Made in Lagos, for pets everywhere.";
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),

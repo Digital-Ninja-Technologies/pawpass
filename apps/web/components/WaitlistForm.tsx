@@ -7,7 +7,7 @@ export function WaitlistForm({
   source,
   dark = false,
 }: {
-  source: "hero" | "footer" | "partners";
+  source: "download" | "partners";
   dark?: boolean;
 }) {
   const id = useId();
@@ -51,7 +51,7 @@ export function WaitlistForm({
       <input name="company" tabIndex={-1} autoComplete="off" aria-hidden="true" className="hp" />
       <input type="hidden" name="source" value={source} />
       <button type="submit" disabled={pending} aria-busy={pending}>
-        {pending ? "Joining…" : "Join the waitlist"}
+        {pending ? "Sending…" : "Email me the link"}
       </button>
       {state && !state.ok ? (
         <p id={`${id}-error`} className="wl-error" role="alert">

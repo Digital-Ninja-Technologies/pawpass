@@ -8,7 +8,7 @@ export interface WaitlistState {
   message: string;
 }
 
-const SOURCES = new Set(["hero", "footer", "partners"]);
+const SOURCES = new Set(["download", "partners"]);
 
 /** Adds an email to the waitlist. Duplicates count as success so the form never reveals who has signed up. */
 export async function joinWaitlist(
@@ -33,7 +33,7 @@ export async function joinWaitlist(
   // No .select(): visitors may insert but never read the list.
   const { error } = await supabase
     .from("waitlist_signups")
-    .insert({ email, source: SOURCES.has(source) ? source : "hero" });
+    .insert({ email, source: SOURCES.has(source) ? source : "download" });
 
   if (error && error.code !== "23505") {
     return {
@@ -43,6 +43,6 @@ export async function joinWaitlist(
   }
   return {
     ok: true,
-    message: "Thank you. You are on the list, and we will email you when PawPass opens in Lagos.",
+    message: "Thank you. We will email you the download link as soon as PawPass is ready.",
   };
 }
