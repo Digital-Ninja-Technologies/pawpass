@@ -334,6 +334,29 @@ do $$ begin
 end $$;
 
 -- ---------------------------------------------------------------------------
+-- Overview numbers respect each role's access
+-- ---------------------------------------------------------------------------
+:finance
+do $$ declare o jsonb; begin
+  o := public.admin_overview(30);
+  assert (o ->> 'held_kobo')::bigint = 500000, 'finance sees the escrow still held (the 5,000 naira row)';
+  assert (o ->> 'ready_kobo')::bigint = (1500000 - 180000) + (800000 - 96000), 'ready money is net of fees';
+  assert (o ->> 'ready_partners')::int = 1, 'one partner is waiting for a payout';
+  assert jsonb_array_length(o -> 'weekly') = 12, 'twelve weekly buckets';
+end $$;
+:support
+do $$ declare o jsonb; begin
+  o := public.admin_overview(30);
+  assert (o ->> 'held_kobo')::bigint = 0, 'support staff cannot see escrow figures';
+  assert (o ->> 'reports_open') is not null, 'support staff see report counts';
+  assert (o ->> 'active_pets')::int >= 1, 'staff can count pets';
+end $$;
+:tolu
+do $$ begin
+  assert (public.admin_overview(30) ->> 'held_kobo')::bigint = 0, 'owners see no escrow totals';
+end $$;
+
+-- ---------------------------------------------------------------------------
 -- Waitlist (public landing page)
 -- ---------------------------------------------------------------------------
 :anon
