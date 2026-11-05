@@ -16,6 +16,10 @@ export const colors = {
   danger: "#A3261B",
   dangerSoft: "#FDEAE7",
   dot: "#E0662A",
+  /** Secondary button outline and dashed photo picker. */
+  outline: "#CFC3B7",
+  /** Disabled button fill. Text on it is ink2. */
+  disabled: "#DCD2C8",
 } as const;
 
 export const petTints = ["#F3D9C4", "#DCE7F7", "#F1E8FB", "#CFE6E1"] as const;
