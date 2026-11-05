@@ -9,7 +9,7 @@ Every pet's life, in one place. A mobile app for pet owners in Lagos (health pas
 - `design/`: source screen designs and photos
 - `apps/mobile`: Flutter app
 - `apps/admin`: Next.js admin console for the ops team
-- `apps/web`: public landing site with a waitlist form
+- `apps/web`: public landing site
 - `packages/shared`: TypeScript tokens, Supabase client and helpers for the admin app
 - `supabase/`: migrations and functions (to be created)
 

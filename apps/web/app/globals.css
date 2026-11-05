@@ -167,6 +167,7 @@ button {
   .pp-marquee,
   .pp-wag,
   .pp-pop,
+  .dl-card,
   .pp-ping {
     animation: none;
   }
@@ -250,8 +251,12 @@ button {
   text-decoration: none;
   padding: 10px 12px;
 }
-.navlinks a.get {
+.navlinks .get {
   margin-left: 6px;
+  border: 0;
+  cursor: pointer;
+  font-family: inherit;
+  font-size: inherit;
   height: 44px;
   padding: 0 20px;
   border-radius: 22px;
@@ -299,7 +304,12 @@ button {
   font-size: 17px;
   font-weight: 700;
 }
-.mobilemenu a.get {
+.mobilemenu .get {
+  display: flex;
+  align-items: center;
+  border: 0;
+  cursor: pointer;
+  font-family: inherit;
   margin: 8px;
   height: 52px;
   border-radius: 26px;
@@ -432,6 +442,16 @@ button {
 .store small {
   font-size: 11px;
   opacity: 0.8;
+}
+.store.off {
+  opacity: 0.85;
+  cursor: default;
+}
+.store.off:hover {
+  background: var(--ink);
+}
+.store.light.off:hover {
+  background: #fff;
 }
 .store.light small {
   color: var(--ink2);
@@ -1149,100 +1169,94 @@ button {
   color: var(--ink);
 }
 
-/* waitlist / email form */
-.wl {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
-  max-width: 520px;
-}
-.wl input[type="email"] {
-  flex: 1 1 240px;
-  min-width: 0;
-  height: 56px;
-  padding: 0 20px;
-  border-radius: 28px;
-  border: 1px solid var(--border);
-  background: #fff;
-  font: 600 16px var(--body);
-  color: var(--ink);
-}
-.wl input[type="email"]:focus {
-  outline: none;
-  border: 2px solid var(--primary);
-  padding: 0 19px;
-}
-.wl button {
-  height: 56px;
-  padding: 0 26px;
-  border-radius: 28px;
-  border: 0;
-  background: var(--ink);
-  color: #fff;
-  font: 700 16px var(--body);
-  cursor: pointer;
-  white-space: nowrap;
-}
-.wl button:hover {
-  background: #000;
-}
-.wl button:disabled {
-  background: #dcd2c8;
-  color: var(--ink2);
-  cursor: progress;
-}
-.wl .hp {
-  position: absolute;
-  left: -9999px;
-  width: 1px;
-  height: 1px;
-  opacity: 0;
-}
-.wl-error {
-  flex-basis: 100%;
-  color: var(--danger);
-  font-weight: 600;
-  font-size: 15px;
-}
-.wl.dark input[type="email"] {
-  border-color: transparent;
-}
-.wl.dark button {
-  background: #fff;
-  color: var(--primary-text);
-}
-.wl.dark button:hover {
-  background: var(--primary-soft);
-}
-.wl.dark .wl-error {
-  color: #ffd7d2;
-}
-.wl-done {
-  display: flex;
-  gap: 10px;
-  align-items: flex-start;
-  font-size: 16px;
-  font-weight: 700;
-  background: var(--primary-soft);
-  color: var(--primary-text);
-  padding: 14px 18px;
-  border-radius: 16px;
-  max-width: 520px;
-}
-.wl-done.dark {
-  background: rgba(255, 255, 255, 0.12);
-  color: #fff;
-}
-.wl-label {
-  font-size: 14px;
-  font-weight: 700;
-}
-
 @container pp (max-width: 560px) {
   .partners-in {
     padding: 28px;
   }
-  .wl button {
-    width: 100%;
-  }
+}
+
+/* download pop up */
+.dl-modal {
+  border: 0;
+  padding: 0;
+  background: transparent;
+  max-width: min(440px, calc(100vw - 32px));
+  width: 100%;
+  margin: auto;
+  color: var(--ink);
+  font-family: var(--body, inherit);
+}
+.dl-modal::backdrop {
+  background: rgba(31, 26, 23, 0.55);
+  backdrop-filter: blur(3px);
+}
+.dl-card {
+  position: relative;
+  background: #fff;
+  border-radius: 28px;
+  padding: 32px 28px 28px;
+  box-shadow: 0 24px 64px rgba(31, 26, 23, 0.28);
+  animation: pp-pop 0.25s ease-out both;
+}
+.dl-x {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  width: 44px;
+  height: 44px;
+  border-radius: 22px;
+  border: 0;
+  background: var(--primary-soft);
+  color: var(--ink);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+.dl-card h2 {
+  font-family: var(--heading);
+  font-size: 28px;
+  font-weight: 800;
+  line-height: 1.1;
+  padding-right: 48px;
+}
+.dl-lead {
+  margin-top: 10px;
+  font-size: 16px;
+  line-height: 1.5;
+  color: var(--ink2);
+}
+.dl-facts {
+  list-style: none;
+  margin: 18px 0 22px;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  font-size: 15px;
+  font-weight: 600;
+}
+.dl-facts li::before {
+  content: "\2713";
+  display: inline-block;
+  width: 22px;
+  height: 22px;
+  margin-right: 10px;
+  border-radius: 11px;
+  background: var(--primary-soft);
+  color: var(--primary);
+  text-align: center;
+  line-height: 22px;
+  font-size: 13px;
+}
+.dl-stores .store {
+  flex: 1 1 160px;
+  justify-content: center;
+}
+.dl-note {
+  margin-top: 16px;
+  font-size: 13px;
+  line-height: 1.5;
+  color: var(--muted);
+  font-weight: 600;
 }

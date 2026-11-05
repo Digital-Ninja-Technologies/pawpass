@@ -4,7 +4,6 @@ import { Header } from "@/components/Header";
 import { Hero } from "@/components/Hero";
 import { LostDemo } from "@/components/LostDemo";
 import { StoreButtons } from "@/components/StoreButtons";
-import { WaitlistForm } from "@/components/WaitlistForm";
 import { PawFilled } from "@/components/icons";
 import { CITIES } from "@/lib/content";
 import { AGENCY_NAME, AGENCY_URL } from "@/lib/site";
@@ -165,21 +164,15 @@ export default function Home() {
             <div className="wrap download-in">
               <div className="download-copy">
                 <h2>Your pet deserves a passport.</h2>
-                <p className="b">
-                  Download free, or get the link by email and open it on your phone.
-                </p>
+                <p className="b">Download free for iPhone and Android.</p>
                 <div className="stores">
                   <StoreButtons light />
                 </div>
                 {STORES_LIVE ? null : (
                   <p className="stores-note">
-                    PawPass is not in the app stores yet. Leave your email and we will send the link
-                    the moment it is.
+                    PawPass is not in the app stores yet. The buttons will go live at launch.
                   </p>
                 )}
-                <div id="get-link" tabIndex={-1}>
-                  <WaitlistForm source="download" dark />
-                </div>
               </div>
             </div>
           </section>

@@ -4,7 +4,7 @@ Two Vercel projects in the team "Ifeoluwa's projects", both linked to this repos
 
 | Project         | Root directory | What                                           | Vercel Authentication            |
 | --------------- | -------------- | ---------------------------------------------- | -------------------------------- |
-| `pawpass-web`   | `apps/web`     | Public landing site and waitlist               | Off (public site)                |
+| `pawpass-web`   | `apps/web`     | Public landing site                            | Off (public site)                |
 | `pawpass-admin` | `apps/admin`   | Ops console, staff sign in through Supabase    | On (extra gate; see below)       |
 
 Both use the Next.js preset, Node 22, and "include source files outside the root directory" (the apps import
@@ -12,10 +12,12 @@ Both use the Next.js preset, Node 22, and "include source files outside the root
 
 ## Environment
 
-Only public values are needed, and they are committed in `apps/*/.env.production`:
+Only public values are needed, and they are committed in `apps/*/.env.production`. `apps/admin` needs:
 
 - `NEXT_PUBLIC_SUPABASE_URL`
 - `NEXT_PUBLIC_SUPABASE_ANON_KEY` (the Supabase **publishable** key, designed for browsers; RLS protects the data)
+
+`apps/web` needs no Supabase values. It uses `NEXT_PUBLIC_AGENCY_URL` (footer link) and, when the app is live, `NEXT_PUBLIC_APP_STORE_URL` and `NEXT_PUBLIC_PLAY_STORE_URL`.
 
 Optional, set in the Vercel dashboard (Settings, Environment Variables):
 

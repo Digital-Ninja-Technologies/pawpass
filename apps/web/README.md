@@ -9,13 +9,13 @@ cp .env.example .env.local
 pnpm --filter @pawpass/web dev
 ```
 
-## Store links and the email form
+## Store links and the "Get the app" pop up
 
-- The app is not in the stores yet, so the iPhone and Android buttons lead to the email form. When the apps are
-  live, set `NEXT_PUBLIC_APP_STORE_URL` and `NEXT_PUBLIC_PLAY_STORE_URL` (both) and the buttons link out and the
-  "not in the stores yet" note disappears.
-- The email form writes to `waitlist_signups` with the publishable key. The table allows inserts only (visitors
-  cannot read it), emails are unique ignoring case, and a hidden honeypot field catches simple bots.
+- "Get the app" in the header opens a pop up with the download buttons (the download section and the hero use
+  the same buttons). The app is not in the stores yet, so the iPhone and Android buttons show "Coming soon" and
+  are not links. When the apps are live, set `NEXT_PUBLIC_APP_STORE_URL` and `NEXT_PUBLIC_PLAY_STORE_URL` (both)
+  and the buttons link out and the "not in the stores yet" notes disappear.
+- There is no email form. The `waitlist_signups` table and its policies still exist in Supabase, unused by this site.
 - The design has a QR code. A real one needs the final store link, so it is left out until then.
 
 ## Notes
@@ -23,4 +23,4 @@ pnpm --filter @pawpass/web dev
 - Photos in `public/photos` are the placeholder stock photos from `design/assets`. Replace them with your own before launch.
 - Fonts are bundled (`app/fonts`), so nothing is fetched from Google.
 - Privacy, Terms and Contact pages do not exist yet, so the footer does not link to them.
-- Copy content lives in `lib/content.ts`, and `lib/waitlist.test.ts` checks it against the copy rules (no em dashes, no hyphenated "72-hour" style phrases).
+- Copy content lives in `lib/content.ts`, and `lib/content.test.ts` checks it against the copy rules (no em dashes, no hyphenated "72-hour" style phrases).
