@@ -24,3 +24,9 @@ pnpm --filter @pawpass/web dev
 - Fonts are bundled (`app/fonts`), so nothing is fetched from Google.
 - Privacy, Terms and Contact pages do not exist yet, so the footer does not link to them.
 - Copy content lives in `lib/content.ts`, and `lib/content.test.ts` checks it against the copy rules (no em dashes, no hyphenated "72-hour" style phrases).
+
+## Onboarding preview
+
+The download section has a tappable phone (`components/OnboardingDemo.tsx`) that walks through the nine real
+onboarding screens from `design/screens` (Welcome to Passport ready). It is a preview only: state lives in the
+component, nothing is sent or stored, and the pet name, species and ticks carry through to the later screens.

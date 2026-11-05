@@ -1260,3 +1260,400 @@ button {
   color: var(--muted);
   font-weight: 600;
 }
+
+/* onboarding preview phone (download section) */
+.download-demo {
+  flex: 1 1 300px;
+  display: flex;
+  justify-content: center;
+}
+.ob {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+}
+.ob-phone {
+  height: 620px;
+  box-shadow: 0 30px 60px rgba(0, 0, 0, 0.3);
+}
+.ob-screen {
+  width: 100%;
+  height: 100%;
+  border-radius: 36px;
+  background: var(--ground);
+  color: var(--ink);
+  overflow: hidden;
+  padding: 34px 16px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.ob-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  min-height: 36px;
+}
+.ob-back,
+.ob-back-gap {
+  width: 36px;
+  height: 36px;
+  flex: none;
+}
+.ob-back {
+  border: 0;
+  border-radius: 18px;
+  background: var(--subtle);
+  color: var(--ink);
+  font-size: 24px;
+  line-height: 1;
+  cursor: pointer;
+}
+.ob-skip {
+  border: 0;
+  background: none;
+  color: var(--primary-text);
+  font: inherit;
+  font-weight: 700;
+  font-size: 13px;
+  min-width: 36px;
+  height: 36px;
+  cursor: pointer;
+}
+.ob-prog {
+  flex: 1;
+  display: flex;
+  gap: 3px;
+}
+.ob-prog i {
+  flex: 1;
+  height: 4px;
+  border-radius: 2px;
+  background: var(--border);
+}
+.ob-prog i.on {
+  background: var(--primary);
+}
+.ob-body {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 2px 2px 6px;
+  animation: pp-pop 0.25s ease-out both;
+}
+.ob-h {
+  font-family: var(--heading);
+  font-size: 21px;
+  font-weight: 800;
+  line-height: 1.1;
+}
+.ob-h-lg {
+  font-size: 27px;
+}
+.ob-p {
+  font-size: 13px;
+  line-height: 1.45;
+  color: var(--ink2);
+}
+.ob-fine {
+  font-size: 11.5px;
+  line-height: 1.4;
+  color: var(--muted);
+}
+.ob-label {
+  margin-top: 4px;
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--ink2);
+}
+.ob-input {
+  width: 100%;
+  height: 42px;
+  padding: 0 12px;
+  border-radius: 12px;
+  border: 1.5px solid var(--border);
+  background: #fff;
+  font: inherit;
+  font-size: 14px;
+  color: var(--ink);
+}
+.ob-input:focus-visible {
+  outline: 2px solid var(--primary);
+  outline-offset: 1px;
+}
+.ob-two {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+.ob-btn {
+  width: 100%;
+  height: 46px;
+  border: 0;
+  border-radius: 23px;
+  background: var(--primary);
+  color: #fff;
+  font: inherit;
+  font-size: 15px;
+  font-weight: 700;
+  cursor: pointer;
+}
+.ob-btn:hover {
+  background: var(--primary-text);
+}
+.ob-link {
+  border: 0;
+  background: none;
+  color: var(--primary-text);
+  font: inherit;
+  font-size: 13px;
+  font-weight: 700;
+  min-height: 36px;
+  cursor: pointer;
+}
+.ob-cta {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.ob button:focus-visible {
+  outline: 2px solid var(--ink);
+  outline-offset: 2px;
+}
+.ob-welcome {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 12px;
+}
+.ob-logo {
+  width: 56px;
+  height: 56px;
+  border-radius: 18px;
+  background: var(--primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.ob-code {
+  display: flex;
+  gap: 6px;
+}
+.ob-code span {
+  flex: 1;
+  height: 46px;
+  border-radius: 12px;
+  border: 1.5px solid var(--primary);
+  background: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--heading);
+  font-size: 20px;
+  font-weight: 800;
+}
+.ob-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.ob-opt {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  min-height: 52px;
+  padding: 8px 12px;
+  border-radius: 16px;
+  border: 1.5px solid var(--border);
+  background: #fff;
+  color: var(--ink);
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+.ob-opt[aria-pressed="true"] {
+  border-color: var(--primary);
+  background: var(--primary-soft);
+}
+.ob-opt b,
+.ob-sched b,
+.ob-scan b,
+.ob-qr b,
+.ob-pass b {
+  display: block;
+  font-size: 13.5px;
+  font-weight: 700;
+}
+.ob-opt small,
+.ob-sched small,
+.ob-scan small,
+.ob-qr small,
+.ob-pass small {
+  display: block;
+  font-size: 11.5px;
+  line-height: 1.35;
+  color: var(--muted);
+}
+.ob-check {
+  flex: none;
+  width: 22px;
+  height: 22px;
+  border-radius: 11px;
+  border: 1.5px solid var(--border);
+  background: #fff;
+  color: #fff;
+  font-size: 13px;
+  line-height: 19px;
+  text-align: center;
+}
+.ob-check.on {
+  background: var(--primary);
+  border-color: var(--primary);
+}
+.ob-seg {
+  display: flex;
+  gap: 6px;
+}
+.ob-seg button,
+.ob-chips button {
+  flex: 1;
+  min-height: 40px;
+  padding: 0 10px;
+  border-radius: 20px;
+  border: 1.5px solid var(--border);
+  background: #fff;
+  color: var(--ink);
+  font: inherit;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+}
+.ob-seg button[aria-pressed="true"],
+.ob-chips button[aria-pressed="true"] {
+  background: var(--primary);
+  border-color: var(--primary);
+  color: #fff;
+}
+.ob-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+.ob-chips button {
+  flex: 0 0 auto;
+}
+.ob-scan,
+.ob-qr {
+  padding: 10px 12px;
+  border-radius: 16px;
+  border: 1.5px dashed var(--primary);
+  background: var(--primary-soft);
+}
+.ob-sched {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.ob-sched li {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 10px;
+  border-radius: 14px;
+  background: #fff;
+  border: 1px solid var(--border);
+}
+.ob-date {
+  flex: none;
+  width: 40px;
+  padding: 3px 0;
+  border-radius: 10px;
+  background: var(--warm-soft);
+  color: var(--warm-text);
+  font-family: var(--heading);
+  font-size: 16px;
+  font-weight: 800;
+  text-align: center;
+  line-height: 1.1;
+}
+.ob-date small {
+  color: var(--warm-text);
+  font-size: 9px;
+  font-weight: 700;
+}
+.ob-done {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.ob-tick {
+  width: 44px;
+  height: 44px;
+  border-radius: 22px;
+  background: var(--primary);
+  color: #fff;
+  font-size: 22px;
+  line-height: 44px;
+  text-align: center;
+}
+.ob-pass {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px;
+  border-radius: 18px;
+  background: var(--primary);
+  color: #fff;
+}
+.ob-pass small {
+  color: var(--primary-soft);
+}
+.ob-pet,
+.ob-pawbox {
+  width: 52px;
+  height: 52px;
+  border-radius: 14px;
+  object-fit: cover;
+  flex: none;
+}
+.ob-pawbox {
+  background: rgba(255, 255, 255, 0.18);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.ob-caption {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--primary-soft);
+}
+.ob-restart {
+  border: 0;
+  background: none;
+  color: #fff;
+  font: inherit;
+  font-size: 13px;
+  font-weight: 700;
+  text-decoration: underline;
+  min-height: 32px;
+  cursor: pointer;
+}
+.ob-restart:focus-visible {
+  outline: 2px solid #fff;
+  outline-offset: 2px;
+}
+@media (prefers-reduced-motion: reduce) {
+  .ob-body {
+    animation: none;
+  }
+}

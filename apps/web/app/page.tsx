@@ -3,6 +3,7 @@ import { FeatureTabs } from "@/components/FeatureTabs";
 import { Header } from "@/components/Header";
 import { Hero } from "@/components/Hero";
 import { LostDemo } from "@/components/LostDemo";
+import { OnboardingDemo } from "@/components/OnboardingDemo";
 import { StoreButtons } from "@/components/StoreButtons";
 import { PawFilled } from "@/components/icons";
 import { CITIES } from "@/lib/content";
@@ -164,7 +165,10 @@ export default function Home() {
             <div className="wrap download-in">
               <div className="download-copy">
                 <h2>Your pet deserves a passport.</h2>
-                <p className="b">Download free for iPhone and Android.</p>
+                <p className="b">
+                  Download free for iPhone and Android. Want a peek first? Tap through the setup in
+                  the phone.
+                </p>
                 <div className="stores">
                   <StoreButtons light />
                 </div>
@@ -173,6 +177,9 @@ export default function Home() {
                     PawPass is not in the app stores yet. The buttons will go live at launch.
                   </p>
                 )}
+              </div>
+              <div className="download-demo">
+                <OnboardingDemo />
               </div>
             </div>
           </section>
