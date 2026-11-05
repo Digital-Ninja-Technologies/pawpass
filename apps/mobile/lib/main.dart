@@ -1,7 +1,12 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 import 'app.dart';
+import 'features/onboarding/data/device_services.dart';
+import 'features/onboarding/data/in_memory.dart';
+import 'features/onboarding/data/repositories.dart';
+import 'features/onboarding/data/supabase_repositories.dart';
 
 const _supabaseUrl = String.fromEnvironment('SUPABASE_URL');
 const _supabasePublishableKey = String.fromEnvironment(
@@ -10,11 +15,45 @@ const _supabasePublishableKey = String.fromEnvironment(
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
   if (_supabaseUrl.isNotEmpty && _supabasePublishableKey.isNotEmpty) {
     await Supabase.initialize(
       url: _supabaseUrl,
       publishableKey: _supabasePublishableKey,
     );
+    final client = Supabase.instance.client;
+    runApp(
+      PawPassApp(
+        services: AppServices(
+          auth: SupabaseAuthRepository(client),
+          profiles: SupabaseProfileRepository(client),
+          pets: SupabasePetRepository(client),
+          photos: ImagePickerPhotoPicker(),
+          emailApp: DeviceEmailAppLauncher(),
+        ),
+      ),
+    );
+    return;
   }
-  runApp(const PawPassApp());
+
+  if (kDebugMode) {
+    // No Supabase project configured: run on in memory stand ins so the screens can be reviewed.
+    final base = inMemoryServices();
+    runApp(
+      PawPassApp(
+        demo: true,
+        services: AppServices(
+          auth: base.auth,
+          profiles: base.profiles,
+          pets: base.pets,
+          photos: ImagePickerPhotoPicker(),
+          emailApp: DeviceEmailAppLauncher(),
+          demoHint: 'Demo mode: nothing is sent. Use the code 123456.',
+        ),
+      ),
+    );
+    return;
+  }
+
+  runApp(const MissingConfigApp());
 }

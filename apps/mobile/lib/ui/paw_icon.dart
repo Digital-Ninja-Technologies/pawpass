@@ -26,6 +26,24 @@ enum PawIconData {
   camera(
     '<path d="M4 8h3l2-3h6l2 3h3v11H4z"/><circle cx="12" cy="13" r="3.5"/>',
   ),
+  mail(
+    '<rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/>',
+  ),
+  mapPin(
+    '<path d="M12 21s-7-6.2-7-11.5a7 7 0 0 1 14 0C19 14.8 12 21 12 21z"/>'
+    '<circle cx="12" cy="9.5" r="2.5"/>',
+  ),
+  vet(
+    '<path d="M5 3v6a5 5 0 0 0 10 0V3"/><path d="M10 14v2a5 5 0 0 0 10 0v-2"/>'
+    '<circle cx="20" cy="12" r="2"/>',
+  ),
+  shieldCheck(
+    '<path d="M12 3 4 6v6c0 4.5 3.4 8.3 8 9 4.6-.7 8-4.5 8-9V6z"/><path d="m9 12 2 2 4-4"/>',
+  ),
+  shelter(
+    '<path d="M3 10.5 12 3l9 7.5V20a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1z"/>'
+    '<path d="M12 17s-3-1.9-3-3.9a1.6 1.6 0 0 1 3-1 1.6 1.6 0 0 1 3 1c0 2-3 3.9-3 3.9z"/>',
+  ),
   chevronLeft('<path d="m15 6-6 6 6 6"/>'),
   chevronRight('<path d="m9 6 6 6-6 6"/>'),
   chevronDown('<path d="m6 9 6 6 6-6"/>'),

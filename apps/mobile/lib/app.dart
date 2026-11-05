@@ -1,51 +1,89 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
-import 'gallery/component_gallery_screen.dart';
+import 'features/onboarding/data/repositories.dart';
+import 'features/onboarding/state/app_scope.dart';
+import 'features/onboarding/state/onboarding_controller.dart';
+import 'features/onboarding/state/session_controller.dart';
+import 'router.dart';
 import 'ui/ui.dart';
 
-final _router = GoRouter(
-  routes: [
-    GoRoute(
-      path: '/',
-      builder: (context, state) => Scaffold(
-        body: SafeArea(
-          child: Center(
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                const Text('PawPass', style: PawText.title30),
-                if (kDebugMode) ...[
-                  const SizedBox(height: 24),
-                  PawButton(
-                    label: 'Component gallery',
-                    expand: false,
-                    onPressed: () => context.go('/gallery'),
-                  ),
-                ],
-              ],
+class PawPassApp extends StatefulWidget {
+  const PawPassApp({super.key, required this.services, this.demo = false});
+
+  final AppServices services;
+
+  /// True in the debug build with no Supabase project: shows a "DEMO" corner so it is never mistaken
+  /// for the real thing.
+  final bool demo;
+
+  @override
+  State<PawPassApp> createState() => _PawPassAppState();
+}
+
+class _PawPassAppState extends State<PawPassApp> {
+  late final SessionController _session = SessionController(widget.services);
+  late final OnboardingController _onboarding = OnboardingController(
+    widget.services,
+    _session,
+  );
+  late final GoRouter _router = buildRouter(
+    session: _session,
+    onboarding: _onboarding,
+  );
+
+  @override
+  void dispose() {
+    _router.dispose();
+    _onboarding.dispose();
+    _session.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return AppScope(
+      services: widget.services,
+      session: _session,
+      onboarding: _onboarding,
+      child: MaterialApp.router(
+        title: 'PawPass',
+        theme: buildAppTheme(),
+        routerConfig: _router,
+        debugShowCheckedModeBanner: false,
+        builder: (context, child) => widget.demo
+            ? Banner(
+                message: 'DEMO',
+                location: BannerLocation.topEnd,
+                color: PawColors.warm,
+                child: child ?? const SizedBox.shrink(),
+              )
+            : child ?? const SizedBox.shrink(),
+      ),
+    );
+  }
+}
+
+/// Shown when a release build has no Supabase project configured (a build mistake, not a user one).
+class MissingConfigApp extends StatelessWidget {
+  const MissingConfigApp({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      theme: buildAppTheme(),
+      home: const Scaffold(
+        body: Center(
+          child: Padding(
+            padding: EdgeInsets.all(32),
+            child: Text(
+              'PawPass is not set up yet. Please update the app or try again later.',
+              textAlign: TextAlign.center,
+              style: PawText.body15,
             ),
           ),
         ),
       ),
-    ),
-    GoRoute(
-      path: '/gallery',
-      builder: (context, state) => const ComponentGalleryScreen(),
-    ),
-  ],
-);
-
-class PawPassApp extends StatelessWidget {
-  const PawPassApp({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp.router(
-      title: 'PawPass',
-      theme: buildAppTheme(),
-      routerConfig: _router,
     );
   }
 }

@@ -24,6 +24,7 @@ class PawTextField extends StatefulWidget {
     this.maxLength,
     this.inputFormatters,
     this.autofillHints,
+    this.prefix,
     this.suffix,
     this.onChanged,
     this.onSubmitted,
@@ -48,6 +49,8 @@ class PawTextField extends StatefulWidget {
   final Iterable<String>? autofillHints;
 
   /// Trailing widget, for example a dropdown chevron.
+  /// Leading icon inside the field (for example the mail or map pin icon).
+  final Widget? prefix;
   final Widget? suffix;
   final ValueChanged<String>? onChanged;
   final ValueChanged<String>? onSubmitted;
@@ -122,6 +125,10 @@ class _PawTextFieldState extends State<PawTextField> {
             ),
             child: Row(
               children: [
+                if (widget.prefix != null) ...[
+                  widget.prefix!,
+                  const SizedBox(width: 10),
+                ],
                 Expanded(
                   child: TextField(
                     controller: widget.controller,

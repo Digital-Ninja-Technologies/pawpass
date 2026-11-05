@@ -66,5 +66,9 @@
 		<string>UIInterfaceOrientationLandscapeLeft</string>
 		<string>UIInterfaceOrientationLandscapeRight</string>
 	</array>
+	<key>NSCameraUsageDescription</key>
+	<string>PawPass uses the camera so you can take a photo of your pet or yourself.</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>PawPass uses your photos so you can choose a picture of your pet or yourself.</string>
 </dict>
 </plist>
