@@ -14,6 +14,7 @@ Full product requirements: `docs/PRD.md`. Data model: `docs/data-model.md`. Buil
 ```
 apps/mobile     Flutter (Dart) app for owners and partners
 apps/admin      Next.js (App Router, TypeScript) admin web app
+apps/web        Next.js public landing site and waitlist
 supabase        migrations, seed data, RLS policies, edge functions
 design          source designs exported from the PawPass canvas (read only)
 docs            PRD, data model, build plan
