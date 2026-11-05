@@ -166,7 +166,7 @@ export default function Home() {
               <div className="download-copy">
                 <h2>Your pet deserves a passport.</h2>
                 <p className="b">
-                  Download free for iPhone and Android. Want a peek first? Tap through the setup in
+                  Download free for iPhone and Android. Want a peek first? Watch the setup play in
                   the phone.
                 </p>
                 <div className="stores">

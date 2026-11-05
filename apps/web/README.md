@@ -27,6 +27,9 @@ pnpm --filter @pawpass/web dev
 
 ## Onboarding preview
 
-The download section has a tappable phone (`components/OnboardingDemo.tsx`) that walks through the nine real
-onboarding screens from `design/screens` (Welcome to Passport ready). It is a preview only: state lives in the
-component, nothing is sent or stored, and the pet name, species and ticks carry through to the later screens.
+The download section has a phone (`components/OnboardingDemo.tsx`) that plays the nine real onboarding screens
+from `design/screens` (Welcome to Passport ready) by itself and loops: it types the email, name and area,
+fills the code, ticks the options and taps each button. It is a recording, not a form: nothing is sent or
+stored and there is nothing to tap inside the phone. It only runs while on screen and the tab is in front, has a
+"Pause preview" button (with previous and next step buttons while paused), and does not autoplay when the
+visitor prefers reduced motion. Timings live in `SCENES` at the top of the file (units of 100 ms).

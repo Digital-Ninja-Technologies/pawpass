@@ -1261,7 +1261,7 @@ button {
   font-weight: 600;
 }
 
-/* onboarding preview phone (download section) */
+/* onboarding preview phone (download section): a self-playing, non-interactive screen */
 .download-demo {
   flex: 1 1 300px;
   display: flex;
@@ -1276,6 +1276,8 @@ button {
 .ob-phone {
   height: 620px;
   box-shadow: 0 30px 60px rgba(0, 0, 0, 0.3);
+  pointer-events: none;
+  user-select: none;
 }
 .ob-screen {
   width: 100%;
@@ -1303,24 +1305,19 @@ button {
   flex: none;
 }
 .ob-back {
-  border: 0;
   border-radius: 18px;
   background: var(--subtle);
   color: var(--ink);
   font-size: 24px;
-  line-height: 1;
-  cursor: pointer;
+  line-height: 34px;
+  text-align: center;
 }
 .ob-skip {
-  border: 0;
-  background: none;
   color: var(--primary-text);
-  font: inherit;
   font-weight: 700;
   font-size: 13px;
   min-width: 36px;
-  height: 36px;
-  cursor: pointer;
+  text-align: right;
 }
 .ob-prog {
   flex: 1;
@@ -1339,7 +1336,7 @@ button {
 .ob-body {
   flex: 1;
   min-height: 0;
-  overflow-y: auto;
+  overflow: hidden;
   display: flex;
   flex-direction: column;
   gap: 8px;
@@ -1372,19 +1369,34 @@ button {
   color: var(--ink2);
 }
 .ob-input {
+  display: flex;
+  align-items: center;
   width: 100%;
+  min-width: 0;
   height: 42px;
   padding: 0 12px;
   border-radius: 12px;
   border: 1.5px solid var(--border);
   background: #fff;
-  font: inherit;
   font-size: 14px;
   color: var(--ink);
+  white-space: nowrap;
+  overflow: hidden;
 }
-.ob-input:focus-visible {
-  outline: 2px solid var(--primary);
-  outline-offset: 1px;
+.ob-input.focus {
+  border-color: var(--primary);
+}
+.ob-caret {
+  width: 1.5px;
+  height: 18px;
+  margin-left: 1px;
+  background: var(--primary);
+  animation: ob-blink 1s steps(1) infinite;
+}
+@keyframes ob-blink {
+  50% {
+    opacity: 0;
+  }
 }
 .ob-two {
   display: grid;
@@ -1394,36 +1406,38 @@ button {
 .ob-btn {
   width: 100%;
   height: 46px;
-  border: 0;
   border-radius: 23px;
   background: var(--primary);
   color: #fff;
-  font: inherit;
   font-size: 15px;
   font-weight: 700;
-  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition:
+    transform 0.12s,
+    background 0.12s;
 }
-.ob-btn:hover {
+.ob-btn.press {
   background: var(--primary-text);
+  transform: scale(0.96);
+}
+.ob-btn.alt {
+  background: var(--ink);
 }
 .ob-link {
-  border: 0;
-  background: none;
   color: var(--primary-text);
-  font: inherit;
   font-size: 13px;
   font-weight: 700;
   min-height: 36px;
-  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 .ob-cta {
   display: flex;
   flex-direction: column;
   gap: 2px;
-}
-.ob button:focus-visible {
-  outline: 2px solid var(--ink);
-  outline-offset: 2px;
 }
 .ob-welcome {
   flex: 1;
@@ -1449,7 +1463,7 @@ button {
   flex: 1;
   height: 46px;
   border-radius: 12px;
-  border: 1.5px solid var(--primary);
+  border: 1.5px solid var(--border);
   background: #fff;
   display: flex;
   align-items: center;
@@ -1457,6 +1471,9 @@ button {
   font-family: var(--heading);
   font-size: 20px;
   font-weight: 800;
+}
+.ob-code span.on {
+  border-color: var(--primary);
 }
 .ob-list {
   display: flex;
@@ -1467,18 +1484,16 @@ button {
   display: flex;
   align-items: center;
   gap: 10px;
-  width: 100%;
   min-height: 52px;
   padding: 8px 12px;
   border-radius: 16px;
   border: 1.5px solid var(--border);
   background: #fff;
-  color: var(--ink);
-  font: inherit;
-  text-align: left;
-  cursor: pointer;
+  transition:
+    background 0.2s,
+    border-color 0.2s;
 }
-.ob-opt[aria-pressed="true"] {
+.ob-opt.on {
   border-color: var(--primary);
   background: var(--primary-soft);
 }
@@ -1521,8 +1536,8 @@ button {
   display: flex;
   gap: 6px;
 }
-.ob-seg button,
-.ob-chips button {
+.ob-seg span,
+.ob-chips span {
   flex: 1;
   min-height: 40px;
   padding: 0 10px;
@@ -1530,13 +1545,17 @@ button {
   border: 1.5px solid var(--border);
   background: #fff;
   color: var(--ink);
-  font: inherit;
   font-size: 13px;
   font-weight: 700;
-  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition:
+    background 0.2s,
+    color 0.2s;
 }
-.ob-seg button[aria-pressed="true"],
-.ob-chips button[aria-pressed="true"] {
+.ob-seg span.on,
+.ob-chips span.on {
   background: var(--primary);
   border-color: var(--primary);
   color: #fff;
@@ -1546,7 +1565,7 @@ button {
   flex-wrap: wrap;
   gap: 6px;
 }
-.ob-chips button {
+.ob-chips span {
   flex: 0 0 auto;
 }
 .ob-scan,
@@ -1618,42 +1637,52 @@ button {
 .ob-pass small {
   color: var(--primary-soft);
 }
-.ob-pet,
-.ob-pawbox {
+.ob-pet {
   width: 52px;
   height: 52px;
   border-radius: 14px;
   object-fit: cover;
   flex: none;
 }
-.ob-pawbox {
-  background: rgba(255, 255, 255, 0.18);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
 .ob-caption {
   font-size: 13px;
   font-weight: 700;
   color: var(--primary-soft);
 }
-.ob-restart {
-  border: 0;
-  background: none;
+.ob-ctrl {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.ob-ctrl button {
+  min-width: 44px;
+  min-height: 44px;
+  padding: 0 16px;
+  border-radius: 22px;
+  border: 1.5px solid rgba(255, 255, 255, 0.55);
+  background: transparent;
   color: #fff;
   font: inherit;
-  font-size: 13px;
+  font-size: 14px;
   font-weight: 700;
-  text-decoration: underline;
-  min-height: 32px;
   cursor: pointer;
 }
-.ob-restart:focus-visible {
+.ob-ctrl button:hover {
+  background: rgba(255, 255, 255, 0.14);
+}
+.ob-ctrl button:focus-visible {
   outline: 2px solid #fff;
   outline-offset: 2px;
 }
 @media (prefers-reduced-motion: reduce) {
-  .ob-body {
+  .ob-body,
+  .ob-caret {
     animation: none;
+  }
+  .ob-btn,
+  .ob-opt,
+  .ob-seg span,
+  .ob-chips span {
+    transition: none;
   }
 }

@@ -1,94 +1,88 @@
 "use client";
 
 import Image from "next/image";
-import { useId, useState, type ReactNode } from "react";
+import { useEffect, useRef, useState, type ReactNode } from "react";
 import { PawOutline } from "./icons";
 
 /**
- * A tappable preview of the real onboarding flow (Welcome to Passport ready) inside a phone.
- * Everything stays in this component's memory: nothing is sent or stored.
+ * A self-playing preview of the real onboarding flow (Welcome to Passport ready) inside a phone.
+ * It types, taps and moves on by itself, then loops. Nothing is sent or stored, and there is a
+ * pause button (and no autoplay at all for people who ask for reduced motion).
  */
 
-type Species = "dog" | "cat" | "other";
+const TICK_MS = 100;
 
-const STEPS = [
-  "Welcome",
-  "Sign up",
-  "Verify",
-  "Account type",
-  "Profile",
-  "Add pet",
-  "Health history",
-  "Reminders",
-  "Passport ready",
-] as const;
-const LAST = STEPS.length - 1;
+type Scene = { name: string; dur: number; press?: number };
 
-const ACCOUNT_TYPES = [
-  ["owner", "Pet owner", "Track health, book care, join the community"],
-  ["vet", "Vet or service provider", "Clinics, groomers, trainers, boarding"],
-  ["breeder", "Breeder", "List litters with verified passports"],
-  ["shelter", "Shelter or rescue", "Rehome pets and screen adopters"],
-] as const;
+// Durations are in ticks (100 ms). `press` is when the main button is tapped, just before the scene ends.
+const SCENES: Scene[] = [
+  { name: "Welcome", dur: 30, press: 26 },
+  { name: "Sign up", dur: 44, press: 40 },
+  { name: "Verify", dur: 42, press: 38 },
+  { name: "Account type", dur: 26, press: 22 },
+  { name: "Profile", dur: 42, press: 38 },
+  { name: "Add pet", dur: 31, press: 27 },
+  { name: "Health history", dur: 32, press: 28 },
+  { name: "Reminders", dur: 28, press: 24 },
+  { name: "Passport ready", dur: 45 },
+];
+const STARTS = SCENES.reduce<number[]>(
+  (acc, s, i) => [...acc, i === 0 ? 0 : acc[i - 1] + SCENES[i - 1].dur],
+  [],
+);
+const TOTAL = SCENES.reduce((n, s) => n + s.dur, 0);
+const LAST = SCENES.length - 1;
 
-const VACCINES = [
-  ["core", "Last given 12 Mar 2026"],
-  ["rabies", "Last given 12 Nov 2025"],
-  ["deworm", "Last given 20 Oct 2026"],
-  ["tick", "Last given 2 Sep 2026"],
-] as const;
-
-function vaccineName(id: string, species: Species) {
-  if (id === "core") {
-    return species === "cat"
-      ? "FVRCP (3-in-1)"
-      : species === "dog"
-        ? "DHPP (5-in-1)"
-        : "Core vaccine";
-  }
-  return { rabies: "Rabies", deworm: "Deworming", tick: "Tick & flea treatment" }[id] ?? id;
+function sceneAt(t: number) {
+  let i = SCENES.length - 1;
+  while (i > 0 && t < STARTS[i]) i--;
+  return { i, lt: t - STARTS[i] };
 }
 
-const CHANNELS = ["App notifications", "WhatsApp", "Email"] as const;
+/** The part of `text` typed by local tick `lt`, starting at `start`, at about six characters a second. */
+function typed(text: string, lt: number, start: number) {
+  return text.slice(0, Math.max(0, Math.floor((lt - start) * 0.6)));
+}
 
-function Check({ on }: { on: boolean }) {
+const SUMMARY =
+  "Animated preview of the PawPass setup: welcome, sign up with your email, confirm the code, choose an account type, add your profile, add your first pet, add health history, turn on reminders, and your pet's passport is ready.";
+
+function Field({ label, value, active }: { label: string; value: string; active: boolean }) {
   return (
-    <span className={`ob-check${on ? " on" : ""}`} aria-hidden="true">
-      {on ? "✓" : ""}
-    </span>
+    <div>
+      <p className="ob-label">{label}</p>
+      <div className={`ob-input${active ? " focus" : ""}`}>
+        {value}
+        {active ? <span className="ob-caret" /> : null}
+      </div>
+    </div>
   );
 }
 
-export function OnboardingDemo() {
-  const uid = useId();
-  const [step, setStep] = useState(0);
-  const [types, setTypes] = useState<string[]>(["owner"]);
-  const [species, setSpecies] = useState<Species>("dog");
-  const [petName, setPetName] = useState("Bingo");
-  const [sex, setSex] = useState<"Male" | "Female">("Male");
-  const [vax, setVax] = useState<string[]>(["core", "rabies", "deworm"]);
-  const [channels, setChannels] = useState<string[]>(["App notifications", "WhatsApp"]);
-
-  const name = petName.trim() || "your pet";
-  const possessive = name.endsWith("s") ? `${name}'` : `${name}'s`;
-  const toggle = (list: string[], set: (v: string[]) => void, v: string) =>
-    set(list.includes(v) ? list.filter((x) => x !== v) : [...list, v]);
-  const next = () => setStep((s) => Math.min(LAST, s + 1));
-  const back = () => setStep((s) => Math.max(0, s - 1));
-  const restart = () => setStep(0);
-
-  let body: ReactNode;
-  let cta: ReactNode = (
-    <button type="button" className="ob-btn" onClick={next}>
-      Continue
-    </button>
+function Opt({ on, title, sub }: { on: boolean; title: string; sub: string }) {
+  return (
+    <div className={`ob-opt${on ? " on" : ""}`}>
+      <span className={`ob-check${on ? " on" : ""}`}>{on ? "✓" : ""}</span>
+      <span>
+        <b>{title}</b>
+        <small>{sub}</small>
+      </span>
+    </div>
   );
+}
 
-  switch (step) {
+function Screen({ i, lt }: { i: number; lt: number }) {
+  const press = SCENES[i].press;
+  const pressed = press !== undefined && lt >= press;
+  const btn = (label: string) => <div className={`ob-btn${pressed ? " press" : ""}`}>{label}</div>;
+  let body: ReactNode;
+  let cta: ReactNode = btn("Continue");
+
+  switch (i) {
     case 0:
       body = (
         <div className="ob-welcome">
-          <span className="ob-logo" aria-hidden="true">
+          <span className="ob-logo">
             <PawOutline size={30} />
           </span>
           <h3 className="ob-h ob-h-lg">
@@ -104,82 +98,58 @@ export function OnboardingDemo() {
       );
       cta = (
         <>
-          <button type="button" className="ob-btn" onClick={next}>
-            Get started
-          </button>
-          <button type="button" className="ob-link" onClick={next}>
-            I already have an account
-          </button>
+          {btn("Get started")}
+          <span className="ob-link">I already have an account</span>
         </>
       );
       break;
-    case 1:
+    case 1: {
+      const v = typed("tolu@example.com", lt, 6);
       body = (
         <>
           <h3 className="ob-h">What&apos;s your email?</h3>
           <p className="ob-p">
             We&apos;ll email you a 6-digit code to sign in. No password needed.
           </p>
-          <label className="ob-label" htmlFor={`${uid}-email`}>
-            Email address
-          </label>
-          <input
-            id={`${uid}-email`}
-            className="ob-input"
-            type="text"
-            inputMode="email"
-            autoComplete="off"
-            placeholder="you@example.com"
-          />
-          <p className="ob-fine">Preview only. Nothing you type here is sent or saved.</p>
+          <Field label="Email address" value={v} active={lt >= 4 && lt < 38} />
         </>
       );
-      cta = (
-        <button type="button" className="ob-btn" onClick={next}>
-          Send code
-        </button>
-      );
+      cta = btn("Send code");
       break;
-    case 2:
+    }
+    case 2: {
+      const shown = [6, 11, 16, 21, 26, 31].map((s) => lt >= s);
       body = (
         <>
           <h3 className="ob-h">Enter the code</h3>
-          <p className="ob-p">We filled in a sample code for you.</p>
-          <div className="ob-code" role="img" aria-label="Sample code 4 8 2 1 7 6">
-            {["4", "8", "2", "1", "7", "6"].map((d, i) => (
-              <span key={i}>{d}</span>
+          <p className="ob-p">Sent to tolu@example.com</p>
+          <div className="ob-code">
+            {["4", "8", "2", "1", "7", "6"].map((d, k) => (
+              <span key={k} className={shown[k] ? "on" : ""}>
+                {shown[k] ? d : ""}
+              </span>
             ))}
           </div>
           <p className="ob-fine">Check spam if it&apos;s not there.</p>
         </>
       );
-      cta = (
-        <button type="button" className="ob-btn" onClick={next}>
-          Verify
-        </button>
-      );
+      cta = btn("Verify");
       break;
+    }
     case 3:
       body = (
         <>
           <h3 className="ob-h">How will you use PawPass?</h3>
           <p className="ob-p">Pick all that apply. You can add more later.</p>
-          <div className="ob-list" role="group" aria-label="Account types">
-            {ACCOUNT_TYPES.map(([id, title, sub]) => (
-              <button
-                key={id}
-                type="button"
-                className="ob-opt"
-                aria-pressed={types.includes(id)}
-                onClick={() => toggle(types, setTypes, id)}
-              >
-                <Check on={types.includes(id)} />
-                <span>
-                  <b>{title}</b>
-                  <small>{sub}</small>
-                </span>
-              </button>
-            ))}
+          <div className="ob-list">
+            <Opt on={lt >= 8} title="Pet owner" sub="Track health, book care, join the community" />
+            <Opt
+              on={false}
+              title="Vet or service provider"
+              sub="Clinics, groomers, trainers, boarding"
+            />
+            <Opt on={false} title="Breeder" sub="List litters with verified passports" />
+            <Opt on={false} title="Shelter or rescue" sub="Rehome pets and screen adopters" />
           </div>
         </>
       );
@@ -189,41 +159,14 @@ export function OnboardingDemo() {
         <>
           <h3 className="ob-h">Tell us about you</h3>
           <div className="ob-two">
-            <div>
-              <label className="ob-label" htmlFor={`${uid}-fn`}>
-                First name
-              </label>
-              <input
-                id={`${uid}-fn`}
-                className="ob-input"
-                type="text"
-                autoComplete="off"
-                placeholder="Tolu"
-              />
-            </div>
-            <div>
-              <label className="ob-label" htmlFor={`${uid}-ln`}>
-                Last name
-              </label>
-              <input
-                id={`${uid}-ln`}
-                className="ob-input"
-                type="text"
-                autoComplete="off"
-                placeholder="Adeyemi"
-              />
-            </div>
+            <Field label="First name" value={typed("Tolu", lt, 4)} active={lt >= 3 && lt < 12} />
+            <Field
+              label="Last name"
+              value={typed("Adeyemi", lt, 12)}
+              active={lt >= 12 && lt < 24}
+            />
           </div>
-          <label className="ob-label" htmlFor={`${uid}-area`}>
-            Your area
-          </label>
-          <input
-            id={`${uid}-area`}
-            className="ob-input"
-            type="text"
-            autoComplete="off"
-            placeholder="e.g. Lekki"
-          />
+          <Field label="Your area" value={typed("Lekki", lt, 25)} active={lt >= 24 && lt < 36} />
           <p className="ob-fine">
             Your area helps us show nearby vets and lost-pet alerts. We never show your exact
             address.
@@ -236,42 +179,17 @@ export function OnboardingDemo() {
         <>
           <h3 className="ob-h">Add your first pet</h3>
           <p className="ob-p">This creates their Pet Passport.</p>
-          <p className="ob-label" id={`${uid}-sp`}>
-            Species
-          </p>
-          <div className="ob-seg" role="group" aria-labelledby={`${uid}-sp`}>
-            {(["dog", "cat", "other"] as const).map((s) => (
-              <button
-                key={s}
-                type="button"
-                aria-pressed={species === s}
-                onClick={() => setSpecies(s)}
-              >
-                {s === "dog" ? "Dog" : s === "cat" ? "Cat" : "Other"}
-              </button>
-            ))}
+          <p className="ob-label">Species</p>
+          <div className="ob-seg">
+            <span className={lt >= 5 ? "on" : ""}>Dog</span>
+            <span>Cat</span>
+            <span>Other</span>
           </div>
-          <label className="ob-label" htmlFor={`${uid}-pn`}>
-            Pet&apos;s name
-          </label>
-          <input
-            id={`${uid}-pn`}
-            className="ob-input"
-            type="text"
-            autoComplete="off"
-            maxLength={20}
-            value={petName}
-            onChange={(e) => setPetName(e.target.value)}
-          />
-          <p className="ob-label" id={`${uid}-sx`}>
-            Sex
-          </p>
-          <div className="ob-seg" role="group" aria-labelledby={`${uid}-sx`}>
-            {(["Male", "Female"] as const).map((s) => (
-              <button key={s} type="button" aria-pressed={sex === s} onClick={() => setSex(s)}>
-                {s}
-              </button>
-            ))}
+          <Field label="Pet's name" value={typed("Bingo", lt, 8)} active={lt >= 7 && lt < 18} />
+          <p className="ob-label">Sex</p>
+          <div className="ob-seg">
+            <span className={lt >= 20 ? "on" : ""}>Male</span>
+            <span>Female</span>
           </div>
         </>
       );
@@ -279,53 +197,50 @@ export function OnboardingDemo() {
     case 6:
       body = (
         <>
-          <h3 className="ob-h">{possessive} health so far</h3>
+          <h3 className="ob-h">Bingo&apos;s health so far</h3>
           <p className="ob-p">Add past vaccines so we can schedule what&apos;s next.</p>
           <div className="ob-scan">
             <b>Scan vaccine card</b>
             <small>Snap the paper card, we&apos;ll read the dates</small>
           </div>
-          <div className="ob-list" role="group" aria-label="Past vaccines">
-            {VACCINES.map(([id, date]) => (
-              <button
-                key={id}
-                type="button"
-                className="ob-opt"
-                aria-pressed={vax.includes(id)}
-                onClick={() => toggle(vax, setVax, id)}
-              >
-                <Check on={vax.includes(id)} />
-                <span>
-                  <b>{vaccineName(id, species)}</b>
-                  <small>{vax.includes(id) ? date : "Not added"}</small>
-                </span>
-              </button>
-            ))}
+          <div className="ob-list">
+            <Opt
+              on={lt >= 8}
+              title="DHPP (5-in-1)"
+              sub={lt >= 8 ? "Last given 12 Mar 2026" : "Not added"}
+            />
+            <Opt
+              on={lt >= 14}
+              title="Rabies"
+              sub={lt >= 14 ? "Last given 12 Nov 2025" : "Not added"}
+            />
+            <Opt
+              on={lt >= 20}
+              title="Deworming"
+              sub={lt >= 20 ? "Last given 20 Oct 2026" : "Not added"}
+            />
+            <Opt on={false} title="Tick & flea treatment" sub="Not added" />
           </div>
         </>
       );
-      cta = (
-        <button type="button" className="ob-btn" onClick={next}>
-          Save health history
-        </button>
-      );
+      cta = btn("Save health history");
       break;
     case 7:
       body = (
         <>
           <h3 className="ob-h">Never miss a dose</h3>
           <p className="ob-p">
-            Here&apos;s {possessive} suggested schedule. We&apos;ll remind you 7 days and 1 day
+            Here&apos;s Bingo&apos;s suggested schedule. We&apos;ll remind you 7 days and 1 day
             before.
           </p>
           <ul className="ob-sched">
             {[
               ["NOV", "12", "Rabies booster", "Yearly · due in 7 days"],
               ["JAN", "20", "Deworming", "Every 3 months"],
-              ["MAR", "12", "Booster vaccine", "Yearly"],
+              ["MAR", "12", "DHPP booster", "Yearly"],
             ].map(([m, d, t, s]) => (
               <li key={t}>
-                <span className="ob-date" aria-hidden="true">
+                <span className="ob-date">
                   <small>{m}</small>
                   {d}
                 </span>
@@ -336,123 +251,140 @@ export function OnboardingDemo() {
               </li>
             ))}
           </ul>
-          <p className="ob-label" id={`${uid}-ch`}>
-            Remind me by
-          </p>
-          <div className="ob-chips" role="group" aria-labelledby={`${uid}-ch`}>
-            {CHANNELS.map((c) => (
-              <button
-                key={c}
-                type="button"
-                aria-pressed={channels.includes(c)}
-                onClick={() => toggle(channels, setChannels, c)}
-              >
-                {c}
-              </button>
-            ))}
+          <p className="ob-label">Remind me by</p>
+          <div className="ob-chips">
+            <span className={lt >= 8 ? "on" : ""}>App notifications</span>
+            <span className={lt >= 14 ? "on" : ""}>WhatsApp</span>
+            <span>Email</span>
           </div>
         </>
       );
-      cta = (
-        <button type="button" className="ob-btn" onClick={next}>
-          Turn on reminders
-        </button>
-      );
+      cta = btn("Turn on reminders");
       break;
     default:
       body = (
         <div className="ob-done">
-          <span className="ob-tick" aria-hidden="true">
-            ✓
-          </span>
-          <h3 className="ob-h">{possessive} passport is ready</h3>
-          <p className="ob-p">
-            {vax.length} {vax.length === 1 ? "record" : "records"} saved and reminders are{" "}
-            {channels.length ? "on" : "off"}.
-          </p>
+          <span className="ob-tick">✓</span>
+          <h3 className="ob-h">Bingo&apos;s passport is ready</h3>
+          <p className="ob-p">3 records saved and reminders are on.</p>
           <div className="ob-pass">
-            {species === "other" ? (
-              <span className="ob-pawbox" aria-hidden="true">
-                <PawOutline size={26} />
-              </span>
-            ) : (
-              <Image
-                src={species === "cat" ? "/photos/mimi.jpg" : "/photos/bingo.jpg"}
-                alt=""
-                width={52}
-                height={52}
-                className="ob-pet"
-              />
-            )}
+            <Image src="/photos/bingo.jpg" alt="" width={52} height={52} className="ob-pet" />
             <span>
-              <b>{petName.trim() || "Your pet"}</b>
-              <small>
-                {species === "dog" ? "Dog" : species === "cat" ? "Cat" : "Pet"} · {sex}
-              </small>
+              <b>Bingo</b>
+              <small>Dog · Male</small>
               <small>Tag ID PP-4821-LK</small>
             </span>
           </div>
           <div className="ob-qr">
             <b>Get a QR collar tag</b>
-            <small>Anyone who finds {name} can reach you safely</small>
+            <small>Anyone who finds Bingo can reach you safely</small>
           </div>
         </div>
       );
       cta = (
-        <button type="button" className="ob-btn" onClick={restart}>
-          Start over
-        </button>
+        <div className="ob-btn alt">
+          <span>Go to home</span>
+        </div>
       );
   }
 
   return (
-    <section className="ob" aria-label="Try PawPass onboarding">
-      <div className="phone ob-phone">
-        <div className="ob-screen">
-          <div className="ob-top">
-            {step > 0 && step < LAST ? (
-              <button type="button" className="ob-back" onClick={back} aria-label="Back">
-                ‹
-              </button>
-            ) : (
-              <span className="ob-back-gap" />
-            )}
-            {step > 0 && step < LAST ? (
-              <span className="ob-prog" aria-hidden="true">
-                {STEPS.slice(1, LAST).map((s, i) => (
-                  <i key={s} className={i < step ? "on" : ""} />
-                ))}
-              </span>
-            ) : null}
-            {step === 6 ? (
-              <button type="button" className="ob-skip" onClick={next}>
-                Skip
-              </button>
-            ) : (
-              <span className="ob-back-gap" />
-            )}
-          </div>
-          <div className="ob-body" key={step}>
-            {body}
-          </div>
-          <div className="ob-cta">{cta}</div>
-        </div>
+    <div className="ob-screen">
+      <div className="ob-top">
+        {i > 0 && i < LAST ? <span className="ob-back">‹</span> : <span className="ob-back-gap" />}
+        {i > 0 && i < LAST ? (
+          <span className="ob-prog">
+            {SCENES.slice(1, LAST).map((s, k) => (
+              <i key={s.name} className={k < i ? "on" : ""} />
+            ))}
+          </span>
+        ) : null}
+        {i === 6 ? <span className="ob-skip">Skip</span> : <span className="ob-back-gap" />}
       </div>
-      <p className="ob-caption" role="status">
-        <span className="sr-only">
-          Step {step + 1} of {STEPS.length}:{" "}
-        </span>
-        {STEPS[step]}
-        <span aria-hidden="true">
-          {" "}
-          · {step + 1}/{STEPS.length}
-        </span>
+      <div className="ob-body" key={i}>
+        {body}
+      </div>
+      <div className="ob-cta">{cta}</div>
+    </div>
+  );
+}
+
+export function OnboardingDemo() {
+  const rootRef = useRef<HTMLElement>(null);
+  const [t, setT] = useState(0);
+  const [playing, setPlaying] = useState(true);
+  const [visible, setVisible] = useState(false);
+  const [tabHidden, setTabHidden] = useState(false);
+
+  // Reduced motion: no autoplay. Start paused on a finished first screen; the buttons step through.
+  useEffect(() => {
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      setPlaying(false);
+      setT(SCENES[0].dur - 2);
+    }
+  }, []);
+
+  // Only run while on screen and the tab is in front.
+  useEffect(() => {
+    const el = rootRef.current;
+    if (!el) return;
+    const io = new IntersectionObserver(([e]) => setVisible(e.isIntersecting), { threshold: 0.25 });
+    io.observe(el);
+    const onVis = () => setTabHidden(document.hidden);
+    document.addEventListener("visibilitychange", onVis);
+    return () => {
+      io.disconnect();
+      document.removeEventListener("visibilitychange", onVis);
+    };
+  }, []);
+
+  const running = playing && visible && !tabHidden;
+  useEffect(() => {
+    if (!running) return;
+    const id = setInterval(() => setT((v) => (v + 1) % TOTAL), TICK_MS);
+    return () => clearInterval(id);
+  }, [running]);
+
+  const { i, lt } = sceneAt(t);
+  const goTo = (n: number) => setT(STARTS[n] + SCENES[n].dur - 2);
+
+  return (
+    <section ref={rootRef} className="ob" aria-label="PawPass setup preview" data-scene={i}>
+      <p className="sr-only">{SUMMARY}</p>
+      <div className="phone ob-phone" aria-hidden="true">
+        <Screen i={i} lt={lt} />
+      </div>
+      <p className="ob-caption" aria-hidden="true">
+        {SCENES[i].name} · {i + 1}/{SCENES.length}
       </p>
-      {step > 0 ? (
-        <button type="button" className="ob-restart" onClick={restart}>
-          Restart
+      <div className="ob-ctrl">
+        {!playing ? (
+          <button
+            type="button"
+            onClick={() => goTo((i + LAST) % SCENES.length)}
+            aria-label="Previous step"
+          >
+            ‹
+          </button>
+        ) : null}
+        <button
+          type="button"
+          className="ob-pp"
+          onClick={() => setPlaying((p) => !p)}
+          aria-pressed={!playing}
+        >
+          {playing ? "Pause preview" : "Play preview"}
         </button>
-      ) : null}
+        {!playing ? (
+          <button
+            type="button"
+            onClick={() => goTo((i + 1) % SCENES.length)}
+            aria-label="Next step"
+          >
+            ›
+          </button>
+        ) : null}
+      </div>
     </section>
   );
 }
