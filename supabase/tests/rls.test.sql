@@ -79,7 +79,7 @@ end $$;
 :tolu
 do $$ begin
   assert (select count(*) from public.health_records) = 4, 'Tolu sees Bingo records';
-  assert (select count(*) from public.reminders) = 1, 'Tolu sees the rabies reminder';
+  assert (select count(*) from public.reminders) = 2, 'Tolu sees the rabies and DHPP reminders (made from her records)';
   assert test_helpers.denied($q$ insert into public.health_records (pet_id, type, name, added_by_user_id, verified_by_partner_id, verified_at)
     values ('c0000000-0000-0000-0000-000000000001', 'vaccine', 'Forged', 'a0000000-0000-0000-0000-000000000001', 'b0000000-0000-0000-0000-000000000001', now()) $q$),
     'owner cannot create a vet verified record';

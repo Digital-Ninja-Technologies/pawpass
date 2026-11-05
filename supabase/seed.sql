@@ -66,6 +66,9 @@ insert into public.pets (id, owner_user_id, name, species, breed, sex, date_of_b
   ('c0000000-0000-0000-0000-000000000004', 'a0000000-0000-0000-0000-000000000004', 'Biscuit', 'dog', 'Mixed breed', 'female', '2025-02-10', 'Tan and white', null, null),
   ('c0000000-0000-0000-0000-000000000005', 'a0000000-0000-0000-0000-000000000005', 'Luna',    'cat', 'Persian', 'female', '2023-09-20', 'White', null, null);
 
+-- Tolu wants reminders on the app and WhatsApp (set before the records, which create the reminders).
+update public.profiles set reminder_channels = array['push', 'whatsapp'] where user_id = 'a0000000-0000-0000-0000-000000000001';
+
 insert into public.health_records
   (pet_id, type, name, given_on, next_due_on, value, given_by_partner_id, verified_by_partner_id, verified_at, added_by_user_id) values
   -- Vet verified by Paws & Claws (Dr. Amina Bello).
@@ -79,10 +82,7 @@ insert into public.health_records
   ('c0000000-0000-0000-0000-000000000001', 'weight',    'Weight',           '2026-10-01', null, '41 kg',
      null, null, null, 'a0000000-0000-0000-0000-000000000001');
 
-insert into public.reminders (pet_id, health_record_id, due_on, channels)
-select h.pet_id, h.id, h.next_due_on, array['push', 'whatsapp']
-from public.health_records h
-where h.pet_id = 'c0000000-0000-0000-0000-000000000001' and h.name = 'Rabies booster';
+-- Reminders are created from the records above by a trigger, using the owner's reminder_channels.
 
 -- ---------------------------------------------------------------------------
 -- Listings, community
@@ -94,3 +94,17 @@ insert into public.listings (partner_account_id, pet_id, kind, price_kobo, statu
 insert into public.posts (author_user_id, pet_id, body, visibility, area) values
   ('a0000000-0000-0000-0000-000000000005', 'c0000000-0000-0000-0000-000000000005', 'Luna loves the window seat this morning.', 'everyone', 'Yaba'),
   ('a0000000-0000-0000-0000-000000000001', 'c0000000-0000-0000-0000-000000000001', 'Bingo met the new puppy next door.', 'nearby', 'Lekki');
+
+-- ---------------------------------------------------------------------------
+-- Emergency vet details (milestone 2). Phone numbers are placeholders, not real lines.
+-- ---------------------------------------------------------------------------
+update public.partner_accounts
+   set phone = '+2340000000001', opens_at = '08:00', closes_at = '20:00', emergency_care = true
+ where id = 'b0000000-0000-0000-0000-000000000001';
+
+insert into public.partner_accounts
+  (id, owner_user_id, type, business_name, area, point, status, verified_at, phone, open_24h, emergency_care, home_visits)
+values
+  ('b0000000-0000-0000-0000-0000000000a1', 'a0000000-0000-0000-0000-000000000002', 'vet', 'Lekki Animal Hospital', 'Lekki',
+     extensions.st_point(3.4720, 6.4400, 4326)::extensions.geography, 'approved', now() - interval '45 days',
+     '+2340000000002', true, true, false);
