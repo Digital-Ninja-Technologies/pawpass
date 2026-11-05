@@ -789,6 +789,53 @@ button {
   flex: none;
   font-size: 12px;
 }
+/* scroll story: pinned under the header while the features play, then the section scrolls away */
+.fx-rail {
+  display: none;
+}
+.fx-on {
+  height: calc(var(--fx-steps) * 70vh + 100vh - 96px);
+}
+.fx-on .fx-pin {
+  position: sticky;
+  top: 96px;
+  height: calc(100vh - 96px);
+  padding-top: 16px;
+  padding-bottom: 16px;
+}
+.fx-on .fx-rail {
+  display: flex;
+  gap: 6px;
+}
+.fx-rail i {
+  --fill: 0;
+  flex: 1;
+  max-width: 96px;
+  height: 4px;
+  border-radius: 2px;
+  background: var(--border);
+  position: relative;
+  overflow: hidden;
+}
+.fx-rail i::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: var(--primary);
+  transform: scaleX(var(--fill));
+  transform-origin: left;
+}
+.fx-on .points li {
+  opacity: 0;
+  transform: translateY(10px);
+  transition:
+    opacity 0.35s,
+    transform 0.35s;
+}
+.fx-on .points li.show {
+  opacity: 1;
+  transform: none;
+}
 .features-visual {
   flex: 1 1 380px;
   min-width: 0;

@@ -33,3 +33,12 @@ fills the code, ticks the options and taps each button. It is a recording, not a
 stored and there is nothing to tap inside the phone. It only runs while on screen and the tab is in front, has a
 "Pause preview" button (with previous and next step buttons while paused), and does not autoplay when the
 visitor prefers reduced motion. Timings live in `SCENES` at the top of the file (units of 100 ms).
+
+## "Tap to explore" scroll story
+
+On screens at least 960px wide and 740px tall (and not for visitors who prefer reduced motion),
+`components/FeatureTabs.tsx` pins the section under the header and walks through the four features as you
+scroll: the tab, the phone screen and a progress rail follow the scroll, each feature's three points appear
+one by one, and after the last one the section is released and scrolls away. Clicking a tab (or arrow keys)
+scrolls to that feature. On smaller or shorter screens, and with reduced motion, it is the plain tab picker.
+The scroll length per feature is `70vh` in `.fx-on` in `globals.css`; the pin offset (`96px`) must match `STICK`.
