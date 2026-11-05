@@ -1,0 +1,106 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Admin verifications</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700&amp;family=Plus+Jakarta+Sans:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0}
+a{color:#0B5650}a:hover{color:#0E6B63}
+</style>
+</helmet>
+<div style="display: flex; flex-wrap: wrap; min-height: 100vh; background: #FFF8F1; font-family: 'Plus Jakarta Sans', system-ui, sans-serif; color: #1F1A17">
+<div style="flex: 1 1 240px; max-width: 100%; background: #1F1A17">
+<dc-import name="AdminNav" active="kyc" hint-size="100%,900px"></dc-import>
+</div>
+<main style="flex: 999 1 560px; min-width: 0; padding: 32px 40px 48px; display: flex; flex-direction: column; gap: 20px; box-sizing: border-box">
+
+<header style="display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 16px">
+<div style="display: flex; flex-direction: column; gap: 4px">
+<h1 style="margin: 0; font-family: 'Bricolage Grotesque', sans-serif; font-size: 30px; font-weight: 700">Partner verifications</h1>
+<p style="margin: 0; font-size: 14px; color: #6B625B">Target: decide within 48 hours of submission</p>
+</div>
+<div role="tablist" aria-label="Status" style="display: flex; background: #F3EBE2; border-radius: 14px; padding: 4px">
+<button role="tab" aria-selected="true" style="height: 40px; padding: 0 16px; border: none; border-radius: 10px; background: #FFFFFF; font: 700 13px 'Plus Jakarta Sans', sans-serif; color: #1F1A17">Pending (12)</button>
+<button role="tab" aria-selected="false" style="height: 40px; padding: 0 16px; border: none; border-radius: 10px; background: transparent; font: 600 13px 'Plus Jakarta Sans', sans-serif; color: #6B625B">Needs info (3)</button>
+<button role="tab" aria-selected="false" style="height: 40px; padding: 0 16px; border: none; border-radius: 10px; background: transparent; font: 600 13px 'Plus Jakarta Sans', sans-serif; color: #6B625B">Approved</button>
+<button role="tab" aria-selected="false" style="height: 40px; padding: 0 16px; border: none; border-radius: 10px; background: transparent; font: 600 13px 'Plus Jakarta Sans', sans-serif; color: #6B625B">Rejected</button>
+</div>
+</header>
+
+<div style="display: flex; flex-wrap: wrap; gap: 20px; align-items: flex-start">
+
+<section aria-label="Queue" style="flex: 1 1 380px; min-width: 0; background: #FFFFFF; border: 1px solid #EDE3D9; border-radius: 18px; overflow: hidden">
+<div style="display: flex; gap: 8px; padding: 14px; border-bottom: 1px solid #F3EBE2; flex-wrap: wrap">
+<button style="height: 34px; padding: 0 12px; border-radius: 17px; border: none; background: #1F1A17; color: #FFFFFF; font: 700 12px 'Plus Jakarta Sans', sans-serif">All types</button>
+<button style="height: 34px; padding: 0 12px; border-radius: 17px; border: 1px solid #EDE3D9; background: #FFFFFF; font: 600 12px 'Plus Jakarta Sans', sans-serif; color: #1F1A17">Vets</button>
+<button style="height: 34px; padding: 0 12px; border-radius: 17px; border: 1px solid #EDE3D9; background: #FFFFFF; font: 600 12px 'Plus Jakarta Sans', sans-serif; color: #1F1A17">Breeders</button>
+<button style="height: 34px; padding: 0 12px; border-radius: 17px; border: 1px solid #EDE3D9; background: #FFFFFF; font: 600 12px 'Plus Jakarta Sans', sans-serif; color: #1F1A17">Services</button>
+<button style="height: 34px; padding: 0 12px; border-radius: 17px; border: 1px solid #EDE3D9; background: #FFFFFF; font: 600 12px 'Plus Jakarta Sans', sans-serif; color: #1F1A17">Shelters</button>
+</div>
+<ul style="margin: 0; padding: 0; list-style: none">
+<li style="display: flex; gap: 12px; align-items: center; padding: 14px; background: #E3F1EE" aria-current="true"><span style="flex: 1; display: flex; flex-direction: column; gap: 2px"><span style="font-weight: 700; font-size: 14px">Lekki K9 Home</span><span style="font-size: 12px; color: #4A433E">Breeder · Lekki · 5 of 5 documents</span></span><span style="font-size: 12px; font-weight: 700; color: #8A2016">31 hrs</span></li>
+<li style="display: flex; gap: 12px; align-items: center; padding: 14px; border-top: 1px solid #F3EBE2"><span style="flex: 1; display: flex; flex-direction: column; gap: 2px"><span style="font-weight: 700; font-size: 14px">Hope Animal Rescue</span><span style="font-size: 12px; color: #6B625B">Shelter · Surulere · 4 of 4</span></span><span style="font-size: 12px; font-weight: 700; color: #9A3F0F">20 hrs</span></li>
+<li style="display: flex; gap: 12px; align-items: center; padding: 14px; border-top: 1px solid #F3EBE2"><span style="flex: 1; display: flex; flex-direction: column; gap: 2px"><span style="font-weight: 700; font-size: 14px">Dr. Femi Ade · home vet</span><span style="font-size: 12px; color: #6B625B">Vet · Yaba · 5 of 5</span></span><span style="font-size: 12px; font-weight: 600; color: #6B625B">12 hrs</span></li>
+<li style="display: flex; gap: 12px; align-items: center; padding: 14px; border-top: 1px solid #F3EBE2"><span style="flex: 1; display: flex; flex-direction: column; gap: 2px"><span style="font-weight: 700; font-size: 14px">Happy Tails Boarding</span><span style="font-size: 12px; color: #6B625B">Boarding · Ikeja · 4 of 5</span></span><span style="font-size: 12px; font-weight: 600; color: #6B625B">6 hrs</span></li>
+<li style="display: flex; gap: 12px; align-items: center; padding: 14px; border-top: 1px solid #F3EBE2"><span style="flex: 1; display: flex; flex-direction: column; gap: 2px"><span style="font-weight: 700; font-size: 14px">Glam Paws Grooming</span><span style="font-size: 12px; color: #6B625B">Groomer · Lekki · 5 of 5</span></span><span style="font-size: 12px; font-weight: 600; color: #6B625B">2 hrs</span></li>
+</ul>
+</section>
+
+<section aria-label="Application detail" style="flex: 2 1 520px; min-width: 0; background: #FFFFFF; border: 1px solid #EDE3D9; border-radius: 18px; padding: 24px; display: flex; flex-direction: column; gap: 20px">
+<div style="display: flex; flex-wrap: wrap; justify-content: space-between; gap: 12px">
+<div style="display: flex; flex-direction: column; gap: 4px">
+<h2 style="margin: 0; font-family: 'Bricolage Grotesque', sans-serif; font-size: 24px; font-weight: 700">Lekki K9 Home</h2>
+<p style="margin: 0; font-size: 14px; color: #6B625B">Breeder · Rottweilers · owner Chinedu Okafor · submitted 4 Nov, 07:12</p>
+</div>
+<span style="align-self: flex-start; font-size: 12px; font-weight: 700; color: #8A2016; background: #FDEAE7; padding: 6px 12px; border-radius: 10px">17 hrs left on target</span>
+</div>
+
+<div style="display: flex; flex-direction: column; gap: 10px">
+<h3 style="margin: 0; font-size: 14px; font-weight: 700">Documents</h3>
+<div style="display: flex; flex-wrap: wrap; gap: 12px">
+<a href="#doc-id" style="flex: 1 1 150px; display: flex; flex-direction: column; gap: 8px; padding: 12px; border-radius: 14px; border: 1px solid #EDE3D9; text-decoration: none; color: #1F1A17"><span aria-hidden="true" style="height: 80px; border-radius: 10px; background: #F3EBE2; display: flex; align-items: center; justify-content: center; color: #6B625B; font-size: 12px; font-weight: 600">ID document</span><span style="font-size: 13px; font-weight: 700">Owner ID (NIN slip)</span></a>
+<a href="#doc-cac" style="flex: 1 1 150px; display: flex; flex-direction: column; gap: 8px; padding: 12px; border-radius: 14px; border: 1px solid #EDE3D9; text-decoration: none; color: #1F1A17"><span aria-hidden="true" style="height: 80px; border-radius: 10px; background: #F3EBE2; display: flex; align-items: center; justify-content: center; color: #6B625B; font-size: 12px; font-weight: 600">Certificate</span><span style="font-size: 13px; font-weight: 700">CAC registration</span></a>
+<a href="#doc-photos" style="flex: 1 1 150px; display: flex; flex-direction: column; gap: 8px; padding: 12px; border-radius: 14px; border: 1px solid #EDE3D9; text-decoration: none; color: #1F1A17"><img src="../assets/rottie.jpg" alt="Facility photo" style="height: 80px; width: 100%; border-radius: 10px; object-fit: cover; display: block"><span style="font-size: 13px; font-weight: 700">Facility photos (3)</span></a>
+<a href="#doc-ref" style="flex: 1 1 150px; display: flex; flex-direction: column; gap: 8px; padding: 12px; border-radius: 14px; border: 1px solid #EDE3D9; text-decoration: none; color: #1F1A17"><span aria-hidden="true" style="height: 80px; border-radius: 10px; background: #F3EBE2; display: flex; align-items: center; justify-content: center; color: #6B625B; font-size: 12px; font-weight: 600">Letter</span><span style="font-size: 13px; font-weight: 700">Vet reference</span></a>
+</div>
+</div>
+
+<div style="display: flex; flex-direction: column; gap: 8px">
+<h3 style="margin: 0; font-size: 14px; font-weight: 700">Checks</h3>
+<ul style="margin: 0; padding: 0; list-style: none; display: flex; flex-direction: column; gap: 8px; font-size: 14px">
+<li style="display: flex; align-items: center; gap: 10px"><span style="font-size: 12px; font-weight: 700; color: #0B5650; background: #E3F1EE; padding: 3px 8px; border-radius: 8px; min-width: 56px; text-align: center">✓ Pass</span>Name on ID matches the CAC director</li>
+<li style="display: flex; align-items: center; gap: 10px"><span style="font-size: 12px; font-weight: 700; color: #0B5650; background: #E3F1EE; padding: 3px 8px; border-radius: 8px; min-width: 56px; text-align: center">✓ Pass</span>Address is in Lagos service area</li>
+<li style="display: flex; align-items: center; gap: 10px"><span style="font-size: 12px; font-weight: 700; color: #0B5650; background: #E3F1EE; padding: 3px 8px; border-radius: 8px; min-width: 56px; text-align: center">✓ Pass</span>No duplicate accounts or past bans</li>
+<li style="display: flex; align-items: center; gap: 10px"><span style="font-size: 12px; font-weight: 700; color: #9A3F0F; background: #FFEBD9; padding: 3px 8px; border-radius: 8px; min-width: 56px; text-align: center">! Check</span>Vet reference not yet confirmed by phone</li>
+</ul>
+</div>
+
+<label style="display: flex; flex-direction: column; gap: 6px; font-size: 14px; font-weight: 700">Internal note
+<textarea rows="2" placeholder="Visible to the ops team only" style="border-radius: 12px; border: 1px solid #EDE3D9; background: #FFF8F1; padding: 12px 14px; font: 500 14px 'Plus Jakarta Sans', sans-serif; color: #1F1A17; resize: vertical"></textarea></label>
+
+<div style="display: flex; flex-wrap: wrap; gap: 10px; justify-content: flex-end">
+<button style="height: 44px; padding: 0 18px; border-radius: 22px; border: 1.5px solid #CFC3B7; background: #FFFFFF; font: 700 14px 'Plus Jakarta Sans', sans-serif; color: #A3261B">Reject</button>
+<button style="height: 44px; padding: 0 18px; border-radius: 22px; border: 1.5px solid #CFC3B7; background: #FFFFFF; font: 700 14px 'Plus Jakarta Sans', sans-serif; color: #1F1A17">Ask for more info</button>
+<button style="height: 44px; padding: 0 22px; border-radius: 22px; border: none; background: #0E6B63; font: 700 14px 'Plus Jakarta Sans', sans-serif; color: #FFFFFF">Approve &amp; give badge</button>
+</div>
+</section>
+</div>
+
+</main>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":1080}}'>
+class Component extends DCLogic {
+renderVals() {
+return {};
+}
+}
+</script>
+</body>
+</html>

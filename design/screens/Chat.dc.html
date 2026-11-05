@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Chat</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700&amp;family=Plus+Jakarta+Sans:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0}
+a{color:inherit}a:hover{color:inherit}
+</style>
+</helmet>
+<div style="width: 390px; height: 844px; position: relative; overflow: hidden; background: #FFF8F1; font-family: 'Plus Jakarta Sans', system-ui, sans-serif; color: #1F1A17; display: flex; flex-direction: column">
+
+<header style="padding: 52px 20px 12px; background: #FFFFFF; border-bottom: 1px solid #EDE3D9; display: flex; flex-direction: column; gap: 10px">
+<div style="display: flex; align-items: center; gap: 12px">
+<a href="LostAlert.dc.html" aria-label="Back" style="width: 44px; height: 44px; border-radius: 22px; border: 1px solid #EDE3D9; display: flex; align-items: center; justify-content: center; flex-shrink: 0; box-sizing: border-box"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 6-6 6 6 6"></path></svg></a>
+<span style="width: 40px; height: 40px; border-radius: 20px; background: #E6C6AB; color: #6B3A16; display: flex; align-items: center; justify-content: center; font-weight: 700; flex-shrink: 0">N</span>
+<span style="flex: 1; display: flex; flex-direction: column"><span style="font-weight: 700; font-size: 15px">Ngozi</span><span style="font-size: 12px; color: #0B5650; font-weight: 600">Bruno's owner · online</span></span>
+</div>
+<div style="display: flex; align-items: center; gap: 8px; padding: 8px 12px; border-radius: 12px; background: #FFEBD9; font-size: 12px; font-weight: 600; color: #6B3A16"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 21s-7-6.2-7-11.5a7 7 0 0 1 14 0C19 14.8 12 21 12 21z"></path></svg>About: Lost alert · Bruno</div>
+</header>
+
+<main style="flex: 1; padding: 16px 20px; display: flex; flex-direction: column; gap: 10px; box-sizing: border-box">
+<p style="margin: 0 auto; font-size: 12px; color: #6B625B; background: #F3EBE2; padding: 6px 12px; border-radius: 12px; text-align: center">Phone numbers stay hidden until you both choose to share.</p>
+
+<div style="align-self: flex-end; max-width: 78%; background: {{accent}}; color: #FFFFFF; padding: 10px 14px; border-radius: 18px 18px 4px 18px; font-size: 14px; line-height: 1.45">Hi! I think I just saw Bruno near the Chevron roundabout, by the petrol station.</div>
+<div style="align-self: flex-end; width: 220px; background: #FFFFFF; border: 1px solid #EDE3D9; border-radius: 18px 18px 4px 18px; overflow: hidden">
+<div role="img" aria-label="Shared location map" style="height: 96px; background: #E4EDE3; position: relative"><span style="position: absolute; left: 0; right: 0; top: 42px; height: 10px; background: #FFFFFF"></span><span style="position: absolute; left: 98px; top: 34px; width: 24px; height: 24px; border-radius: 12px; background: #B4501C; border: 3px solid #FFFFFF; box-sizing: border-box"></span></div>
+<p style="margin: 0; padding: 8px 12px; font-size: 12px; font-weight: 600">Live location · 15 min</p>
+</div>
+<span style="align-self: flex-end; font-size: 11px; color: #6B625B">9:41am · Seen</span>
+
+<div style="align-self: flex-start; max-width: 78%; background: #FFFFFF; border: 1px solid #EDE3D9; padding: 10px 14px; border-radius: 18px 18px 18px 4px; font-size: 14px; line-height: 1.45">Thank you so much! I'm 5 minutes away. Could you keep an eye on him without chasing?</div>
+<div style="align-self: flex-start; max-width: 78%; background: #FFFFFF; border: 1px solid #EDE3D9; padding: 10px 14px; border-radius: 18px 18px 18px 4px; font-size: 14px; line-height: 1.45">He comes when you say "treat".</div>
+</main>
+
+<footer style="padding: 10px 16px 28px; background: #FFFFFF; border-top: 1px solid #EDE3D9; display: flex; align-items: center; gap: 8px">
+<button aria-label="Attach photo" style="width: 44px; height: 44px; border-radius: 22px; border: none; background: #F3EBE2; display: flex; align-items: center; justify-content: center; padding: 0; color: #1F1A17"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 8h3l2-3h6l2 3h3v11H4z"></path><circle cx="12" cy="13" r="3.5"></circle></svg></button>
+<button aria-label="Share location" style="width: 44px; height: 44px; border-radius: 22px; border: none; background: #F3EBE2; display: flex; align-items: center; justify-content: center; padding: 0; color: #1F1A17"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 21s-7-6.2-7-11.5a7 7 0 0 1 14 0C19 14.8 12 21 12 21z"></path><circle cx="12" cy="9.5" r="2.5"></circle></svg></button>
+<label style="flex: 1; min-width: 0"><span style="position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0)">Message</span><input type="text" placeholder="Message" style="width: 100%; height: 44px; padding: 0 16px; border-radius: 22px; border: 1px solid #EDE3D9; background: #FFF8F1; font: 500 14px 'Plus Jakarta Sans', sans-serif; color: #1F1A17; box-sizing: border-box"></label>
+<button aria-label="Send" style="width: 44px; height: 44px; border-radius: 22px; border: none; background: {{accent}}; display: flex; align-items: center; justify-content: center; padding: 0; color: #FFFFFF"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 2 11 13M22 2l-7 20-4-9-9-4z"></path></svg></button>
+</footer>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"accent":{"editor":"color","default":"#0E6B63","options":["#0E6B63","#B4501C","#3346B8","#1F1A17"]},"$preview":{"width":390,"height":844}}'>
+class Component extends DCLogic {
+renderVals() {
+return { accent: this.props.accent ?? '#0E6B63' };
+}
+}
+</script>
+</body>
+</html>

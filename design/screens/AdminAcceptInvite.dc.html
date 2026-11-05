@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Accept admin invite</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700&amp;family=Plus+Jakarta+Sans:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0}
+a{color:#0B5650}a:hover{color:#0E6B63}
+</style>
+</helmet>
+<div style="min-height: 100vh; background: #FFF8F1; font-family: 'Plus Jakarta Sans', system-ui, sans-serif; color: #1F1A17; display: flex; align-items: center; justify-content: center; padding: 48px 24px; box-sizing: border-box">
+<main style="width: 100%; max-width: 480px; background: #FFFFFF; border: 1px solid #EDE3D9; border-radius: 24px; padding: 40px; box-sizing: border-box; display: flex; flex-direction: column; gap: 20px">
+
+<div style="display: flex; align-items: center; gap: 10px">
+<span aria-hidden="true" style="width: 36px; height: 36px; border-radius: 10px; background: #0E6B63; display: flex; align-items: center; justify-content: center"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="1.8"><circle cx="7" cy="10" r="2"></circle><circle cx="17" cy="10" r="2"></circle><circle cx="10" cy="6" r="2"></circle><circle cx="14" cy="6" r="2"></circle><path d="M12 12c-3 0-5 3.5-5 5.5S9 20 12 20s5-.5 5-2.5S15 12 12 12z"></path></svg></span>
+<span style="font-family: 'Bricolage Grotesque', sans-serif; font-weight: 700; font-size: 18px">PawPass Admin</span>
+</div>
+
+<div style="display: flex; flex-direction: column; gap: 8px">
+<h1 style="margin: 0; font-family: 'Bricolage Grotesque', sans-serif; font-size: 28px; font-weight: 700">Join the PawPass team</h1>
+<p style="margin: 0; font-size: 15px; color: #4A433E; line-height: 1.5"><b>Bisi A.</b> invited you as <b>Support &amp; reports</b>.</p>
+</div>
+
+<div style="padding: 12px 14px; border-radius: 14px; background: #F3EBE2; font-size: 14px; line-height: 1.5; color: #4A433E">"Welcome to the team! You'll be covering the support inbox from Monday."</div>
+
+<form style="display: flex; flex-direction: column; gap: 14px">
+<label style="display: flex; flex-direction: column; gap: 6px; font-size: 13px; font-weight: 600; color: #4A433E">Work email<input type="email" value="ife.o@pawpass.example" readonly style="height: 50px; padding: 0 14px; border-radius: 12px; border: 1px solid #EDE3D9; background: #F3EBE2; font: 600 15px 'Plus Jakarta Sans', sans-serif; color: #4A433E; box-sizing: border-box"></label>
+<label style="display: flex; flex-direction: column; gap: 6px; font-size: 13px; font-weight: 600; color: #4A433E">Your name<input type="text" value="Ife Okoro" style="height: 50px; padding: 0 14px; border-radius: 12px; border: 1px solid #EDE3D9; font: 600 15px 'Plus Jakarta Sans', sans-serif; color: #1F1A17; box-sizing: border-box"></label>
+<label style="display: flex; flex-direction: column; gap: 6px; font-size: 13px; font-weight: 600; color: #4A433E">Create a password<input type="password" value="••••••••••••" autocomplete="new-password" style="height: 50px; padding: 0 14px; border-radius: 12px; border: 2px solid #0E6B63; font: 600 15px 'Plus Jakarta Sans', sans-serif; color: #1F1A17; box-sizing: border-box"></label>
+<div style="display: flex; gap: 6px" aria-label="Password strength: strong"><span style="flex: 1; height: 6px; border-radius: 3px; background: #0E6B63"></span><span style="flex: 1; height: 6px; border-radius: 3px; background: #0E6B63"></span><span style="flex: 1; height: 6px; border-radius: 3px; background: #0E6B63"></span><span style="flex: 1; height: 6px; border-radius: 3px; background: #EDE3D9"></span></div>
+<p style="margin: -6px 0 0; font-size: 12px; color: #6B625B">At least 12 characters. Strong.</p>
+<label style="display: flex; align-items: flex-start; gap: 10px; font-size: 13px; line-height: 1.45; color: #4A433E"><input type="checkbox" checked style="width: 18px; height: 18px; accent-color: #0E6B63; margin: 0; flex-shrink: 0">I'll keep user data confidential and follow the PawPass staff policy.</label>
+<a href="AdminOverview.dc.html" style="height: 52px; border-radius: 26px; background: #0E6B63; color: #FFFFFF; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 16px; text-decoration: none">Accept &amp; continue</a>
+</form>
+
+<p style="margin: 0; font-size: 12px; color: #6B625B; line-height: 1.5">This invite expires Sat 7 Nov, 18:12. Not expecting it? Ignore this page; nothing is created until you accept.</p>
+</main>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":900}}'>
+class Component extends DCLogic {
+renderVals() {
+return {};
+}
+}
+</script>
+</body>
+</html>

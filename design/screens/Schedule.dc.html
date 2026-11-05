@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Reminders and schedule</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700&amp;family=Plus+Jakarta+Sans:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0}
+a{color:inherit}a:hover{color:inherit}
+</style>
+</helmet>
+<div style="width: 390px; height: 844px; position: relative; overflow: hidden; background: #FFF8F1; font-family: 'Plus Jakarta Sans', system-ui, sans-serif; color: #1F1A17">
+<main style="padding: 52px 20px 96px; display: flex; flex-direction: column; gap: 14px; box-sizing: border-box">
+
+<header style="display: flex; align-items: center; gap: 12px">
+<a href="Main.dc.html" aria-label="Back" style="width: 44px; height: 44px; border-radius: 22px; border: 1px solid #EDE3D9; background: #FFFFFF; display: flex; align-items: center; justify-content: center; flex-shrink: 0"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 6-6 6 6 6"></path></svg></a>
+<h1 style="margin: 0; flex: 1; font-family: 'Bricolage Grotesque', sans-serif; font-size: 22px; font-weight: 700">Schedule</h1>
+<a href="AddRecord.dc.html" aria-label="Add reminder" style="width: 44px; height: 44px; border-radius: 22px; background: {{accent}}; color: #FFFFFF; display: flex; align-items: center; justify-content: center"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"></path></svg></a>
+</header>
+
+<div style="display: flex; gap: 8px">
+<button aria-pressed="true" style="height: 38px; padding: 0 14px; border-radius: 19px; border: none; background: #1F1A17; color: #FFFFFF; font: 700 13px 'Plus Jakarta Sans', sans-serif">All pets</button>
+<button aria-pressed="false" style="height: 38px; padding: 0 14px; border-radius: 19px; border: 1px solid #EDE3D9; background: #FFFFFF; color: #1F1A17; font: 600 13px 'Plus Jakarta Sans', sans-serif">Bingo</button>
+<button aria-pressed="false" style="height: 38px; padding: 0 14px; border-radius: 19px; border: 1px solid #EDE3D9; background: #FFFFFF; color: #1F1A17; font: 600 13px 'Plus Jakarta Sans', sans-serif">Mimi</button>
+</div>
+
+<h2 style="margin: 6px 0 0; font-size: 13px; font-weight: 700; color: #9A3F0F; text-transform: uppercase; letter-spacing: 0.04em">This month</h2>
+
+<div style="background: #FFFFFF; border: 1px solid #EDE3D9; border-radius: 18px; padding: 14px; display: flex; flex-direction: column; gap: 12px">
+<div style="display: flex; gap: 12px; align-items: center">
+<span style="width: 46px; text-align: center; flex-shrink: 0; display: flex; flex-direction: column"><span style="font-size: 11px; font-weight: 700; color: #9A3F0F">NOV</span><span style="font-family: 'Bricolage Grotesque', sans-serif; font-size: 22px; font-weight: 700">12</span></span>
+<span style="flex: 1; display: flex; flex-direction: column"><span style="font-weight: 700; font-size: 14px">Rabies booster</span><span style="font-size: 12px; color: #6B625B">Bingo · in 7 days</span></span>
+</div>
+<div style="display: flex; gap: 8px">
+<a href="Services.dc.html" style="flex: 1; height: 40px; border-radius: 20px; background: {{accent}}; color: #FFFFFF; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 13px; text-decoration: none">Book a vet</a>
+<button style="flex: 1; height: 40px; border-radius: 20px; border: 1px solid #EDE3D9; background: #FFFFFF; color: #1F1A17; font: 700 13px 'Plus Jakarta Sans', sans-serif">Mark done</button>
+</div>
+</div>
+
+<div style="background: #FFFFFF; border: 1px solid #EDE3D9; border-radius: 18px; padding: 14px; display: flex; gap: 12px; align-items: center">
+<span style="width: 46px; text-align: center; flex-shrink: 0; display: flex; flex-direction: column"><span style="font-size: 11px; font-weight: 700; color: #9A3F0F">NOV</span><span style="font-family: 'Bricolage Grotesque', sans-serif; font-size: 22px; font-weight: 700">28</span></span>
+<span style="flex: 1; display: flex; flex-direction: column"><span style="font-weight: 700; font-size: 14px">Flea &amp; tick treatment</span><span style="font-size: 12px; color: #6B625B">Mimi · monthly</span></span>
+<button style="height: 36px; padding: 0 12px; border-radius: 18px; border: 1px solid #EDE3D9; background: #FFFFFF; color: #1F1A17; font: 700 12px 'Plus Jakarta Sans', sans-serif">Done</button>
+</div>
+
+<h2 style="margin: 6px 0 0; font-size: 13px; font-weight: 700; color: #6B625B; text-transform: uppercase; letter-spacing: 0.04em">Coming up</h2>
+
+<div style="background: #FFFFFF; border: 1px solid #EDE3D9; border-radius: 18px; padding: 4px 14px">
+<div style="display: flex; gap: 12px; align-items: center; padding: 10px 0; border-bottom: 1px solid #F3EBE2">
+<span style="width: 46px; text-align: center; flex-shrink: 0; display: flex; flex-direction: column"><span style="font-size: 11px; font-weight: 700; color: #6B625B">JAN</span><span style="font-family: 'Bricolage Grotesque', sans-serif; font-size: 20px; font-weight: 700">20</span></span>
+<span style="flex: 1; display: flex; flex-direction: column"><span style="font-weight: 700; font-size: 14px">Deworming</span><span style="font-size: 12px; color: #6B625B">Bingo · every 3 months</span></span>
+</div>
+<div style="display: flex; gap: 12px; align-items: center; padding: 10px 0; border-bottom: 1px solid #F3EBE2">
+<span style="width: 46px; text-align: center; flex-shrink: 0; display: flex; flex-direction: column"><span style="font-size: 11px; font-weight: 700; color: #6B625B">FEB</span><span style="font-family: 'Bricolage Grotesque', sans-serif; font-size: 20px; font-weight: 700">3</span></span>
+<span style="flex: 1; display: flex; flex-direction: column"><span style="font-weight: 700; font-size: 14px">FVRCP booster</span><span style="font-size: 12px; color: #6B625B">Mimi · yearly</span></span>
+</div>
+<div style="display: flex; gap: 12px; align-items: center; padding: 10px 0">
+<span style="width: 46px; text-align: center; flex-shrink: 0; display: flex; flex-direction: column"><span style="font-size: 11px; font-weight: 700; color: #6B625B">MAR</span><span style="font-family: 'Bricolage Grotesque', sans-serif; font-size: 20px; font-weight: 700">12</span></span>
+<span style="flex: 1; display: flex; flex-direction: column"><span style="font-weight: 700; font-size: 14px">DHPP booster</span><span style="font-size: 12px; color: #6B625B">Bingo · yearly</span></span>
+</div>
+</div>
+
+</main>
+<div style="position: absolute; left: 0; bottom: 0; width: 390px; height: 80px">
+<dc-import name="TabBar" active="home" accent="{{accent}}" hint-size="390px,80px"></dc-import>
+</div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"accent":{"editor":"color","default":"#0E6B63","options":["#0E6B63","#B4501C","#3346B8","#1F1A17"]},"$preview":{"width":390,"height":844}}'>
+class Component extends DCLogic {
+renderVals() {
+return { accent: this.props.accent ?? '#0E6B63' };
+}
+}
+</script>
+</body>
+</html>

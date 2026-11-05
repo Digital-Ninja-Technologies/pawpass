@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Verification status</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700&amp;family=Plus+Jakarta+Sans:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0}
+a{color:inherit}a:hover{color:inherit}
+</style>
+</helmet>
+<div style="width: 390px; height: 844px; position: relative; overflow: hidden; background: #FFF8F1; font-family: 'Plus Jakarta Sans', system-ui, sans-serif; color: #1F1A17">
+<main style="padding: 52px 20px 0; display: flex; flex-direction: column; gap: 16px; box-sizing: border-box">
+
+<header style="display: flex; align-items: center; gap: 12px">
+<a href="Profile.dc.html" aria-label="Back" style="width: 44px; height: 44px; border-radius: 22px; border: 1px solid #EDE3D9; background: #FFFFFF; display: flex; align-items: center; justify-content: center; flex-shrink: 0"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 6-6 6 6 6"></path></svg></a>
+<h1 style="margin: 0; font-family: 'Bricolage Grotesque', sans-serif; font-size: 22px; font-weight: 700">Verification status</h1>
+</header>
+
+<section style="display: flex; flex-direction: column; gap: 4px">
+<h2 style="margin: 0; font-family: 'Bricolage Grotesque', sans-serif; font-size: 26px; font-weight: 700">Glam Paws Grooming</h2>
+<p style="margin: 0; font-size: 14px; color: #6B625B">Groomer · submitted Thu 5 Nov, 9:58am</p>
+</section>
+
+<section role="alert" style="background: #FFEBD9; border-radius: 20px; padding: 16px; display: flex; flex-direction: column; gap: 10px">
+<p style="margin: 0; font-size: 12px; font-weight: 700; color: #9A3F0F; letter-spacing: 0.04em">ONE THING NEEDED</p>
+<p style="margin: 0; font-size: 15px; font-weight: 700">Your CAC certificate photo is blurry</p>
+<p style="margin: 0; font-size: 13px; color: #6B4A33; line-height: 1.45">"Please upload a clearer photo where the registration number can be read." · PawPass team</p>
+<a href="KYC.dc.html" style="height: 44px; border-radius: 22px; background: #1F1A17; color: #FFFFFF; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 14px; text-decoration: none">Re-upload certificate</a>
+</section>
+
+<ol style="margin: 0; padding: 16px; list-style: none; border-radius: 20px; background: #FFFFFF; border: 1px solid #EDE3D9; display: flex; flex-direction: column; gap: 14px">
+<li style="display: flex; gap: 12px; align-items: flex-start"><span aria-hidden="true" style="width: 24px; height: 24px; border-radius: 12px; background: #0E6B63; display: flex; align-items: center; justify-content: center; flex-shrink: 0"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5 10 17l9-10"></path></svg></span><span style="display: flex; flex-direction: column"><span style="font-weight: 700; font-size: 14px">Submitted</span><span style="font-size: 12px; color: #6B625B">5 documents received</span></span></li>
+<li style="display: flex; gap: 12px; align-items: flex-start"><span aria-hidden="true" style="width: 24px; height: 24px; border-radius: 12px; border: 3px solid #E0662A; background: #FFFFFF; box-sizing: border-box; flex-shrink: 0"></span><span style="display: flex; flex-direction: column"><span style="font-weight: 700; font-size: 14px">In review · waiting on you</span><span style="font-size: 12px; color: #9A3F0F; font-weight: 600">Decision within 48 hours of your re-upload</span></span></li>
+<li style="display: flex; gap: 12px; align-items: flex-start"><span aria-hidden="true" style="width: 24px; height: 24px; border-radius: 12px; border: 2px solid #CFC3B7; background: #FFFFFF; box-sizing: border-box; flex-shrink: 0"></span><span style="display: flex; flex-direction: column"><span style="font-weight: 600; font-size: 14px; color: #6B625B">Approved · badge and dashboard unlock</span></span></li>
+</ol>
+
+<p style="margin: 0; font-size: 13px; color: #4A433E; line-height: 1.5">We'll notify you by push and email. You can keep using PawPass as an owner meanwhile.</p>
+</main>
+
+<footer style="position: absolute; left: 0; right: 0; bottom: 0; background: #FFFFFF; border-top: 1px solid #EDE3D9; padding: 14px 20px 26px; display: flex; flex-direction: column; gap: 8px; box-sizing: border-box">
+<a href="ProviderDash.dc.html" style="height: 48px; border-radius: 24px; border: 1.5px solid #CFC3B7; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 14px; text-decoration: none; color: #4A433E; box-sizing: border-box">Preview: dashboard after approval</a>
+<a href="Main.dc.html" style="height: 48px; border-radius: 24px; background: {{accent}}; color: #FFFFFF; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 15px; text-decoration: none">Back to home</a>
+</footer>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"accent":{"editor":"color","default":"#0E6B63","options":["#0E6B63","#B4501C","#3346B8","#1F1A17"]},"$preview":{"width":390,"height":844}}'>
+class Component extends DCLogic {
+renderVals() {
+return { accent: this.props.accent ?? '#0E6B63' };
+}
+}
+</script>
+</body>
+</html>

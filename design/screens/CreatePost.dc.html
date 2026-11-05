@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>New post</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700&amp;family=Plus+Jakarta+Sans:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0}
+a{color:inherit}a:hover{color:inherit}
+.ph1{background-image:url(../assets/bingo2.jpg);background-size:cover;background-position:center}
+</style>
+</helmet>
+<div style="width: 390px; height: 844px; position: relative; overflow: hidden; background: #FFF8F1; font-family: 'Plus Jakarta Sans', system-ui, sans-serif; color: #1F1A17">
+<main style="padding: 52px 20px 40px; display: flex; flex-direction: column; gap: 16px; box-sizing: border-box">
+
+<header style="display: flex; align-items: center; justify-content: space-between">
+<a href="Community.dc.html" style="min-height: 44px; display: flex; align-items: center; font-size: 15px; font-weight: 600; text-decoration: none; color: #4A433E">Cancel</a>
+<h1 style="margin: 0; font-family: 'Bricolage Grotesque', sans-serif; font-size: 20px; font-weight: 700">New post</h1>
+<a href="Community.dc.html" style="height: 40px; padding: 0 18px; border-radius: 20px; background: {{accent}}; color: #FFFFFF; display: flex; align-items: center; font-weight: 700; font-size: 14px; text-decoration: none">Post</a>
+</header>
+
+<fieldset style="border: none; margin: 0; padding: 0">
+<legend style="font-size: 13px; font-weight: 600; color: #4A433E; padding: 0; margin-bottom: 8px">Posting as</legend>
+<div style="display: flex; gap: 8px">
+<button aria-pressed="true" style="display: flex; align-items: center; gap: 8px; height: 44px; padding: 0 16px 0 6px; border-radius: 22px; border: none; background: {{accent}}; color: #FFFFFF; font: 600 14px 'Plus Jakarta Sans', sans-serif"><img src="../assets/bingo.jpg" alt="" style="width: 32px; height: 32px; border-radius: 16px; object-fit: cover; display: block">Bingo</button>
+<button aria-pressed="false" style="display: flex; align-items: center; gap: 8px; height: 44px; padding: 0 16px 0 6px; border-radius: 22px; border: 1px solid #EDE3D9; background: #FFFFFF; color: #1F1A17; font: 600 14px 'Plus Jakarta Sans', sans-serif"><img src="../assets/mimi.jpg" alt="" style="width: 32px; height: 32px; border-radius: 16px; object-fit: cover; display: block">Mimi</button>
+</div>
+</fieldset>
+
+<div style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px">
+<span role="img" aria-label="Selected photo of Bingo on a walk" class="ph1" style="grid-column: span 2; height: 220px; border-radius: 18px; position: relative"><button aria-label="Remove photo" style="position: absolute; top: 8px; right: 8px; width: 32px; height: 32px; border-radius: 16px; border: none; background: rgba(31,26,23,0.7); color: #FFFFFF; display: flex; align-items: center; justify-content: center; padding: 0"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"></path></svg></button></span>
+<button style="height: 220px; border-radius: 18px; border: 2px dashed #CFC3B7; background: #FFFFFF; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 6px; color: #6B625B; font: 600 12px 'Plus Jakarta Sans', sans-serif"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"></path></svg>Add photo<br>or video</button>
+</div>
+
+<label style="display: flex; flex-direction: column; gap: 6px">
+<span style="position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0)">Caption</span>
+<textarea rows="3" style="border-radius: 16px; border: 1px solid #EDE3D9; background: #FFFFFF; padding: 12px 14px; font: 500 15px 'Plus Jakarta Sans', sans-serif; color: #1F1A17; resize: none">Sunday walk at Lekki Conservation Centre. He made friends with everyone.</textarea>
+</label>
+
+<fieldset style="border: none; margin: 0; padding: 0">
+<legend style="font-size: 13px; font-weight: 600; color: #4A433E; padding: 0; margin-bottom: 8px">Who can see this</legend>
+<div style="display: flex; background: #F3EBE2; border-radius: 22px; padding: 4px">
+<button aria-pressed="true" style="flex: 1; height: 40px; border: none; border-radius: 18px; background: #FFFFFF; font: 700 13px 'Plus Jakarta Sans', sans-serif; color: #1F1A17">Everyone</button>
+<button aria-pressed="false" style="flex: 1; height: 40px; border: none; border-radius: 18px; background: transparent; font: 600 13px 'Plus Jakarta Sans', sans-serif; color: #6B625B">Nearby</button>
+<button aria-pressed="false" style="flex: 1; height: 40px; border: none; border-radius: 18px; background: transparent; font: 600 13px 'Plus Jakarta Sans', sans-serif; color: #6B625B">Followers</button>
+</div>
+</fieldset>
+
+<label style="display: flex; align-items: center; justify-content: space-between; min-height: 52px; padding: 0 16px; border-radius: 16px; background: #FFFFFF; border: 1px solid #EDE3D9; font-size: 14px; font-weight: 600">Show area (Lekki) on post<input type="checkbox" checked style="width: 20px; height: 20px; accent-color: {{accent}}; margin: 0"></label>
+
+</main>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"accent":{"editor":"color","default":"#0E6B63","options":["#0E6B63","#B4501C","#3346B8","#1F1A17"]},"$preview":{"width":390,"height":844}}'>
+class Component extends DCLogic {
+renderVals() {
+return { accent: this.props.accent ?? '#0E6B63' };
+}
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Find a pet</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700&amp;family=Plus+Jakarta+Sans:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0}
+a{color:inherit}a:hover{color:inherit}
+</style>
+</helmet>
+<div style="width: 390px; height: 844px; position: relative; overflow: hidden; background: #FFF8F1; font-family: 'Plus Jakarta Sans', system-ui, sans-serif; color: #1F1A17">
+<main style="padding: 56px 20px 96px; display: flex; flex-direction: column; gap: 14px; box-sizing: border-box">
+
+<header style="display: flex; align-items: center; justify-content: space-between">
+<h1 style="margin: 0; font-family: 'Bricolage Grotesque', sans-serif; font-size: 28px; font-weight: 700">Find a pet</h1>
+<button aria-label="Filters" style="width: 44px; height: 44px; border-radius: 22px; border: 1px solid #EDE3D9; background: #FFFFFF; display: flex; align-items: center; justify-content: center; color: #1F1A17; padding: 0"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M4 6h16M7 12h10M10 18h4"></path></svg></button>
+</header>
+
+<div role="tablist" aria-label="Source" style="display: flex; background: #F3EBE2; border-radius: 22px; padding: 4px">
+<button role="tab" aria-selected="true" style="flex: 1; height: 40px; border: none; border-radius: 18px; background: #FFFFFF; font: 700 13px 'Plus Jakarta Sans', sans-serif; color: #1F1A17">Verified breeders</button>
+<button role="tab" aria-selected="false" style="flex: 1; height: 40px; border: none; border-radius: 18px; background: transparent; font: 600 13px 'Plus Jakarta Sans', sans-serif; color: #6B625B">Shelters &amp; rescue</button>
+</div>
+
+<div style="display: flex; gap: 8px">
+<button style="height: 36px; padding: 0 12px; border-radius: 18px; border: 1px solid #EDE3D9; background: #FFFFFF; font: 600 13px 'Plus Jakarta Sans', sans-serif; color: #1F1A17">Dogs ▾</button>
+<button style="height: 36px; padding: 0 12px; border-radius: 18px; border: 1px solid #EDE3D9; background: #FFFFFF; font: 600 13px 'Plus Jakarta Sans', sans-serif; color: #1F1A17">Any breed ▾</button>
+<button style="height: 36px; padding: 0 12px; border-radius: 18px; border: 1px solid #EDE3D9; background: #FFFFFF; font: 600 13px 'Plus Jakarta Sans', sans-serif; color: #1F1A17">Lagos ▾</button>
+</div>
+
+<div style="display: flex; align-items: center; gap: 10px; padding: 10px 14px; border-radius: 16px; background: #E3F1EE; color: #0B5650; font-size: 12px; font-weight: 600">
+<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="flex-shrink: 0"><path d="M12 3 4 6v6c0 4.5 3.4 8.3 8 9 4.6-.7 8-4.5 8-9V6z"></path><path d="m9 12 2 2 4-4"></path></svg>
+Every pet here comes with a verified passport, and payments are held in escrow.
+</div>
+
+<div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px">
+<a href="Listing.dc.html" style="background: #FFFFFF; border: 1px solid #EDE3D9; border-radius: 20px; overflow: hidden; text-decoration: none; color: #1F1A17; display: flex; flex-direction: column">
+<img src="../assets/duke.jpg" alt="Photo of Duke" style="height: 130px; object-fit: cover; display: block">
+<span style="padding: 10px 12px 12px; display: flex; flex-direction: column; gap: 3px"><span style="font-weight: 700; font-size: 15px">Duke</span><span style="font-size: 12px; color: #6B625B">Boerboel · 9 wks · M</span><span style="font-size: 14px; font-weight: 700; margin-top: 2px">₦450,000</span><span style="font-size: 11px; font-weight: 700; color: #0B5650">✓ Royal Paws Kennels</span></span>
+</a>
+<a href="Listing.dc.html" style="background: #FFFFFF; border: 1px solid #EDE3D9; border-radius: 20px; overflow: hidden; text-decoration: none; color: #1F1A17; display: flex; flex-direction: column">
+<img src="../assets/nala.jpg" alt="Photo of Nala" style="height: 130px; object-fit: cover; display: block">
+<span style="padding: 10px 12px 12px; display: flex; flex-direction: column; gap: 3px"><span style="font-weight: 700; font-size: 15px">Nala</span><span style="font-size: 12px; color: #6B625B">German Shepherd · 10 wks · F</span><span style="font-size: 14px; font-weight: 700; margin-top: 2px">₦380,000</span><span style="font-size: 11px; font-weight: 700; color: #0B5650">✓ Ikeja Shepherds</span></span>
+</a>
+<a href="Listing.dc.html" style="background: #FFFFFF; border: 1px solid #EDE3D9; border-radius: 20px; overflow: hidden; text-decoration: none; color: #1F1A17; display: flex; flex-direction: column">
+<img src="../assets/rottie.jpg" alt="Photo of a litter" style="height: 130px; object-fit: cover; display: block">
+<span style="padding: 10px 12px 12px; display: flex; flex-direction: column; gap: 3px"><span style="font-weight: 700; font-size: 15px">Litter of 5</span><span style="font-size: 12px; color: #6B625B">Rottweiler · 7 wks</span><span style="font-size: 14px; font-weight: 700; margin-top: 2px">from ₦350,000</span><span style="font-size: 11px; font-weight: 700; color: #0B5650">✓ Lekki K9 Home</span></span>
+</a>
+<a href="AdoptApply.dc.html" style="background: #FFFFFF; border: 1px solid #EDE3D9; border-radius: 20px; overflow: hidden; text-decoration: none; color: #1F1A17; display: flex; flex-direction: column">
+<img src="../assets/ada.jpg" alt="Photo of Ada" style="height: 130px; object-fit: cover; display: block">
+<span style="padding: 10px 12px 12px; display: flex; flex-direction: column; gap: 3px"><span style="font-weight: 700; font-size: 15px">Ada</span><span style="font-size: 12px; color: #6B625B">Mixed breed · 1 yr · F</span><span style="font-size: 14px; font-weight: 700; margin-top: 2px">Adopt · free</span><span style="font-size: 11px; font-weight: 700; color: #5A2E8C">✓ Lagos Paws Rescue</span></span>
+</a>
+</div>
+
+</main>
+<div style="position: absolute; left: 0; bottom: 0; width: 390px; height: 80px">
+<dc-import name="TabBar" active="adopt" accent="{{accent}}" hint-size="390px,80px"></dc-import>
+</div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"accent":{"editor":"color","default":"#0E6B63","options":["#0E6B63","#B4501C","#3346B8","#1F1A17"]},"$preview":{"width":390,"height":844}}'>
+class Component extends DCLogic {
+renderVals() {
+return { accent: this.props.accent ?? '#0E6B63' };
+}
+}
+</script>
+</body>
+</html>

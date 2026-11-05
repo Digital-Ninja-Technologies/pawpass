@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Choose account type</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700&amp;family=Plus+Jakarta+Sans:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0}
+a{color:inherit}a:hover{color:inherit}
+</style>
+</helmet>
+<div style="width: 390px; height: 844px; position: relative; overflow: hidden; background: #FFF8F1; font-family: 'Plus Jakarta Sans', system-ui, sans-serif; color: #1F1A17; display: flex; flex-direction: column">
+<main style="flex: 1; padding: 52px 24px 40px; display: flex; flex-direction: column; gap: 20px; box-sizing: border-box">
+
+<header style="display: flex; align-items: center; gap: 14px">
+<a href="Verify.dc.html" aria-label="Back" style="width: 44px; height: 44px; border-radius: 22px; border: 1px solid #EDE3D9; background: #FFFFFF; display: flex; align-items: center; justify-content: center; flex-shrink: 0"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 6-6 6 6 6"></path></svg></a>
+<div role="progressbar" aria-label="Step 3 of 6" aria-valuenow="3" aria-valuemin="1" aria-valuemax="6" style="flex: 1; height: 6px; border-radius: 3px; background: #EDE3D9; overflow: hidden"><span style="display: block; width: 50%; height: 6px; background: {{accent}}"></span></div>
+</header>
+
+<div style="display: flex; flex-direction: column; gap: 8px">
+<h1 style="margin: 0; font-family: 'Bricolage Grotesque', sans-serif; font-size: 30px; line-height: 1.1; font-weight: 700">How will you use PawPass?</h1>
+<p style="margin: 0; font-size: 15px; color: #6B625B; line-height: 1.5">Pick all that apply. You can add more later.</p>
+</div>
+
+<fieldset style="border: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 10px">
+<legend style="position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0)">Account types</legend>
+
+<label style="display: flex; align-items: center; gap: 14px; padding: 16px; border-radius: 20px; background: #FFFFFF; border: 2px solid {{accent}}">
+<span aria-hidden="true" style="width: 48px; height: 48px; border-radius: 16px; background: #F3D9C4; color: #9A3F0F; display: flex; align-items: center; justify-content: center; flex-shrink: 0"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="7" cy="10" r="2"></circle><circle cx="17" cy="10" r="2"></circle><circle cx="10" cy="6" r="2"></circle><circle cx="14" cy="6" r="2"></circle><path d="M12 12c-3 0-5 3.5-5 5.5S9 20 12 20s5-.5 5-2.5S15 12 12 12z"></path></svg></span>
+<span style="flex: 1; display: flex; flex-direction: column; gap: 2px"><span style="font-weight: 700; font-size: 16px">Pet owner</span><span style="font-size: 13px; color: #6B625B">Track health, book care, join the community</span></span>
+<input type="checkbox" checked style="width: 22px; height: 22px; accent-color: {{accent}}; margin: 0">
+</label>
+
+<label style="display: flex; align-items: center; gap: 14px; padding: 16px; border-radius: 20px; background: #FFFFFF; border: 1px solid #EDE3D9">
+<span aria-hidden="true" style="width: 48px; height: 48px; border-radius: 16px; background: #E3F1EE; color: #0B5650; display: flex; align-items: center; justify-content: center; flex-shrink: 0"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 3v6a5 5 0 0 0 10 0V3"></path><path d="M10 14v2a5 5 0 0 0 10 0v-2"></path><circle cx="20" cy="12" r="2"></circle></svg></span>
+<span style="flex: 1; display: flex; flex-direction: column; gap: 2px"><span style="font-weight: 700; font-size: 16px">Vet or service provider</span><span style="font-size: 13px; color: #6B625B">Clinics, groomers, trainers, boarding</span></span>
+<input type="checkbox" style="width: 22px; height: 22px; margin: 0">
+</label>
+
+<label style="display: flex; align-items: center; gap: 14px; padding: 16px; border-radius: 20px; background: #FFFFFF; border: 1px solid #EDE3D9">
+<span aria-hidden="true" style="width: 48px; height: 48px; border-radius: 16px; background: #DCE7F7; color: #23407A; display: flex; align-items: center; justify-content: center; flex-shrink: 0"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3 4 6v6c0 4.5 3.4 8.3 8 9 4.6-.7 8-4.5 8-9V6z"></path><path d="m9 12 2 2 4-4"></path></svg></span>
+<span style="flex: 1; display: flex; flex-direction: column; gap: 2px"><span style="font-weight: 700; font-size: 16px">Breeder</span><span style="font-size: 13px; color: #6B625B">List litters with verified passports</span></span>
+<input type="checkbox" style="width: 22px; height: 22px; margin: 0">
+</label>
+
+<label style="display: flex; align-items: center; gap: 14px; padding: 16px; border-radius: 20px; background: #FFFFFF; border: 1px solid #EDE3D9">
+<span aria-hidden="true" style="width: 48px; height: 48px; border-radius: 16px; background: #F1E8FB; color: #5A2E8C; display: flex; align-items: center; justify-content: center; flex-shrink: 0"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 10.5 12 3l9 7.5V20a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1z"></path><path d="M12 17s-3-1.9-3-3.9a1.6 1.6 0 0 1 3-1 1.6 1.6 0 0 1 3 1c0 2-3 3.9-3 3.9z"></path></svg></span>
+<span style="flex: 1; display: flex; flex-direction: column; gap: 2px"><span style="font-weight: 700; font-size: 16px">Shelter or rescue</span><span style="font-size: 13px; color: #6B625B">Rehome pets and screen adopters</span></span>
+<input type="checkbox" style="width: 22px; height: 22px; margin: 0">
+</label>
+</fieldset>
+
+<p style="margin: 0; font-size: 12px; color: #6B625B; line-height: 1.5">Providers, breeders and shelters complete a quick ID check before going live.</p>
+
+<a href="ProfileSetup.dc.html" style="margin-top: auto; height: 54px; border-radius: 27px; background: {{accent}}; color: #FFFFFF; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 16px; text-decoration: none">Continue</a>
+</main>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"accent":{"editor":"color","default":"#0E6B63","options":["#0E6B63","#B4501C","#3346B8","#1F1A17"]},"$preview":{"width":390,"height":844}}'>
+class Component extends DCLogic {
+renderVals() {
+return { accent: this.props.accent ?? '#0E6B63' };
+}
+}
+</script>
+</body>
+</html>

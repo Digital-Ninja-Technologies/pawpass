@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Admin disputes</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700&amp;family=Plus+Jakarta+Sans:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0}
+a{color:#0B5650}a:hover{color:#0E6B63}
+</style>
+</helmet>
+<div style="display: flex; flex-wrap: wrap; min-height: 100vh; background: #FFF8F1; font-family: 'Plus Jakarta Sans', system-ui, sans-serif; color: #1F1A17">
+<div style="flex: 1 1 240px; max-width: 100%; background: #1F1A17">
+<dc-import name="AdminNav" active="disputes" hint-size="100%,900px"></dc-import>
+</div>
+<main style="flex: 999 1 560px; min-width: 0; padding: 32px 40px 48px; display: flex; flex-direction: column; gap: 20px; box-sizing: border-box">
+
+<header style="display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 16px">
+<div style="display: flex; flex-direction: column; gap: 4px">
+<h1 style="margin: 0; font-family: 'Bricolage Grotesque', sans-serif; font-size: 30px; font-weight: 700">Escrow disputes</h1>
+<p style="margin: 0; font-size: 14px; color: #6B625B">3 open · ₦487,500 held · respond within 72 hours</p>
+</div>
+</header>
+
+<div style="display: flex; flex-wrap: wrap; gap: 20px; align-items: flex-start">
+
+<section aria-label="Open cases" style="flex: 1 1 340px; min-width: 0; background: #FFFFFF; border: 1px solid #EDE3D9; border-radius: 18px; overflow: hidden">
+<ul style="margin: 0; padding: 0; list-style: none">
+<li aria-current="true" style="padding: 16px; background: #FDEAE7; display: flex; flex-direction: column; gap: 4px"><span style="display: flex; justify-content: space-between"><span style="font-size: 12px; font-weight: 700; color: #6B625B">D-1042 · Puppy sale</span><span style="font-size: 12px; font-weight: 700; color: #8A2016">Due today</span></span><span style="font-weight: 700; font-size: 14px">Puppy ill after handover</span><span style="font-size: 13px; color: #4A433E">Emeka O. vs Ikeja Shepherds · ₦380,000</span></li>
+<li style="padding: 16px; border-top: 1px solid #F3EBE2; display: flex; flex-direction: column; gap: 4px"><span style="display: flex; justify-content: space-between"><span style="font-size: 12px; font-weight: 700; color: #6B625B">D-1039 · Boarding</span><span style="font-size: 12px; font-weight: 600; color: #6B625B">2 days left</span></span><span style="font-weight: 700; font-size: 14px">Dog returned with a wound</span><span style="font-size: 13px; color: #4A433E">Kunle B. vs Happy Tails Boarding · ₦45,000</span></li>
+<li style="padding: 16px; border-top: 1px solid #F3EBE2; display: flex; flex-direction: column; gap: 4px"><span style="display: flex; justify-content: space-between"><span style="font-size: 12px; font-weight: 700; color: #6B625B">D-1036 · Training</span><span style="font-size: 12px; font-weight: 600; color: #6B625B">3 days left</span></span><span style="font-weight: 700; font-size: 14px">Sessions not delivered</span><span style="font-size: 13px; color: #4A433E">Funmi A. vs K9 Academy Lagos · ₦62,500</span></li>
+</ul>
+</section>
+
+<section aria-label="Case detail" style="flex: 2 1 560px; min-width: 0; display: flex; flex-direction: column; gap: 16px">
+<div style="background: #FFFFFF; border: 1px solid #EDE3D9; border-radius: 18px; padding: 24px; display: flex; flex-direction: column; gap: 18px">
+<div style="display: flex; flex-wrap: wrap; gap: 16px; align-items: center">
+<img src="../assets/nala.jpg" alt="Nala, German Shepherd puppy" style="width: 72px; height: 72px; border-radius: 16px; object-fit: cover; display: block">
+<div style="flex: 1 1 260px; display: flex; flex-direction: column; gap: 4px">
+<h2 style="margin: 0; font-family: 'Bricolage Grotesque', sans-serif; font-size: 22px; font-weight: 700">D-1042 · Nala, German Shepherd</h2>
+<p style="margin: 0; font-size: 14px; color: #6B625B">Buyer Emeka O. · Breeder Ikeja Shepherds (verified) · ₦380,000 held</p>
+</div>
+<span style="font-size: 12px; font-weight: 700; color: #9A3F0F; background: #FFEBD9; padding: 6px 12px; border-radius: 10px">Breeder payout paused</span>
+</div>
+
+<div style="padding: 14px 16px; border-radius: 14px; background: #F3EBE2; font-size: 14px; line-height: 1.5"><b>Buyer's claim:</b> "Nala was diagnosed with parvovirus 2 days after pickup. Vet report attached."</div>
+<div style="padding: 14px 16px; border-radius: 14px; background: #F3EBE2; font-size: 14px; line-height: 1.5"><b>Breeder's reply:</b> "She was healthy at handover. Our vet checked the litter on 28 Oct."</div>
+
+<div style="display: flex; flex-direction: column; gap: 10px">
+<h3 style="margin: 0; font-size: 14px; font-weight: 700">Timeline</h3>
+<ol style="margin: 0; padding: 0; list-style: none; display: flex; flex-direction: column; gap: 10px; font-size: 14px">
+<li style="display: flex; gap: 14px"><span style="width: 92px; color: #6B625B; font-weight: 600; flex-shrink: 0">28 Oct</span>Deposit ₦127,000 paid · breeder's vet check recorded</li>
+<li style="display: flex; gap: 14px"><span style="width: 92px; color: #6B625B; font-weight: 600; flex-shrink: 0">1 Nov</span>Handover confirmed · balance ₦253,000 paid · passport transferred</li>
+<li style="display: flex; gap: 14px"><span style="width: 92px; color: #6B625B; font-weight: 600; flex-shrink: 0">3 Nov</span><span>Parvo positive · record <b>verified by Dr. Femi Ade</b> (PawPass vet)</span></li>
+<li style="display: flex; gap: 14px"><span style="width: 92px; color: #6B625B; font-weight: 600; flex-shrink: 0">3 Nov</span>Buyer opened dispute, 46 hrs after handover</li>
+</ol>
+</div>
+
+<div style="display: flex; gap: 10px; align-items: flex-start; padding: 14px 16px; border-radius: 14px; background: #E3F1EE; color: #0B5650; font-size: 13px; font-weight: 600; line-height: 1.5">
+<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="flex-shrink: 0; margin-top: 1px"><path d="M12 3 4 6v6c0 4.5 3.4 8.3 8 9 4.6-.7 8-4.5 8-9V6z"></path></svg>
+<span>Policy match: a vet-verified health problem found within 72 hours of handover qualifies for a full refund. The breeder's trust score drops if upheld.</span>
+</div>
+</div>
+
+<div style="background: #FFFFFF; border: 1px solid #EDE3D9; border-radius: 18px; padding: 20px 24px; display: flex; flex-direction: column; gap: 14px">
+<fieldset style="border: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 10px">
+<legend style="font-size: 14px; font-weight: 700; padding: 0; margin-bottom: 10px">Decision</legend>
+<label style="flex: 1 1 180px; display: flex; align-items: center; gap: 10px; min-height: 52px; padding: 0 14px; border-radius: 14px; border: 2px solid #0E6B63; font-size: 14px; font-weight: 600"><input type="radio" name="dec" checked style="width: 18px; height: 18px; accent-color: #0E6B63; margin: 0">Full refund to buyer</label>
+<label style="flex: 1 1 180px; display: flex; align-items: center; gap: 10px; min-height: 52px; padding: 0 14px; border-radius: 14px; border: 1px solid #EDE3D9; font-size: 14px; font-weight: 600"><input type="radio" name="dec" style="width: 18px; height: 18px; margin: 0">Split the amount</label>
+<label style="flex: 1 1 180px; display: flex; align-items: center; gap: 10px; min-height: 52px; padding: 0 14px; border-radius: 14px; border: 1px solid #EDE3D9; font-size: 14px; font-weight: 600"><input type="radio" name="dec" style="width: 18px; height: 18px; margin: 0">Release to breeder</label>
+</fieldset>
+<div style="display: flex; flex-wrap: wrap; gap: 10px; justify-content: flex-end">
+<button style="height: 44px; padding: 0 18px; border-radius: 22px; border: 1.5px solid #CFC3B7; background: #FFFFFF; font: 700 14px 'Plus Jakarta Sans', sans-serif; color: #1F1A17">Message both parties</button>
+<button style="height: 44px; padding: 0 22px; border-radius: 22px; border: none; background: #0E6B63; font: 700 14px 'Plus Jakarta Sans', sans-serif; color: #FFFFFF">Confirm refund ₦380,000</button>
+</div>
+</div>
+</section>
+</div>
+
+</main>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":1080}}'>
+class Component extends DCLogic {
+renderVals() {
+return {};
+}
+}
+</script>
+</body>
+</html>

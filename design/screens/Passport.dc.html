@@ -1,0 +1,110 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Bingo's Pet Passport</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700&amp;family=Plus+Jakarta+Sans:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0}
+a{color:inherit}a:hover{color:inherit}
+</style>
+</helmet>
+<div style="width: 390px; height: 844px; position: relative; overflow: hidden; background: #FFF8F1; font-family: 'Plus Jakarta Sans', system-ui, sans-serif; color: #1F1A17">
+<main style="padding: 52px 20px 96px; display: flex; flex-direction: column; gap: 16px; box-sizing: border-box">
+
+<header style="display: flex; align-items: center; justify-content: space-between">
+<a href="Main.dc.html" aria-label="Back" style="width: 44px; height: 44px; border-radius: 22px; border: 1px solid #EDE3D9; background: #FFFFFF; display: flex; align-items: center; justify-content: center"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 6-6 6 6 6"></path></svg></a>
+<h1 style="margin: 0; font-family: 'Bricolage Grotesque', sans-serif; font-size: 20px; font-weight: 700">Pet Passport</h1>
+<a href="ShareVet.dc.html" aria-label="Share passport" style="box-sizing: border-box; width: 44px; height: 44px; border-radius: 22px; border: 1px solid #EDE3D9; background: #FFFFFF; display: flex; align-items: center; justify-content: center; color: #1F1A17; padding: 0"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="18" cy="5" r="3"></circle><circle cx="6" cy="12" r="3"></circle><circle cx="18" cy="19" r="3"></circle><path d="m8.6 13.5 6.8 4M15.4 6.5l-6.8 4"></path></svg></a>
+</header>
+
+<section style="background: {{accent}}; color: #FFFFFF; border-radius: 24px; padding: 18px; display: flex; flex-direction: column; gap: 14px">
+<div style="display: flex; gap: 14px; align-items: center">
+<img src="../assets/bingo.jpg" alt="Photo of Bingo" style="width: 72px; height: 72px; border-radius: 18px; flex-shrink: 0; display: flex; align-items: center; justify-content: center; color: #B4501C; object-fit: cover; display: block">
+<div style="flex: 1; display: flex; flex-direction: column; gap: 4px">
+<h2 style="margin: 0; font-family: 'Bricolage Grotesque', sans-serif; font-size: 24px; font-weight: 700">Bingo</h2>
+<p style="margin: 0; font-size: 13px; opacity: 0.9">Boerboel · Male · Born 14 Aug 2024</p>
+</div>
+<div role="img" aria-label="QR tag code" style="width: 52px; height: 52px; border-radius: 10px; background: #FFFFFF; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 3px; padding: 7px; box-sizing: border-box">
+<span style="background: #1F1A17; border-radius: 1px"></span><span style="background: #1F1A17; border-radius: 1px"></span><span></span><span style="background: #1F1A17; border-radius: 1px"></span>
+<span></span><span style="background: #1F1A17; border-radius: 1px"></span><span style="background: #1F1A17; border-radius: 1px"></span><span></span>
+<span style="background: #1F1A17; border-radius: 1px"></span><span></span><span style="background: #1F1A17; border-radius: 1px"></span><span style="background: #1F1A17; border-radius: 1px"></span>
+<span style="background: #1F1A17; border-radius: 1px"></span><span style="background: #1F1A17; border-radius: 1px"></span><span></span><span style="background: #1F1A17; border-radius: 1px"></span>
+</div>
+</div>
+<div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; font-size: 12px">
+<div style="background: rgba(255,255,255,0.14); border-radius: 12px; padding: 10px"><p style="margin: 0; opacity: 0.85">Tag ID</p><p style="margin: 2px 0 0; font-weight: 700; font-size: 14px">PP-4821-LK</p></div>
+<div style="background: rgba(255,255,255,0.14); border-radius: 12px; padding: 10px"><p style="margin: 0; opacity: 0.85">Origin</p><p style="margin: 2px 0 0; font-weight: 700; font-size: 14px">Royal Paws Kennels ✓</p></div>
+</div>
+</section>
+
+<div role="tablist" aria-label="Passport sections" style="display: flex; background: #F3EBE2; border-radius: 22px; padding: 4px">
+<button role="tab" aria-selected="true" style="flex: 1; height: 40px; border: none; border-radius: 18px; background: #FFFFFF; font: 700 13px 'Plus Jakarta Sans', sans-serif; color: #1F1A17">Health</button>
+<button role="tab" aria-selected="false" style="flex: 1; height: 40px; border: none; border-radius: 18px; background: transparent; font: 600 13px 'Plus Jakarta Sans', sans-serif; color: #6B625B">Origin</button>
+<button role="tab" aria-selected="false" style="flex: 1; height: 40px; border: none; border-radius: 18px; background: transparent; font: 600 13px 'Plus Jakarta Sans', sans-serif; color: #6B625B">Services</button>
+</div>
+
+<section style="display: flex; flex-direction: column; gap: 10px">
+<div style="display: flex; justify-content: space-between; align-items: baseline">
+<h3 style="margin: 0; font-size: 15px; font-weight: 700">Vaccines &amp; treatments</h3>
+<a href="AddRecord.dc.html" style="min-height: 44px; display: flex; align-items: center; font-size: 13px; font-weight: 700; color: {{accent}}; text-decoration: none">+ Add record</a>
+</div>
+
+<div style="background: #FFFFFF; border: 1px solid #EDE3D9; border-radius: 18px; padding: 12px 14px; display: flex; align-items: center; gap: 12px">
+<span style="width: 10px; height: 10px; border-radius: 5px; background: #E0662A; flex-shrink: 0"></span>
+<div style="flex: 1"><p style="margin: 0; font-weight: 700; font-size: 14px">Rabies booster</p><p style="margin: 2px 0 0; font-size: 12px; color: #6B625B">Due 12 Nov 2026</p></div>
+<a href="Schedule.dc.html" style="font-size: 12px; font-weight: 700; color: #9A3F0F; background: #FFEBD9; padding: 4px 10px; border-radius: 10px; text-decoration: none">Upcoming</a>
+</div>
+
+<div style="background: #FFFFFF; border: 1px solid #EDE3D9; border-radius: 18px; padding: 12px 14px; display: flex; align-items: center; gap: 12px">
+<span style="width: 10px; height: 10px; border-radius: 5px; background: #0E6B63; flex-shrink: 0"></span>
+<div style="flex: 1"><p style="margin: 0; font-weight: 700; font-size: 14px">Deworming</p><p style="margin: 2px 0 0; font-size: 12px; color: #6B625B">20 Oct 2026 · added by you</p></div>
+<span style="font-size: 12px; font-weight: 600; color: #6B625B">Done</span>
+</div>
+
+<div style="background: #FFFFFF; border: 1px solid #EDE3D9; border-radius: 18px; padding: 12px 14px; display: flex; align-items: center; gap: 12px">
+<span style="width: 10px; height: 10px; border-radius: 5px; background: #0E6B63; flex-shrink: 0"></span>
+<div style="flex: 1"><p style="margin: 0; font-weight: 700; font-size: 14px">DHPP vaccine</p><p style="margin: 2px 0 0; font-size: 12px; color: #6B625B">12 Mar 2026 · Dr. Amina Bello</p></div>
+<span style="display: flex; align-items: center; gap: 4px; font-size: 12px; font-weight: 700; color: #0B5650; background: #E3F1EE; padding: 4px 10px; border-radius: 10px"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5 10 17l9-10"></path></svg>Vet verified</span>
+</div>
+</section>
+
+<section style="background: #FFFFFF; border: 1px solid #EDE3D9; border-radius: 18px; padding: 14px; display: flex; flex-direction: column; gap: 10px">
+<div style="display: flex; justify-content: space-between; align-items: baseline"><h3 style="margin: 0; font-size: 15px; font-weight: 700">Weight</h3><span style="font-size: 13px; color: #6B625B">41 kg · last 6 months</span></div>
+<div role="img" aria-label="Weight rising from 34 to 41 kilograms over six months" style="display: flex; align-items: flex-end; gap: 10px; height: 56px">
+<span style="flex: 1; height: 62%; background: #CFE6E1; border-radius: 6px"></span>
+<span style="flex: 1; height: 68%; background: #CFE6E1; border-radius: 6px"></span>
+<span style="flex: 1; height: 75%; background: #CFE6E1; border-radius: 6px"></span>
+<span style="flex: 1; height: 82%; background: #CFE6E1; border-radius: 6px"></span>
+<span style="flex: 1; height: 90%; background: #CFE6E1; border-radius: 6px"></span>
+<span style="flex: 1; height: 100%; background: {{accent}}; border-radius: 6px"></span>
+</div>
+</section>
+
+
+
+</main>
+
+<nav aria-label="Main" style="position: absolute; left: 0; right: 0; bottom: 0; height: 80px; background: #FFFFFF; border-top: 1px solid #EDE3D9; display: flex; justify-content: space-around; align-items: flex-start; padding-top: 10px; box-sizing: border-box">
+<a href="Main.dc.html" style="display: flex; flex-direction: column; align-items: center; gap: 4px; min-width: 64px; min-height: 44px; text-decoration: none; color: #6B625B; font-size: 11px; font-weight: 600"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 10.5 12 3l9 7.5V20a1 1 0 0 1-1 1h-5v-6h-6v6H4a1 1 0 0 1-1-1z"></path></svg>Home</a>
+<a href="Passport.dc.html" aria-current="page" style="display: flex; flex-direction: column; align-items: center; gap: 4px; min-width: 64px; min-height: 44px; text-decoration: none; color: {{accent}}; font-size: 11px; font-weight: 700"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="3" width="14" height="18" rx="2"></rect><path d="M12 16s-3.5-2.2-3.5-4.5a1.9 1.9 0 0 1 3.5-1.2 1.9 1.9 0 0 1 3.5 1.2C15.5 13.8 12 16 12 16z"></path></svg>Passport</a>
+<a href="Services.dc.html" style="display: flex; flex-direction: column; align-items: center; gap: 4px; min-width: 64px; min-height: 44px; text-decoration: none; color: #6B625B; font-size: 11px; font-weight: 600"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="16" rx="2"></rect><path d="M3 10h18M8 3v4M16 3v4"></path></svg>Book</a>
+<a href="Community.dc.html" style="display: flex; flex-direction: column; align-items: center; gap: 4px; min-width: 64px; min-height: 44px; text-decoration: none; color: #6B625B; font-size: 11px; font-weight: 600"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="9" cy="8" r="3.5"></circle><path d="M2.5 20a6.5 6.5 0 0 1 13 0M16 4.5a3.5 3.5 0 0 1 0 7M18 14a6 6 0 0 1 3.5 6"></path></svg>Community</a>
+<a href="Adopt.dc.html" style="display: flex; flex-direction: column; align-items: center; gap: 4px; min-width: 64px; min-height: 44px; text-decoration: none; color: #6B625B; font-size: 11px; font-weight: 600"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="7" cy="10" r="2"></circle><circle cx="17" cy="10" r="2"></circle><circle cx="10" cy="6" r="2"></circle><circle cx="14" cy="6" r="2"></circle><path d="M12 12c-3 0-5 3.5-5 5.5S9 20 12 20s5-.5 5-2.5S15 12 12 12z"></path></svg>Adopt</a>
+</nav>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"accent":{"editor":"color","default":"#0E6B63","options":["#0E6B63","#B4501C","#3346B8","#1F1A17"]},"$preview":{"width":390,"height":844}}'>
+class Component extends DCLogic {
+renderVals() {
+return { accent: this.props.accent ?? '#0E6B63' };
+}
+}
+</script>
+</body>
+</html>

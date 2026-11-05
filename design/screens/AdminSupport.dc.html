@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Admin support inbox</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700&amp;family=Plus+Jakarta+Sans:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0}
+a{color:#0B5650}a:hover{color:#0E6B63}
+</style>
+</helmet>
+<div style="display: flex; flex-wrap: wrap; min-height: 100vh; background: #FFF8F1; font-family: 'Plus Jakarta Sans', system-ui, sans-serif; color: #1F1A17">
+<div style="flex: 1 1 240px; max-width: 100%; background: #1F1A17">
+<dc-import name="AdminNav" active="support" hint-size="100%,900px"></dc-import>
+</div>
+<main style="flex: 999 1 560px; min-width: 0; padding: 32px 40px 48px; display: flex; flex-direction: column; gap: 20px; box-sizing: border-box">
+
+<header style="display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 16px">
+<div style="display: flex; flex-direction: column; gap: 4px">
+<h1 style="margin: 0; font-family: 'Bricolage Grotesque', sans-serif; font-size: 30px; font-weight: 700">Support inbox</h1>
+<p style="margin: 0; font-size: 14px; color: #6B625B">From Help &amp; support in the app · reply within 1 day</p>
+</div>
+<div role="tablist" aria-label="Status" style="display: flex; background: #F3EBE2; border-radius: 14px; padding: 4px">
+<button role="tab" aria-selected="true" style="height: 40px; padding: 0 16px; border: none; border-radius: 10px; background: #FFFFFF; font: 700 13px 'Plus Jakarta Sans', sans-serif; color: #1F1A17">Open (5)</button>
+<button role="tab" aria-selected="false" style="height: 40px; padding: 0 16px; border: none; border-radius: 10px; background: transparent; font: 600 13px 'Plus Jakarta Sans', sans-serif; color: #6B625B">Waiting on user</button>
+<button role="tab" aria-selected="false" style="height: 40px; padding: 0 16px; border: none; border-radius: 10px; background: transparent; font: 600 13px 'Plus Jakarta Sans', sans-serif; color: #6B625B">Closed</button>
+</div>
+</header>
+
+<div style="display: flex; flex-wrap: wrap; gap: 20px; align-items: flex-start">
+<section aria-label="Tickets" style="flex: 1 1 340px; min-width: 0; background: #FFFFFF; border: 1px solid #EDE3D9; border-radius: 18px; overflow: hidden">
+<ul style="margin: 0; padding: 0; list-style: none">
+<li aria-current="true" style="padding: 14px 16px; background: #E3F1EE; display: flex; flex-direction: column; gap: 4px"><span style="display: flex; justify-content: space-between; font-size: 12px; font-weight: 700; color: #4A433E"><span>#S-2207 · Payments &amp; refunds</span><span>40 min</span></span><span style="font-weight: 700; font-size: 14px">When will my booking refund arrive?</span><span style="font-size: 13px; color: #4A433E">Funmi A. · owner</span></li>
+<li style="padding: 14px 16px; border-top: 1px solid #F3EBE2; display: flex; flex-direction: column; gap: 4px"><span style="display: flex; justify-content: space-between; font-size: 12px; font-weight: 700; color: #6B625B"><span>#S-2206 · Partner account</span><span>2 hrs</span></span><span style="font-weight: 700; font-size: 14px">How do I add a second branch?</span><span style="font-size: 13px; color: #4A433E">Paws &amp; Claws Vet Clinic</span></li>
+<li style="padding: 14px 16px; border-top: 1px solid #F3EBE2; display: flex; flex-direction: column; gap: 4px"><span style="display: flex; justify-content: space-between; font-size: 12px; font-weight: 700; color: #6B625B"><span>#S-2204 · Passport</span><span>5 hrs</span></span><span style="font-weight: 700; font-size: 14px">Vet added the wrong vaccine date</span><span style="font-size: 13px; color: #4A433E">Kemi B. · owner</span></li>
+<li style="padding: 14px 16px; border-top: 1px solid #F3EBE2; display: flex; flex-direction: column; gap: 4px"><span style="display: flex; justify-content: space-between; font-size: 12px; font-weight: 700; color: #6B625B"><span>#S-2203 · Sign-in</span><span>8 hrs</span></span><span style="font-weight: 700; font-size: 14px">Not getting my email code</span><span style="font-size: 13px; color: #4A433E">Seun O. · owner</span></li>
+<li style="padding: 14px 16px; border-top: 1px solid #F3EBE2; display: flex; flex-direction: column; gap: 4px"><span style="display: flex; justify-content: space-between; font-size: 12px; font-weight: 700; color: #6B625B"><span>#S-2201 · QR tags</span><span>3 days</span></span><span style="font-weight: 700; font-size: 14px">QR tag delivery date</span><span style="font-size: 13px; color: #4A433E">Tolu A. · replied, waiting</span></li>
+</ul>
+</section>
+
+<section aria-label="Conversation" style="flex: 2 1 520px; min-width: 0; background: #FFFFFF; border: 1px solid #EDE3D9; border-radius: 18px; padding: 22px; display: flex; flex-direction: column; gap: 16px">
+<div style="display: flex; flex-wrap: wrap; justify-content: space-between; gap: 12px">
+<div style="display: flex; flex-direction: column; gap: 4px"><h2 style="margin: 0; font-size: 18px; font-weight: 700">When will my booking refund arrive?</h2><p style="margin: 0; font-size: 13px; color: #6B625B">Funmi A. · funmi@example.com · linked: dispute D-1036, ₦62,500</p></div>
+<a href="AdminDisputes.dc.html" style="align-self: flex-start; height: 36px; padding: 0 14px; border-radius: 18px; border: 1px solid #EDE3D9; display: flex; align-items: center; font-weight: 700; font-size: 13px; text-decoration: none; box-sizing: border-box">Open dispute</a>
+</div>
+<div style="align-self: flex-start; max-width: 80%; padding: 12px 14px; border-radius: 16px 16px 16px 4px; background: #F3EBE2; font-size: 14px; line-height: 1.5">The trainer never showed up for 3 sessions. I reported it on Monday. When do I get my ₦62,500 back?</div>
+<div style="align-self: flex-end; max-width: 80%; padding: 10px 14px; border-radius: 12px; background: #FFF8F1; border: 1px dashed #CFC3B7; font-size: 13px; color: #4A433E"><b>Internal note · Bisi A.:</b> K9 Academy has 2 days left to respond. Refund likely.</div>
+<div style="display: flex; flex-wrap: wrap; gap: 8px">
+<button style="height: 34px; padding: 0 12px; border-radius: 17px; border: 1px solid #EDE3D9; background: #FFFFFF; font: 600 12px 'Plus Jakarta Sans', sans-serif; color: #1F1A17">Template: dispute timeline</button>
+<button style="height: 34px; padding: 0 12px; border-radius: 17px; border: 1px solid #EDE3D9; background: #FFFFFF; font: 600 12px 'Plus Jakarta Sans', sans-serif; color: #1F1A17">Template: refund sent</button>
+</div>
+<label style="display: flex; flex-direction: column; gap: 6px; font-size: 14px; font-weight: 700">Reply
+<textarea rows="3" style="border-radius: 12px; border: 1px solid #EDE3D9; background: #FFF8F1; padding: 12px 14px; font: 500 14px 'Plus Jakarta Sans', sans-serif; color: #1F1A17; resize: vertical">Hi Funmi, your ₦62,500 is safe and on hold. The trainer has until Saturday to respond, then we decide. If we refund you, it reaches your card in 3–5 working days.</textarea></label>
+<div style="display: flex; flex-wrap: wrap; gap: 10px; justify-content: flex-end">
+<button style="height: 44px; padding: 0 18px; border-radius: 22px; border: 1.5px solid #CFC3B7; background: #FFFFFF; font: 700 14px 'Plus Jakarta Sans', sans-serif; color: #1F1A17">Add internal note</button>
+<button style="height: 44px; padding: 0 22px; border-radius: 22px; border: none; background: #0E6B63; font: 700 14px 'Plus Jakarta Sans', sans-serif; color: #FFFFFF">Send reply</button>
+</div>
+</section>
+</div>
+
+</main>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":1080}}'>
+class Component extends DCLogic {
+renderVals() {
+return {};
+}
+}
+</script>
+</body>
+</html>

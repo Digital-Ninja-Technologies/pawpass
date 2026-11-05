@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Admin overview</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700&amp;family=Plus+Jakarta+Sans:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0}
+a{color:#0B5650}a:hover{color:#0E6B63}
+</style>
+</helmet>
+<div style="display: flex; flex-wrap: wrap; min-height: 100vh; background: #FFF8F1; font-family: 'Plus Jakarta Sans', system-ui, sans-serif; color: #1F1A17">
+<div style="flex: 1 1 240px; max-width: 100%; background: #1F1A17">
+<dc-import name="AdminNav" active="overview" hint-size="100%,900px"></dc-import>
+</div>
+<main style="flex: 999 1 560px; min-width: 0; padding: 32px 40px 48px; display: flex; flex-direction: column; gap: 24px; box-sizing: border-box">
+
+<header style="display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 16px">
+<div style="display: flex; flex-direction: column; gap: 4px">
+<h1 style="margin: 0; font-family: 'Bricolage Grotesque', sans-serif; font-size: 30px; font-weight: 700">Overview</h1>
+<p style="margin: 0; font-size: 14px; color: #6B625B">Lagos · last 30 days · sample data</p>
+</div>
+<div style="display: flex; flex-wrap: wrap; gap: 10px">
+<label style="display: flex; align-items: center; gap: 8px; height: 44px; padding: 0 14px; border-radius: 12px; border: 1px solid #EDE3D9; background: #FFFFFF; min-width: 260px; box-sizing: border-box"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#6B625B" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"></circle><path d="m20 20-3.5-3.5"></path></svg><span style="position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0)">Search</span><input type="search" placeholder="Search users, pets, bookings, cases" style="flex: 1; border: none; outline: none; background: transparent; font: 500 14px 'Plus Jakarta Sans', sans-serif; color: #1F1A17; min-width: 0"></label>
+<button style="height: 44px; padding: 0 16px; border-radius: 12px; border: 1px solid #EDE3D9; background: #FFFFFF; font: 600 14px 'Plus Jakarta Sans', sans-serif; color: #1F1A17">Last 30 days ▾</button>
+</div>
+</header>
+
+<section aria-label="Key numbers" style="display: flex; flex-wrap: wrap; gap: 16px">
+<div style="flex: 1 1 180px; background: #FFFFFF; border: 1px solid #EDE3D9; border-radius: 18px; padding: 18px; display: flex; flex-direction: column; gap: 6px"><span style="font-size: 13px; color: #6B625B; font-weight: 600">Active pets</span><span style="font-family: 'Bricolage Grotesque', sans-serif; font-size: 30px; font-weight: 700">18,420</span><span style="font-size: 12px; font-weight: 700; color: #0B5650">▲ 6.2% vs previous 30 days</span></div>
+<div style="flex: 1 1 180px; background: #FFFFFF; border: 1px solid #EDE3D9; border-radius: 18px; padding: 18px; display: flex; flex-direction: column; gap: 6px"><span style="font-size: 13px; color: #6B625B; font-weight: 600">Completed bookings</span><span style="font-family: 'Bricolage Grotesque', sans-serif; font-size: 30px; font-weight: 700">3,114</span><span style="font-size: 12px; font-weight: 700; color: #0B5650">▲ 11.4%</span></div>
+<div style="flex: 1 1 180px; background: #FFFFFF; border: 1px solid #EDE3D9; border-radius: 18px; padding: 18px; display: flex; flex-direction: column; gap: 6px"><span style="font-size: 13px; color: #6B625B; font-weight: 600">Payments processed</span><span style="font-family: 'Bricolage Grotesque', sans-serif; font-size: 30px; font-weight: 700">₦46.8M</span><span style="font-size: 12px; font-weight: 700; color: #0B5650">▲ 9.1%</span></div>
+<div style="flex: 1 1 180px; background: #FFFFFF; border: 1px solid #EDE3D9; border-radius: 18px; padding: 18px; display: flex; flex-direction: column; gap: 6px"><span style="font-size: 13px; color: #6B625B; font-weight: 600">Held in escrow now</span><span style="font-family: 'Bricolage Grotesque', sans-serif; font-size: 30px; font-weight: 700">₦7.9M</span><span style="font-size: 12px; font-weight: 600; color: #6B625B">412 open transactions</span></div>
+<div style="flex: 1 1 180px; background: #FFFFFF; border: 1px solid #EDE3D9; border-radius: 18px; padding: 18px; display: flex; flex-direction: column; gap: 6px"><span style="font-size: 13px; color: #6B625B; font-weight: 600">Verified partners</span><span style="font-family: 'Bricolage Grotesque', sans-serif; font-size: 30px; font-weight: 700">312</span><span style="font-size: 12px; font-weight: 600; color: #6B625B">241 providers · 46 breeders · 25 shelters</span></div>
+</section>
+
+<div style="display: flex; flex-wrap: wrap; gap: 16px">
+<section style="flex: 2 1 480px; min-width: 0; background: #FFFFFF; border: 1px solid #EDE3D9; border-radius: 18px; padding: 20px; display: flex; flex-direction: column; gap: 16px">
+<div style="display: flex; justify-content: space-between; align-items: baseline; flex-wrap: wrap; gap: 8px"><h2 style="margin: 0; font-size: 16px; font-weight: 700">Completed bookings per week</h2><span style="font-size: 13px; color: #6B625B">Last 12 weeks · hover a bar for the count</span></div>
+<div style="display: flex; gap: 10px">
+<div aria-hidden="true" style="display: flex; flex-direction: column; justify-content: space-between; height: 220px; font-size: 11px; color: #6B625B; text-align: right; width: 28px"><span>800</span><span>600</span><span>400</span><span>200</span><span>0</span></div>
+<div role="img" aria-label="Weekly completed bookings rose from 452 to 736 over 12 weeks" style="flex: 1; min-width: 0; height: 220px; position: relative; border-bottom: 1px solid #CFC3B7">
+<span aria-hidden="true" style="position: absolute; left: 0; right: 0; top: 0; border-top: 1px solid #F3EBE2"></span>
+<span aria-hidden="true" style="position: absolute; left: 0; right: 0; top: 25%; border-top: 1px solid #F3EBE2"></span>
+<span aria-hidden="true" style="position: absolute; left: 0; right: 0; top: 50%; border-top: 1px solid #F3EBE2"></span>
+<span aria-hidden="true" style="position: absolute; left: 0; right: 0; top: 75%; border-top: 1px solid #F3EBE2"></span>
+<div style="position: absolute; inset: 0; display: flex; align-items: flex-end; gap: 10px; padding: 0 4px"><span title="Week of 17 Aug: 452 bookings" style="flex: 1; height: 56.5%; background: #0E6B63; border-radius: 4px 4px 0 0"></span><span title="Week of 24 Aug: 480 bookings" style="flex: 1; height: 60.0%; background: #0E6B63; border-radius: 4px 4px 0 0"></span><span title="Week of 31 Aug: 511 bookings" style="flex: 1; height: 63.9%; background: #0E6B63; border-radius: 4px 4px 0 0"></span><span title="Week of 7 Sep: 498 bookings" style="flex: 1; height: 62.3%; background: #0E6B63; border-radius: 4px 4px 0 0"></span><span title="Week of 14 Sep: 540 bookings" style="flex: 1; height: 67.5%; background: #0E6B63; border-radius: 4px 4px 0 0"></span><span title="Week of 21 Sep: 575 bookings" style="flex: 1; height: 71.9%; background: #0E6B63; border-radius: 4px 4px 0 0"></span><span title="Week of 28 Sep: 602 bookings" style="flex: 1; height: 75.2%; background: #0E6B63; border-radius: 4px 4px 0 0"></span><span title="Week of 5 Oct: 590 bookings" style="flex: 1; height: 73.8%; background: #0E6B63; border-radius: 4px 4px 0 0"></span><span title="Week of 12 Oct: 640 bookings" style="flex: 1; height: 80.0%; background: #0E6B63; border-radius: 4px 4px 0 0"></span><span title="Week of 19 Oct: 688 bookings" style="flex: 1; height: 86.0%; background: #0E6B63; border-radius: 4px 4px 0 0"></span><span title="Week of 26 Oct: 702 bookings" style="flex: 1; height: 87.8%; background: #0E6B63; border-radius: 4px 4px 0 0"></span><span title="Week of 2 Nov: 736 bookings" style="flex: 1; height: 92.0%; background: #0E6B63; border-radius: 4px 4px 0 0"></span></div>
+</div>
+</div>
+<div aria-hidden="true" style="display: flex; gap: 10px; padding-left: 42px; font-size: 11px; color: #6B625B"><span style="flex: 1; text-align: center">17 Aug</span><span style="flex: 1; text-align: center"></span><span style="flex: 1; text-align: center"></span><span style="flex: 1; text-align: center">7 Sep</span><span style="flex: 1; text-align: center"></span><span style="flex: 1; text-align: center"></span><span style="flex: 1; text-align: center">28 Sep</span><span style="flex: 1; text-align: center"></span><span style="flex: 1; text-align: center"></span><span style="flex: 1; text-align: center">19 Oct</span><span style="flex: 1; text-align: center"></span><span style="flex: 1; text-align: center">2 Nov</span></div>
+</section>
+
+<section style="flex: 1 1 300px; min-width: 0; background: #FFFFFF; border: 1px solid #EDE3D9; border-radius: 18px; padding: 20px; display: flex; flex-direction: column; gap: 10px">
+<h2 style="margin: 0 0 4px; font-size: 16px; font-weight: 700">Needs attention</h2>
+<a href="AdminKYC.dc.html" style="display: flex; align-items: center; gap: 12px; padding: 12px 14px; border-radius: 14px; background: #FFEBD9; text-decoration: none; color: #1F1A17"><span style="font-family: 'Bricolage Grotesque', sans-serif; font-size: 24px; font-weight: 700; width: 40px">12</span><span style="flex: 1; display: flex; flex-direction: column"><span style="font-weight: 700; font-size: 14px">Verifications waiting</span><span style="font-size: 12px; color: #6B4A33">Oldest 31 hrs · 48-hr target</span></span><span aria-hidden="true">›</span></a>
+<a href="AdminDisputes.dc.html" style="display: flex; align-items: center; gap: 12px; padding: 12px 14px; border-radius: 14px; background: #FDEAE7; text-decoration: none; color: #1F1A17"><span style="font-family: 'Bricolage Grotesque', sans-serif; font-size: 24px; font-weight: 700; width: 40px">3</span><span style="flex: 1; display: flex; flex-direction: column"><span style="font-weight: 700; font-size: 14px">Open disputes</span><span style="font-size: 12px; color: #8A2016">₦487,500 held · 1 due today</span></span><span aria-hidden="true">›</span></a>
+<a href="AdminModeration.dc.html" style="display: flex; align-items: center; gap: 12px; padding: 12px 14px; border-radius: 14px; background: #F3EBE2; text-decoration: none; color: #1F1A17"><span style="font-family: 'Bricolage Grotesque', sans-serif; font-size: 24px; font-weight: 700; width: 40px">8</span><span style="flex: 1; display: flex; flex-direction: column"><span style="font-weight: 700; font-size: 14px">Reported content</span><span style="font-size: 12px; color: #4A433E">2 possible scam listings</span></span><span aria-hidden="true">›</span></a>
+<a href="AdminPayouts.dc.html" style="display: flex; align-items: center; gap: 12px; padding: 12px 14px; border-radius: 14px; background: #E3F1EE; text-decoration: none; color: #1F1A17"><span style="font-family: 'Bricolage Grotesque', sans-serif; font-size: 18px; font-weight: 700; width: 40px">Mon</span><span style="flex: 1; display: flex; flex-direction: column"><span style="font-weight: 700; font-size: 14px">Next payout run</span><span style="font-size: 12px; color: #0B5650">₦4.2M to 186 partners</span></span><span aria-hidden="true">›</span></a>
+</section>
+</div>
+
+<section style="background: #FFFFFF; border: 1px solid #EDE3D9; border-radius: 18px; padding: 20px; display: flex; flex-direction: column; gap: 12px">
+<h2 style="margin: 0; font-size: 16px; font-weight: 700">Recent activity</h2>
+<div style="overflow-x: auto">
+<table style="width: 100%; border-collapse: collapse; font-size: 14px; min-width: 640px">
+<thead><tr style="text-align: left; color: #6B625B; font-size: 12px; text-transform: uppercase; letter-spacing: 0.04em"><th style="padding: 10px 12px; font-weight: 700">Time</th><th style="padding: 10px 12px; font-weight: 700">Event</th><th style="padding: 10px 12px; font-weight: 700">Who</th><th style="padding: 10px 12px; font-weight: 700">Status</th></tr></thead>
+<tbody>
+<tr style="border-top: 1px solid #F3EBE2"><td style="padding: 12px; color: #6B625B">10:42</td><td style="padding: 12px; font-weight: 600">Escrow deposit · Duke (Boerboel)</td><td style="padding: 12px">Tolu A. → Royal Paws Kennels</td><td style="padding: 12px"><span style="font-size: 12px; font-weight: 700; color: #0B5650; background: #E3F1EE; padding: 4px 10px; border-radius: 10px">Held · ₦157,500</span></td></tr>
+<tr style="border-top: 1px solid #F3EBE2"><td style="padding: 12px; color: #6B625B">10:15</td><td style="padding: 12px; font-weight: 600">Lost pet alert · Bruno</td><td style="padding: 12px">Ngozi E. · Lekki</td><td style="padding: 12px"><span style="font-size: 12px; font-weight: 700; color: #9A3F0F; background: #FFEBD9; padding: 4px 10px; border-radius: 10px">Active · 1 sighting</span></td></tr>
+<tr style="border-top: 1px solid #F3EBE2"><td style="padding: 12px; color: #6B625B">09:58</td><td style="padding: 12px; font-weight: 600">Verification submitted</td><td style="padding: 12px">Glam Paws Grooming</td><td style="padding: 12px"><span style="font-size: 12px; font-weight: 700; color: #4A433E; background: #F3EBE2; padding: 4px 10px; border-radius: 10px">In queue</span></td></tr>
+<tr style="border-top: 1px solid #F3EBE2"><td style="padding: 12px; color: #6B625B">09:31</td><td style="padding: 12px; font-weight: 600">Dispute opened · puppy health</td><td style="padding: 12px">Emeka O. vs Ikeja Shepherds</td><td style="padding: 12px"><span style="font-size: 12px; font-weight: 700; color: #8A2016; background: #FDEAE7; padding: 4px 10px; border-radius: 10px">Needs review</span></td></tr>
+<tr style="border-top: 1px solid #F3EBE2"><td style="padding: 12px; color: #6B625B">08:47</td><td style="padding: 12px; font-weight: 600">Record verified · DHPP</td><td style="padding: 12px">Dr. Amina Bello → Bingo</td><td style="padding: 12px"><span style="font-size: 12px; font-weight: 700; color: #0B5650; background: #E3F1EE; padding: 4px 10px; border-radius: 10px">Done</span></td></tr>
+</tbody>
+</table>
+</div>
+</section>
+
+</main>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":1080}}'>
+class Component extends DCLogic {
+renderVals() {
+return {};
+}
+}
+</script>
+</body>
+</html>

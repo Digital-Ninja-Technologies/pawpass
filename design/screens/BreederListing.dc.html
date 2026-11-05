@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>New breeder listing</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700&amp;family=Plus+Jakarta+Sans:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0}
+a{color:inherit}a:hover{color:inherit}
+</style>
+</helmet>
+<div style="width: 390px; height: 844px; position: relative; overflow: hidden; background: #FFF8F1; font-family: 'Plus Jakarta Sans', system-ui, sans-serif; color: #1F1A17">
+<main style="padding: 52px 20px 0; display: flex; flex-direction: column; gap: 14px; box-sizing: border-box">
+
+<header style="display: flex; align-items: center; gap: 12px">
+<a href="BreederDash.dc.html" aria-label="Close" style="width: 44px; height: 44px; border-radius: 22px; border: 1px solid #EDE3D9; background: #FFFFFF; display: flex; align-items: center; justify-content: center; flex-shrink: 0"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"></path></svg></a>
+<h1 style="margin: 0; flex: 1; font-family: 'Bricolage Grotesque', sans-serif; font-size: 22px; font-weight: 700">New listing</h1>
+<span style="font-size: 12px; font-weight: 700; color: #0B5650; background: #E3F1EE; padding: 4px 10px; border-radius: 10px">✓ Verified breeder</span>
+</header>
+
+<div style="display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 8px">
+<img src="../assets/duke.jpg" alt="Puppy photo 1" style="height: 76px; border-radius: 14px; object-fit: cover; display: block">
+<img src="../assets/duke_kennel.jpg" alt="Puppy photo 2" style="height: 76px; border-radius: 14px; object-fit: cover; display: block">
+<button aria-label="Add photo" style="height: 76px; border-radius: 14px; border: 2px dashed #CFC3B7; background: #FFFFFF; color: #6B625B; display: flex; align-items: center; justify-content: center; padding: 0"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"></path></svg></button>
+<span></span>
+</div>
+
+<div style="display: flex; background: #F3EBE2; border-radius: 22px; padding: 4px">
+<button aria-pressed="true" style="flex: 1; height: 40px; border: none; border-radius: 18px; background: #FFFFFF; font: 700 13px 'Plus Jakarta Sans', sans-serif; color: #1F1A17">Single puppy</button>
+<button aria-pressed="false" style="flex: 1; height: 40px; border: none; border-radius: 18px; background: transparent; font: 600 13px 'Plus Jakarta Sans', sans-serif; color: #6B625B">Whole litter</button>
+</div>
+
+<div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px">
+<label style="display: flex; flex-direction: column; gap: 6px; font-size: 13px; font-weight: 600; color: #4A433E; min-width: 0">Name<input type="text" value="Duke" style="height: 48px; padding: 0 14px; border-radius: 14px; border: 1px solid #EDE3D9; background: #FFFFFF; font: 600 14px 'Plus Jakarta Sans', sans-serif; color: #1F1A17; min-width: 0; box-sizing: border-box"></label>
+<label style="display: flex; flex-direction: column; gap: 6px; font-size: 13px; font-weight: 600; color: #4A433E; min-width: 0">Breed<input type="text" value="Boerboel" style="height: 48px; padding: 0 14px; border-radius: 14px; border: 1px solid #EDE3D9; background: #FFFFFF; font: 600 14px 'Plus Jakarta Sans', sans-serif; color: #1F1A17; min-width: 0; box-sizing: border-box"></label>
+<label style="display: flex; flex-direction: column; gap: 6px; font-size: 13px; font-weight: 600; color: #4A433E; min-width: 0">Born<input type="text" value="3 Sep 2026" style="height: 48px; padding: 0 14px; border-radius: 14px; border: 1px solid #EDE3D9; background: #FFFFFF; font: 600 14px 'Plus Jakarta Sans', sans-serif; color: #1F1A17; min-width: 0; box-sizing: border-box"></label>
+<label style="display: flex; flex-direction: column; gap: 6px; font-size: 13px; font-weight: 600; color: #4A433E; min-width: 0">Price (₦)<input type="text" value="450,000" style="height: 48px; padding: 0 14px; border-radius: 14px; border: 2px solid {{accent}}; background: #FFFFFF; font: 600 14px 'Plus Jakarta Sans', sans-serif; color: #1F1A17; min-width: 0; box-sizing: border-box"></label>
+</div>
+
+<section style="background: #FFFFFF; border: 1px solid #EDE3D9; border-radius: 18px; padding: 12px 14px; display: flex; flex-direction: column; gap: 10px">
+<h2 style="margin: 0; font-size: 14px; font-weight: 700">Passport details</h2>
+<div style="display: flex; justify-content: space-between; align-items: center; font-size: 13px"><span style="color: #6B625B">Parents</span><button style="height: 34px; padding: 0 12px; border-radius: 17px; border: 1px solid #EDE3D9; background: #FFF8F1; font: 600 12px 'Plus Jakarta Sans', sans-serif; color: #1F1A17">Max × Bella ▾</button></div>
+<div style="display: flex; justify-content: space-between; align-items: center; font-size: 13px"><span style="color: #6B625B">First vaccine</span><span style="font-weight: 600; color: #0B5650">DHPP · vet verified ✓</span></div>
+<div style="display: flex; justify-content: space-between; align-items: center; font-size: 13px"><span style="color: #6B625B">Vet health check</span><button style="height: 34px; padding: 0 12px; border-radius: 17px; border: none; background: {{accent}}; font: 700 12px 'Plus Jakarta Sans', sans-serif; color: #FFFFFF">Request from vet</button></div>
+</section>
+
+</main>
+<footer style="position: absolute; left: 0; right: 0; bottom: 0; background: #FFFFFF; border-top: 1px solid #EDE3D9; padding: 14px 20px 26px; display: flex; flex-direction: column; gap: 8px; box-sizing: border-box">
+<a href="Listing.dc.html" style="height: 52px; border-radius: 26px; background: {{accent}}; color: #FFFFFF; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 15px; text-decoration: none">Publish listing</a>
+<p style="margin: 0; text-align: center; font-size: 12px; color: #6B625B">Each puppy gets its own passport that moves to the buyer.</p>
+</footer>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"accent":{"editor":"color","default":"#0E6B63","options":["#0E6B63","#B4501C","#3346B8","#1F1A17"]},"$preview":{"width":390,"height":844}}'>
+class Component extends DCLogic {
+renderVals() {
+return { accent: this.props.accent ?? '#0E6B63' };
+}
+}
+</script>
+</body>
+</html>

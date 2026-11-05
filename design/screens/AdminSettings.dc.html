@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Admin settings</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700&amp;family=Plus+Jakarta+Sans:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0}
+a{color:#0B5650}a:hover{color:#0E6B63}
+</style>
+</helmet>
+<div style="display: flex; flex-wrap: wrap; min-height: 100vh; background: #FFF8F1; font-family: 'Plus Jakarta Sans', system-ui, sans-serif; color: #1F1A17">
+<div style="flex: 1 1 240px; max-width: 100%; background: #1F1A17">
+<dc-import name="AdminNav" active="settings" hint-size="100%,900px"></dc-import>
+</div>
+<main style="flex: 999 1 560px; min-width: 0; padding: 32px 40px 48px; display: flex; flex-direction: column; gap: 20px; box-sizing: border-box">
+
+<header style="display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 16px">
+<div style="display: flex; flex-direction: column; gap: 4px">
+<h1 style="margin: 0; font-family: 'Bricolage Grotesque', sans-serif; font-size: 30px; font-weight: 700">Settings</h1>
+<p style="margin: 0; font-size: 14px; color: #6B625B">These rules drive what users see in the app. Changes apply to new bookings and listings only.</p>
+</div>
+<button style="height: 44px; padding: 0 22px; border-radius: 22px; border: none; background: #0E6B63; font: 700 14px 'Plus Jakarta Sans', sans-serif; color: #FFFFFF">Save changes</button>
+</header>
+
+<div style="display: flex; flex-wrap: wrap; gap: 20px; align-items: flex-start">
+<section style="flex: 1 1 460px; min-width: 0; background: #FFFFFF; border: 1px solid #EDE3D9; border-radius: 18px; padding: 20px; display: flex; flex-direction: column; gap: 14px">
+<h2 style="margin: 0; font-size: 16px; font-weight: 700">Fees &amp; policies</h2>
+<div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px">
+<label style="display: flex; flex-direction: column; gap: 6px; font-size: 13px; font-weight: 600; color: #4A433E">Booking commission (%)<input type="text" value="12" style="height: 46px; padding: 0 12px; border-radius: 12px; border: 1px solid #EDE3D9; font: 600 15px 'Plus Jakarta Sans', sans-serif; color: #1F1A17; min-width: 0; box-sizing: border-box"></label>
+<label style="display: flex; flex-direction: column; gap: 6px; font-size: 13px; font-weight: 600; color: #4A433E">Puppy sale escrow fee (%)<input type="text" value="5" style="height: 46px; padding: 0 12px; border-radius: 12px; border: 1px solid #EDE3D9; font: 600 15px 'Plus Jakarta Sans', sans-serif; color: #1F1A17; min-width: 0; box-sizing: border-box"></label>
+<label style="display: flex; flex-direction: column; gap: 6px; font-size: 13px; font-weight: 600; color: #4A433E">Puppy deposit share<input type="text" value="⅓ of price" style="height: 46px; padding: 0 12px; border-radius: 12px; border: 1px solid #EDE3D9; font: 600 15px 'Plus Jakarta Sans', sans-serif; color: #1F1A17; min-width: 0; box-sizing: border-box"></label>
+<label style="display: flex; flex-direction: column; gap: 6px; font-size: 13px; font-weight: 600; color: #4A433E">Vet-check window (hours)<input type="text" value="72" style="height: 46px; padding: 0 12px; border-radius: 12px; border: 1px solid #EDE3D9; font: 600 15px 'Plus Jakarta Sans', sans-serif; color: #1F1A17; min-width: 0; box-sizing: border-box"></label>
+<label style="display: flex; flex-direction: column; gap: 6px; font-size: 13px; font-weight: 600; color: #4A433E">Free cancellation (hours before)<input type="text" value="2" style="height: 46px; padding: 0 12px; border-radius: 12px; border: 1px solid #EDE3D9; font: 600 15px 'Plus Jakarta Sans', sans-serif; color: #1F1A17; min-width: 0; box-sizing: border-box"></label>
+<label style="display: flex; flex-direction: column; gap: 6px; font-size: 13px; font-weight: 600; color: #4A433E">Verification target (hours)<input type="text" value="48" style="height: 46px; padding: 0 12px; border-radius: 12px; border: 1px solid #EDE3D9; font: 600 15px 'Plus Jakarta Sans', sans-serif; color: #1F1A17; min-width: 0; box-sizing: border-box"></label>
+<label style="display: flex; flex-direction: column; gap: 6px; font-size: 13px; font-weight: 600; color: #4A433E">Lost alert default radius (km)<input type="text" value="5" style="height: 46px; padding: 0 12px; border-radius: 12px; border: 1px solid #EDE3D9; font: 600 15px 'Plus Jakarta Sans', sans-serif; color: #1F1A17; min-width: 0; box-sizing: border-box"></label>
+<label style="display: flex; flex-direction: column; gap: 6px; font-size: 13px; font-weight: 600; color: #4A433E">Payout day<input type="text" value="Every Monday" style="height: 46px; padding: 0 12px; border-radius: 12px; border: 1px solid #EDE3D9; font: 600 15px 'Plus Jakarta Sans', sans-serif; color: #1F1A17; min-width: 0; box-sizing: border-box"></label>
+</div>
+</section>
+
+<section style="flex: 1 1 380px; min-width: 0; display: flex; flex-direction: column; gap: 20px">
+<div style="background: #FFFFFF; border: 1px solid #EDE3D9; border-radius: 18px; padding: 20px; display: flex; flex-direction: column; gap: 12px">
+<div style="display: flex; justify-content: space-between; align-items: center"><h2 style="margin: 0; font-size: 16px; font-weight: 700">Team &amp; roles</h2><button style="height: 34px; padding: 0 12px; border-radius: 17px; border: 1px solid #EDE3D9; background: #FFFFFF; font: 700 12px 'Plus Jakarta Sans', sans-serif; color: #1F1A17">+ Invite</button></div>
+<div style="display: flex; justify-content: space-between; align-items: center; font-size: 14px; padding: 8px 0; border-bottom: 1px solid #F3EBE2"><span><b>Bisi A.</b> · Trust &amp; Safety</span><span style="font-size: 12px; font-weight: 700; color: #0B5650; background: #E3F1EE; padding: 4px 10px; border-radius: 10px">Full admin</span></div>
+<div style="display: flex; justify-content: space-between; align-items: center; font-size: 14px; padding: 8px 0; border-bottom: 1px solid #F3EBE2"><span><b>Tunde K.</b> · Finance</span><span style="font-size: 12px; font-weight: 700; color: #23407A; background: #DCE7F7; padding: 4px 10px; border-radius: 10px">Payouts &amp; disputes</span></div>
+<div style="display: flex; justify-content: space-between; align-items: center; font-size: 14px; padding: 8px 0"><span><b>Halima S.</b> · Support</span><span style="font-size: 12px; font-weight: 700; color: #4A433E; background: #F3EBE2; padding: 4px 10px; border-radius: 10px">Support &amp; reports</span></div>
+</div>
+
+<div style="background: #FFFFFF; border: 1px solid #EDE3D9; border-radius: 18px; padding: 20px; display: flex; flex-direction: column; gap: 10px">
+<h2 style="margin: 0; font-size: 16px; font-weight: 700">Audit log</h2>
+<ol style="margin: 0; padding: 0; list-style: none; display: flex; flex-direction: column; gap: 8px; font-size: 13px">
+<li style="display: flex; gap: 12px"><span style="width: 44px; color: #6B625B; flex-shrink: 0">11:02</span><span><b>Bisi A.</b> asked Glam Paws Grooming for a clearer CAC certificate</span></li>
+<li style="display: flex; gap: 12px"><span style="width: 44px; color: #6B625B; flex-shrink: 0">10:47</span><span><b>Bisi A.</b> removed listing and suspended Prince Kennels</span></li>
+<li style="display: flex; gap: 12px"><span style="width: 44px; color: #6B625B; flex-shrink: 0">10:20</span><span><b>Tunde K.</b> paused payout T-88204 (dispute D-1042)</span></li>
+<li style="display: flex; gap: 12px"><span style="width: 44px; color: #6B625B; flex-shrink: 0">09:15</span><span><b>Halima S.</b> sent a new sign-in code to Seun O.</span></li>
+</ol>
+<a href="#audit" style="font-size: 13px; font-weight: 700; min-height: 32px; display: flex; align-items: center">View full log · export</a>
+</div>
+</section>
+</div>
+
+</main>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":1080}}'>
+class Component extends DCLogic {
+renderVals() {
+return {};
+}
+}
+</script>
+</body>
+</html>

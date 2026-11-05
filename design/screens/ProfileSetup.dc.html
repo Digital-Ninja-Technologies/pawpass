@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Set up your profile</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700&amp;family=Plus+Jakarta+Sans:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0}
+a{color:inherit}a:hover{color:inherit}
+</style>
+</helmet>
+<div style="width: 390px; height: 844px; position: relative; overflow: hidden; background: #FFF8F1; font-family: 'Plus Jakarta Sans', system-ui, sans-serif; color: #1F1A17; display: flex; flex-direction: column">
+<main style="flex: 1; padding: 52px 24px 40px; display: flex; flex-direction: column; gap: 20px; box-sizing: border-box">
+
+<header style="display: flex; align-items: center; gap: 14px">
+<a href="AccountType.dc.html" aria-label="Back" style="width: 44px; height: 44px; border-radius: 22px; border: 1px solid #EDE3D9; background: #FFFFFF; display: flex; align-items: center; justify-content: center; flex-shrink: 0"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 6-6 6 6 6"></path></svg></a>
+<div role="progressbar" aria-label="Step 4 of 6" aria-valuenow="4" aria-valuemin="1" aria-valuemax="6" style="flex: 1; height: 6px; border-radius: 3px; background: #EDE3D9; overflow: hidden"><span style="display: block; width: 66%; height: 6px; background: {{accent}}"></span></div>
+</header>
+
+<h1 style="margin: 0; font-family: 'Bricolage Grotesque', sans-serif; font-size: 30px; line-height: 1.1; font-weight: 700">Tell us about you</h1>
+
+<button style="align-self: center; width: 104px; height: 104px; border-radius: 52px; border: 2px dashed #CFC3B7; background: #FFFFFF; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; color: #6B625B; font: 600 12px 'Plus Jakarta Sans', sans-serif"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 8h3l2-3h6l2 3h3v11H4z"></path><circle cx="12" cy="13" r="3.5"></circle></svg>Add photo</button>
+
+<div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px">
+<label style="display: flex; flex-direction: column; gap: 6px; font-size: 13px; font-weight: 600; color: #4A433E">First name<input type="text" value="Tolu" style="height: 52px; padding: 0 14px; border-radius: 16px; border: 1px solid #EDE3D9; background: #FFFFFF; font: 600 15px 'Plus Jakarta Sans', sans-serif; color: #1F1A17; min-width: 0; box-sizing: border-box"></label>
+<label style="display: flex; flex-direction: column; gap: 6px; font-size: 13px; font-weight: 600; color: #4A433E">Last name<input type="text" value="Adeyemi" style="height: 52px; padding: 0 14px; border-radius: 16px; border: 1px solid #EDE3D9; background: #FFFFFF; font: 600 15px 'Plus Jakarta Sans', sans-serif; color: #1F1A17; min-width: 0; box-sizing: border-box"></label>
+</div>
+
+<label style="display: flex; flex-direction: column; gap: 6px; font-size: 13px; font-weight: 600; color: #4A433E">Your area
+<span style="display: flex; align-items: center; gap: 10px; height: 52px; padding: 0 14px; border-radius: 16px; border: 2px solid {{accent}}; background: #FFFFFF; box-sizing: border-box">
+<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#6B625B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 21s-7-6.2-7-11.5a7 7 0 0 1 14 0C19 14.8 12 21 12 21z"></path><circle cx="12" cy="9.5" r="2.5"></circle></svg>
+<input type="text" value="Lekki Phase 1, Lagos" style="flex: 1; border: none; outline: none; background: transparent; font: 600 15px 'Plus Jakarta Sans', sans-serif; color: #1F1A17; min-width: 0">
+</span></label>
+<button style="align-self: flex-start; border: none; background: none; padding: 0; min-height: 44px; font: 700 14px 'Plus Jakarta Sans', sans-serif; color: {{accent}}; display: flex; align-items: center; gap: 6px"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="3"></circle><path d="M12 2v3M12 19v3M2 12h3M19 12h3"></path></svg>Use my current location</button>
+
+<label style="display: flex; flex-direction: column; gap: 6px; font-size: 13px; font-weight: 600; color: #4A433E">Phone <span style="font-weight: 500; color: #6B625B">(optional, for WhatsApp and SMS reminders)</span><input type="tel" placeholder="+234 800 000 0000" style="height: 52px; padding: 0 14px; border-radius: 16px; border: 1px solid #EDE3D9; background: #FFFFFF; font: 500 15px 'Plus Jakarta Sans', sans-serif; color: #1F1A17; box-sizing: border-box"></label>
+
+<p style="margin: 0; font-size: 12px; color: #6B625B; line-height: 1.5">Your area helps us show nearby vets and lost-pet alerts. We never show your exact address.</p>
+
+<a href="AddPet.dc.html" style="margin-top: auto; height: 54px; border-radius: 27px; background: {{accent}}; color: #FFFFFF; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 16px; text-decoration: none">Continue</a>
+</main>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"accent":{"editor":"color","default":"#0E6B63","options":["#0E6B63","#B4501C","#3346B8","#1F1A17"]},"$preview":{"width":390,"height":844}}'>
+class Component extends DCLogic {
+renderVals() {
+return { accent: this.props.accent ?? '#0E6B63' };
+}
+}
+</script>
+</body>
+</html>

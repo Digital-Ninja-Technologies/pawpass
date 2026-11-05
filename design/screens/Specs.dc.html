@@ -1,0 +1,113 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>PawPass design specs</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700&amp;family=Plus+Jakarta+Sans:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0}
+a{color:inherit}a:hover{color:inherit}
+</style>
+</helmet>
+<div style="width: 1280px; height: 1640px; box-sizing: border-box; padding: 64px; background: #FFF8F1; font-family: 'Plus Jakarta Sans', system-ui, sans-serif; color: #1F1A17; display: flex; flex-direction: column; gap: 40px">
+
+<header style="display: flex; flex-direction: column; gap: 8px">
+<h1 style="margin: 0; font-family: 'Bricolage Grotesque', sans-serif; font-size: 44px; font-weight: 700">PawPass design specs</h1>
+<p style="margin: 0; font-size: 16px; color: #4A433E; max-width: 900px; line-height: 1.5">Tokens and components used across every screen. Base frame 390 × 844 (iPhone 14/15 size). Build for iOS and Android from one codebase; values are in px = dp/pt.</p>
+</header>
+
+<section style="display: flex; flex-direction: column; gap: 16px">
+<h2 style="margin: 0; font-family: 'Bricolage Grotesque', sans-serif; font-size: 24px; font-weight: 700">Colour</h2>
+<div style="display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 14px">
+<div style="display: flex; flex-direction: column; gap: 6px"><span style="height: 64px; border-radius: 14px; background: #0E6B63"></span><b style="font-size: 13px">primary · #0E6B63</b><span style="font-size: 12px; color: #6B625B">Buttons, active tab, passport card</span></div>
+<div style="display: flex; flex-direction: column; gap: 6px"><span style="height: 64px; border-radius: 14px; background: #E3F1EE; border: 1px solid #EDE3D9"></span><b style="font-size: 13px">primary-soft · #E3F1EE</b><span style="font-size: 12px; color: #6B625B">Verified badges, trust notes (text #0B5650)</span></div>
+<div style="display: flex; flex-direction: column; gap: 6px"><span style="height: 64px; border-radius: 14px; background: #B4501C"></span><b style="font-size: 13px">warm · #B4501C</b><span style="font-size: 12px; color: #6B625B">Lost-pet actions</span></div>
+<div style="display: flex; flex-direction: column; gap: 6px"><span style="height: 64px; border-radius: 14px; background: #FFEBD9; border: 1px solid #EDE3D9"></span><b style="font-size: 13px">warm-soft · #FFEBD9</b><span style="font-size: 12px; color: #6B625B">Reminders, alerts (text #9A3F0F)</span></div>
+<div style="display: flex; flex-direction: column; gap: 6px"><span style="height: 64px; border-radius: 14px; background: #A3261B"></span><b style="font-size: 13px">danger · #A3261B</b><span style="font-size: 12px; color: #6B625B">Emergency, cancel (soft #FDEAE7)</span></div>
+<div style="display: flex; flex-direction: column; gap: 6px"><span style="height: 64px; border-radius: 14px; background: #E0662A"></span><b style="font-size: 13px">dot · #E0662A</b><span style="font-size: 12px; color: #6B625B">Unread dots, stars, decor only</span></div>
+<div style="display: flex; flex-direction: column; gap: 6px"><span style="height: 64px; border-radius: 14px; background: #FFF8F1; border: 1px solid #EDE3D9"></span><b style="font-size: 13px">ground · #FFF8F1</b><span style="font-size: 12px; color: #6B625B">Screen background</span></div>
+<div style="display: flex; flex-direction: column; gap: 6px"><span style="height: 64px; border-radius: 14px; background: #FFFFFF; border: 1px solid #EDE3D9"></span><b style="font-size: 13px">surface · #FFFFFF</b><span style="font-size: 12px; color: #6B625B">Cards, inputs, bars</span></div>
+<div style="display: flex; flex-direction: column; gap: 6px"><span style="height: 64px; border-radius: 14px; background: #1F1A17"></span><b style="font-size: 13px">ink · #1F1A17</b><span style="font-size: 12px; color: #6B625B">Text, dark buttons, partner header</span></div>
+<div style="display: flex; flex-direction: column; gap: 6px"><span style="height: 64px; border-radius: 14px; background: #6B625B"></span><b style="font-size: 13px">muted · #6B625B</b><span style="font-size: 12px; color: #6B625B">Secondary text (ink-2 #4A433E)</span></div>
+<div style="display: flex; flex-direction: column; gap: 6px"><span style="height: 64px; border-radius: 14px; background: #EDE3D9"></span><b style="font-size: 13px">border · #EDE3D9</b><span style="font-size: 12px; color: #6B625B">Card and input borders (subtle #F3EBE2)</span></div>
+<div style="display: flex; flex-direction: column; gap: 6px"><span style="height: 64px; border-radius: 14px; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); overflow: hidden"><span style="background: #F3D9C4"></span><span style="background: #DCE7F7"></span><span style="background: #F1E8FB"></span><span style="background: #CFE6E1"></span></span><b style="font-size: 13px">pet tints</b><span style="font-size: 12px; color: #6B625B">Avatar and photo fallbacks</span></div>
+</div>
+</section>
+
+<div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 40px">
+<section style="display: flex; flex-direction: column; gap: 14px">
+<h2 style="margin: 0; font-family: 'Bricolage Grotesque', sans-serif; font-size: 24px; font-weight: 700">Type</h2>
+<div style="display: flex; align-items: baseline; gap: 16px"><span style="font-family: 'Bricolage Grotesque', sans-serif; font-size: 36px; font-weight: 700">Display 36</span><span style="font-size: 12px; color: #6B625B">Bricolage Grotesque 700 · welcome</span></div>
+<div style="display: flex; align-items: baseline; gap: 16px"><span style="font-family: 'Bricolage Grotesque', sans-serif; font-size: 30px; font-weight: 700">Title 30 / 28</span><span style="font-size: 12px; color: #6B625B">onboarding &amp; tab titles</span></div>
+<div style="display: flex; align-items: baseline; gap: 16px"><span style="font-family: 'Bricolage Grotesque', sans-serif; font-size: 22px; font-weight: 700">Heading 22</span><span style="font-size: 12px; color: #6B625B">screen headers, pet names</span></div>
+<div style="display: flex; align-items: baseline; gap: 16px"><span style="font-size: 16px; font-weight: 700">Button 16 / 15 · 700</span><span style="font-size: 12px; color: #6B625B">Plus Jakarta Sans</span></div>
+<div style="display: flex; align-items: baseline; gap: 16px"><span style="font-size: 15px; font-weight: 600">Body 15 / 14 · 500–600</span><span style="font-size: 12px; color: #6B625B">line height 1.45–1.5</span></div>
+<div style="display: flex; align-items: baseline; gap: 16px"><span style="font-size: 13px; font-weight: 600">Meta 13 / 12</span><span style="font-size: 12px; color: #6B625B">captions, card details</span></div>
+<div style="display: flex; align-items: baseline; gap: 16px"><span style="font-size: 12px; font-weight: 700; letter-spacing: 0.04em; color: #9A3F0F">OVERLINE 12 · 700 · +4%</span><span style="font-size: 12px; color: #6B625B">section labels</span></div>
+</section>
+
+<section style="display: flex; flex-direction: column; gap: 14px">
+<h2 style="margin: 0; font-family: 'Bricolage Grotesque', sans-serif; font-size: 24px; font-weight: 700">Layout, spacing &amp; radius</h2>
+<ul style="margin: 0; padding-left: 18px; font-size: 14px; line-height: 1.7; color: #4A433E">
+<li>Screen side padding <b>20</b> (onboarding <b>24</b>); content starts <b>52</b> from top, below the OS status bar</li>
+<li>Spacing scale <b>4 · 8 · 10 · 12 · 14 · 16 · 18 · 22</b>; stack gap 14–18 between sections</li>
+<li>Radius: pill buttons and chips = height ÷ 2; inputs <b>16</b>; cards <b>18–24</b>; photos <b>14–22</b></li>
+<li>Touch targets at least <b>44 × 44</b>; primary buttons <b>52–54</b> tall</li>
+<li>Bottom tab bar <b>80</b> tall (white, 1px top border); sticky action footers pad <b>26</b> for the home indicator</li>
+<li>Icons: 24px line icons, 1.8 stroke, round caps (a Lucide-style set fits)</li>
+<li>Text contrast meets WCAG AA (4.5:1) on every surface shown</li>
+</ul>
+</section>
+</div>
+
+<section style="display: flex; flex-direction: column; gap: 16px">
+<h2 style="margin: 0; font-family: 'Bricolage Grotesque', sans-serif; font-size: 24px; font-weight: 700">Components</h2>
+<div style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 24px">
+
+<div style="background: #FFFFFF; border: 1px solid #EDE3D9; border-radius: 20px; padding: 20px; display: flex; flex-direction: column; gap: 12px">
+<p style="margin: 0; font-size: 12px; font-weight: 700; color: #6B625B; letter-spacing: 0.04em">BUTTONS</p>
+<button style="height: 52px; border-radius: 26px; border: none; background: #0E6B63; color: #FFFFFF; font: 700 15px 'Plus Jakarta Sans', sans-serif">Primary</button>
+<button style="height: 52px; border-radius: 26px; border: 1.5px solid #CFC3B7; background: #FFFFFF; color: #1F1A17; font: 700 15px 'Plus Jakarta Sans', sans-serif">Secondary</button>
+<button style="height: 52px; border-radius: 26px; border: none; background: #B4501C; color: #FFFFFF; font: 700 15px 'Plus Jakarta Sans', sans-serif">Lost-pet action</button>
+<button disabled style="height: 52px; border-radius: 26px; border: none; background: #DCD2C8; color: #4A433E; font: 700 15px 'Plus Jakarta Sans', sans-serif">Disabled</button>
+</div>
+
+<div style="background: #FFFFFF; border: 1px solid #EDE3D9; border-radius: 20px; padding: 20px; display: flex; flex-direction: column; gap: 14px">
+<p style="margin: 0; font-size: 12px; font-weight: 700; color: #6B625B; letter-spacing: 0.04em">CHIPS, BADGES &amp; SEGMENTS</p>
+<div style="display: flex; gap: 8px; flex-wrap: wrap"><span style="height: 40px; padding: 0 16px; border-radius: 20px; background: #0E6B63; color: #FFFFFF; font-size: 13px; font-weight: 700; display: flex; align-items: center">Selected</span><span style="height: 40px; padding: 0 16px; border-radius: 20px; border: 1px solid #EDE3D9; font-size: 13px; font-weight: 600; display: flex; align-items: center">Default</span></div>
+<div style="display: flex; gap: 8px; flex-wrap: wrap"><span style="font-size: 12px; font-weight: 700; color: #0B5650; background: #E3F1EE; padding: 4px 10px; border-radius: 10px">✓ Vet verified</span><span style="font-size: 12px; font-weight: 700; color: #9A3F0F; background: #FFEBD9; padding: 4px 10px; border-radius: 10px">Upcoming</span><span style="font-size: 12px; font-weight: 800; color: #FFFFFF; background: #B4501C; padding: 4px 10px; border-radius: 10px">LOST</span></div>
+<div style="display: flex; background: #F3EBE2; border-radius: 22px; padding: 4px"><span style="flex: 1; height: 40px; border-radius: 18px; background: #FFFFFF; font-size: 13px; font-weight: 700; display: flex; align-items: center; justify-content: center">Active</span><span style="flex: 1; height: 40px; font-size: 13px; font-weight: 600; color: #6B625B; display: flex; align-items: center; justify-content: center">Tab</span><span style="flex: 1; height: 40px; font-size: 13px; font-weight: 600; color: #6B625B; display: flex; align-items: center; justify-content: center">Tab</span></div>
+</div>
+
+<div style="background: #FFFFFF; border: 1px solid #EDE3D9; border-radius: 20px; padding: 20px; display: flex; flex-direction: column; gap: 12px">
+<p style="margin: 0; font-size: 12px; font-weight: 700; color: #6B625B; letter-spacing: 0.04em">INPUTS</p>
+<label style="display: flex; flex-direction: column; gap: 6px; font-size: 13px; font-weight: 600; color: #4A433E">Default<input type="text" value="Boerboel" style="height: 52px; padding: 0 14px; border-radius: 16px; border: 1px solid #EDE3D9; background: #FFFFFF; font: 600 15px 'Plus Jakarta Sans', sans-serif; color: #1F1A17; box-sizing: border-box"></label>
+<label style="display: flex; flex-direction: column; gap: 6px; font-size: 13px; font-weight: 600; color: #4A433E">Focused<input type="text" value="Bingo" style="height: 52px; padding: 0 14px; border-radius: 16px; border: 2px solid #0E6B63; background: #FFFFFF; font: 600 15px 'Plus Jakarta Sans', sans-serif; color: #1F1A17; box-sizing: border-box"></label>
+<label style="display: flex; align-items: center; justify-content: space-between; min-height: 52px; padding: 0 16px; border-radius: 16px; border: 1px solid #EDE3D9; font-size: 14px; font-weight: 600">Toggle row<input type="checkbox" checked style="width: 20px; height: 20px; accent-color: #0E6B63; margin: 0"></label>
+</div>
+
+</div>
+</section>
+
+<section style="background: #1F1A17; color: #FFFFFF; border-radius: 22px; padding: 24px 28px; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 28px; font-size: 14px; line-height: 1.55">
+<div><b style="display: block; font-size: 15px; margin-bottom: 6px">Shared components</b>Bottom tab bar is one component (TabBar) with an <i>active</i> prop. Back buttons, step progress, sticky action footers, list rows and badges repeat on every screen: build each once.</div>
+<div><b style="display: block; font-size: 15px; margin-bottom: 6px">Content rules</b>Names, prices and ratings shown are sample data. Photos are free Unsplash stock for the mockup and get replaced by user uploads in the app. Use the pet tints as loading and fallback colours.</div>
+<div><b style="display: block; font-size: 15px; margin-bottom: 6px">Privacy in the UI</b>Phone numbers stay masked in chat and lost &amp; found. Health records are private by default and shared only through time-limited links.</div>
+</section>
+
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1280,"height":1640}}'>
+class Component extends DCLogic {
+renderVals() {
+return {};
+}
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Report a problem</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700&amp;family=Plus+Jakarta+Sans:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0}
+a{color:inherit}a:hover{color:inherit}
+</style>
+</helmet>
+<div style="width: 390px; height: 844px; position: relative; overflow: hidden; background: #FFF8F1; font-family: 'Plus Jakarta Sans', system-ui, sans-serif; color: #1F1A17">
+<main style="padding: 52px 20px 0; display: flex; flex-direction: column; gap: 14px; box-sizing: border-box">
+
+<header style="display: flex; align-items: center; gap: 12px">
+<a href="Review.dc.html" aria-label="Close" style="width: 44px; height: 44px; border-radius: 22px; border: 1px solid #EDE3D9; background: #FFFFFF; display: flex; align-items: center; justify-content: center; flex-shrink: 0"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"></path></svg></a>
+<h1 style="margin: 0; font-family: 'Bricolage Grotesque', sans-serif; font-size: 22px; font-weight: 700">Report a problem</h1>
+</header>
+
+<section style="display: flex; gap: 12px; align-items: center; padding: 12px; border-radius: 16px; background: #FFFFFF; border: 1px solid #EDE3D9">
+<img src="../assets/groomer.jpg" alt="Glam Paws Grooming" style="width: 48px; height: 48px; border-radius: 12px; object-fit: cover; display: block; flex-shrink: 0">
+<span style="flex: 1; display: flex; flex-direction: column"><span style="font-weight: 700; font-size: 14px">Full groom for Mimi</span><span style="font-size: 12px; color: #6B625B">Glam Paws Grooming · 3 Nov · ₦12,000 held</span></span>
+</section>
+
+<fieldset style="border: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 8px">
+<legend style="font-size: 14px; font-weight: 700; padding: 0; margin-bottom: 8px">What went wrong?</legend>
+<label style="display: flex; align-items: center; gap: 12px; min-height: 48px; padding: 0 14px; border-radius: 14px; background: #FFFFFF; border: 1px solid #EDE3D9; font-size: 14px; font-weight: 600"><input type="radio" name="why" style="width: 18px; height: 18px; margin: 0">Service didn't happen</label>
+<label style="display: flex; align-items: center; gap: 12px; min-height: 48px; padding: 0 14px; border-radius: 14px; background: #FFFFFF; border: 2px solid {{accent}}; font-size: 14px; font-weight: 600"><input type="radio" name="why" checked style="width: 18px; height: 18px; accent-color: {{accent}}; margin: 0">My pet was hurt or got sick</label>
+<label style="display: flex; align-items: center; gap: 12px; min-height: 48px; padding: 0 14px; border-radius: 14px; background: #FFFFFF; border: 1px solid #EDE3D9; font-size: 14px; font-weight: 600"><input type="radio" name="why" style="width: 18px; height: 18px; margin: 0">Not what was promised</label>
+<label style="display: flex; align-items: center; gap: 12px; min-height: 48px; padding: 0 14px; border-radius: 14px; background: #FFFFFF; border: 1px solid #EDE3D9; font-size: 14px; font-weight: 600"><input type="radio" name="why" style="width: 18px; height: 18px; margin: 0">Something else</label>
+</fieldset>
+
+<label style="display: flex; flex-direction: column; gap: 6px; font-size: 14px; font-weight: 700">Tell us what happened
+<textarea rows="3" style="border-radius: 14px; border: 1px solid #EDE3D9; background: #FFFFFF; padding: 12px 14px; font: 500 14px 'Plus Jakarta Sans', sans-serif; color: #1F1A17; resize: none">Mimi has a small cut near her ear from the clippers.</textarea></label>
+
+<button style="display: flex; align-items: center; justify-content: center; gap: 8px; height: 48px; border-radius: 14px; border: 1.5px dashed #CFC3B7; background: transparent; font: 600 14px 'Plus Jakarta Sans', sans-serif; color: #4A433E"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 8h3l2-3h6l2 3h3v11H4z"></path><circle cx="12" cy="13" r="3.5"></circle></svg>Add photos or a vet report</button>
+
+</main>
+<footer style="position: absolute; left: 0; right: 0; bottom: 0; background: #FFFFFF; border-top: 1px solid #EDE3D9; padding: 14px 20px 26px; display: flex; flex-direction: column; gap: 8px; box-sizing: border-box">
+<p style="margin: 0; font-size: 12px; color: #4A433E; line-height: 1.45">The ₦12,000 stays on hold. The PawPass team reviews both sides and decides within 72 hours.</p>
+<a href="Bookings.dc.html" style="height: 52px; border-radius: 26px; background: {{accent}}; color: #FFFFFF; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 15px; text-decoration: none">Send to PawPass</a>
+</footer>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"accent":{"editor":"color","default":"#0E6B63","options":["#0E6B63","#B4501C","#3346B8","#1F1A17"]},"$preview":{"width":390,"height":844}}'>
+class Component extends DCLogic {
+renderVals() {
+return { accent: this.props.accent ?? '#0E6B63' };
+}
+}
+</script>
+</body>
+</html>

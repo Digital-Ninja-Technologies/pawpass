@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Report a lost pet</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700&amp;family=Plus+Jakarta+Sans:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0}
+a{color:inherit}a:hover{color:inherit}
+</style>
+</helmet>
+<div style="width: 390px; height: 844px; position: relative; overflow: hidden; background: #FFF8F1; font-family: 'Plus Jakarta Sans', system-ui, sans-serif; color: #1F1A17">
+<main style="padding: 52px 20px 0; display: flex; flex-direction: column; gap: 14px; box-sizing: border-box">
+
+<header style="display: flex; align-items: center; gap: 12px">
+<a href="Main.dc.html" aria-label="Back" style="width: 44px; height: 44px; border-radius: 22px; border: 1px solid #EDE3D9; background: #FFFFFF; display: flex; align-items: center; justify-content: center; flex-shrink: 0"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 6-6 6 6 6"></path></svg></a>
+<h1 style="margin: 0; font-family: 'Bricolage Grotesque', sans-serif; font-size: 22px; font-weight: 700">Report a lost pet</h1>
+</header>
+
+<div style="display: flex; align-items: center; gap: 12px; padding: 10px 12px; border-radius: 18px; background: #FFFFFF; border: 1px solid #EDE3D9">
+<img src="../assets/bingo.jpg" alt="Photo of Bingo" style="width: 44px; height: 44px; border-radius: 12px; flex-shrink: 0; object-fit: cover; display: block">
+<span style="flex: 1; display: flex; flex-direction: column"><span style="font-weight: 700; font-size: 15px">Bingo</span><span style="font-size: 12px; color: #6B625B">Boerboel · fawn · black mask</span></span>
+<button style="border: none; background: none; min-height: 44px; padding: 0 4px; font: 700 13px 'Plus Jakarta Sans', sans-serif; color: {{accent}}">Change</button>
+</div>
+
+<section style="display: flex; flex-direction: column; gap: 8px">
+<h2 style="margin: 0; font-size: 14px; font-weight: 700">Last seen</h2>
+<div role="img" aria-label="Map showing last seen location on Admiralty Way" style="height: 130px; border-radius: 18px; background: #E4EDE3; position: relative; overflow: hidden">
+<span style="position: absolute; left: 0; right: 0; top: 58px; height: 12px; background: #FFFFFF"></span>
+<span style="position: absolute; top: 0; bottom: 0; left: 120px; width: 10px; background: #FFFFFF"></span>
+<span style="position: absolute; top: 0; bottom: 0; left: 270px; width: 8px; background: #FFFFFF"></span>
+<span style="position: absolute; left: 165px; top: 14px; width: 60px; height: 60px; border-radius: 30px; background: rgba(224,102,42,0.22)"></span>
+<svg style="position: absolute; left: 181px; top: 22px" width="28" height="34" viewBox="0 0 24 28" aria-hidden="true"><path d="M12 27s-9-8-9-15a9 9 0 0 1 18 0c0 7-9 15-9 15z" fill="#B4501C"></path><circle cx="12" cy="12" r="3.5" fill="#FFFFFF"></circle></svg>
+</div>
+<label style="display: flex; align-items: center; gap: 10px; height: 48px; padding: 0 14px; border-radius: 16px; background: #FFFFFF; border: 1px solid #EDE3D9">
+<span style="position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0)">Address</span>
+<input type="text" value="Admiralty Way, Lekki Phase 1" style="flex: 1; border: none; outline: none; background: transparent; font: 600 14px 'Plus Jakarta Sans', sans-serif; color: #1F1A17">
+</label>
+<div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px">
+<label style="display: flex; flex-direction: column; gap: 2px; padding: 8px 14px; border-radius: 16px; background: #FFFFFF; border: 1px solid #EDE3D9"><span style="font-size: 11px; color: #6B625B; font-weight: 600">Date</span><input type="text" value="Today, 5 Nov" style="border: none; outline: none; background: transparent; padding: 0; font: 600 14px 'Plus Jakarta Sans', sans-serif; color: #1F1A17"></label>
+<label style="display: flex; flex-direction: column; gap: 2px; padding: 8px 14px; border-radius: 16px; background: #FFFFFF; border: 1px solid #EDE3D9"><span style="font-size: 11px; color: #6B625B; font-weight: 600">Time</span><input type="text" value="About 7:30am" style="border: none; outline: none; background: transparent; padding: 0; font: 600 14px 'Plus Jakarta Sans', sans-serif; color: #1F1A17"></label>
+</div>
+</section>
+
+<label style="display: flex; flex-direction: column; gap: 6px">
+<span style="font-size: 14px; font-weight: 700">Anything finders should know?</span>
+<textarea rows="2" style="border-radius: 16px; border: 1px solid #EDE3D9; background: #FFFFFF; padding: 12px 14px; font: 500 14px 'Plus Jakarta Sans', sans-serif; color: #1F1A17; resize: none">Red collar with PawPass tag. Friendly but shy with strangers.</textarea>
+</label>
+
+<fieldset style="border: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 8px">
+<legend style="font-size: 14px; font-weight: 700; padding: 0; margin-bottom: 8px">Alert people within</legend>
+<div style="display: flex; gap: 8px">
+<button style="flex: 1; height: 44px; border-radius: 22px; border: 1px solid #EDE3D9; background: #FFFFFF; color: #1F1A17; font: 600 14px 'Plus Jakarta Sans', sans-serif">2 km</button>
+<button aria-pressed="true" style="flex: 1; height: 44px; border-radius: 22px; border: none; background: {{accent}}; color: #FFFFFF; font: 700 14px 'Plus Jakarta Sans', sans-serif">5 km</button>
+<button style="flex: 1; height: 44px; border-radius: 22px; border: 1px solid #EDE3D9; background: #FFFFFF; color: #1F1A17; font: 600 14px 'Plus Jakarta Sans', sans-serif">10 km</button>
+</div>
+</fieldset>
+
+</main>
+
+<footer style="position: absolute; left: 0; right: 0; bottom: 0; background: #FFFFFF; border-top: 1px solid #EDE3D9; padding: 14px 20px 26px; display: flex; flex-direction: column; gap: 10px; box-sizing: border-box">
+<div style="display: flex; align-items: flex-start; gap: 8px; font-size: 12px; color: #4A433E; line-height: 1.4">
+<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#0E6B63" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="flex-shrink: 0; margin-top: 1px"><rect x="4" y="11" width="16" height="10" rx="2"></rect><path d="M8 11V7a4 4 0 0 1 8 0v4"></path></svg>
+<span>Finders chat with you in the app; your number stays hidden. Bingo's QR tag switches to Lost mode.</span>
+</div>
+<button style="height: 52px; border-radius: 26px; border: none; background: #B4501C; color: #FFFFFF; font: 700 15px 'Plus Jakarta Sans', sans-serif">Send lost-pet alert</button>
+</footer>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"accent":{"editor":"color","default":"#0E6B63","options":["#0E6B63","#B4501C","#3346B8","#1F1A17"]},"$preview":{"width":390,"height":844}}'>
+class Component extends DCLogic {
+renderVals() {
+return { accent: this.props.accent ?? '#0E6B63' };
+}
+}
+</script>
+</body>
+</html>

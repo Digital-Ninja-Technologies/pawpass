@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Invite a team member</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700&amp;family=Plus+Jakarta+Sans:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0}
+a{color:#0B5650}a:hover{color:#0E6B63}
+</style>
+</helmet>
+<div style="display: flex; flex-wrap: wrap; min-height: 100vh; background: #FFF8F1; font-family: 'Plus Jakarta Sans', system-ui, sans-serif; color: #1F1A17">
+<div style="flex: 1 1 240px; max-width: 100%; background: #1F1A17">
+<dc-import name="AdminNav" active="settings" hint-size="100%,900px"></dc-import>
+</div>
+<main style="flex: 999 1 560px; min-width: 0; padding: 32px 40px 48px; display: flex; flex-direction: column; gap: 20px; box-sizing: border-box">
+
+<nav aria-label="Breadcrumb" style="font-size: 13px; font-weight: 600; color: #6B625B"><a href="AdminSettings.dc.html" style="text-decoration: none">Settings</a> › Team &amp; roles › Invite</nav>
+<header style="display: flex; flex-direction: column; gap: 4px">
+<h1 style="margin: 0; font-family: 'Bricolage Grotesque', sans-serif; font-size: 30px; font-weight: 700">Invite a team member</h1>
+<p style="margin: 0; font-size: 14px; color: #6B625B">They get an email link to set up their account. Links expire after 48 hours.</p>
+</header>
+
+<div style="display: flex; flex-wrap: wrap; gap: 20px; align-items: flex-start">
+<form style="flex: 2 1 520px; min-width: 0; background: #FFFFFF; border: 1px solid #EDE3D9; border-radius: 18px; padding: 24px; display: flex; flex-direction: column; gap: 18px">
+<div style="display: flex; flex-wrap: wrap; gap: 14px">
+<label style="flex: 1 1 220px; display: flex; flex-direction: column; gap: 6px; font-size: 13px; font-weight: 600; color: #4A433E">Full name<input type="text" value="Ife Okoro" style="height: 48px; padding: 0 14px; border-radius: 12px; border: 1px solid #EDE3D9; font: 600 15px 'Plus Jakarta Sans', sans-serif; color: #1F1A17; min-width: 0; box-sizing: border-box"></label>
+<label style="flex: 1 1 220px; display: flex; flex-direction: column; gap: 6px; font-size: 13px; font-weight: 600; color: #4A433E">Work email<input type="email" value="ife.o@pawpass.example" style="height: 48px; padding: 0 14px; border-radius: 12px; border: 2px solid #0E6B63; font: 600 15px 'Plus Jakarta Sans', sans-serif; color: #1F1A17; min-width: 0; box-sizing: border-box"></label>
+</div>
+<p style="margin: -8px 0 0; font-size: 12px; color: #6B625B">Only @pawpass.example addresses can be invited.</p>
+
+<fieldset style="border: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 10px">
+<legend style="font-size: 14px; font-weight: 700; padding: 0; margin-bottom: 10px">Role</legend>
+<label style="display: flex; gap: 12px; align-items: flex-start; padding: 14px 16px; border-radius: 14px; border: 1px solid #EDE3D9"><input type="radio" name="role" style="width: 18px; height: 18px; margin: 2px 0 0"><span style="display: flex; flex-direction: column; gap: 2px"><span style="font-weight: 700; font-size: 14px">Full admin</span><span style="font-size: 13px; color: #6B625B">Everything, including settings, fees and team</span></span></label>
+<label style="display: flex; gap: 12px; align-items: flex-start; padding: 14px 16px; border-radius: 14px; border: 1px solid #EDE3D9"><input type="radio" name="role" style="width: 18px; height: 18px; margin: 2px 0 0"><span style="display: flex; flex-direction: column; gap: 2px"><span style="font-weight: 700; font-size: 14px">Payouts &amp; disputes</span><span style="font-size: 13px; color: #6B625B">Escrow, refunds, payout runs, dispute decisions</span></span></label>
+<label style="display: flex; gap: 12px; align-items: flex-start; padding: 14px 16px; border-radius: 14px; border: 2px solid #0E6B63; background: #E3F1EE"><input type="radio" name="role" checked style="width: 18px; height: 18px; margin: 2px 0 0; accent-color: #0E6B63"><span style="display: flex; flex-direction: column; gap: 2px"><span style="font-weight: 700; font-size: 14px">Support &amp; reports</span><span style="font-size: 13px; color: #4A433E">Support inbox, reported content, lost &amp; found, user look-up</span></span></label>
+<label style="display: flex; gap: 12px; align-items: flex-start; padding: 14px 16px; border-radius: 14px; border: 1px solid #EDE3D9"><input type="radio" name="role" style="width: 18px; height: 18px; margin: 2px 0 0"><span style="display: flex; flex-direction: column; gap: 2px"><span style="font-weight: 700; font-size: 14px">Verifications</span><span style="font-size: 13px; color: #6B625B">Review and approve partner documents</span></span></label>
+<label style="display: flex; gap: 12px; align-items: flex-start; padding: 14px 16px; border-radius: 14px; border: 1px solid #EDE3D9"><input type="radio" name="role" style="width: 18px; height: 18px; margin: 2px 0 0"><span style="display: flex; flex-direction: column; gap: 2px"><span style="font-weight: 700; font-size: 14px">Read only</span><span style="font-size: 13px; color: #6B625B">View dashboards and reports, no actions</span></span></label>
+</fieldset>
+
+<label style="display: flex; flex-direction: column; gap: 6px; font-size: 14px; font-weight: 700">Personal note <span style="font-size: 12px; font-weight: 500; color: #6B625B">Optional · included in the email</span>
+<textarea rows="2" style="border-radius: 12px; border: 1px solid #EDE3D9; background: #FFF8F1; padding: 12px 14px; font: 500 14px 'Plus Jakarta Sans', sans-serif; color: #1F1A17; resize: vertical">Welcome to the team! You'll be covering the support inbox from Monday.</textarea></label>
+
+<div style="display: flex; flex-wrap: wrap; gap: 10px; justify-content: flex-end">
+<a href="AdminSettings.dc.html" style="height: 44px; padding: 0 18px; border-radius: 22px; border: 1.5px solid #CFC3B7; display: flex; align-items: center; font-weight: 700; font-size: 14px; text-decoration: none; color: #1F1A17; box-sizing: border-box">Cancel</a>
+<a href="AdminSettings.dc.html" style="height: 44px; padding: 0 22px; border-radius: 22px; background: #0E6B63; display: flex; align-items: center; font-weight: 700; font-size: 14px; text-decoration: none; color: #FFFFFF">Send invite</a>
+</div>
+</form>
+
+<aside style="flex: 1 1 280px; min-width: 0; background: #FFFFFF; border: 1px solid #EDE3D9; border-radius: 18px; padding: 20px; display: flex; flex-direction: column; gap: 12px">
+<h2 style="margin: 0; font-size: 15px; font-weight: 700">Support &amp; reports can</h2>
+<ul style="margin: 0; padding: 0; list-style: none; display: flex; flex-direction: column; gap: 8px; font-size: 13px">
+<li style="display: flex; gap: 8px"><span style="color: #0B5650; font-weight: 700">✓</span>Reply to support tickets</li>
+<li style="display: flex; gap: 8px"><span style="color: #0B5650; font-weight: 700">✓</span>Remove reported posts and listings</li>
+<li style="display: flex; gap: 8px"><span style="color: #0B5650; font-weight: 700">✓</span>Manage lost alerts and QR tag orders</li>
+<li style="display: flex; gap: 8px"><span style="color: #0B5650; font-weight: 700">✓</span>Send users a new sign-in code</li>
+<li style="display: flex; gap: 8px"><span style="color: #8A2016; font-weight: 700">✕</span>Refund or release escrow money</li>
+<li style="display: flex; gap: 8px"><span style="color: #8A2016; font-weight: 700">✕</span>Approve partners or change settings</li>
+</ul>
+<p style="margin: 4px 0 0; font-size: 12px; color: #6B625B; line-height: 1.5">Every action they take is recorded in the audit log. You can change their role or remove access any time.</p>
+</aside>
+</div>
+
+</main>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":1080}}'>
+class Component extends DCLogic {
+renderVals() {
+return {};
+}
+}
+</script>
+</body>
+</html>

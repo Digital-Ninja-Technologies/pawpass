@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Admin lost and found</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700&amp;family=Plus+Jakarta+Sans:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0}
+a{color:#0B5650}a:hover{color:#0E6B63}
+</style>
+</helmet>
+<div style="display: flex; flex-wrap: wrap; min-height: 100vh; background: #FFF8F1; font-family: 'Plus Jakarta Sans', system-ui, sans-serif; color: #1F1A17">
+<div style="flex: 1 1 240px; max-width: 100%; background: #1F1A17">
+<dc-import name="AdminNav" active="lost" hint-size="100%,900px"></dc-import>
+</div>
+<main style="flex: 999 1 560px; min-width: 0; padding: 32px 40px 48px; display: flex; flex-direction: column; gap: 20px; box-sizing: border-box">
+
+<header style="display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 16px">
+<div style="display: flex; flex-direction: column; gap: 4px">
+<h1 style="margin: 0; font-family: 'Bricolage Grotesque', sans-serif; font-size: 30px; font-weight: 700">Lost &amp; found</h1>
+<p style="margin: 0; font-size: 14px; color: #6B625B">Active alerts, sightings and QR collar tags</p>
+</div>
+</header>
+
+<section aria-label="Totals" style="display: flex; flex-wrap: wrap; gap: 16px">
+<div style="flex: 1 1 180px; background: #FFFFFF; border: 1px solid #EDE3D9; border-radius: 18px; padding: 18px; display: flex; flex-direction: column; gap: 6px"><span style="font-size: 13px; color: #6B625B; font-weight: 600">Active alerts</span><span style="font-family: 'Bricolage Grotesque', sans-serif; font-size: 28px; font-weight: 700">14</span><span style="font-size: 12px; color: #6B625B; font-weight: 600">3 opened today</span></div>
+<div style="flex: 1 1 180px; background: #FFFFFF; border: 1px solid #EDE3D9; border-radius: 18px; padding: 18px; display: flex; flex-direction: column; gap: 6px"><span style="font-size: 13px; color: #6B625B; font-weight: 600">Found · last 30 days</span><span style="font-family: 'Bricolage Grotesque', sans-serif; font-size: 28px; font-weight: 700">41 of 106</span><span style="font-size: 12px; color: #0B5650; font-weight: 700">39% reunited</span></div>
+<div style="flex: 1 1 180px; background: #FFFFFF; border: 1px solid #EDE3D9; border-radius: 18px; padding: 18px; display: flex; flex-direction: column; gap: 6px"><span style="font-size: 13px; color: #6B625B; font-weight: 600">QR tags active</span><span style="font-family: 'Bricolage Grotesque', sans-serif; font-size: 28px; font-weight: 700">2,318</span><span style="font-size: 12px; color: #6B625B; font-weight: 600">18 scans this week</span></div>
+<div style="flex: 1 1 180px; background: #FFFFFF; border: 1px solid #EDE3D9; border-radius: 18px; padding: 18px; display: flex; flex-direction: column; gap: 6px"><span style="font-size: 13px; color: #6B625B; font-weight: 600">Tag orders to ship</span><span style="font-family: 'Bricolage Grotesque', sans-serif; font-size: 28px; font-weight: 700">12</span><span style="font-size: 12px; color: #9A3F0F; font-weight: 700">2 past 3-day target</span></div>
+</section>
+
+<div style="display: flex; flex-wrap: wrap; gap: 20px; align-items: flex-start">
+<section style="flex: 3 1 520px; min-width: 0; background: #FFFFFF; border: 1px solid #EDE3D9; border-radius: 18px; overflow: hidden">
+<h2 style="margin: 0; padding: 16px 16px 12px; font-size: 16px; font-weight: 700">Active alerts</h2>
+<div style="overflow-x: auto">
+<table style="width: 100%; border-collapse: collapse; font-size: 14px; min-width: 620px">
+<thead><tr style="text-align: left; color: #6B625B; font-size: 12px; text-transform: uppercase; letter-spacing: 0.04em; background: #FFF8F1"><th style="padding: 10px 16px; font-weight: 700">Pet</th><th style="padding: 10px 16px; font-weight: 700">Area</th><th style="padding: 10px 16px; font-weight: 700">Open</th><th style="padding: 10px 16px; font-weight: 700">Sightings</th><th style="padding: 10px 16px; font-weight: 700">Flag</th><th style="padding: 10px 16px; font-weight: 700"><span style="position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0)">Actions</span></th></tr></thead>
+<tbody>
+<tr style="border-top: 1px solid #F3EBE2"><td style="padding: 12px 16px"><span style="display: flex; align-items: center; gap: 10px"><img src="../assets/bruno.jpg" alt="Bruno" style="width: 36px; height: 36px; border-radius: 10px; object-fit: cover; display: block"><b>Bruno</b> · Jack Russell</span></td><td style="padding: 12px 16px">Lekki Phase 1</td><td style="padding: 12px 16px; color: #6B625B">2 hrs</td><td style="padding: 12px 16px">1</td><td style="padding: 12px 16px; color: #6B625B">None</td><td style="padding: 12px 16px"><button style="height: 34px; padding: 0 12px; border-radius: 17px; border: 1px solid #EDE3D9; background: #FFFFFF; font: 700 12px 'Plus Jakarta Sans', sans-serif; color: #1F1A17">Widen to 10 km</button></td></tr>
+<tr style="border-top: 1px solid #F3EBE2"><td style="padding: 12px 16px"><b>Simba</b> · Boerboel</td><td style="padding: 12px 16px">Ikeja GRA</td><td style="padding: 12px 16px; color: #6B625B">3 days</td><td style="padding: 12px 16px">4</td><td style="padding: 12px 16px"><span style="font-size: 12px; font-weight: 700; color: #9A3F0F; background: #FFEBD9; padding: 4px 10px; border-radius: 10px">Possible theft</span></td><td style="padding: 12px 16px"><button style="height: 34px; padding: 0 12px; border-radius: 17px; border: 1px solid #EDE3D9; background: #FFFFFF; font: 700 12px 'Plus Jakarta Sans', sans-serif; color: #1F1A17">Contact owner</button></td></tr>
+<tr style="border-top: 1px solid #F3EBE2"><td style="padding: 12px 16px"><b>Coco</b> · cat</td><td style="padding: 12px 16px">Surulere</td><td style="padding: 12px 16px; color: #6B625B">5 hrs</td><td style="padding: 12px 16px">0</td><td style="padding: 12px 16px"><span style="font-size: 12px; font-weight: 700; color: #8A2016; background: #FDEAE7; padding: 4px 10px; border-radius: 10px">Reported fake · asks for reward first</span></td><td style="padding: 12px 16px"><button style="height: 34px; padding: 0 12px; border-radius: 17px; border: none; background: #A3261B; font: 700 12px 'Plus Jakarta Sans', sans-serif; color: #FFFFFF">Review</button></td></tr>
+<tr style="border-top: 1px solid #F3EBE2"><td style="padding: 12px 16px"><b>Rocky</b> · Rottweiler</td><td style="padding: 12px 16px">Ajah</td><td style="padding: 12px 16px; color: #6B625B">9 days</td><td style="padding: 12px 16px">2</td><td style="padding: 12px 16px; color: #6B625B">Auto-close in 5 days</td><td style="padding: 12px 16px"><button style="height: 34px; padding: 0 12px; border-radius: 17px; border: 1px solid #EDE3D9; background: #FFFFFF; font: 700 12px 'Plus Jakarta Sans', sans-serif; color: #1F1A17">Remind owner</button></td></tr>
+</tbody>
+</table>
+</div>
+</section>
+
+<section style="flex: 2 1 340px; min-width: 0; background: #FFFFFF; border: 1px solid #EDE3D9; border-radius: 18px; padding: 16px; display: flex; flex-direction: column; gap: 10px">
+<div style="display: flex; justify-content: space-between; align-items: center"><h2 style="margin: 0; font-size: 16px; font-weight: 700">QR tag orders</h2><button style="height: 34px; padding: 0 12px; border-radius: 17px; border: none; background: #0E6B63; color: #FFFFFF; font: 700 12px 'Plus Jakarta Sans', sans-serif">Print shipping labels</button></div>
+<div style="display: flex; justify-content: space-between; gap: 10px; padding: 10px 12px; border-radius: 12px; background: #FDEAE7; font-size: 13px"><span><b>#Q-512</b> · Tolu A. · Bingo · Lekki</span><span style="font-weight: 700; color: #8A2016">4 days</span></div>
+<div style="display: flex; justify-content: space-between; gap: 10px; padding: 10px 12px; border-radius: 12px; background: #FDEAE7; font-size: 13px"><span><b>#Q-509</b> · Kemi B. · Luna · Yaba</span><span style="font-weight: 700; color: #8A2016">4 days</span></div>
+<div style="display: flex; justify-content: space-between; gap: 10px; padding: 10px 12px; border-radius: 12px; background: #F3EBE2; font-size: 13px"><span><b>#Q-518</b> · Chidi N. · Rex + Tiger · Ikeja</span><span style="font-weight: 600; color: #4A433E">1 day</span></div>
+<div style="display: flex; justify-content: space-between; gap: 10px; padding: 10px 12px; border-radius: 12px; background: #F3EBE2; font-size: 13px"><span><b>#Q-521</b> · Emeka O. · Nala · VI</span><span style="font-weight: 600; color: #4A433E">Today</span></div>
+<p style="margin: 0; font-size: 12px; color: #6B625B">+ 8 more · support ticket #S-2201 is about order #Q-512</p>
+</section>
+</div>
+
+</main>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":1080}}'>
+class Component extends DCLogic {
+renderVals() {
+return {};
+}
+}
+</script>
+</body>
+</html>
