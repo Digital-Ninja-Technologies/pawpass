@@ -7,6 +7,7 @@ import { StoreButtons } from "@/components/StoreButtons";
 import { WaitlistForm } from "@/components/WaitlistForm";
 import { PawFilled } from "@/components/icons";
 import { CITIES } from "@/lib/content";
+import { AGENCY_NAME, AGENCY_URL } from "@/lib/site";
 import { STORES_LIVE } from "@/lib/stores";
 
 const PAINS = [
@@ -186,7 +187,16 @@ export default function Home() {
 
         <footer className="wrap footer">
           <span>
-            <b>PawPass</b> · a Digital Ninja Technologies product · Lagos, Nigeria
+            <b>PawPass</b> · a{" "}
+            {AGENCY_URL ? (
+              <a href={AGENCY_URL} target="_blank" rel="noopener noreferrer">
+                {AGENCY_NAME}
+                <span className="sr-only"> (opens in a new tab)</span>
+              </a>
+            ) : (
+              AGENCY_NAME
+            )}{" "}
+            product · Lagos, Nigeria
           </span>
         </footer>
       </div>

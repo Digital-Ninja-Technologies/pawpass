@@ -24,7 +24,7 @@
 }
 html {
   scroll-behavior: smooth;
-  scroll-padding-top: 16px;
+  scroll-padding-top: 96px;
 }
 body {
   margin: 0;
@@ -178,7 +178,9 @@ button {
   container-name: pp;
   background: var(--ground);
   color: var(--ink);
-  overflow: hidden;
+  /* clip (not hidden): clips sideways overflow from the blobs and marquee without creating a
+     scroll container, which would stop the sticky header from sticking. */
+  overflow-x: clip;
 }
 .wrap {
   max-width: 1200px;
@@ -196,7 +198,16 @@ button {
   letter-spacing: 0.08em;
 }
 
-/* header */
+/* header: sticks to the top of the screen. overflow-x: clip on .pp (not hidden) keeps sticky working. */
+.sticky-bar {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  background: rgba(255, 248, 241, 0.98);
+  backdrop-filter: saturate(1.4) blur(10px);
+  -webkit-backdrop-filter: saturate(1.4) blur(10px);
+  border-bottom: 1px solid rgba(237, 227, 217, 0.9);
+}
 .header {
   padding: 20px 24px;
   display: flex;

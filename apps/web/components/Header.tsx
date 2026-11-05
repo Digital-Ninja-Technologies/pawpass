@@ -13,7 +13,7 @@ const LINKS = [
 export function Header() {
   const [open, setOpen] = useState(false);
   return (
-    <>
+    <div className="sticky-bar">
       <header className="wrap header">
         <a href="#top" className="logo" aria-label="PawPass home">
           <span className="logo-mark" aria-hidden="true">
@@ -65,6 +65,6 @@ export function Header() {
           </a>
         </nav>
       ) : null}
-    </>
+    </div>
   );
 }
