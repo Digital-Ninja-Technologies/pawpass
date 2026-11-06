@@ -646,7 +646,7 @@ class _QuickActions extends StatelessWidget {
         PawIconData.alertTriangle,
         PawColors.warmSoft,
         PawColors.warmText,
-        '/lost',
+        '/lost-report',
       ),
       (
         'Find a pet',
@@ -667,11 +667,12 @@ class _QuickActions extends StatelessWidget {
                 button: true,
                 label: label,
                 excludeSemantics: true,
-                onTap: () =>
-                    route == '/lost' ? context.push(route) : context.go(route),
+                onTap: () => route == '/lost-report'
+                    ? context.push(route)
+                    : context.go(route),
                 child: GestureDetector(
                   behavior: HitTestBehavior.opaque,
-                  onTap: () => route == '/lost'
+                  onTap: () => route == '/lost-report'
                       ? context.push(route)
                       : context.go(route),
                   child: Column(

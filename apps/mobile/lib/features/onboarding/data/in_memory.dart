@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import '../../booking/data/in_memory_bookings.dart';
+import '../../community/data/in_memory_community.dart';
 import '../../health/data/in_memory_health.dart';
 import '../domain/models.dart';
 import '../domain/reminder_schedule.dart';
@@ -213,6 +214,7 @@ AppServices inMemoryServices({
     links: FakeLinkLauncher(),
     bookings: bookings,
     payments: InMemoryPaymentsRepository(bookings),
+    community: InMemoryCommunityRepository(now: now),
     now: now ?? DateTime.now,
   );
 }

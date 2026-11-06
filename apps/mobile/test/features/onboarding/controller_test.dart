@@ -2,6 +2,7 @@ import 'dart:typed_data';
 
 import 'package:flutter_test/flutter_test.dart';
 import 'package:pawpass/features/booking/data/in_memory_bookings.dart';
+import 'package:pawpass/features/community/data/in_memory_community.dart';
 import 'package:pawpass/features/health/data/in_memory_health.dart';
 import 'package:pawpass/features/onboarding/data/in_memory.dart';
 import 'package:pawpass/features/onboarding/data/repositories.dart';
@@ -28,6 +29,7 @@ class _Rig {
       links: FakeLinkLauncher(),
       bookings: InMemoryBookingsRepository(),
       payments: InMemoryPaymentsRepository(InMemoryBookingsRepository()),
+      community: InMemoryCommunityRepository(),
       now: () => today,
     );
     session = SessionController(services);

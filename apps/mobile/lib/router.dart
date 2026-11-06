@@ -3,6 +3,14 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
 import 'features/booking/ui/booked_screen.dart';
+import 'features/community/domain/models.dart';
+import 'features/community/ui/chat_screen.dart';
+import 'features/community/ui/community_screen.dart';
+import 'features/community/ui/create_post_screen.dart';
+import 'features/community/ui/lost_alert_screen.dart';
+import 'features/community/ui/lost_pet_screen.dart';
+import 'features/community/ui/pet_profile_screen.dart';
+import 'features/community/ui/report_screen.dart';
 import 'features/booking/ui/bookings_screen.dart';
 import 'features/booking/ui/dispute_screen.dart';
 import 'features/booking/ui/provider_screen.dart';
@@ -135,11 +143,7 @@ GoRouter buildRouter({
             routes: [
               GoRoute(
                 path: '/community',
-                builder: (_, _) => const ComingSoonScreen(
-                  title: 'Community',
-                  body: 'Share photos, follow pet friends nearby and help reunite lost pets with their families.',
-                  icon: PawIconData.community,
-                ),
+                builder: (_, _) => const CommunityScreen(),
               ),
             ],
           ),
@@ -182,14 +186,41 @@ GoRouter buildRouter({
         path: '/notifications',
         builder: (_, _) => const NotificationsScreen(),
       ),
+      GoRoute(path: '/post/new', builder: (_, _) => const CreatePostScreen()),
       GoRoute(
-        path: '/lost',
-        builder: (_, _) => const ComingSoonScreen(
-          title: 'Report a lost pet',
-          body: 'Alert people nearby within minutes, with a QR collar tag that lets finders reach you safely.',
-          icon: PawIconData.alertTriangle,
-          showBack: true,
-        ),
+        path: '/pet/:id',
+        builder: (_, state) =>
+            PetProfileScreen(petId: state.pathParameters['id']!),
+      ),
+      GoRoute(
+        path: '/report/:type/:id',
+        builder: (_, state) {
+          final target = ReportTarget.parse(state.pathParameters['type']);
+          if (target == null) {
+            return const ComingSoonScreen(
+              title: 'Report',
+              body: 'That cannot be reported from here.',
+              icon: PawIconData.alertTriangle,
+              showBack: true,
+            );
+          }
+          return ReportScreen(
+            target: target,
+            targetId: state.pathParameters['id']!,
+          );
+        },
+      ),
+      GoRoute(path: '/lost-report', builder: (_, _) => const LostPetScreen()),
+      GoRoute(
+        path: '/lost/:id',
+        builder: (_, state) =>
+            LostAlertScreen(alertId: state.pathParameters['id']!),
+      ),
+      GoRoute(path: '/messages', builder: (_, _) => const MessagesScreen()),
+      GoRoute(
+        path: '/chat/:id',
+        builder: (_, state) =>
+            ChatScreen(conversationId: state.pathParameters['id']!),
       ),
       if (kDebugMode)
         GoRoute(

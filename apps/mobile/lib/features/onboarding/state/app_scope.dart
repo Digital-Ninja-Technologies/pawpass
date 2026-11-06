@@ -1,6 +1,9 @@
 import 'package:flutter/widgets.dart';
 
 import '../../booking/state/booking_controller.dart';
+import '../../community/state/chat_controller.dart';
+import '../../community/state/community_controller.dart';
+import '../../community/state/lost_controller.dart';
 import '../../health/state/health_controller.dart';
 import '../data/repositories.dart';
 import 'onboarding_controller.dart';
@@ -15,6 +18,9 @@ class AppScope extends InheritedWidget {
     required this.onboarding,
     required this.health,
     required this.booking,
+    required this.community,
+    required this.lost,
+    required this.chat,
     required super.child,
   });
 
@@ -23,6 +29,9 @@ class AppScope extends InheritedWidget {
   final OnboardingController onboarding;
   final HealthController health;
   final BookingController booking;
+  final CommunityController community;
+  final LostController lost;
+  final ChatController chat;
 
   static AppScope of(BuildContext context) {
     final scope = context.dependOnInheritedWidgetOfExactType<AppScope>();
@@ -30,11 +39,17 @@ class AppScope extends InheritedWidget {
     return scope!;
   }
 
+  static AppScope? maybeOf(BuildContext context) =>
+      context.getInheritedWidgetOfExactType<AppScope>();
+
   @override
   bool updateShouldNotify(AppScope old) =>
       services != old.services ||
       session != old.session ||
       onboarding != old.onboarding ||
       health != old.health ||
-      booking != old.booking;
+      booking != old.booking ||
+      community != old.community ||
+      lost != old.lost ||
+      chat != old.chat;
 }

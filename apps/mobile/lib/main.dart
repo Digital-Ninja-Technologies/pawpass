@@ -4,6 +4,7 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 
 import 'app.dart';
 import 'features/booking/data/supabase_bookings.dart';
+import 'features/community/data/supabase_community.dart';
 import 'features/health/data/supabase_health.dart';
 import 'features/onboarding/data/device_services.dart';
 import 'features/onboarding/data/in_memory.dart';
@@ -39,6 +40,7 @@ Future<void> main() async {
           links: UrlLinkLauncher(),
           bookings: SupabaseBookingsRepository(client),
           payments: SupabasePaymentsRepository(client),
+          community: SupabaseCommunityRepository(client),
         ),
       ),
     );
@@ -64,6 +66,7 @@ Future<void> main() async {
           links: UrlLinkLauncher(),
           bookings: base.bookings,
           payments: base.payments,
+          community: base.community,
           demoHint: 'Demo mode: nothing is sent. Use the code 123456.',
         ),
       ),

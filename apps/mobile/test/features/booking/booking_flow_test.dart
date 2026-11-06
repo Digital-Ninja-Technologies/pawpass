@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:pawpass/app.dart';
 import 'package:pawpass/features/booking/data/in_memory_bookings.dart';
+import 'package:pawpass/features/community/data/in_memory_community.dart';
 import 'package:pawpass/features/booking/domain/models.dart';
 import 'package:pawpass/features/booking/ui/booking_widgets.dart';
 import 'package:pawpass/features/health/data/in_memory_health.dart';
@@ -35,6 +36,7 @@ class _Rig {
       links: links,
       bookings: bookings,
       payments: payments,
+      community: InMemoryCommunityRepository(),
       now: () => _today,
     );
   }

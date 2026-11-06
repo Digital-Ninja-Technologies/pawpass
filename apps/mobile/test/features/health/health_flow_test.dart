@@ -3,6 +3,7 @@ import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:pawpass/features/booking/data/in_memory_bookings.dart';
+import 'package:pawpass/features/community/data/in_memory_community.dart';
 import 'package:pawpass/app.dart';
 import 'package:pawpass/features/health/data/in_memory_health.dart';
 import 'package:pawpass/features/health/domain/models.dart';
@@ -39,6 +40,7 @@ class _Rig {
       links: links,
       bookings: InMemoryBookingsRepository(),
       payments: InMemoryPaymentsRepository(InMemoryBookingsRepository()),
+      community: InMemoryCommunityRepository(),
       now: () => _today,
     );
   }
@@ -382,7 +384,9 @@ void main() {
       );
     });
 
-    testWidgets('Report lost is coming soon, with a way back', (tester) async {
+    testWidgets('Report lost opens the lost pet form, with a way back', (
+      tester,
+    ) async {
       await _pump(tester, _Rig());
       await _tap(tester, 'Report lost');
       expect(find.text('Report a lost pet'), findsOneWidget);
@@ -1112,7 +1116,7 @@ void main() {
         await _tapLabel(tester, 'Notifications, 2 new');
         expect(find.text('TODAY'), findsOneWidget);
         await _back(tester);
-        for (final tab in ['Community', 'Adopt']) {
+        for (final tab in ['Adopt']) {
           await _tab(tester, tab);
           expect(find.text('Coming soon'), findsOneWidget);
         }
