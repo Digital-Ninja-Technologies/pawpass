@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 import 'app.dart';
+import 'core/offline_cache.dart';
 import 'features/adopt/data/supabase_adopt.dart';
 import 'features/booking/data/supabase_bookings.dart';
 import 'features/community/data/supabase_community.dart';
@@ -27,16 +28,17 @@ Future<void> main() async {
       publishableKey: _supabasePublishableKey,
     );
     final client = Supabase.instance.client;
+    final cache = OfflineCache(PrefsKeyValueStore());
     runApp(
       PawPassApp(
         services: AppServices(
           auth: SupabaseAuthRepository(client),
-          profiles: SupabaseProfileRepository(client),
-          pets: SupabasePetRepository(client),
+          profiles: SupabaseProfileRepository(client, cache: cache),
+          pets: SupabasePetRepository(client, cache: cache),
           photos: ImagePickerPhotoPicker(),
           emailApp: DeviceEmailAppLauncher(),
-          health: SupabaseHealthRepository(client),
-          notifications: SupabaseNotificationsRepository(client),
+          health: SupabaseHealthRepository(client, cache: cache),
+          notifications: SupabaseNotificationsRepository(client, cache: cache),
           vets: SupabaseVetsRepository(client),
           location: GeolocatorLocationService(),
           links: UrlLinkLauncher(),
@@ -45,6 +47,7 @@ Future<void> main() async {
           community: SupabaseCommunityRepository(client),
           adopt: SupabaseAdoptRepository(client),
           partner: SupabasePartnerRepository(client),
+          cache: cache,
         ),
       ),
     );

@@ -1,18 +1,17 @@
-import 'dart:io';
-
 import 'package:flutter/services.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../../core/dates.dart';
+import '../../../core/offline_cache.dart';
 import '../../onboarding/domain/models.dart';
 import '../domain/models.dart';
 import 'health_repositories.dart';
 
 AppFailure _failure(Object e, String fallback) {
   if (e is AppFailure) return e;
-  if (e is SocketException || e is HttpException) {
+  if (isNetworkError(e)) {
     return const AppFailure(
       'No connection. Check your internet and try again.',
     );
@@ -25,22 +24,30 @@ AppFailure _failure(Object e, String fallback) {
 }
 
 class SupabaseHealthRepository implements HealthRepository {
-  SupabaseHealthRepository(this._client);
+  SupabaseHealthRepository(this._client, {this._cache});
   final SupabaseClient _client;
+  final OfflineCache? _cache;
 
   String get _uid => _client.auth.currentUser!.id;
 
   @override
   Future<List<HealthRecord>> records(String petId) async {
     try {
-      final rows = await _client
-          .from('health_records')
-          .select(
-            '*, verifier:partner_accounts!verified_by_partner_id(business_name)',
-          )
-          .eq('pet_id', petId)
-          .order('given_on', ascending: false, nullsFirst: false);
-      return [for (final r in rows) HealthRecord.fromRow(r, me: _uid)];
+      return await cachedRead(
+        _cache,
+        '$_uid/records/$petId',
+        () => _client
+            .from('health_records')
+            .select(
+              '*, verifier:partner_accounts!verified_by_partner_id(business_name)',
+            )
+            .eq('pet_id', petId)
+            .order('given_on', ascending: false, nullsFirst: false),
+        (j) => [
+          for (final r in (j as List))
+            HealthRecord.fromRow(Map<String, dynamic>.from(r as Map), me: _uid),
+        ],
+      );
     } catch (e) {
       throw _failure(e, 'We could not load the health records.');
     }
@@ -51,16 +58,23 @@ class SupabaseHealthRepository implements HealthRepository {
     if (pets.isEmpty) return const [];
     final names = {for (final p in pets) p.id: p.name};
     try {
-      final rows = await _client
-          .from('reminders')
-          .select('*, health_records(type, name, given_on, next_due_on)')
-          .inFilter('pet_id', names.keys.toList())
-          .inFilter('status', ['scheduled', 'snoozed'])
-          .order('due_on');
-      return [
-        for (final r in rows)
-          Reminder.fromRow(r, petName: names[r['pet_id']] ?? ''),
-      ];
+      return await cachedRead(
+        _cache,
+        '$_uid/reminders',
+        () => _client
+            .from('reminders')
+            .select('*, health_records(type, name, given_on, next_due_on)')
+            .inFilter('pet_id', names.keys.toList())
+            .inFilter('status', ['scheduled', 'snoozed'])
+            .order('due_on'),
+        (j) => [
+          for (final r in (j as List))
+            Reminder.fromRow(
+              Map<String, dynamic>.from(r as Map),
+              petName: names[r['pet_id']] ?? '',
+            ),
+        ],
+      );
     } catch (e) {
       throw _failure(e, 'We could not load the schedule.');
     }
@@ -178,14 +192,19 @@ class SupabaseHealthRepository implements HealthRepository {
   @override
   Future<PetDetails> petDetails(Pet pet) async {
     try {
-      final row = await _client
-          .from('pets')
-          .select(
-            'origin:partner_accounts!origin_partner_id(business_name, verified_at), '
-            'mother:pets!mother_pet_id(name), father:pets!father_pet_id(name)',
-          )
-          .eq('id', pet.id)
-          .single();
+      final row = await cachedRead(
+        _cache,
+        '$_uid/details/${pet.id}',
+        () => _client
+            .from('pets')
+            .select(
+              'origin:partner_accounts!origin_partner_id(business_name, verified_at), '
+              'mother:pets!mother_pet_id(name), father:pets!father_pet_id(name)',
+            )
+            .eq('id', pet.id)
+            .single(),
+        (j) => Map<String, dynamic>.from(j as Map),
+      );
       final origin = row['origin'];
       return PetDetails(
         originName: origin is Map ? origin['business_name'] as String? : null,
@@ -204,8 +223,11 @@ class SupabaseHealthRepository implements HealthRepository {
 }
 
 class SupabaseNotificationsRepository implements NotificationsRepository {
-  SupabaseNotificationsRepository(this._client);
+  SupabaseNotificationsRepository(this._client, {this._cache});
   final SupabaseClient _client;
+  final OfflineCache? _cache;
+
+  String get _uid => _client.auth.currentUser!.id;
 
   @override
   Future<List<AppNotification>> load() async {
@@ -214,12 +236,19 @@ class SupabaseNotificationsRepository implements NotificationsRepository {
       try {
         await _client.rpc('generate_my_reminder_notifications');
       } catch (_) {}
-      final rows = await _client
-          .from('notifications')
-          .select()
-          .order('created_at', ascending: false)
-          .limit(60);
-      return [for (final r in rows) AppNotification.fromRow(r)];
+      return await cachedRead(
+        _cache,
+        '$_uid/notifications',
+        () => _client
+            .from('notifications')
+            .select()
+            .order('created_at', ascending: false)
+            .limit(60),
+        (j) => [
+          for (final r in (j as List))
+            AppNotification.fromRow(Map<String, dynamic>.from(r as Map)),
+        ],
+      );
     } catch (e) {
       throw _failure(e, 'We could not load your notifications.');
     }

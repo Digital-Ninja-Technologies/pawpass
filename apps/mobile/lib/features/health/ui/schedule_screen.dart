@@ -61,6 +61,8 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
                       ),
                     ],
                   ),
+                  const SizedBox(height: 12),
+                  OfflineBanner(onRetry: h.refreshHealth),
                   if (h.pets.length > 1) ...[
                     const SizedBox(height: 14),
                     SingleChildScrollView(

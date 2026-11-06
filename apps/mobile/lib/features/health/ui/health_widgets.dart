@@ -333,3 +333,74 @@ class InfoCard extends StatelessWidget {
     );
   }
 }
+
+/// Shown when what is on screen is a saved copy because the phone has no signal. Says when it was saved, and offers
+/// to try again. Nothing here can be changed until the connection is back, and the app says so when you try.
+class OfflineBanner extends StatelessWidget {
+  const OfflineBanner({super.key, this.onRetry});
+  final Future<void> Function()? onRetry;
+
+  @override
+  Widget build(BuildContext context) {
+    final scope = AppScope.of(context);
+    final cache = scope.services.cache;
+    if (cache == null) {
+      return const SizedBox.shrink();
+    }
+    return ListenableBuilder(
+      listenable: cache,
+      builder: (context, _) {
+        final at = cache.staleSince;
+        if (at == null) {
+          return const SizedBox.shrink();
+        }
+        final text =
+            "You're offline. Showing what was saved ${savedAtLabel(at, scope.services.now())}.";
+        return Padding(
+          padding: const EdgeInsets.only(bottom: 12),
+          child: Semantics(
+            liveRegion: true,
+            container: true,
+            child: Container(
+              padding: const EdgeInsets.fromLTRB(14, 10, 6, 10),
+              decoration: BoxDecoration(
+                color: PawColors.warmSoft,
+                borderRadius: BorderRadius.circular(PawRadius.cardSmall),
+              ),
+              child: Row(
+                children: [
+                  const PawIcon(
+                    PawIconData.alertTriangle,
+                    size: 20,
+                    color: PawColors.warmText,
+                  ),
+                  const SizedBox(width: 10),
+                  Expanded(
+                    child: Text(
+                      text,
+                      style: PawText.meta13.copyWith(color: PawColors.warmText),
+                    ),
+                  ),
+                  if (onRetry != null)
+                    TextButton(
+                      onPressed: onRetry,
+                      style: TextButton.styleFrom(
+                        minimumSize: const Size(PawSize.touch, PawSize.touch),
+                        foregroundColor: PawColors.warmText,
+                      ),
+                      child: Text(
+                        'Retry',
+                        style: PawText.body14Strong.copyWith(
+                          color: PawColors.warmText,
+                        ),
+                      ),
+                    ),
+                ],
+              ),
+            ),
+          ),
+        );
+      },
+    );
+  }
+}

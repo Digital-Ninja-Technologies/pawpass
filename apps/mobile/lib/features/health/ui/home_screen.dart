@@ -41,6 +41,14 @@ class HomeScreen extends StatelessWidget {
               slivers: [
                 SliverToBoxAdapter(child: _Header(unread: h.unread)),
                 const SliverToBoxAdapter(child: PartnerBar()),
+                SliverToBoxAdapter(
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: PawSpace.screenSide,
+                    ),
+                    child: OfflineBanner(onRetry: h.load),
+                  ),
+                ),
                 SliverFillRemaining(hasScrollBody: false, child: body),
               ],
             ),

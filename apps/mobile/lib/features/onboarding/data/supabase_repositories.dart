@@ -1,7 +1,6 @@
-import 'dart:io';
-
 import 'package:supabase_flutter/supabase_flutter.dart';
 
+import '../../../core/offline_cache.dart';
 import '../domain/models.dart';
 import '../domain/reminder_schedule.dart';
 import '../domain/validators.dart';
@@ -9,7 +8,7 @@ import 'repositories.dart';
 
 AppFailure _failure(Object e, {required String fallback}) {
   if (e is AppFailure) return e;
-  if (e is SocketException || e is HttpException) {
+  if (isNetworkError(e)) {
     return const AppFailure(
       'No connection. Check your internet and try again.',
     );
@@ -75,22 +74,27 @@ class SupabaseAuthRepository implements AuthRepository {
 }
 
 class SupabaseProfileRepository implements ProfileRepository {
-  SupabaseProfileRepository(this._client);
+  SupabaseProfileRepository(this._client, {this._cache});
   final SupabaseClient _client;
+  final OfflineCache? _cache;
 
   String get _uid => _client.auth.currentUser!.id;
 
   @override
   Future<Profile> load() async {
     try {
-      final row = await _client
-          .from('profiles')
-          .select(
-            'first_name, last_name, area, phone, avatar_path, account_types, onboarded_at',
-          )
-          .eq('user_id', _uid)
-          .single();
-      return Profile.fromRow(row);
+      return await cachedRead(
+        _cache,
+        '$_uid/profile',
+        () => _client
+            .from('profiles')
+            .select(
+              'first_name, last_name, area, phone, avatar_path, account_types, onboarded_at',
+            )
+            .eq('user_id', _uid)
+            .single(),
+        (j) => Profile.fromRow(Map<String, dynamic>.from(j as Map)),
+      );
     } catch (e) {
       throw _failure(e, fallback: 'We could not load your profile.');
     }
@@ -146,8 +150,9 @@ class SupabaseProfileRepository implements ProfileRepository {
 }
 
 class SupabasePetRepository implements PetRepository {
-  SupabasePetRepository(this._client);
+  SupabasePetRepository(this._client, {this._cache});
   final SupabaseClient _client;
+  final OfflineCache? _cache;
 
   String get _uid => _client.auth.currentUser!.id;
 
@@ -234,12 +239,19 @@ class SupabasePetRepository implements PetRepository {
   @override
   Future<List<Pet>> myPets() async {
     try {
-      final rows = await _client
-          .from('pets')
-          .select()
-          .eq('owner_user_id', _uid)
-          .order('created_at');
-      return [for (final r in rows) Pet.fromRow(r)];
+      return await cachedRead(
+        _cache,
+        '$_uid/pets',
+        () => _client
+            .from('pets')
+            .select()
+            .eq('owner_user_id', _uid)
+            .order('created_at'),
+        (j) => [
+          for (final r in (j as List))
+            Pet.fromRow(Map<String, dynamic>.from(r as Map)),
+        ],
+      );
     } catch (e) {
       throw _failure(e, fallback: 'We could not load your pets.');
     }

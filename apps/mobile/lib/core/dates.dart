@@ -78,3 +78,17 @@ String greetingFor(DateTime now) {
   if (now.hour < 17) return 'Good afternoon';
   return 'Good evening';
 }
+
+/// "today at 9:41am" or "on 3 Nov at 4:05pm": when a saved copy was made.
+String savedAtLabel(DateTime saved, DateTime now) {
+  final h = saved.hour % 12 == 0 ? 12 : saved.hour % 12;
+  final time =
+      '$h:${saved.minute.toString().padLeft(2, '0')}${saved.hour < 12 ? 'am' : 'pm'}';
+  final sameDay =
+      saved.year == now.year &&
+      saved.month == now.month &&
+      saved.day == now.day;
+  return sameDay
+      ? 'today at $time'
+      : 'on ${saved.day} ${_months[saved.month - 1]} at $time';
+}

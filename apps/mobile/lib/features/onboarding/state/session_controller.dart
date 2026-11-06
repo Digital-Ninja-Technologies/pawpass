@@ -57,6 +57,10 @@ class SessionController extends ChangeNotifier {
 
   void _set(SessionStatus s, Profile? p) {
     if (_disposed) return;
+    if (s == SessionStatus.signedOut) {
+      // The next person on this phone must never see the last one's saved passport.
+      _services.cache?.clear();
+    }
     status = s;
     profile = p;
     notifyListeners();

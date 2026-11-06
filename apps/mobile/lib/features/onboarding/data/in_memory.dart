@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import '../../../core/offline_cache.dart';
 import '../../adopt/data/in_memory_adopt.dart';
 import '../../booking/data/in_memory_bookings.dart';
 import '../../community/data/in_memory_community.dart';
@@ -200,6 +201,7 @@ AppServices inMemoryServices({
   DateTime Function()? now,
   String validCode = '123456',
   String? signedInAs,
+  OfflineCache? cache,
 }) {
   final profiles = InMemoryProfileRepository();
   final bookings = InMemoryBookingsRepository(now: now);
@@ -243,6 +245,7 @@ AppServices inMemoryServices({
       onConfirmHandover: adopt.sellerConfirmHandover,
       onCancelOrder: adopt.sellerCancel,
     ),
+    cache: cache,
     now: now ?? DateTime.now,
   );
 }

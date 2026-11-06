@@ -45,6 +45,7 @@ class _PassportScreenState extends State<PassportScreen> {
               children: [
                 _TopBar(canShare: pet != null),
                 const SizedBox(height: 16),
+                OfflineBanner(onRetry: h.load),
                 if (pet == null)
                   const InfoCard(
                     title: 'No pet yet',

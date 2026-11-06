@@ -1,3 +1,4 @@
+import '../../../core/offline_cache.dart';
 import '../../adopt/data/adopt_repository.dart';
 import '../../booking/data/booking_repositories.dart';
 import '../../community/data/community_repository.dart';
@@ -84,6 +85,7 @@ class AppServices {
     required this.community,
     required this.adopt,
     required this.partner,
+    this.cache,
     this.shareBaseUrl = kShareBaseUrl,
     this.now = DateTime.now,
     this.demoHint,
@@ -104,6 +106,9 @@ class AppServices {
   final CommunityRepository community;
   final AdoptRepository adopt;
   final PartnerRepository partner;
+
+  /// Saved copies of the profile, pets, passport and reminders, for reading with no signal.
+  final OfflineCache? cache;
 
   /// Where share links point. The token follows a `#`, so it is never sent to that server.
   final String shareBaseUrl;
