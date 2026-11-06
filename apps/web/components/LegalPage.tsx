@@ -2,7 +2,8 @@ import type { ReactNode } from "react";
 import type { LegalSection } from "@/lib/legal";
 import { LEGAL_UPDATED } from "@/lib/legal";
 import { CONTACT_EMAIL } from "@/lib/contact";
-import { PawOutline } from "./icons";
+import { Footer } from "./Footer";
+import { Header } from "./Header";
 
 export function LegalPage({ title, intro, sections }: { title: string; intro: ReactNode; sections: LegalSection[] }) {
   return (
@@ -11,14 +12,7 @@ export function LegalPage({ title, intro, sections }: { title: string; intro: Re
         Skip to content
       </a>
       <div className="pp">
-        <header className="wrap header">
-          <a href="/" className="logo" aria-label="PawPass home">
-            <span className="logo-mark" aria-hidden="true">
-              <PawOutline />
-            </span>
-            <span className="logo-name">PawPass</span>
-          </a>
-        </header>
+        <Header base="/" />
         <main id="main" className="wrap legal">
           <h1 className="h2">{title}</h1>
           <p className="legal-meta">Last updated {LEGAL_UPDATED}</p>
@@ -51,14 +45,7 @@ export function LegalPage({ title, intro, sections }: { title: string; intro: Re
             </p>
           </section>
         </main>
-        <footer className="wrap footer">
-          <span>
-            <b>PawPass</b> · Lagos, Nigeria
-          </span>
-          <span>
-            <a href="/privacy">Privacy</a> · <a href="/terms">Terms</a>
-          </span>
-        </footer>
+        <Footer />
       </div>
     </>
   );

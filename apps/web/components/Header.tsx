@@ -11,14 +11,15 @@ const LINKS = [
   ["#faq", "FAQ"],
 ] as const;
 
-export function Header() {
+/** `base` is "" on the home page (links scroll in place) and "/" on other pages (links go to the home page sections). */
+export function Header({ base = "" }: { base?: "" | "/" }) {
   const [open, setOpen] = useState(false);
   const [dl, setDl] = useState(false);
   return (
     <>
       <div className="sticky-bar">
         <header className="wrap header">
-          <a href="#top" className="logo" aria-label="PawPass home">
+          <a href={`${base}#top`} className="logo" aria-label="PawPass home">
             <span className="logo-mark" aria-hidden="true">
               <PawOutline />
             </span>
@@ -26,7 +27,7 @@ export function Header() {
           </a>
           <nav className="navlinks" aria-label="Main">
             {LINKS.map(([href, label]) => (
-              <a key={href} href={href}>
+              <a key={href} href={`${base}${href}`}>
                 {label}
               </a>
             ))}
@@ -64,7 +65,7 @@ export function Header() {
         {open ? (
           <nav id="pp-mobile-menu" className="mobilemenu pp-pop" aria-label="Mobile">
             {LINKS.map(([href, label]) => (
-              <a key={href} href={href} onClick={() => setOpen(false)}>
+              <a key={href} href={`${base}${href}`} onClick={() => setOpen(false)}>
                 {label}
               </a>
             ))}
