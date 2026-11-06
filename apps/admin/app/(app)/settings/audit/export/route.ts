@@ -2,12 +2,13 @@ import { NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
 import { canDo, isRole } from "@/lib/roles";
 import { describeAudit, resolveAuditNames } from "@/lib/audit";
+import { applyAuditFilter, parseAuditFilter } from "@/lib/audit-filter";
 import { toCsv } from "@/lib/csv";
 import type { AuditRow, MeRow } from "@/lib/types";
 
 export const dynamic = "force-dynamic";
 
-export async function GET() {
+export async function GET(request: Request) {
   const supabase = await createClient();
   const {
     data: { user },
@@ -17,9 +18,8 @@ export async function GET() {
   if (!me || me.status !== "active" || !isRole(me.role) || !canDo(me.role, "manage_team")) {
     return new NextResponse("Not allowed", { status: 403 });
   }
-  const { data } = await supabase
-    .from("admin_audit_v")
-    .select("*")
+  const filter = parseAuditFilter(Object.fromEntries(new URL(request.url).searchParams));
+  const { data } = await applyAuditFilter(supabase.from("admin_audit_v").select("*"), filter)
     .order("at", { ascending: false })
     .limit(20000);
   const rows = (data ?? []) as AuditRow[];

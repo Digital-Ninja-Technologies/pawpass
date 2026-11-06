@@ -51,7 +51,7 @@ export const PRIVACY: LegalSection[] = [
   {
     title: "Your choices",
     body: [
-      "You can edit your details in Settings, delete your account from Settings, and turn off location or notifications in your phone settings. To ask for a copy of your data or a correction, contact us using the details below.",
+      "You can edit your details in Settings, ask us to delete your account from Privacy and sharing in the app, and turn off location or notifications in your phone settings. To ask for a copy of your data or a correction, contact us using the details below.",
       "Data is encrypted in transit.",
     ],
   },
@@ -127,7 +127,7 @@ export const TERMS: LegalSection[] = [
   {
     title: "Ending your account",
     body: [
-      "You can delete your account in Settings at any time. We may suspend or close an account that breaks these terms.",
+      "You can ask us to delete your account at any time, from Privacy and sharing in the app. We may suspend or close an account that breaks these terms.",
     ],
   },
   {

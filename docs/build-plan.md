@@ -44,4 +44,4 @@ Work through these milestones in order. Start each one in a fresh Claude Code se
 
 ## Known gaps in the designs
 
-Designed and listed in `design/README.md` under "Added later": QR tag ordering, privacy and sharing settings, help articles, partner calendar, shelter applications list, full audit log, and empty and error states. They are designs only; none is built yet. Build them as a follow up to milestone 8, and wire the entry points listed in that README.
+Designed and listed in `design/README.md` under "Added later": QR tag ordering, privacy and sharing settings, help articles, partner calendar, shelter applications list, full audit log, and empty and error states. They are built (milestone 8 follow up), with the differences listed in that README. The database migration `20261112100000_tags_shares_calendar.sql` and the three Paystack edge functions need deploying before they work against the hosted project.

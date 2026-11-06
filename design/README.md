@@ -95,7 +95,7 @@ Exported from the PawPass design canvas. One file per screen in `screens/`, phot
 
 ## Added later (design gaps filled)
 
-These were missing from the first export and were drawn afterwards in the same style. Sample data and prices (for example the ₦3,500 tag) are placeholders. The existing screens were not edited, so wire these entry points when building:
+These were missing from the first export and were drawn afterwards in the same style. All of them are now built in the app and admin, with the differences noted in the last column of the build notes below. Sample data and prices (for example the ₦3,500 tag) are placeholders. The existing screens were not edited, so wire these entry points when building:
 
 | File | Screen | Reached from |
 | --- | --- | --- |
@@ -108,6 +108,13 @@ These were missing from the first export and were drawn afterwards in the same s
 | `screens/AdminAuditLog.dc.html` | Full audit log (admin, 1440 wide) | AdminSettings, "View full log" (`#audit`) |
 | `screens/EmptyStates.dc.html` | Empty states reference sheet | Used by every list screen |
 | `screens/ErrorStates.dc.html` | Error states reference sheet | Used app wide |
+
+Built differently from the drawings:
+
+- Privacy and sharing has no "who can see what" switches. Nothing in the database could honour them yet, and a switch that does nothing would be dishonest. It lists what is shared (with Stop sharing), blocked accounts, and two requests (copy of data, delete account) that go to support.
+- Shelter applications have All, New, Home visit and Approved tabs. There is no In review or Declined tab, because declined applications are not loaded and there is no in review state.
+- The partner calendar "Block" removes an open time (and "Block the rest of this day" removes the day's open times). Times with a booking are never removed.
+- The audit log filters by area, team member and date; it does not show a role chip.
 
 The two state files are reference sheets, not single screens: each card shows what replaces a list or page. Open questions for the team: the tag and delivery prices, whether the audit log is Full admin only (drawn that way), and whether a calendar is needed for groomer, trainer and boarding partners beyond the provider layout shown.
 
