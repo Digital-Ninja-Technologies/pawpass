@@ -1,0 +1,157 @@
+// Wiring for the real services (Deno / Supabase Edge Functions). Not unit tested: it is thin, and
+// everything it calls is covered by payments.test.ts and the SQL tests.
+import { createClient, type SupabaseClient } from "jsr:@supabase/supabase-js@2";
+import { HttpError, type BookingRow, type Ctx, type Db, type PaystackApi } from "./payments.ts";
+import { safeEqual } from "./paystack.ts";
+
+declare const Deno: { env: { get(name: string): string | undefined } };
+
+export const corsHeaders = {
+  "Access-Control-Allow-Origin": "*",
+  "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
+};
+
+export function json(body: unknown, status = 200): Response {
+  return new Response(JSON.stringify(body), {
+    status,
+    headers: { ...corsHeaders, "Content-Type": "application/json" },
+  });
+}
+
+function env(name: string): string {
+  const v = Deno.env.get(name);
+  if (!v) throw new Error(`Missing secret: ${name}`);
+  return v;
+}
+
+export function serviceClient(): SupabaseClient {
+  return createClient(env("SUPABASE_URL"), env("SUPABASE_SERVICE_ROLE_KEY"), {
+    auth: { persistSession: false },
+  });
+}
+
+/** The person calling, from their own access token. Throws 401 if the token is missing or invalid. */
+export async function callerFrom(req: Request): Promise<{ id: string; email: string | null }> {
+  const token = req.headers.get("Authorization")?.replace(/^Bearer\s+/i, "");
+  if (!token) throw new HttpError(401, "Sign in first");
+  const { data, error } = await serviceClient().auth.getUser(token);
+  if (error || !data.user) throw new HttpError(401, "Sign in first");
+  return { id: data.user.id, email: data.user.email ?? null };
+}
+
+/** True if the request carries the project's service role key (used by the scheduled job). */
+export function isServiceCall(req: Request): boolean {
+  const token = req.headers.get("Authorization")?.replace(/^Bearer\s+/i, "") ?? "";
+  return token.length > 0 && safeEqual(token, env("SUPABASE_SERVICE_ROLE_KEY"));
+}
+
+function paystack(secret: string): PaystackApi {
+  const call = async (path: string, init?: RequestInit) => {
+    const res = await fetch(`https://api.paystack.co${path}`, {
+      ...init,
+      headers: { Authorization: `Bearer ${secret}`, "Content-Type": "application/json" },
+    });
+    // Paystack answers errors with JSON too (status: false and a message), which the callers read.
+    return await res
+      .json()
+      .catch(() => ({ status: false, message: `Paystack HTTP ${res.status}` }));
+  };
+  return {
+    initialize: (body) =>
+      call("/transaction/initialize", { method: "POST", body: JSON.stringify(body) }),
+    verify: (reference) => call(`/transaction/verify/${encodeURIComponent(reference)}`),
+    refund: (body) => call("/refund", { method: "POST", body: JSON.stringify(body) }),
+  };
+}
+
+function db(client: SupabaseClient): Db {
+  const row = (r: Record<string, unknown> | null): BookingRow | null =>
+    r
+      ? {
+          id: r.id as string,
+          status: r.status as string,
+          amountKobo: Number(r.amount_kobo),
+          reference: r.paystack_reference as string,
+          paid: r.escrow_transaction_id !== null,
+          createdAt: r.created_at as string,
+        }
+      : null;
+  const cols =
+    "id, status, amount_kobo, paystack_reference, escrow_transaction_id, created_at, owner_user_id";
+  const must = <T>(res: { data: T; error: { message: string } | null }): T => {
+    if (res.error) throw new Error(res.error.message);
+    return res.data;
+  };
+  return {
+    async bookingForOwner(reference, userId) {
+      const r = must(
+        await client
+          .from("bookings")
+          .select(cols)
+          .eq("paystack_reference", reference)
+          .eq("owner_user_id", userId)
+          .maybeSingle(),
+      );
+      return row(r);
+    },
+    async bookingByReference(reference) {
+      return row(
+        must(
+          await client
+            .from("bookings")
+            .select(cols)
+            .eq("paystack_reference", reference)
+            .maybeSingle(),
+        ),
+      );
+    },
+    async confirmPayment(reference, amountKobo) {
+      return must(
+        await client.rpc("confirm_booking_payment", {
+          p_reference: reference,
+          p_amount_kobo: amountKobo,
+        }),
+      );
+    },
+    async claimRefunds(limit) {
+      return must(await client.rpc("claim_pending_refunds", { p_limit: limit })) ?? [];
+    },
+    async finishRefund(escrowId, ok, refundReference, error) {
+      must(
+        await client.rpc("finish_refund", {
+          p_escrow: escrowId,
+          p_ok: ok,
+          p_refund_reference: refundReference,
+          p_error: error,
+        }),
+      );
+    },
+    async releaseDueBookings() {
+      return must(await client.rpc("release_due_bookings")) as number;
+    },
+  };
+}
+
+export async function context(): Promise<Ctx> {
+  const client = serviceClient();
+  const { data } = await client
+    .from("settings")
+    .select("booking_hold_minutes")
+    .limit(1)
+    .maybeSingle();
+  const secret = env("PAYSTACK_SECRET_KEY");
+  return {
+    paystack: paystack(secret),
+    db: db(client),
+    secret,
+    callbackUrl: Deno.env.get("PAYSTACK_CALLBACK_URL") || undefined,
+    holdMinutes: data?.booking_hold_minutes ?? 20,
+  };
+}
+
+/** Turns a thrown error into a response: HttpError keeps its status, anything else is a plain 500. */
+export function errorResponse(e: unknown): Response {
+  if (e instanceof HttpError) return json({ error: e.message }, e.status);
+  console.error(e);
+  return json({ error: "Something went wrong. Please try again." }, 500);
+}

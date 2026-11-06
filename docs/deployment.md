@@ -44,3 +44,30 @@ is marked `noindex`, but the extra gate is a sensible default until MFA is added
 ## Database
 
 Migrations are applied with the Supabase MCP tools or `supabase db push`; see `supabase/README.md`.
+
+## Payments (Paystack)
+
+Four edge functions in `supabase/functions/` handle money. Paystack's secret key only ever exists in the
+Supabase project's function secrets; the app never sees it.
+
+| Function            | Who calls it                | What it does                                                                                                   |
+| ------------------- | --------------------------- | -------------------------------------------------------------------------------------------------------------- |
+| `paystack-initialize` | The app (signed in owner) | Reads the booking's amount from the database and asks Paystack for a checkout page                             |
+| `paystack-verify`   | The app, after paying       | Asks Paystack whether the exact amount arrived, then records it with `confirm_booking_payment`                 |
+| `paystack-webhook`  | Paystack                    | Checks the HMAC SHA512 signature, then records `charge.success` the same way (safe if both run)               |
+| `process-refunds`   | A schedule (service role)   | Sends queued refunds to Paystack, and makes visits the owner never confirmed ready for payout                  |
+
+Setup, once the `20261106200000_services_escrow` migration is applied:
+
+1. Supabase dashboard, Edge Functions, Secrets: add `PAYSTACK_SECRET_KEY` (use the **test** key first).
+2. Deploy all four functions with JWT verification **off** (each one checks who is calling itself).
+3. Paystack dashboard, Settings, API Keys and Webhooks: set the webhook URL to
+   `https://<project-ref>.supabase.co/functions/v1/paystack-webhook`.
+4. Schedule `process-refunds` every 5 minutes (Supabase Cron, an HTTP `POST` with the service role key).
+5. Pay a test booking with a Paystack test card, then check the booking is `confirmed` and an
+   `escrow_transactions` row is `held`.
+
+Money rules enforced in code: the amount always comes from the booking row; a payment only counts when
+Paystack says `success`, in `NGN`, for exactly that amount; the same payment can be reported any number of times
+and is recorded once; a payment for a time that was taken meanwhile is refunded in full.
+Tests: `pnpm --filter @pawpass/edge-functions test`.

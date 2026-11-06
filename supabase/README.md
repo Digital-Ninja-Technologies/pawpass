@@ -4,21 +4,23 @@ Database schema, row level security, storage rules and seed data for PawPass.
 
 ## Layout
 
-| Path                                               | What it holds                                                                                             |
-| -------------------------------------------------- | --------------------------------------------------------------------------------------------------------- |
-| `migrations/20261105100000_core_tables.sql`        | All tables from `docs/data-model.md`, plus the single row `settings` table                                |
-| `migrations/20261105110000_functions_triggers.sql` | RLS helper functions (schema `private`), `updated_at`, guards, lost alert defaults                        |
-| `migrations/20261105120000_rls.sql`                | Row Level Security policies, column grants and the `public_profiles` view                                 |
-| `migrations/20261105130000_storage_realtime.sql`   | Storage buckets and policies, realtime publication                                                        |
-| `migrations/20261105140000_admin_console.sql`      | Staff read views (`admin_*_v`) and audited write functions (`admin_*`) for the admin console              |
-| `migrations/20261105150000_waitlist.sql`           | Public waitlist table (no longer used by the landing page; kept)                                          |
-| `migrations/20261106100000_health.sql`             | Reminders from records, `complete_reminder`, notifications, `create_passport_share`, `emergency_vets`     |
-| `migrations/20261105180000_onboarding.sql`         | `profiles.account_types` and `onboarded_at`, `create_pet_passport()`, owners read their pet rows directly |
-| `seed.sql`                                         | Sample data from the designs (Tolu, Bingo, Mimi and the three partners). Local dev only                   |
-| `tests/rls.test.sql`                               | Plain SQL tests for the privacy and business rules                                                        |
-| `tests/admin.test.sql`                             | Tests for the admin functions: roles, state changes, audit trail, invites                                 |
-| `tests/health.test.sql`                            | Tests for reminders, mark done, notifications, share links and emergency vets                             |
-| `tests/onboarding.test.sql`                        | Tests for the account type fields and `create_pet_passport` (all or nothing, privacy, validation)         |
+| Path                                               | What it holds                                                                                                     |
+| -------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------- |
+| `migrations/20261105100000_core_tables.sql`        | All tables from `docs/data-model.md`, plus the single row `settings` table                                        |
+| `migrations/20261105110000_functions_triggers.sql` | RLS helper functions (schema `private`), `updated_at`, guards, lost alert defaults                                |
+| `migrations/20261105120000_rls.sql`                | Row Level Security policies, column grants and the `public_profiles` view                                         |
+| `migrations/20261105130000_storage_realtime.sql`   | Storage buckets and policies, realtime publication                                                                |
+| `migrations/20261105140000_admin_console.sql`      | Staff read views (`admin_*_v`) and audited write functions (`admin_*`) for the admin console                      |
+| `migrations/20261105150000_waitlist.sql`           | Public waitlist table (no longer used by the landing page; kept)                                                  |
+| `migrations/20261106100000_health.sql`             | Reminders from records, `complete_reminder`, notifications, `create_passport_share`, `emergency_vets`             |
+| `migrations/20261105180000_onboarding.sql`         | `profiles.account_types` and `onboarded_at`, `create_pet_passport()`, owners read their pet rows directly         |
+| `migrations/20261106200000_services_escrow.sql`    | Escrow and booking state machines, `create_booking`, payment confirmation, cancel, disputes, refund queue, search |
+| `functions/`                                       | Paystack edge functions (initialize, verify, webhook, refunds) and their tested logic                             |
+| `seed.sql`                                         | Sample data from the designs (Tolu, Bingo, Mimi and the three partners). Local dev only                           |
+| `tests/rls.test.sql`                               | Plain SQL tests for the privacy and business rules                                                                |
+| `tests/admin.test.sql`                             | Tests for the admin functions: roles, state changes, audit trail, invites                                         |
+| `tests/health.test.sql`                            | Tests for reminders, mark done, notifications, share links and emergency vets                                     |
+| `tests/onboarding.test.sql`                        | Tests for the account type fields and `create_pet_passport` (all or nothing, privacy, validation)                 |
 
 ## How access works
 
