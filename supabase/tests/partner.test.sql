@@ -168,7 +168,7 @@ end $$;
 do $$
 declare
   pid uuid := current_setting('test.tolu_partner')::uuid;
-  ids uuid[];
+  ids jsonb;
 begin
   assert test_helpers.state(format($q$ select public.partner_create_listings(%L, '{"name":"Zeus","price_kobo":"50"}') $q$, pid)) = '22023', 'a puppy needs a real price';
   assert test_helpers.state(format($q$ select public.partner_create_listings(%L, '{"name":"","price_kobo":"30000000"}') $q$, pid)) = '22023', 'a name is required';
@@ -177,14 +177,14 @@ begin
   assert test_helpers.state(format($q$ select public.partner_create_listings(%L, '{"name":"Zeus","price_kobo":"30000000","photo_path":"a0000000-0000-0000-0000-000000000005/p.jpg"}') $q$, pid)) = '22023', 'photos must be in your own folder';
 
   ids := public.partner_create_listings(pid, '{"name":"Zeus","breed":"Boerboel","sex":"male","price_kobo":"30000000","mother_pet_id":"c0000000-0000-0000-0000-000000000002"}');
-  assert cardinality(ids) = 1, 'one puppy, one listing';
-  assert (select status || kind from public.listings where id = ids[1]) = 'livesale', 'it is live and for sale';
+  assert jsonb_array_length(ids) = 1, 'one puppy, one listing';
+  assert (select status || kind from public.listings where id = (ids #>> '{0,listing_id}')::uuid) = 'livesale', 'it is live and for sale';
   assert (select count(*) from public.pets where origin_partner_id = pid and name = 'Zeus' and owner_user_id = 'a0000000-0000-0000-0000-000000000001' and tag_code is not null) = 1, 'the puppy has its own passport';
 
   ids := public.partner_create_listings(pid, '{"name":"Hera","breed":"Boerboel","price_kobo":"25000000","count":"3"}');
-  assert cardinality(ids) = 3, 'a litter makes one listing each';
+  assert jsonb_array_length(ids) = 3, 'a litter makes one listing each';
   assert (select count(*) from public.pets where name in ('Hera 1', 'Hera 2', 'Hera 3')) = 3, 'litter members are numbered';
-  perform set_config('test.hera', ids[1]::text, true);
+  perform set_config('test.hera', ids #>> '{0,listing_id}', true);
 end $$;
 
 :kemi
@@ -213,10 +213,10 @@ end $$;
 -- Shelter listings are free.
 :ngozi
 do $$
-declare ids uuid[];
+declare ids jsonb;
 begin
   ids := public.partner_create_listings('b0000000-0000-0000-0000-000000000003', '{"name":"Kofi","species":"dog","price_kobo":"99999999"}');
-  assert (select kind || coalesce(price_kobo::text, 'free') from public.listings where id = ids[1]) = 'adoptionfree', 'a shelter listing is an adoption with no price';
+  assert (select kind || coalesce(price_kobo::text, 'free') from public.listings where id = (ids #>> '{0,listing_id}')::uuid) = 'adoptionfree', 'a shelter listing is an adoption with no price';
 end $$;
 
 -- ---------------------------------------------------------------------------

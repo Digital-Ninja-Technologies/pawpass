@@ -7,6 +7,7 @@ import 'package:pawpass/features/booking/data/in_memory_bookings.dart';
 import 'package:pawpass/features/community/data/in_memory_community.dart';
 import 'package:pawpass/app.dart';
 import 'package:pawpass/features/health/data/in_memory_health.dart';
+import 'package:pawpass/features/partner/data/in_memory_partner.dart';
 import 'package:pawpass/features/health/domain/models.dart';
 import 'package:pawpass/features/onboarding/data/in_memory.dart';
 import 'package:pawpass/features/onboarding/data/repositories.dart';
@@ -43,6 +44,7 @@ class _Rig {
       payments: InMemoryPaymentsRepository(InMemoryBookingsRepository()),
       community: InMemoryCommunityRepository(),
       adopt: InMemoryAdoptRepository(),
+      partner: InMemoryPartnerRepository(),
       now: () => _today,
     );
   }
@@ -420,8 +422,8 @@ void main() {
     ) async {
       await _pump(tester, _Rig());
       await _tapLabel(tester, 'Your account');
-      expect(find.text('tolu@example.com'), findsOneWidget);
-      await _tap(tester, 'Sign out');
+      expect(find.textContaining('tolu@example.com'), findsOneWidget);
+      await _tap(tester, 'Log out');
       expect(find.text('Get started'), findsOneWidget);
     });
   });

@@ -73,3 +73,17 @@ and is recorded once; a payment for a time that was taken meanwhile is refunded 
 Puppy deposits (`pd_`) and balances (`pb_`) go through the same functions as bookings (`pp_`).
 The scheduled `process-refunds` run also releases puppy sales whose 72 hour vet check window ended with no problem.
 Tests: `pnpm --filter @pawpass/edge-functions test`.
+
+## Partner mode
+
+Becoming a partner needs no setup beyond the `20261109100000_partner_mode` migration. Things worth knowing:
+
+- Verification documents go to the private `partner-documents` bucket, inside the applicant's own folder; only the
+  applicant and the PawPass verifications team can read them.
+- The payout account (`partner_payout_accounts`) is readable by its owner and by payouts or verifications staff. The app
+  only ever gets the bank name and last four digits back. Nobody writes it directly: `partner_save_payout_account` checks
+  the shape (10 digit account number, bank code) first. Changing it after approval goes through support for now.
+- A partner can submit only when every step is done (`submit_partner_for_review`). The team's decision (approved, needs
+  more info, rejected) reaches the partner as a notification.
+- Not designed yet, so shown as "coming soon": the vet and service Calendar tab, QR tags, and privacy and sharing.
+  Vets still cannot open a shared passport or add a verified record from the dashboard; that stays on the share link.

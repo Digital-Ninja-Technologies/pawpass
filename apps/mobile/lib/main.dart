@@ -11,6 +11,7 @@ import 'features/onboarding/data/device_services.dart';
 import 'features/onboarding/data/in_memory.dart';
 import 'features/onboarding/data/repositories.dart';
 import 'features/onboarding/data/supabase_repositories.dart';
+import 'features/partner/data/supabase_partner.dart';
 
 const _supabaseUrl = String.fromEnvironment('SUPABASE_URL');
 const _supabasePublishableKey = String.fromEnvironment(
@@ -43,6 +44,7 @@ Future<void> main() async {
           payments: SupabasePaymentsRepository(client),
           community: SupabaseCommunityRepository(client),
           adopt: SupabaseAdoptRepository(client),
+          partner: SupabasePartnerRepository(client),
         ),
       ),
     );
@@ -70,6 +72,7 @@ Future<void> main() async {
           payments: base.payments,
           community: base.community,
           adopt: base.adopt,
+          partner: base.partner,
           demoHint: 'Demo mode: nothing is sent. Use the code 123456.',
         ),
       ),

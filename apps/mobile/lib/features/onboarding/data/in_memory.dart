@@ -4,6 +4,7 @@ import '../../adopt/data/in_memory_adopt.dart';
 import '../../booking/data/in_memory_bookings.dart';
 import '../../community/data/in_memory_community.dart';
 import '../../health/data/in_memory_health.dart';
+import '../../partner/data/in_memory_partner.dart';
 import '../domain/models.dart';
 import '../domain/reminder_schedule.dart';
 import '../domain/validators.dart';
@@ -237,6 +238,11 @@ AppServices inMemoryServices({
     payments: InMemoryPaymentsRepository(bookings, others: [adopt.markPaid]),
     community: InMemoryCommunityRepository(now: now),
     adopt: adopt,
+    partner: InMemoryPartnerRepository(
+      now: now,
+      onConfirmHandover: adopt.sellerConfirmHandover,
+      onCancelOrder: adopt.sellerCancel,
+    ),
     now: now ?? DateTime.now,
   );
 }

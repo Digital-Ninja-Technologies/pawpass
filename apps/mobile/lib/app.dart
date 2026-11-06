@@ -8,6 +8,7 @@ import 'features/community/state/community_controller.dart';
 import 'features/community/state/lost_controller.dart';
 import 'features/health/state/health_controller.dart';
 import 'features/onboarding/data/repositories.dart';
+import 'features/partner/state/partner_controller.dart';
 import 'features/onboarding/state/app_scope.dart';
 import 'features/onboarding/state/onboarding_controller.dart';
 import 'features/onboarding/state/session_controller.dart';
@@ -51,6 +52,10 @@ class _PawPassAppState extends State<PawPassApp> {
     widget.services,
     _session,
   );
+  late final PartnerController _partner = PartnerController(
+    widget.services,
+    _session,
+  );
   late final GoRouter _router = buildRouter(
     session: _session,
     onboarding: _onboarding,
@@ -59,6 +64,7 @@ class _PawPassAppState extends State<PawPassApp> {
   @override
   void dispose() {
     _router.dispose();
+    _partner.dispose();
     _adopt.dispose();
     _chat.dispose();
     _lost.dispose();
@@ -82,6 +88,7 @@ class _PawPassAppState extends State<PawPassApp> {
       lost: _lost,
       chat: _chat,
       adopt: _adopt,
+      partner: _partner,
       child: MaterialApp.router(
         title: 'PawPass',
         theme: buildAppTheme(),

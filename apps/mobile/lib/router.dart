@@ -42,6 +42,12 @@ import 'features/onboarding/ui/reminders_screen.dart';
 import 'features/onboarding/ui/sign_up_screen.dart';
 import 'features/onboarding/ui/verify_screen.dart';
 import 'features/onboarding/ui/welcome_screen.dart';
+import 'features/partner/ui/dashboard_screens.dart';
+import 'features/partner/ui/earnings_help_screens.dart';
+import 'features/partner/ui/listing_form_screen.dart';
+import 'features/partner/ui/me_screen.dart';
+import 'features/partner/ui/partner_shell.dart';
+import 'features/partner/ui/verify_screens.dart';
 import 'gallery/component_gallery_screen.dart';
 import 'theme/tokens.dart';
 import 'ui/ui.dart' show PawIconData;
@@ -157,6 +163,90 @@ GoRouter buildRouter({
           StatefulShellBranch(
             routes: [
               GoRoute(path: '/adopt', builder: (_, _) => const AdoptScreen()),
+            ],
+          ),
+        ],
+      ),
+      GoRoute(path: '/me', builder: (_, _) => const MeScreen()),
+      GoRoute(path: '/me/edit', builder: (_, _) => const EditProfileScreen()),
+      GoRoute(path: '/orders', builder: (_, _) => const OrdersListScreen()),
+      GoRoute(path: '/help', builder: (_, _) => const HelpScreen()),
+      GoRoute(
+        path: '/soon/:title',
+        builder: (_, state) =>
+            SoonScreen(title: state.pathParameters['title'] ?? 'Coming soon'),
+      ),
+      GoRoute(
+        path: '/partner/become',
+        builder: (_, _) => const BecomePartnerScreen(),
+      ),
+      GoRoute(
+        path: '/partner/details',
+        builder: (_, _) => const BusinessDetailsScreen(),
+      ),
+      GoRoute(path: '/partner/kyc', builder: (_, _) => const KycScreen()),
+      GoRoute(
+        path: '/partner/doc/:kind',
+        builder: (_, state) {
+          final kind = documentKindFor(state.pathParameters['kind']);
+          return kind == null
+              ? const SoonScreen(title: 'Document')
+              : DocumentStepScreen(kind: kind);
+        },
+      ),
+      GoRoute(
+        path: '/partner/facility',
+        builder: (_, _) => const FacilityPayoutScreen(),
+      ),
+      GoRoute(
+        path: '/partner/review',
+        builder: (_, _) => const PartnerReviewScreen(),
+      ),
+      GoRoute(
+        path: '/partner/listing/new',
+        builder: (_, _) => const ListingFormScreen(),
+      ),
+      StatefulShellRoute.indexedStack(
+        builder: (_, _, shell) => PartnerShell(shell: shell),
+        branches: [
+          StatefulShellBranch(
+            routes: [
+              GoRoute(
+                path: '/partner',
+                builder: (_, _) => const PartnerTodayScreen(),
+              ),
+            ],
+          ),
+          StatefulShellBranch(
+            routes: [
+              GoRoute(
+                path: '/partner/listings',
+                builder: (_, _) => const PartnerSecondTab(),
+              ),
+            ],
+          ),
+          StatefulShellBranch(
+            routes: [
+              GoRoute(
+                path: '/partner/messages',
+                builder: (_, _) => const PartnerMessagesTab(),
+              ),
+            ],
+          ),
+          StatefulShellBranch(
+            routes: [
+              GoRoute(
+                path: '/partner/money',
+                builder: (_, _) => const PartnerFourthTab(),
+              ),
+            ],
+          ),
+          StatefulShellBranch(
+            routes: [
+              GoRoute(
+                path: '/partner/business',
+                builder: (_, _) => const PartnerBusinessTab(),
+              ),
             ],
           ),
         ],

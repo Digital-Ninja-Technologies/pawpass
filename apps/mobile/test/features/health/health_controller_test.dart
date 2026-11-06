@@ -5,6 +5,7 @@ import 'package:pawpass/features/adopt/data/in_memory_adopt.dart';
 import 'package:pawpass/features/booking/data/in_memory_bookings.dart';
 import 'package:pawpass/features/community/data/in_memory_community.dart';
 import 'package:pawpass/features/health/data/in_memory_health.dart';
+import 'package:pawpass/features/partner/data/in_memory_partner.dart';
 import 'package:pawpass/features/health/domain/health_logic.dart';
 import 'package:pawpass/features/health/domain/models.dart';
 import 'package:pawpass/features/health/state/health_controller.dart';
@@ -39,6 +40,7 @@ class _Rig {
       payments: InMemoryPaymentsRepository(InMemoryBookingsRepository()),
       community: InMemoryCommunityRepository(),
       adopt: InMemoryAdoptRepository(),
+      partner: InMemoryPartnerRepository(),
       now: () => _today,
     );
     if (onboarded) profiles.markOnboarded(_today);

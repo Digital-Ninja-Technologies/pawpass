@@ -6,6 +6,7 @@ import '../../community/state/chat_controller.dart';
 import '../../community/state/community_controller.dart';
 import '../../community/state/lost_controller.dart';
 import '../../health/state/health_controller.dart';
+import '../../partner/state/partner_controller.dart';
 import '../data/repositories.dart';
 import 'onboarding_controller.dart';
 import 'session_controller.dart';
@@ -23,6 +24,7 @@ class AppScope extends InheritedWidget {
     required this.lost,
     required this.chat,
     required this.adopt,
+    required this.partner,
     required super.child,
   });
 
@@ -35,6 +37,7 @@ class AppScope extends InheritedWidget {
   final LostController lost;
   final ChatController chat;
   final AdoptController adopt;
+  final PartnerController partner;
 
   static AppScope of(BuildContext context) {
     final scope = context.dependOnInheritedWidgetOfExactType<AppScope>();
@@ -55,5 +58,6 @@ class AppScope extends InheritedWidget {
       community != old.community ||
       lost != old.lost ||
       chat != old.chat ||
-      adopt != old.adopt;
+      adopt != old.adopt ||
+      partner != old.partner;
 }

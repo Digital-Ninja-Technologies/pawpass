@@ -9,6 +9,7 @@ import 'package:pawpass/features/community/data/in_memory_community.dart';
 import 'package:pawpass/features/booking/domain/models.dart';
 import 'package:pawpass/features/booking/ui/booking_widgets.dart';
 import 'package:pawpass/features/health/data/in_memory_health.dart';
+import 'package:pawpass/features/partner/data/in_memory_partner.dart';
 import 'package:pawpass/features/health/ui/health_widgets.dart';
 import 'package:pawpass/features/onboarding/data/in_memory.dart';
 import 'package:pawpass/features/onboarding/data/repositories.dart';
@@ -39,6 +40,7 @@ class _Rig {
       payments: payments,
       community: InMemoryCommunityRepository(),
       adopt: InMemoryAdoptRepository(),
+      partner: InMemoryPartnerRepository(),
       now: () => _today,
     );
   }

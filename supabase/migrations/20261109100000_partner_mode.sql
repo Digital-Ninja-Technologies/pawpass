@@ -557,8 +557,9 @@ grant execute on function public.partner_earnings(uuid) to authenticated;
 -- Listings (breeders and shelters)
 -- ---------------------------------------------------------------------------
 -- Adds a pet (or a whole litter) to the partner's listings. Each animal gets its own passport, which moves
--- to the buyer or adopter on handover. Breeders set a price; shelters list for free.
-create function public.partner_create_listings(p_partner uuid, p_input jsonb) returns uuid[]
+-- to the buyer or adopter on handover. Breeders set a price; shelters list for free. Returns the new
+-- listing and pet ids so the app can upload the photo into each pet's own folder.
+create function public.partner_create_listings(p_partner uuid, p_input jsonb) returns jsonb
 language plpgsql security definer
 set search_path = ''
 as $$
@@ -578,7 +579,7 @@ declare
   kind text;
   pet_id uuid;
   listing_id uuid;
-  ids uuid[] := '{}';
+  ids jsonb := '[]'::jsonb;
   i integer;
 begin
   select * into a from public.partner_accounts where id = p_partner and owner_user_id = me;
@@ -624,7 +625,7 @@ begin
     insert into public.listings (partner_account_id, pet_id, kind, price_kobo, status, handover_by)
     values (p_partner, pet_id, kind, price, 'live', handover)
     returning id into listing_id;
-    ids := ids || listing_id;
+    ids := ids || jsonb_build_array(jsonb_build_object('listing_id', listing_id, 'pet_id', pet_id));
   end loop;
   return ids;
 end;

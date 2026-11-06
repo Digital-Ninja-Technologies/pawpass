@@ -7,6 +7,7 @@ import 'package:pawpass/features/booking/data/in_memory_bookings.dart';
 import 'package:pawpass/features/community/data/in_memory_community.dart';
 import 'package:pawpass/app.dart';
 import 'package:pawpass/features/health/data/in_memory_health.dart';
+import 'package:pawpass/features/partner/data/in_memory_partner.dart';
 import 'package:pawpass/features/onboarding/data/in_memory.dart';
 import 'package:pawpass/features/onboarding/data/repositories.dart';
 import 'package:pawpass/features/onboarding/domain/models.dart';
@@ -36,6 +37,7 @@ class _App {
       payments: InMemoryPaymentsRepository(InMemoryBookingsRepository()),
       community: InMemoryCommunityRepository(),
       adopt: InMemoryAdoptRepository(),
+      partner: InMemoryPartnerRepository(),
       now: () => _today,
     );
   }
@@ -528,7 +530,7 @@ void main() {
       await _pump(tester, app);
       await tester.tap(find.bySemanticsLabel('Your account'));
       await tester.pumpAndSettle();
-      await _tap(tester, 'Sign out');
+      await _tap(tester, 'Log out');
       expect(find.text('Get started'), findsOneWidget);
       await _tap(tester, 'Get started');
       final field = tester.widget<TextField>(find.byType(TextField));

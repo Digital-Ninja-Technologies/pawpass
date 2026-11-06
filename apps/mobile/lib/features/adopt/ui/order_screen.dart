@@ -282,12 +282,14 @@ class _OrderScreenState extends State<OrderScreen> with WidgetsBindingObserver {
                     style: PawText.meta13.copyWith(color: PawColors.muted),
                   ),
                 ],
-                if (!o.isBuyer) ...[
-                  const SizedBox(height: 14),
-                  const InfoCard(
-                    title: 'Seller tools',
-                    body: 'Confirming the handover and cancelling an order are in the partner tools, which arrive in a later update.',
-                    icon: PawIconData.shieldCheck,
+                if (!o.isBuyer && scope.partner.sellerError != null) ...[
+                  const SizedBox(height: 12),
+                  Semantics(
+                    liveRegion: true,
+                    child: Text(
+                      scope.partner.sellerError!,
+                      style: PawText.body14.copyWith(color: PawColors.danger),
+                    ),
                   ),
                 ],
                 if (c.acceptError != null) ...[
@@ -306,6 +308,28 @@ class _OrderScreenState extends State<OrderScreen> with WidgetsBindingObserver {
         ),
         if (waiting)
           PayWaitingBar(controller: c)
+        else if (sellerActions(o).isNotEmpty)
+          PawStickyFooter(
+            children: [
+              for (final a in sellerActions(o))
+                switch (a) {
+                  SellerAction.confirmHandover => PawButton(
+                    label: 'Confirm handover',
+                    loading: scope.partner.sellerBusy,
+                    onPressed: scope.partner.sellerBusy
+                        ? null
+                        : () => _confirmHandover(context, scope, c, o),
+                  ),
+                  SellerAction.cancelOrder => PawButton(
+                    label: 'Cancel order',
+                    variant: PawButtonVariant.secondary,
+                    onPressed: scope.partner.sellerBusy
+                        ? null
+                        : () => _cancelOrder(context, scope, c, o),
+                  ),
+                },
+            ],
+          )
         else if (actions.isNotEmpty)
           PawStickyFooter(
             children: [
@@ -340,6 +364,84 @@ class _OrderScreenState extends State<OrderScreen> with WidgetsBindingObserver {
           ),
       ],
     );
+  }
+
+  Future<void> _confirmHandover(
+    BuildContext context,
+    AppScope scope,
+    AdoptController c,
+    OrderDetail o,
+  ) async {
+    final ok = await scope.partner.confirmHandover(o.id);
+    if (!context.mounted) {
+      return;
+    }
+    if (ok) {
+      await c.reloadOrder();
+    }
+    if (context.mounted) {
+      ScaffoldMessenger.of(context)
+        ..hideCurrentSnackBar()
+        ..showSnackBar(
+          SnackBar(
+            content: Text(
+              ok
+                  ? 'Handover confirmed. ${o.buyerName ?? 'The buyer'} can now accept ${o.petName}\'s passport.'
+                  : scope.partner.sellerError ?? 'That did not work.',
+            ),
+          ),
+        );
+    }
+  }
+
+  Future<void> _cancelOrder(
+    BuildContext context,
+    AppScope scope,
+    AdoptController c,
+    OrderDetail o,
+  ) async {
+    final sure = await showDialog<bool>(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        title: const Text('Cancel this order?'),
+        content: Text(
+          'Everything ${o.buyerName ?? 'the buyer'} paid is refunded in full, and ${o.petName} goes back on sale.',
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(ctx, false),
+            child: const Text('Keep the order'),
+          ),
+          TextButton(
+            onPressed: () => Navigator.pop(ctx, true),
+            child: const Text('Cancel order'),
+          ),
+        ],
+      ),
+    );
+    if (sure != true || !context.mounted) {
+      return;
+    }
+    final ok = await scope.partner.cancelOrder(o.id);
+    if (!context.mounted) {
+      return;
+    }
+    if (ok) {
+      await c.reloadOrder();
+    }
+    if (context.mounted) {
+      ScaffoldMessenger.of(context)
+        ..hideCurrentSnackBar()
+        ..showSnackBar(
+          SnackBar(
+            content: Text(
+              ok
+                  ? 'Order cancelled. The buyer is refunded in full.'
+                  : scope.partner.sellerError ?? 'That did not work.',
+            ),
+          ),
+        );
+    }
   }
 
   Future<void> _accept(

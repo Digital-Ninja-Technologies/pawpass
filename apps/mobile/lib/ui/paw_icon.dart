@@ -70,7 +70,30 @@ enum PawIconData {
   chevronLeft('<path d="m15 6-6 6 6 6"/>'),
   chevronRight('<path d="m9 6 6 6-6 6"/>'),
   chevronDown('<path d="m6 9 6 6 6-6"/>'),
-  check('<path d="m5 12.5 4.5 4.5L19 7.5"/>');
+  check('<path d="m5 12.5 4.5 4.5L19 7.5"/>'),
+  grid(
+    '<rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/>'
+    '<rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/>',
+  ),
+  tag(
+    '<path d="M3 12V4a1 1 0 0 1 1-1h8l9 9-9 9z"/><circle cx="8" cy="8" r="1.4"/>',
+  ),
+  messages(
+    '<path d="M4 5h16a1 1 0 0 1 1 1v10a1 1 0 0 1-1 1h-9l-5 4v-4H4a1 1 0 0 1-1-1V6a1 1 0 0 1 1-1z"/>',
+  ),
+  wallet(
+    '<rect x="3" y="6" width="18" height="14" rx="2"/><path d="M3 10h18M16 15h2"/>',
+  ),
+  briefcase(
+    '<rect x="3" y="7" width="18" height="13" rx="2"/><path d="M9 7V5a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v2M3 13h18"/>',
+  ),
+  user('<circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/>'),
+  upload(
+    '<path d="M12 16V4"/><path d="m7 9 5-5 5 5"/><path d="M5 14v5a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-5"/>',
+  ),
+  helpCircle(
+    '<circle cx="12" cy="12" r="9"/><path d="M9.5 9.5a2.5 2.5 0 1 1 3.5 2.3c-.7.4-1 .9-1 1.7M12 17v.01"/>',
+  );
 
   const PawIconData(this.body);
   final String body;

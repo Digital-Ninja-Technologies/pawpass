@@ -112,6 +112,23 @@ List<BuyerAction> buyerActions(OrderDetail o, DateTime now) {
   }
 }
 
+/// What the seller can do next on an order.
+enum SellerAction { confirmHandover, cancelOrder }
+
+List<SellerAction> sellerActions(OrderDetail o) {
+  if (o.isBuyer) {
+    return const [];
+  }
+  switch (o.status) {
+    case OrderStatus.depositPaid:
+      return const [SellerAction.cancelOrder];
+    case OrderStatus.balancePaid:
+      return const [SellerAction.confirmHandover, SellerAction.cancelOrder];
+    default:
+      return const [];
+  }
+}
+
 /// A plain sentence for where the order stands.
 String orderHeadline(OrderDetail o, DateTime now) {
   switch (o.status) {

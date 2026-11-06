@@ -200,6 +200,9 @@ class InMemoryAdoptRepository implements AdoptRepository {
 
   /// Set to make the next call of that name fail.
   AppFailure? failNextLoad;
+
+  /// Test hook: show orders as the seller sees them.
+  bool viewAsSeller = false;
   AppFailure? failNextOrder;
   AppFailure? failNextApply;
   AppFailure? failNextAccept;
@@ -475,7 +478,7 @@ class InMemoryAdoptRepository implements AdoptRepository {
           partnerName: o.listing.partnerName,
           priceKobo: o.listing.priceKobo!,
           createdAt: o.createdAt,
-          isBuyer: true,
+          isBuyer: !viewAsSeller,
         ),
   ];
 
@@ -500,7 +503,7 @@ class InMemoryAdoptRepository implements AdoptRepository {
       depositKobo: o.deposit,
       protectionFeeKobo: o.fee,
       balanceKobo: o.balance,
-      isBuyer: true,
+      isBuyer: !viewAsSeller,
       depositPaid: o.depositPaid,
       balancePaid: o.balancePaid,
       handoverBy: l.handoverBy,

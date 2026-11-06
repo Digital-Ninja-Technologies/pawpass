@@ -322,7 +322,10 @@ class _Bubble extends StatelessWidget {
 
 /// The inbox: every conversation, newest first, with an unread dot.
 class MessagesScreen extends StatefulWidget {
-  const MessagesScreen({super.key});
+  const MessagesScreen({super.key, this.embedded = false});
+
+  /// True when it is a tab (partner mode): no back button.
+  final bool embedded;
 
   @override
   State<MessagesScreen> createState() => _MessagesScreenState();
@@ -357,8 +360,10 @@ class _MessagesScreenState extends State<MessagesScreen> {
                 children: [
                   Row(
                     children: [
-                      const PawBackButton(),
-                      const SizedBox(width: 12),
+                      if (!widget.embedded) ...[
+                        const PawBackButton(),
+                        const SizedBox(width: 12),
+                      ],
                       Expanded(
                         child: Semantics(
                           header: true,

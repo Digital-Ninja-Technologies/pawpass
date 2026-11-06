@@ -6,6 +6,7 @@ import '../../../ui/ui.dart';
 import '../../onboarding/domain/models.dart';
 import '../../onboarding/domain/pet_age.dart';
 import '../../onboarding/state/app_scope.dart';
+import '../../partner/ui/partner_widgets.dart' show PartnerBar;
 import '../domain/health_logic.dart';
 import '../domain/models.dart';
 import 'health_widgets.dart';
@@ -39,6 +40,7 @@ class HomeScreen extends StatelessWidget {
               physics: const AlwaysScrollableScrollPhysics(),
               slivers: [
                 SliverToBoxAdapter(child: _Header(unread: h.unread)),
+                const SliverToBoxAdapter(child: PartnerBar()),
                 SliverFillRemaining(hasScrollBody: false, child: body),
               ],
             ),
@@ -109,8 +111,7 @@ class _Header extends StatelessWidget {
   }
 }
 
-/// The account circle. The full account screen arrives with partner mode (milestone 6); until then it
-/// offers signing out.
+/// The account circle: opens Me.
 class _AccountButton extends StatelessWidget {
   const _AccountButton({required this.initial});
   final String initial;
@@ -145,45 +146,7 @@ class _AccountButton extends StatelessWidget {
     );
   }
 
-  void _open(BuildContext context) {
-    final scope = AppScope.of(context);
-    showModalBottomSheet<void>(
-      context: context,
-      backgroundColor: PawColors.surface,
-      showDragHandle: true,
-      builder: (sheet) => SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.fromLTRB(
-            PawSpace.screenSide,
-            0,
-            PawSpace.screenSide,
-            20,
-          ),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              Text('Your account', style: PawText.title28),
-              const SizedBox(height: 6),
-              Text(
-                scope.services.auth.email ?? '',
-                style: PawText.body15.copyWith(color: PawColors.muted),
-              ),
-              const SizedBox(height: 18),
-              PawButton(
-                label: 'Sign out',
-                variant: PawButtonVariant.secondary,
-                onPressed: () {
-                  Navigator.pop(sheet);
-                  scope.session.signOut();
-                },
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
+  void _open(BuildContext context) => context.push('/me');
 }
 
 class _NoPets extends StatelessWidget {
