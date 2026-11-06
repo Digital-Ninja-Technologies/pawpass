@@ -309,6 +309,64 @@ class SupabasePartnerRepository implements PartnerRepository {
   }
 
   @override
+  Future<PartnerCalendar> calendar(
+    String partnerId,
+    DateTime from,
+    DateTime to,
+  ) async {
+    try {
+      final r = await _json('partner_calendar', {
+        'p_from': from.toUtc().toIso8601String(),
+        'p_to': to.toUtc().toIso8601String(),
+        'p_partner': partnerId,
+      });
+      return PartnerCalendar(
+        visits: [
+          for (final v in _list(r['visits']))
+            VisitItem(
+              bookingId: v['booking_id'] as String,
+              startsAt: _date(v['starts_at']) ?? DateTime.now(),
+              service: (v['service'] as String?) ?? '',
+              petName: (v['pet_name'] as String?) ?? '',
+              petId: (v['pet_id'] as String?) ?? '',
+              breed: _str(v['breed']),
+              ownerName: (v['owner_name'] as String?) ?? 'Owner',
+              status: (v['status'] as String?) ?? '',
+              passportShared: v['passport_shared'] == true,
+            ),
+        ],
+        open: [
+          for (final s in _list(r['open']))
+            OpenSlot(
+              slotId: s['slot_id'] as String,
+              startsAt: _date(s['starts_at']) ?? DateTime.now(),
+              endsAt: _date(s['ends_at']) ?? DateTime.now(),
+            ),
+        ],
+      );
+    } catch (e) {
+      throw _failure(e, 'We could not load your calendar. Pull down to try again.');
+    }
+  }
+
+  @override
+  Future<int> blockTimes(String partnerId, DateTime from, DateTime to) async {
+    try {
+      final n = await _client.rpc(
+        'partner_block_slots',
+        params: {
+          'p_from': from.toUtc().toIso8601String(),
+          'p_to': to.toUtc().toIso8601String(),
+          'p_partner': partnerId,
+        },
+      );
+      return n is num ? n.toInt() : 0;
+    } catch (e) {
+      throw _failure(e, 'We could not block that time. Please try again.');
+    }
+  }
+
+  @override
   Future<Earnings> earnings(String partnerId) async {
     try {
       return parseEarnings(

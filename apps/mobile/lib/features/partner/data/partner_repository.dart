@@ -42,6 +42,18 @@ abstract class PartnerRepository {
   Future<void> submit(String partnerId);
 
   Future<PartnerDashboard> dashboard(String partnerId);
+
+  /// Visits and free times from [from] up to (not including) [to]. A vet or service provider only.
+  Future<PartnerCalendar> calendar(
+    String partnerId,
+    DateTime from,
+    DateTime to,
+  );
+
+  /// Closes the free times in a range so nobody can book them. Times that already have a booking stay.
+  /// Returns how many free times were closed.
+  Future<int> blockTimes(String partnerId, DateTime from, DateTime to);
+
   Future<Earnings> earnings(String partnerId);
 
   /// Lists one pet or a litter. Each pet's photo goes into its own folder.

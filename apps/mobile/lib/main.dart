@@ -5,6 +5,7 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 import 'app.dart';
 import 'core/analytics.dart';
 import 'core/offline_cache.dart';
+import 'features/account/data/supabase_account.dart';
 import 'features/adopt/data/supabase_adopt.dart';
 import 'features/booking/data/supabase_bookings.dart';
 import 'features/community/data/supabase_community.dart';
@@ -48,6 +49,7 @@ Future<void> main() async {
           community: SupabaseCommunityRepository(client),
           adopt: SupabaseAdoptRepository(client),
           partner: SupabasePartnerRepository(client),
+          account: SupabaseAccountRepository(client),
           cache: cache,
           analytics: SupabaseAnalytics(client),
         ),
@@ -78,6 +80,7 @@ Future<void> main() async {
           community: base.community,
           adopt: base.adopt,
           partner: base.partner,
+          account: base.account,
           demoHint: 'Demo mode: nothing is sent. Use the code 123456.',
         ),
       ),

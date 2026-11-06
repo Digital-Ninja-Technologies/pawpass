@@ -2,6 +2,8 @@ import 'dart:async';
 
 import '../../../core/analytics.dart';
 import '../../../core/offline_cache.dart';
+import '../../account/data/in_memory_account.dart';
+import '../../account/domain/models.dart';
 import '../../adopt/data/in_memory_adopt.dart';
 import '../../booking/data/in_memory_bookings.dart';
 import '../../community/data/in_memory_community.dart';
@@ -208,6 +210,31 @@ AppServices inMemoryServices({
   final profiles = InMemoryProfileRepository();
   final bookings = InMemoryBookingsRepository(now: now);
   final pets = InMemoryPetRepository(profiles: profiles, now: now);
+  final health = InMemoryHealthRepository(now: now);
+  String? petNameFor(String id) {
+    for (final p in pets.pets) {
+      if (p.id == id) {
+        return p.name;
+      }
+    }
+    return null;
+  }
+
+  final account = InMemoryAccountRepository(
+    now: now,
+    petName: petNameFor,
+    sharesSource: () => [
+      for (final s in health.shares)
+        if (!s.revoked)
+          ActiveShare(
+            id: s.link.id,
+            petId: s.petId,
+            petName: petNameFor(s.petId) ?? 'Your pet',
+            scopes: s.link.scopes,
+            expiresAt: s.link.expiresAt,
+          ),
+    ],
+  );
   final adopt = InMemoryAdoptRepository(
     now: now,
     onPassport: (name, species, breed) {
@@ -233,13 +260,16 @@ AppServices inMemoryServices({
     pets: pets,
     photos: NoPhotoPicker(),
     emailApp: NoEmailApp(),
-    health: InMemoryHealthRepository(now: now),
+    health: health,
     notifications: InMemoryNotificationsRepository(),
     vets: InMemoryVetsRepository(),
     location: FakeLocationService(),
     links: FakeLinkLauncher(),
     bookings: bookings,
-    payments: InMemoryPaymentsRepository(bookings, others: [adopt.markPaid]),
+    payments: InMemoryPaymentsRepository(
+      bookings,
+      others: [adopt.markPaid, account.markPaid],
+    ),
     community: InMemoryCommunityRepository(now: now),
     adopt: adopt,
     partner: InMemoryPartnerRepository(
@@ -247,6 +277,7 @@ AppServices inMemoryServices({
       onConfirmHandover: adopt.sellerConfirmHandover,
       onCancelOrder: adopt.sellerCancel,
     ),
+    account: account,
     cache: cache,
     analytics: analytics,
     now: now ?? DateTime.now,

@@ -2,6 +2,10 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
+import 'features/account/ui/help_article_screen.dart';
+import 'features/account/ui/help_articles_screen.dart';
+import 'features/account/ui/privacy_screen.dart';
+import 'features/account/ui/qr_tag_order_screen.dart';
 import 'features/adopt/ui/adopt_screen.dart';
 import 'features/adopt/ui/apply_screen.dart';
 import 'features/adopt/ui/checkout_screen.dart';
@@ -171,6 +175,17 @@ GoRouter buildRouter({
       GoRoute(path: '/me/edit', builder: (_, _) => const EditProfileScreen()),
       GoRoute(path: '/orders', builder: (_, _) => const OrdersListScreen()),
       GoRoute(path: '/help', builder: (_, _) => const HelpScreen()),
+      GoRoute(
+        path: '/help/articles',
+        builder: (_, _) => const HelpArticlesScreen(),
+      ),
+      GoRoute(
+        path: '/help/article/:id',
+        builder: (_, state) =>
+            HelpArticleScreen(articleId: state.pathParameters['id']!),
+      ),
+      GoRoute(path: '/qr-tags', builder: (_, _) => const QrTagOrderScreen()),
+      GoRoute(path: '/privacy', builder: (_, _) => const PrivacyScreen()),
       GoRoute(
         path: '/soon/:title',
         builder: (_, state) =>

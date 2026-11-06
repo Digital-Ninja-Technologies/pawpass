@@ -617,46 +617,114 @@ class _ApplicationCard extends StatelessWidget {
   }
 }
 
-/// The fourth tab for shelters: every application.
-class ApplicationsTab extends StatelessWidget {
+/// The fourth tab for shelters: every application, with tabs and a search (design/screens/ShelterApplications).
+class ApplicationsTab extends StatefulWidget {
   const ApplicationsTab({super.key});
+
+  @override
+  State<ApplicationsTab> createState() => _ApplicationsTabState();
+}
+
+class _ApplicationsTabState extends State<ApplicationsTab> {
+  var _filter = ApplicationFilter.all;
+  final _search = TextEditingController();
+
+  @override
+  void dispose() {
+    _search.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
     final p = AppScope.of(context).partner;
     return ListenableBuilder(
-      listenable: p,
-      builder: (context, _) => SafeArea(
-        child: RefreshIndicator(
-          onRefresh: p.refresh,
-          child: ListView(
-            physics: const AlwaysScrollableScrollPhysics(),
-            padding: const EdgeInsets.fromLTRB(
-              PawSpace.screenSide,
-              16,
-              PawSpace.screenSide,
-              24,
-            ),
-            children: [
-              Semantics(
-                header: true,
-                child: Text('Applications', style: PawText.title28),
+      listenable: Listenable.merge([p, _search]),
+      builder: (context, _) {
+        final d = p.dashboard;
+        final all = d?.applications ?? const <ShelterApplication>[];
+        final shown = filterApplications(all, _filter, query: _search.text);
+        return SafeArea(
+          child: RefreshIndicator(
+            onRefresh: p.refresh,
+            child: ListView(
+              physics: const AlwaysScrollableScrollPhysics(),
+              padding: const EdgeInsets.fromLTRB(
+                PawSpace.screenSide,
+                16,
+                PawSpace.screenSide,
+                24,
               ),
-              const SizedBox(height: 12),
-              if (p.dashboard == null)
-                const Padding(
-                  padding: EdgeInsets.all(24),
-                  child: Center(child: CircularProgressIndicator()),
-                )
-              else
-                ApplicationsList(
-                  applications: p.dashboard!.applications,
-                  controller: p,
+              children: [
+                Semantics(
+                  header: true,
+                  child: Text('Applications', style: PawText.title28),
                 ),
-            ],
+                const SizedBox(height: 12),
+                if (d == null && p.dashboardError != null)
+                  SizedBox(
+                    height: 360,
+                    child: LoadError(
+                      message: p.dashboardError!,
+                      onRetry: p.loadDashboard,
+                    ),
+                  )
+                else if (d == null)
+                  const Padding(
+                    padding: EdgeInsets.all(24),
+                    child: Center(child: CircularProgressIndicator()),
+                  )
+                else if (all.isEmpty)
+                  SizedBox(
+                    height: 380,
+                    child: PawEmptyState(
+                      icon: PawIconData.passport,
+                      tone: PawStateTone.teal,
+                      title: 'No applications yet',
+                      message:
+                          'When someone applies to adopt, you will see them here. Sharing a pet to the community helps.',
+                      actionLabel: 'See your pets',
+                      onAction: () =>
+                          StatefulNavigationShell.of(context).goBranch(1),
+                    ),
+                  )
+                else ...[
+                  SizedBox(
+                    height: 44,
+                    child: ListView(
+                      scrollDirection: Axis.horizontal,
+                      children: [
+                        for (final f in ApplicationFilter.values)
+                          Padding(
+                            padding: const EdgeInsets.only(right: 8),
+                            child: PawChip(
+                              label:
+                                  '${f.label} · ${applicationCount(all, f)}',
+                              selected: _filter == f,
+                              onTap: () => setState(() => _filter = f),
+                            ),
+                          ),
+                      ],
+                    ),
+                  ),
+                  const SizedBox(height: 12),
+                  PawTextField(
+                    label: 'Search applications',
+                    controller: _search,
+                    hint: 'Search by name or pet',
+                    textInputAction: TextInputAction.search,
+                  ),
+                  const SizedBox(height: 12),
+                  if (shown.isEmpty)
+                    const EmptyNote('No applications match that.')
+                  else
+                    ApplicationsList(applications: shown, controller: p),
+                ],
+              ],
+            ),
           ),
-        ),
-      ),
+        );
+      },
     );
   }
 }
@@ -754,43 +822,485 @@ class ListingsTab extends StatelessWidget {
   }
 }
 
-/// Calendar for vets and service providers (the design lists it but does not draw it).
-class CalendarTab extends StatelessWidget {
+/// Calendar for vets and service providers (design/screens/PartnerCalendar.dc.html): a week strip, the day's visits
+/// and free times, and a way to close free times so nobody can book them.
+class CalendarTab extends StatefulWidget {
   const CalendarTab({super.key});
 
   @override
-  Widget build(BuildContext context) => SafeArea(
-    child: Padding(
-      padding: const EdgeInsets.all(PawSpace.screenSide),
+  State<CalendarTab> createState() => _CalendarTabState();
+}
+
+class _CalendarTabState extends State<CalendarTab> {
+  var _started = false;
+
+  Future<void> _block(
+    BuildContext context, {
+    required String title,
+    required String body,
+    required DateTime from,
+    required DateTime to,
+  }) async {
+    final p = AppScope.of(context).partner;
+    final messenger = ScaffoldMessenger.of(context);
+    final ok = await showDialog<bool>(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        title: Text(title, style: PawText.heading22),
+        content: Text(body, style: PawText.body14),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(ctx, false),
+            child: const Text('Keep open'),
+          ),
+          TextButton(
+            onPressed: () => Navigator.pop(ctx, true),
+            child: const Text('Block'),
+          ),
+        ],
+      ),
+    );
+    if (ok != true) {
+      return;
+    }
+    final n = await p.blockTimes(from, to);
+    messenger
+      ..hideCurrentSnackBar()
+      ..showSnackBar(
+        SnackBar(
+          content: Text(
+            n == null
+                ? (p.blockError ?? 'We could not block that. Please try again.')
+                : n == 0
+                ? 'Nothing to block. Booked times stay as they are.'
+                : n == 1
+                ? 'Blocked. Nobody can book that time now.'
+                : 'Blocked $n times. Nobody can book them now.',
+          ),
+        ),
+      );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final p = AppScope.of(context).partner;
+    if (!_started) {
+      _started = true;
+      WidgetsBinding.instance.addPostFrameCallback((_) => p.loadCalendar());
+    }
+    return ListenableBuilder(
+      listenable: p,
+      builder: (context, _) {
+        final week = p.calendarWeek ?? lagosWeekStart(p.now);
+        final day = p.calendarDay ?? lagosDayStart(p.now);
+        final cal = p.calendar;
+        final entries = cal == null
+            ? const <CalendarEntry>[]
+            : entriesForDay(cal, day);
+        final booked = entries.where((e) => e.visit != null).length;
+        final open = entries.where((e) => e.slot != null).length;
+        final dayEnd = day.add(const Duration(days: 1));
+        final restFrom = p.now.isAfter(day) ? p.now : day;
+        return Column(
+          children: [
+            _CalendarHeader(
+              week: week,
+              busy: p.loadingCalendar,
+              onPrevious: () => p.shiftCalendarWeek(-1),
+              onNext: () => p.shiftCalendarWeek(1),
+            ),
+            Expanded(
+              child: RefreshIndicator(
+                onRefresh: () async {
+                  p.loadingCalendar = false;
+                  await p.loadCalendar();
+                },
+                child: ListView(
+                  physics: const AlwaysScrollableScrollPhysics(),
+                  padding: const EdgeInsets.fromLTRB(
+                    PawSpace.screenSide,
+                    14,
+                    PawSpace.screenSide,
+                    24,
+                  ),
+                  children: [
+                    Row(
+                      children: [
+                        for (final d in weekDays(week)) ...[
+                          Expanded(
+                            child: _DayButton(
+                              day: d,
+                              selected: d == day,
+                              dots: cal == null ? 0 : visitsOn(cal, d),
+                              onTap: () => p.selectCalendarDay(d),
+                            ),
+                          ),
+                          if (d != weekDays(week).last)
+                            const SizedBox(width: 6),
+                        ],
+                      ],
+                    ),
+                    const SizedBox(height: 14),
+                    if (cal == null && p.calendarError != null)
+                      SizedBox(
+                        height: 320,
+                        child: PawErrorState(
+                          title: 'We could not load your calendar',
+                          message: p.calendarError!,
+                          onAction: () {
+                            p.loadingCalendar = false;
+                            p.loadCalendar();
+                          },
+                        ),
+                      )
+                    else if (cal == null)
+                      const Padding(
+                        padding: EdgeInsets.all(24),
+                        child: Center(child: CircularProgressIndicator()),
+                      )
+                    else ...[
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Semantics(
+                            header: true,
+                            child: Text(
+                              dayHeading(day),
+                              style: PawText.body15Strong,
+                            ),
+                          ),
+                          Text(
+                            '$booked booked · $open open',
+                            style: PawText.meta13.copyWith(
+                              color: PawColors.muted,
+                            ),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: 10),
+                      if (entries.isEmpty)
+                        const EmptyNote('Nothing booked and no open times.')
+                      else
+                        for (final e in entries)
+                          Padding(
+                            padding: const EdgeInsets.only(bottom: 10),
+                            child: e.visit != null
+                                ? _VisitTile(v: e.visit!)
+                                : _OpenTile(
+                                    slot: e.slot!,
+                                    onBlock: () => _block(
+                                      context,
+                                      title: 'Block this time?',
+                                      body:
+                                          'Nobody will be able to book ${visitTime(e.slot!.startsAt)}${visitMeridiem(e.slot!.startsAt)} on ${dayHeading(day)}.',
+                                      from: e.slot!.startsAt,
+                                      to: e.slot!.startsAt.add(
+                                        const Duration(minutes: 1),
+                                      ),
+                                    ),
+                                  ),
+                          ),
+                      if (p.blockError != null)
+                        Padding(
+                          padding: const EdgeInsets.only(bottom: 8),
+                          child: Semantics(
+                            liveRegion: true,
+                            child: Text(
+                              p.blockError!,
+                              style: PawText.body14.copyWith(
+                                color: PawColors.danger,
+                              ),
+                            ),
+                          ),
+                        ),
+                      const SizedBox(height: 4),
+                      PawButton(
+                        label: 'Block the rest of this day',
+                        variant: PawButtonVariant.secondary,
+                        height: 48,
+                        loading: p.busy,
+                        onPressed: open == 0
+                            ? null
+                            : () => _block(
+                                context,
+                                title: 'Block the rest of the day?',
+                                body:
+                                    '$open open ${open == 1 ? 'time' : 'times'} on ${dayHeading(day)} will close. Visits already booked stay.',
+                                from: restFrom,
+                                to: dayEnd,
+                              ),
+                      ),
+                    ],
+                  ],
+                ),
+              ),
+            ),
+          ],
+        );
+      },
+    );
+  }
+}
+
+class _CalendarHeader extends StatelessWidget {
+  const _CalendarHeader({
+    required this.week,
+    required this.busy,
+    required this.onPrevious,
+    required this.onNext,
+  });
+  final DateTime week;
+  final bool busy;
+  final VoidCallback onPrevious;
+  final VoidCallback onNext;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: double.infinity,
+      color: PawColors.ink,
+      padding: EdgeInsets.fromLTRB(
+        PawSpace.screenSide,
+        MediaQuery.paddingOf(context).top + 16,
+        PawSpace.screenSide,
+        14,
+      ),
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          Text(
+            'PARTNER MODE',
+            style: PawText.overline12.copyWith(color: const Color(0xFFCFE6E1)),
+          ),
+          const SizedBox(height: 2),
           Semantics(
             header: true,
-            child: Text('Calendar', style: PawText.title28),
+            child: Text(
+              'Calendar',
+              style: PawText.heading22.copyWith(color: Colors.white),
+            ),
           ),
-          const Spacer(),
-          Text(
-            'The full calendar is coming soon',
-            textAlign: TextAlign.center,
-            style: PawText.heading22,
+          const SizedBox(height: 10),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              _WeekButton(
+                label: 'Previous week',
+                icon: PawIconData.chevronLeft,
+                onTap: busy ? null : onPrevious,
+              ),
+              Text(
+                weekRangeLabel(week),
+                style: PawText.body14Strong.copyWith(color: Colors.white),
+              ),
+              _WeekButton(
+                label: 'Next week',
+                icon: PawIconData.chevronRight,
+                onTap: busy ? null : onNext,
+              ),
+            ],
           ),
-          const SizedBox(height: 8),
-          Text(
-            "Today's visits are on the Today tab.",
-            textAlign: TextAlign.center,
-            style: PawText.body15.copyWith(color: PawColors.muted),
-          ),
-          const SizedBox(height: 16),
-          PawButton(
-            label: 'See today',
-            expand: false,
-            variant: PawButtonVariant.secondary,
-            onPressed: () => StatefulNavigationShell.of(context).goBranch(0),
-          ),
-          const Spacer(),
         ],
+      ),
+    );
+  }
+}
+
+class _WeekButton extends StatelessWidget {
+  const _WeekButton({
+    required this.label,
+    required this.icon,
+    required this.onTap,
+  });
+  final String label;
+  final PawIconData icon;
+  final VoidCallback? onTap;
+
+  @override
+  Widget build(BuildContext context) => Semantics(
+    button: true,
+    label: label,
+    enabled: onTap != null,
+    excludeSemantics: true,
+    onTap: onTap,
+    child: GestureDetector(
+      onTap: onTap,
+      behavior: HitTestBehavior.opaque,
+      child: Container(
+        width: PawSize.touch,
+        height: PawSize.touch,
+        decoration: BoxDecoration(
+          shape: BoxShape.circle,
+          border: Border.all(color: Colors.white.withValues(alpha: 0.3)),
+        ),
+        alignment: Alignment.center,
+        child: PawIcon(
+          icon,
+          size: 20,
+          color: onTap == null ? Colors.white38 : Colors.white,
+        ),
       ),
     ),
   );
+}
+
+class _DayButton extends StatelessWidget {
+  const _DayButton({
+    required this.day,
+    required this.selected,
+    required this.dots,
+    required this.onTap,
+  });
+  final DateTime day;
+  final bool selected;
+  final int dots;
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    final fg = selected ? Colors.white : PawColors.ink;
+    return Semantics(
+      button: true,
+      selected: selected,
+      label:
+          '${dayHeading(day)}, ${dots == 0 ? 'no visits' : dots == 1 ? '1 visit' : '$dots visits'}',
+      excludeSemantics: true,
+      onTap: onTap,
+      child: GestureDetector(
+        onTap: onTap,
+        behavior: HitTestBehavior.opaque,
+        child: Container(
+          constraints: const BoxConstraints(minHeight: 64),
+          decoration: BoxDecoration(
+            color: selected ? PawColors.primary : PawColors.surface,
+            borderRadius: BorderRadius.circular(16),
+            border: selected ? null : Border.all(color: PawColors.border),
+          ),
+          padding: const EdgeInsets.symmetric(vertical: 6),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text(
+                dayAbbr(day),
+                style: PawText.meta12.copyWith(
+                  color: fg.withValues(alpha: selected ? 0.9 : 0.7),
+                  fontWeight: FontWeight.w700,
+                  fontSize: 11,
+                ),
+              ),
+              Text('${dayNumber(day)}', style: PawText.heading22.copyWith(
+                fontSize: 18,
+                color: fg,
+              )),
+              SizedBox(
+                height: 6,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    for (var i = 0; i < dots.clamp(0, 3); i++)
+                      Container(
+                        width: 5,
+                        height: 5,
+                        margin: const EdgeInsets.symmetric(horizontal: 1.5),
+                        decoration: BoxDecoration(
+                          color: selected ? Colors.white : PawColors.dot,
+                          shape: BoxShape.circle,
+                        ),
+                      ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class _VisitTile extends StatelessWidget {
+  const _VisitTile({required this.v});
+  final VisitItem v;
+
+  @override
+  Widget build(BuildContext context) {
+    return PawCard(
+      radius: PawRadius.cardSmall,
+      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
+      semanticLabel:
+          '${visitTime(v.startsAt)}${visitMeridiem(v.startsAt)}, ${v.service} for ${v.petName}, ${v.ownerName}',
+      child: Row(
+        children: [
+          SizedBox(
+            width: 52,
+            child: Text(
+              visitTime(v.startsAt),
+              style: PawText.body14Strong.copyWith(color: PawColors.muted),
+            ),
+          ),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text('${v.service} · ${v.petName}', style: PawText.body14Strong),
+                Text(
+                  [v.ownerName, if (v.breed != null) v.breed!].join(' · '),
+                  style: PawText.meta12.copyWith(color: PawColors.muted),
+                ),
+              ],
+            ),
+          ),
+          StatusTag(
+            v.done
+                ? 'Done'
+                : v.status == 'confirmed'
+                ? 'Confirmed'
+                : v.status,
+            highlight: v.status == 'confirmed',
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _OpenTile extends StatelessWidget {
+  const _OpenTile({required this.slot, required this.onBlock});
+  final OpenSlot slot;
+  final VoidCallback onBlock;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 6),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(PawRadius.cardSmall),
+        border: Border.all(color: PawColors.outline, width: 1.5),
+      ),
+      child: Row(
+        children: [
+          SizedBox(
+            width: 52,
+            child: Text(
+              visitTime(slot.startsAt),
+              style: PawText.body14Strong.copyWith(color: PawColors.muted),
+            ),
+          ),
+          Expanded(
+            child: Text(
+              'Open for booking',
+              style: PawText.body14Strong.copyWith(color: PawColors.muted),
+            ),
+          ),
+          PawButton(
+            label: 'Block',
+            variant: PawButtonVariant.secondary,
+            expand: false,
+            height: 44,
+            onPressed: onBlock,
+          ),
+        ],
+      ),
+    );
+  }
 }

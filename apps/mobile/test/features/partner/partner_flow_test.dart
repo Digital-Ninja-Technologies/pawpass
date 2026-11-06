@@ -215,14 +215,16 @@ void main() {
       expect(find.text('Enter your first name'), findsOneWidget);
     });
 
-    testWidgets('screens that are not designed yet say so', (tester) async {
+    testWidgets('QR tags and Privacy & sharing open their screens', (
+      tester,
+    ) async {
       await _pump(tester, _Rig());
       await _openMe(tester);
       await _tap(tester, 'QR tags');
-      expect(find.text('This part is coming soon'), findsOneWidget);
+      expect(find.text('Order a QR tag'), findsOneWidget);
       await _back(tester);
       await _tap(tester, 'Privacy & sharing');
-      expect(find.text('This part is coming soon'), findsOneWidget);
+      expect(find.text('SHARED RIGHT NOW'), findsOneWidget);
     });
 
     testWidgets(
@@ -915,7 +917,7 @@ void main() {
       );
       await tester.pumpAndSettle();
       expect(find.text('Applications'), findsWidgets);
-      expect(find.textContaining('No applications to review'), findsOneWidget);
+      expect(find.text('No applications yet'), findsOneWidget);
     });
 
     testWidgets('adding a pet is free: no price field', (tester) async {
@@ -934,6 +936,121 @@ void main() {
       await _tap(tester, 'Publish for adoption');
       expect(find.text('Kofi is live.'), findsOneWidget);
       expect(rig.partner.listings.single.sale, isFalse);
+    });
+  });
+
+  group('Calendar and applications', () {
+    testWidgets('a vet sees the day, and blocking a free time closes it', (
+      tester,
+    ) async {
+      final rig = _Rig();
+      _approve(rig, PartnerType.vet, 'Paws & Claws Vet Clinic');
+      rig.partner
+        ..calendarVisits = [
+          VisitItem(
+            bookingId: 'b1',
+            startsAt: DateTime.utc(2026, 11, 5, 15, 30),
+            service: 'Rabies vaccine',
+            petName: 'Bingo',
+            petId: 'p1',
+            ownerName: 'Tolu',
+            status: 'confirmed',
+            passportShared: true,
+          ),
+        ]
+        ..openSlots = [
+          OpenSlot(
+            slotId: 's1',
+            startsAt: DateTime.utc(2026, 11, 5, 16, 30),
+            endsAt: DateTime.utc(2026, 11, 5, 17, 30),
+          ),
+        ];
+      await _pump(tester, rig);
+      await _tapLabel(
+        tester,
+        'Partner mode. Paws & Claws Vet Clinic. Open your dashboard',
+      );
+      await tester.tap(
+        find.descendant(
+          of: find.byType(PartnerTabBar),
+          matching: find.text('Calendar'),
+        ),
+      );
+      await tester.pumpAndSettle();
+      expect(find.text('2 to 8 Nov 2026'), findsOneWidget);
+      expect(find.text('Thursday 5 Nov'), findsOneWidget);
+      expect(find.text('1 booked · 1 open'), findsOneWidget);
+      expect(find.text('Open for booking'), findsOneWidget);
+
+      await tester.tap(find.widgetWithText(PawButton, 'Block').first);
+      await tester.pumpAndSettle();
+      expect(find.text('Block this time?'), findsOneWidget);
+      await tester.tap(find.widgetWithText(TextButton, 'Block'));
+      await tester.pumpAndSettle();
+      expect(rig.partner.openSlots, isEmpty);
+      expect(find.text('Open for booking'), findsNothing);
+      expect(find.text('Rabies vaccine · Bingo'), findsOneWidget);
+    });
+
+    testWidgets('moving to the next week loads that week', (tester) async {
+      final rig = _Rig();
+      _approve(rig, PartnerType.service, 'Glam Paws Grooming');
+      await _pump(tester, rig);
+      await _tapLabel(
+        tester,
+        'Partner mode. Glam Paws Grooming. Open your dashboard',
+      );
+      await tester.tap(
+        find.descendant(
+          of: find.byType(PartnerTabBar),
+          matching: find.text('Calendar'),
+        ),
+      );
+      await tester.pumpAndSettle();
+      await _tapLabel(tester, 'Next week');
+      expect(find.text('9 to 15 Nov 2026'), findsOneWidget);
+      expect(find.text('Nothing booked and no open times.'), findsOneWidget);
+    });
+
+    testWidgets('a shelter filters applications by tab and searches', (
+      tester,
+    ) async {
+      final rig = _Rig();
+      _approve(rig, PartnerType.shelter, 'Lagos Paws Rescue');
+      ShelterApplication app(String id, String who, String pet, ApplicationState s) =>
+          ShelterApplication(
+            id: id,
+            listingId: 'l$id',
+            petName: pet,
+            applicantName: who,
+            state: s,
+            createdAt: _today,
+          );
+      rig.partner.applications = [
+        app('1', 'Tolu', 'Ada', ApplicationState.submitted),
+        app('2', 'Seun', 'Kofi', ApplicationState.homeVisit),
+      ];
+      await _pump(tester, rig);
+      await _tapLabel(
+        tester,
+        'Partner mode. Lagos Paws Rescue. Open your dashboard',
+      );
+      await tester.tap(
+        find.descendant(
+          of: find.byType(PartnerTabBar),
+          matching: find.text('Applications'),
+        ),
+      );
+      await tester.pumpAndSettle();
+      expect(find.text('All · 2'), findsOneWidget);
+      expect(find.text('Home visit · 1'), findsOneWidget);
+      await _tap(tester, 'Home visit · 1');
+      expect(find.textContaining('Seun'), findsWidgets);
+      expect(find.textContaining('Tolu'), findsNothing);
+      await _tap(tester, 'All · 2');
+      await _enterAt(tester, 0, 'ada');
+      expect(find.textContaining('Tolu'), findsWidgets);
+      expect(find.textContaining('Seun'), findsNothing);
     });
   });
 

@@ -1,5 +1,7 @@
 import '../../../core/analytics.dart';
 import '../../../core/offline_cache.dart';
+import '../../account/data/account_repository.dart';
+import '../../account/data/in_memory_account.dart';
 import '../../adopt/data/adopt_repository.dart';
 import '../../booking/data/booking_repositories.dart';
 import '../../community/data/community_repository.dart';
@@ -70,7 +72,7 @@ abstract class EmailAppLauncher {
 
 /// Everything the onboarding flow needs from the outside world.
 class AppServices {
-  const AppServices({
+  AppServices({
     required this.auth,
     required this.profiles,
     required this.pets,
@@ -86,12 +88,13 @@ class AppServices {
     required this.community,
     required this.adopt,
     required this.partner,
+    AccountRepository? account,
     this.cache,
     this.analytics = const NoAnalytics(),
     this.shareBaseUrl = kShareBaseUrl,
     this.now = DateTime.now,
     this.demoHint,
-  });
+  }) : account = account ?? InMemoryAccountRepository();
 
   final AuthRepository auth;
   final ProfileRepository profiles;
@@ -108,6 +111,9 @@ class AppServices {
   final CommunityRepository community;
   final AdoptRepository adopt;
   final PartnerRepository partner;
+
+  /// QR tag orders, active shares and blocked accounts. Tests that do not need it get a pretend one.
+  final AccountRepository account;
 
   /// Saved copies of the profile, pets, passport and reminders, for reading with no signal.
   final OfflineCache? cache;

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 import '../../../core/analytics.dart';
 import '../../../ui/ui.dart';
@@ -333,7 +334,35 @@ class _HelpScreenState extends State<HelpScreen> {
                   textInputAction: TextInputAction.search,
                 ),
                 const SizedBox(height: 18),
-                const SectionLabel('Popular topics'),
+                Row(
+                  children: [
+                    const Expanded(child: SectionLabel('Popular topics')),
+                    Semantics(
+                      button: true,
+                      label: 'Browse all help articles',
+                      excludeSemantics: true,
+                      onTap: () => context.push('/help/articles'),
+                      child: GestureDetector(
+                        onTap: () => context.push('/help/articles'),
+                        behavior: HitTestBehavior.opaque,
+                        child: ConstrainedBox(
+                          constraints: const BoxConstraints(
+                            minHeight: PawSize.touch,
+                          ),
+                          child: Align(
+                            alignment: Alignment.centerRight,
+                            child: Text(
+                              'Browse all',
+                              style: PawText.body14Strong.copyWith(
+                                color: PawColors.primaryText,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
                 const SizedBox(height: 8),
                 if (articles.isEmpty)
                   const EmptyNote(

@@ -31,6 +31,10 @@ class InMemoryPartnerRepository implements PartnerRepository {
 
   // Fixtures a test or the demo can set.
   List<VisitItem> visits = [];
+
+  /// Visits on other days, and free times, for the calendar.
+  List<VisitItem> calendarVisits = [];
+  List<OpenSlot> openSlots = [];
   List<PartnerListing> listings = [];
   List<Enquiry> enquiries = [];
   List<ShelterApplication> applications = [];
@@ -253,6 +257,41 @@ class InMemoryPartnerRepository implements PartnerRepository {
       enquiries: List.of(enquiries),
       applications: List.of(applications),
     );
+  }
+
+  @override
+  Future<PartnerCalendar> calendar(
+    String partnerId,
+    DateTime from,
+    DateTime to,
+  ) async {
+    if (_status != PartnerStatus.approved) {
+      throw const AppFailure('Your partner account is not approved yet');
+    }
+    bool inRange(DateTime d) => !d.isBefore(from) && d.isBefore(to);
+    return PartnerCalendar(
+      visits: [
+        for (final v in [...visits, ...calendarVisits])
+          if (inRange(v.startsAt)) v,
+      ]..sort((a, b) => a.startsAt.compareTo(b.startsAt)),
+      open: [
+        for (final s in openSlots)
+          if (inRange(s.startsAt)) s,
+      ]..sort((a, b) => a.startsAt.compareTo(b.startsAt)),
+    );
+  }
+
+  @override
+  Future<int> blockTimes(String partnerId, DateTime from, DateTime to) async {
+    if (_status != PartnerStatus.approved) {
+      throw const AppFailure('Your partner account is not approved yet');
+    }
+    final before = openSlots.length;
+    openSlots = [
+      for (final s in openSlots)
+        if (s.startsAt.isBefore(from) || !s.startsAt.isBefore(to)) s,
+    ];
+    return before - openSlots.length;
   }
 
   @override

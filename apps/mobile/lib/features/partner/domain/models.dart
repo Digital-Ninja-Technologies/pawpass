@@ -197,6 +197,25 @@ class VisitItem {
       status == 'completed' || status == 'completed_awaiting_owner';
 }
 
+/// A free time a partner has opened for booking.
+class OpenSlot {
+  const OpenSlot({
+    required this.slotId,
+    required this.startsAt,
+    required this.endsAt,
+  });
+  final String slotId;
+  final DateTime startsAt;
+  final DateTime endsAt;
+}
+
+/// Visits and free times over a stretch of days, for the partner calendar.
+class PartnerCalendar {
+  const PartnerCalendar({this.visits = const [], this.open = const []});
+  final List<VisitItem> visits;
+  final List<OpenSlot> open;
+}
+
 class PartnerListing {
   const PartnerListing({
     required this.listingId,

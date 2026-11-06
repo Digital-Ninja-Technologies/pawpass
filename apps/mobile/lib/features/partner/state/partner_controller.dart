@@ -280,6 +280,87 @@ class PartnerController extends ChangeNotifier {
     }
   }
 
+  // -------------------------------------------------------------- calendar
+
+  /// The Monday (as a Lagos day start) of the week on show, and the day picked within it.
+  DateTime? calendarWeek;
+  DateTime? calendarDay;
+  PartnerCalendar? calendar;
+  var loadingCalendar = false;
+  String? calendarError;
+
+  /// Shown on the calendar after a failed Block.
+  String? blockError;
+
+  /// Loads the week on show (this week to begin with).
+  Future<void> loadCalendar() async {
+    final id = application?.partnerId;
+    if (id == null || loadingCalendar) {
+      return;
+    }
+    final week = calendarWeek ??= lagosWeekStart(now);
+    calendarDay ??= lagosDayStart(now);
+    loadingCalendar = true;
+    calendarError = null;
+    _notify();
+    try {
+      calendar = await _services.partner.calendar(
+        id,
+        week,
+        week.add(const Duration(days: 7)),
+      );
+    } on AppFailure catch (e) {
+      calendarError = e.message;
+    } finally {
+      loadingCalendar = false;
+      _notify();
+    }
+  }
+
+  /// Moves to the next or previous week and picks its first day (or today, if today is in it).
+  Future<void> shiftCalendarWeek(int weeks) async {
+    final week = calendarWeek ?? lagosWeekStart(now);
+    final next = week.add(Duration(days: 7 * weeks));
+    calendarWeek = next;
+    final today = lagosDayStart(now);
+    calendarDay = weekDays(next).contains(today) ? today : next;
+    calendar = null;
+    blockError = null;
+    _notify();
+    await loadCalendar();
+  }
+
+  void selectCalendarDay(DateTime dayStart) {
+    calendarDay = dayStart;
+    blockError = null;
+    _notify();
+  }
+
+  /// Closes free times from [from] up to [to]. Returns how many were closed, or null if it failed.
+  Future<int?> blockTimes(DateTime from, DateTime to) async {
+    final id = application?.partnerId;
+    if (id == null || busy) {
+      return null;
+    }
+    blockError = null;
+    busy = true;
+    _notify();
+    int? closed;
+    try {
+      closed = await _services.partner.blockTimes(id, from, to);
+    } on AppFailure catch (e) {
+      blockError = e.message;
+    } finally {
+      busy = false;
+      _notify();
+    }
+    if (closed != null) {
+      loadingCalendar = false;
+      await loadCalendar();
+    }
+    return closed;
+  }
+
   /// Runs a change, then refreshes the dashboard. [actionError] says why it failed.
   Future<bool> _dash(Future<void> Function() work) async {
     actionError = null;
@@ -418,6 +499,10 @@ class PartnerController extends ChangeNotifier {
     dashboardError = null;
     earnings = null;
     earningsError = null;
+    calendar = null;
+    calendarError = null;
+    calendarWeek = null;
+    calendarDay = null;
     tickets = const [];
     ticketError = null;
     actionError = null;

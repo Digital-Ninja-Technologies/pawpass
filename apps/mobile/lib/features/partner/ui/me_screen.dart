@@ -143,7 +143,7 @@ class _MeScreenState extends State<MeScreen> {
                 ),
                 PawListRow(
                   title: 'QR tags',
-                  onTap: () => context.push('/soon/QR tags'),
+                  onTap: () => context.push('/qr-tags'),
                 ),
                 PawListRow(
                   title: 'Notifications & reminders',
@@ -151,7 +151,7 @@ class _MeScreenState extends State<MeScreen> {
                 ),
                 PawListRow(
                   title: 'Privacy & sharing',
-                  onTap: () => context.push('/soon/Privacy & sharing'),
+                  onTap: () => context.push('/privacy'),
                 ),
                 PawListRow(
                   title: 'Help & support',
