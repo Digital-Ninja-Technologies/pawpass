@@ -1733,3 +1733,33 @@ button {
     transition: none;
   }
 }
+
+/* legal pages */
+.legal {
+  max-width: 760px;
+  padding: 24px 24px 56px;
+  color: var(--ink2);
+  font-size: 16px;
+  line-height: 1.65;
+}
+.legal h2:not(.h2) {
+  font-family: var(--heading);
+  font-size: 22px;
+  color: var(--ink);
+  margin: 32px 0 8px;
+}
+.legal-meta {
+  color: var(--muted);
+  font-size: 14px;
+}
+.legal ul {
+  padding-left: 20px;
+}
+.legal li {
+  margin: 6px 0;
+}
+.legal a,
+.footer a {
+  color: var(--primary-text, var(--primary));
+  text-decoration: underline;
+}

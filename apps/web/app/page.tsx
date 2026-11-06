@@ -198,6 +198,9 @@ export default function Home() {
             )}{" "}
             product · Lagos, Nigeria
           </span>
+          <span>
+            <a href="/privacy">Privacy</a> · <a href="/terms">Terms</a>
+          </span>
         </footer>
       </div>
     </>

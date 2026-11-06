@@ -22,7 +22,7 @@ pnpm --filter @pawpass/web dev
 
 - Photos in `public/photos` are the placeholder stock photos from `design/assets`. Replace them with your own before launch.
 - Fonts are bundled (`app/fonts`), so nothing is fetched from Google.
-- Privacy, Terms and Contact pages do not exist yet, so the footer does not link to them.
+- `/privacy` and `/terms` are drafts (text in `lib/legal.ts`). Have a lawyer review them before launch. Set `NEXT_PUBLIC_CONTACT_EMAIL` to show a support email. There is no separate Contact page.
 - Copy content lives in `lib/content.ts`, and `lib/content.test.ts` checks it against the copy rules (no em dashes, no hyphenated "72-hour" style phrases).
 
 ## Onboarding preview
