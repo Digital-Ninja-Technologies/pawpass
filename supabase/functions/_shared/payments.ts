@@ -9,6 +9,7 @@ import {
   parseChargeSuccess,
   verifyWebhookSignature,
 } from "./paystack.ts";
+import { parseTransferEvent } from "./payouts.ts";
 
 export interface BookingRow {
   id: string;
@@ -55,6 +56,8 @@ export interface Db {
     error: string | null,
   ): Promise<void>;
   releaseDueBookings(): Promise<number>;
+  /** Paystack reported a payout transfer failed or was reversed: flag the payout item for staff. */
+  markTransferFailed?(transferCode: string, reason: string | null): Promise<void>;
 }
 
 export interface Ctx {
@@ -158,6 +161,18 @@ export async function handleWebhook(
 ): Promise<{ status: number; body: string }> {
   if (!(await verifyWebhookSignature(rawBody, signature, ctx.secret))) {
     return { status: 401, body: "bad signature" };
+  }
+  const transfer = parseTransferEvent(rawBody);
+  if (transfer) {
+    if (transfer.kind === "failed") {
+      try {
+        await ctx.db.markTransferFailed?.(transfer.transferCode, transfer.reason);
+      } catch (e) {
+        console.error("transfer failure not recorded", transfer.transferCode, e);
+        return { status: 500, body: "try again" };
+      }
+    }
+    return { status: 200, body: "ok" };
   }
   const charge = parseChargeSuccess(rawBody);
   if (!charge) return { status: 200, body: "ignored" };

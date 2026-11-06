@@ -3,6 +3,7 @@
 import { createClient, type SupabaseClient } from "jsr:@supabase/supabase-js@2";
 import { HttpError, type BookingRow, type Ctx, type Db, type PaystackApi } from "./payments.ts";
 import { safeEqual } from "./paystack.ts";
+import type { PayoutCtx, PayoutDb, PayoutItem, TransferApi } from "./payouts.ts";
 
 declare const Deno: { env: { get(name: string): string | undefined } };
 
@@ -156,6 +157,14 @@ function db(client: SupabaseClient): Db {
         }),
       );
     },
+    async markTransferFailed(transferCode, reason) {
+      must(
+        await client.rpc("mark_transfer_failed", {
+          p_transfer_code: transferCode,
+          p_reason: reason,
+        }),
+      );
+    },
     async releaseDueBookings() {
       const bookings = must(await client.rpc("release_due_bookings")) as number;
       const orders = must(await client.rpc("release_due_orders")) as number;
@@ -186,4 +195,69 @@ export function errorResponse(e: unknown): Response {
   if (e instanceof HttpError) return json({ error: e.message }, e.status);
   console.error(e);
   return json({ error: "Something went wrong. Please try again." }, 500);
+}
+
+// ---------------------------------------------------------------------------------------------------------------
+// Payouts
+// ---------------------------------------------------------------------------------------------------------------
+function transferApi(secret: string): TransferApi {
+  const post = async (path: string, body: Record<string, unknown>) => {
+    const res = await fetch(`https://api.paystack.co${path}`, {
+      method: "POST",
+      headers: { Authorization: `Bearer ${secret}`, "Content-Type": "application/json" },
+      body: JSON.stringify(body),
+    });
+    return await res
+      .json()
+      .catch(() => ({ status: false, message: `Paystack HTTP ${res.status}` }));
+  };
+  return {
+    createRecipient: (body) => post("/transferrecipient", body),
+    transfer: (body) => post("/transfer", body),
+  };
+}
+
+function payoutDb(client: SupabaseClient): PayoutDb {
+  const must = <T>(res: { data: T; error: { message: string } | null }): T => {
+    if (res.error) throw new Error(res.error.message);
+    return res.data;
+  };
+  return {
+    async schedule() {
+      return (must(await client.rpc("schedule_payout_run")) as string | null) ?? null;
+    },
+    async claim(limit) {
+      const rows = (must(await client.rpc("claim_payout_items", { p_limit: limit })) ?? []) as Record<
+        string,
+        unknown
+      >[];
+      return rows.map(
+        (r): PayoutItem => ({
+          itemId: r.item_id as string,
+          partnerId: r.partner_id as string,
+          amountKobo: Number(r.amount_kobo),
+          bankCode: r.bank_code as string,
+          accountNumber: r.account_number as string,
+          accountName: r.account_name as string,
+          recipientCode: (r.recipient_code as string | null) ?? null,
+          attempts: Number(r.attempts),
+        }),
+      );
+    },
+    async finish(itemId, ok, transferCode, error, recipientCode) {
+      must(
+        await client.rpc("finish_payout_item", {
+          p_item: itemId,
+          p_ok: ok,
+          p_transfer_code: transferCode,
+          p_error: error,
+          p_recipient_code: recipientCode,
+        }),
+      );
+    },
+  };
+}
+
+export function payoutContext(): PayoutCtx {
+  return { api: transferApi(env("PAYSTACK_SECRET_KEY")), db: payoutDb(serviceClient()) };
 }

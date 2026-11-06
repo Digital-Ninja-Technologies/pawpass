@@ -37,6 +37,12 @@ class FakeDb implements Db {
   refunds: { escrow_id: string; paystack_reference: string; refund_kobo: number }[] = [];
   finished: { escrowId: string; ok: boolean; ref: string | null; error: string | null }[] = [];
   released = 0;
+  failedTransfers: { code: string; reason: string | null }[] = [];
+  transferError: Error | null = null;
+  async markTransferFailed(code: string, reason: string | null) {
+    if (this.transferError) throw this.transferError;
+    this.failedTransfers.push({ code, reason });
+  }
 
   add(owner: string, row: BookingRow) {
     this.rows.set(row.reference, { owner, row });
@@ -278,6 +284,26 @@ describe("handleWebhook", () => {
     expect((await handleWebhook(ctx, body, null)).status).toBe(401);
     expect((await handleWebhook(ctx, body, sign(body + "x"))).status).toBe(401);
     expect(db.confirmed).toHaveLength(0);
+  });
+
+  it("a failed or reversed payout transfer is flagged; a successful one is just acknowledged", async () => {
+    const failed = JSON.stringify({
+      event: "transfer.failed",
+      data: { transfer_code: "TRF_1", reason: "Account closed" },
+    });
+    expect(await handleWebhook(ctx, failed, sign(failed))).toEqual({ status: 200, body: "ok" });
+    expect(db.failedTransfers).toEqual([{ code: "TRF_1", reason: "Account closed" }]);
+    const ok = JSON.stringify({ event: "transfer.success", data: { transfer_code: "TRF_2" } });
+    expect((await handleWebhook(ctx, ok, sign(ok))).status).toBe(200);
+    expect(db.failedTransfers).toHaveLength(1);
+  });
+
+  it("an unsigned transfer event changes nothing, and a database error is retried", async () => {
+    const failed = JSON.stringify({ event: "transfer.failed", data: { transfer_code: "TRF_1" } });
+    expect((await handleWebhook(ctx, failed, null)).status).toBe(401);
+    expect(db.failedTransfers).toHaveLength(0);
+    db.transferError = new Error("db down");
+    expect(await handleWebhook(ctx, failed, sign(failed))).toEqual({ status: 500, body: "try again" });
   });
 
   it("a forged body with a real signature for another body is rejected", async () => {
