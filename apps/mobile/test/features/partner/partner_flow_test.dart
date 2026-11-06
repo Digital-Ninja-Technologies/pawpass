@@ -225,6 +225,27 @@ void main() {
       expect(find.text('This part is coming soon'), findsOneWidget);
     });
 
+    testWidgets(
+      'if the partner status cannot be checked, it says so rather than offering to join',
+      (tester) async {
+        final rig = _Rig();
+        _approve(rig, PartnerType.vet, 'Paws & Claws Vet Clinic');
+        rig.partner.failApplication = const AppFailure(
+          'No connection. Check your internet and try again.',
+        );
+        await _pump(tester, rig);
+        await _openMe(tester);
+        expect(
+          find.text('We could not check your partner status'),
+          findsOneWidget,
+        );
+        expect(find.text('Become a partner'), findsNothing);
+        rig.partner.failApplication = null;
+        await _tap(tester, 'We could not check your partner status');
+        expect(find.text('Paws & Claws Vet Clinic'), findsOneWidget);
+      },
+    );
+
     testWidgets('payments & escrow is empty before any order', (tester) async {
       await _pump(tester, _Rig());
       await _openMe(tester);

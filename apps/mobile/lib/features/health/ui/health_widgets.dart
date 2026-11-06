@@ -404,3 +404,25 @@ class OfflineBanner extends StatelessWidget {
     );
   }
 }
+
+/// What to show in place of a list while the first load has not finished: a spinner, or the reason it failed with a
+/// way to try again. Without this an empty screen would claim "nothing here" when the truth is "we do not know yet".
+class FirstLoad extends StatelessWidget {
+  const FirstLoad({super.key, required this.error, required this.onRetry});
+  final String? error;
+  final VoidCallback onRetry;
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      height: 260,
+      child: error != null
+          ? LoadError(message: error!, onRetry: onRetry)
+          : Semantics(
+              label: 'Loading',
+              liveRegion: true,
+              child: const Center(child: CircularProgressIndicator()),
+            ),
+    );
+  }
+}

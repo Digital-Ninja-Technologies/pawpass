@@ -46,7 +46,9 @@ class _PassportScreenState extends State<PassportScreen> {
                 _TopBar(canShare: pet != null),
                 const SizedBox(height: 16),
                 OfflineBanner(onRetry: h.load),
-                if (pet == null)
+                if (!h.loaded)
+                  FirstLoad(error: h.error, onRetry: h.load)
+                else if (pet == null)
                   const InfoCard(
                     title: 'No pet yet',
                     body: 'Add a pet from Home to start their passport.',

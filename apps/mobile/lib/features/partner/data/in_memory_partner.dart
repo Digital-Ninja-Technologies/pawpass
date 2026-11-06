@@ -99,8 +99,15 @@ class InMemoryPartnerRepository implements PartnerRepository {
     ];
   }
 
+  /// Test hook: while set, reading the application fails.
+  AppFailure? failApplication;
+
   @override
   Future<PartnerApplication?> application() async {
+    final f = failApplication;
+    if (f != null) {
+      throw f;
+    }
     if (_id == null) {
       return null;
     }

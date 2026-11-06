@@ -30,7 +30,7 @@ class PawSegmented<T> extends StatelessWidget {
         borderRadius: BorderRadius.circular(22),
       ),
       child: Padding(
-        padding: const EdgeInsets.all(4),
+        padding: const EdgeInsets.all(2),
         child: Row(
           children: [
             for (final s in segments)
@@ -61,7 +61,7 @@ class _Segment extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final radius = BorderRadius.circular(18);
+    final radius = BorderRadius.circular(20);
     return Semantics(
       button: true,
       selected: selected,
@@ -76,7 +76,7 @@ class _Segment extends StatelessWidget {
           onTap: onTap,
           borderRadius: radius,
           child: SizedBox(
-            height: PawSize.chip,
+            height: PawSize.touch,
             child: Center(
               child: Text(
                 label,

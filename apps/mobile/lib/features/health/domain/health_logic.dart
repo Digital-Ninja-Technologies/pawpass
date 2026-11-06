@@ -400,3 +400,33 @@ String relativeTime(DateTime then, DateTime now) {
 }
 
 int unreadCount(List<AppNotification> all) => all.where((n) => !n.read).length;
+
+/// Where a notification takes you. Tab roots replace the current screen (`root`); everything else opens on top.
+/// Null for a link this version of the app does not know, so tapping it only marks it read.
+({String route, bool root})? notificationRoute(String? link) {
+  if (link == null || !link.startsWith('/')) {
+    return null;
+  }
+  if (link == '/passport' || link == '/partner' || link == '/partner/money') {
+    return (route: link, root: true);
+  }
+  // A shelter's applications are the fourth partner tab.
+  if (link.startsWith('/applications/')) {
+    return (route: '/partner/money', root: true);
+  }
+  const opensOnTop = [
+    '/schedule',
+    '/bookings',
+    '/orders',
+    '/lost/',
+    '/transfer/',
+    '/listing/',
+    '/partner/review',
+  ];
+  for (final p in opensOnTop) {
+    if (link == p || link.startsWith(p.endsWith('/') ? p : '$p/')) {
+      return (route: link, root: false);
+    }
+  }
+  return null;
+}

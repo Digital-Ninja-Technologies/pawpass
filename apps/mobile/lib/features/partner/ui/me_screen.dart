@@ -160,6 +160,10 @@ class _MeScreenState extends State<MeScreen> {
                 ),
                 const SizedBox(height: 18),
                 _PartnerCard(
+                  error: scope.partner.applicationLoaded
+                      ? null
+                      : scope.partner.applicationError,
+                  onRetry: scope.partner.loadApplication,
                   application: scope.partner.application,
                   loading:
                       !scope.partner.applicationLoaded &&
@@ -258,6 +262,8 @@ class _AddPetChip extends StatelessWidget {
 /// The partner entry on the Me screen: it changes with where the application stands.
 class _PartnerCard extends StatelessWidget {
   const _PartnerCard({
+    required this.error,
+    required this.onRetry,
     required this.application,
     required this.loading,
     required this.onBecome,
@@ -266,6 +272,8 @@ class _PartnerCard extends StatelessWidget {
     required this.onOpen,
   });
 
+  final String? error;
+  final VoidCallback onRetry;
   final PartnerApplication? application;
   final bool loading;
   final VoidCallback onBecome;
@@ -280,7 +288,12 @@ class _PartnerCard extends StatelessWidget {
     final String body;
     final VoidCallback onTap;
     String? tag;
-    if (a == null) {
+    if (error != null && a == null) {
+      // Do not offer "Become a partner" to someone who may already be one: say we could not check.
+      title = 'We could not check your partner status';
+      body = '$error Tap to try again.';
+      onTap = onRetry;
+    } else if (a == null) {
       title = 'Become a partner';
       body = 'Offer services, list litters or rehome pets';
       onTap = onBecome;
@@ -543,6 +556,11 @@ class _OrdersListScreenState extends State<OrdersListScreen> {
                     const Padding(
                       padding: EdgeInsets.all(24),
                       child: Center(child: CircularProgressIndicator()),
+                    )
+                  else if (!c.loaded && c.error != null)
+                    SizedBox(
+                      height: 260,
+                      child: LoadError(message: c.error!, onRetry: c.load),
                     )
                   else if (orders.isEmpty)
                     const EmptyNote(

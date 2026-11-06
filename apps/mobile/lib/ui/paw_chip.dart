@@ -34,48 +34,48 @@ class PawChip extends StatelessWidget {
       color: selected ? Colors.white : PawColors.ink,
     );
 
-    final pill = Semantics(
-      button: true,
-      selected: selected,
-      enabled: onTap != null,
-      label: label,
-      excludeSemantics: true,
-      onTap: onTap,
-      child: Material(
-        color: selected ? PawColors.primary : PawColors.surface,
-        shape: RoundedRectangleBorder(
-          borderRadius: radius,
-          side: selected
-              ? BorderSide.none
-              : const BorderSide(color: PawColors.border),
-        ),
-        child: InkWell(
-          onTap: onTap,
-          customBorder: RoundedRectangleBorder(borderRadius: radius),
-          child: ConstrainedBox(
-            constraints: BoxConstraints(minHeight: height),
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16),
-              child: Center(
-                widthFactor: expand ? null : 1,
-                child: Text(label, style: style),
-              ),
+    final pill = Material(
+      color: selected ? PawColors.primary : PawColors.surface,
+      shape: RoundedRectangleBorder(
+        borderRadius: radius,
+        side: selected
+            ? BorderSide.none
+            : const BorderSide(color: PawColors.border),
+      ),
+      child: InkWell(
+        onTap: onTap,
+        customBorder: RoundedRectangleBorder(borderRadius: radius),
+        child: ConstrainedBox(
+          constraints: BoxConstraints(minHeight: height),
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16),
+            child: Center(
+              widthFactor: expand ? null : 1,
+              child: Text(label, style: style),
             ),
           ),
         ),
       ),
     );
 
-    // The pill is 40 tall; the tap area is padded out to the 44 minimum.
-    final chip = GestureDetector(
-      behavior: HitTestBehavior.opaque,
+    // The pill is 40 tall; the tap area, and what a screen reader focuses, is padded out to the 44 minimum.
+    final chip = Semantics(
+      button: true,
+      selected: selected,
+      enabled: onTap != null,
+      label: label,
+      excludeSemantics: true,
       onTap: onTap,
-      child: ConstrainedBox(
-        constraints: const BoxConstraints(minHeight: PawSize.touch),
-        child: Center(
-          heightFactor: 1,
-          widthFactor: expand ? null : 1,
-          child: pill,
+      child: GestureDetector(
+        behavior: HitTestBehavior.opaque,
+        onTap: onTap,
+        child: ConstrainedBox(
+          constraints: const BoxConstraints(minHeight: PawSize.touch),
+          child: Center(
+            heightFactor: 1,
+            widthFactor: expand ? null : 1,
+            child: pill,
+          ),
         ),
       ),
     );

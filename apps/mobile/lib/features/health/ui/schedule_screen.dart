@@ -87,7 +87,9 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
                     ),
                   ],
                   const SizedBox(height: 14),
-                  if (groups.isEmpty)
+                  if (!h.loaded)
+                    FirstLoad(error: h.error, onRetry: h.load)
+                  else if (groups.isEmpty)
                     const InfoCard(
                       title: 'Nothing scheduled',
                       body: 'When you add a vaccine or treatment, the next dose shows up here and we remind you before it is due.',

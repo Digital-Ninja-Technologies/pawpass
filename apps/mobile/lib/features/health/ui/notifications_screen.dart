@@ -25,15 +25,18 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
     );
   }
 
-  /// Routes the app can open from a notification today. Others (lost pets, bookings) arrive with their screens.
+  /// Marks it read, then opens whatever it points at (if this version of the app knows where).
   void _open(BuildContext context, AppNotification n) {
     final health = AppScope.of(context).health;
     health.markNotificationRead(n.id);
-    switch (n.link) {
-      case '/schedule':
-        context.push('/schedule');
-      case '/passport':
-        context.go('/passport');
+    final target = notificationRoute(n.link);
+    if (target == null) {
+      return;
+    }
+    if (target.root) {
+      context.go(target.route);
+    } else {
+      context.push(target.route);
     }
   }
 
@@ -80,7 +83,9 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
                     ],
                   ),
                   const SizedBox(height: 14),
-                  if (groups.isEmpty)
+                  if (!h.loaded)
+                    FirstLoad(error: h.error, onRetry: h.load)
+                  else if (groups.isEmpty)
                     const InfoCard(
                       title: "You're all caught up",
                       body: 'Reminders, verified records and nearby lost pet alerts will show up here.',
