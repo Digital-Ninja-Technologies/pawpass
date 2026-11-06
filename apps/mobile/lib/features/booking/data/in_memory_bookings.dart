@@ -520,8 +520,11 @@ class InMemoryBookingsRepository implements BookingsRepository {
 
 /// Pays instantly (or as told), and, like the real webhook, marks the booking paid.
 class InMemoryPaymentsRepository implements PaymentsRepository {
-  InMemoryPaymentsRepository(this._bookings);
+  InMemoryPaymentsRepository(this._bookings, {this.others = const []});
   final InMemoryBookingsRepository _bookings;
+
+  /// Other things that can be paid for (a puppy order), each told when a reference is paid.
+  final List<bool Function(String reference)> others;
 
   /// What [verify] answers. Defaults to paid.
   PaymentOutcome outcome = PaymentOutcome.paid;
@@ -544,7 +547,15 @@ class InMemoryPaymentsRepository implements PaymentsRepository {
 
   @override
   Future<PaymentOutcome> verify(String reference) async {
-    if (outcome == PaymentOutcome.paid) _bookings.markPaid(reference);
+    if (outcome == PaymentOutcome.paid) {
+      if (!_bookings.markPaid(reference)) {
+        for (final confirm in others) {
+          if (confirm(reference)) {
+            break;
+          }
+        }
+      }
+    }
     return outcome;
   }
 }

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
+import 'features/adopt/state/adopt_controller.dart';
 import 'features/booking/state/booking_controller.dart';
 import 'features/community/state/chat_controller.dart';
 import 'features/community/state/community_controller.dart';
@@ -46,6 +47,10 @@ class _PawPassAppState extends State<PawPassApp> {
   );
   late final LostController _lost = LostController(widget.services, _session);
   late final ChatController _chat = ChatController(widget.services, _session);
+  late final AdoptController _adopt = AdoptController(
+    widget.services,
+    _session,
+  );
   late final GoRouter _router = buildRouter(
     session: _session,
     onboarding: _onboarding,
@@ -54,6 +59,7 @@ class _PawPassAppState extends State<PawPassApp> {
   @override
   void dispose() {
     _router.dispose();
+    _adopt.dispose();
     _chat.dispose();
     _lost.dispose();
     _community.dispose();
@@ -75,6 +81,7 @@ class _PawPassAppState extends State<PawPassApp> {
       community: _community,
       lost: _lost,
       chat: _chat,
+      adopt: _adopt,
       child: MaterialApp.router(
         title: 'PawPass',
         theme: buildAppTheme(),

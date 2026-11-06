@@ -1,3 +1,4 @@
+import '../../adopt/data/adopt_repository.dart';
 import '../../booking/data/booking_repositories.dart';
 import '../../community/data/community_repository.dart';
 import '../../health/data/health_repositories.dart';
@@ -80,6 +81,7 @@ class AppServices {
     required this.bookings,
     required this.payments,
     required this.community,
+    required this.adopt,
     this.shareBaseUrl = kShareBaseUrl,
     this.now = DateTime.now,
     this.demoHint,
@@ -98,6 +100,7 @@ class AppServices {
   final BookingsRepository bookings;
   final PaymentsRepository payments;
   final CommunityRepository community;
+  final AdoptRepository adopt;
 
   /// Where share links point. The token follows a `#`, so it is never sent to that server.
   final String shareBaseUrl;

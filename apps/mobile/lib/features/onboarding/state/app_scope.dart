@@ -1,5 +1,6 @@
 import 'package:flutter/widgets.dart';
 
+import '../../adopt/state/adopt_controller.dart';
 import '../../booking/state/booking_controller.dart';
 import '../../community/state/chat_controller.dart';
 import '../../community/state/community_controller.dart';
@@ -21,6 +22,7 @@ class AppScope extends InheritedWidget {
     required this.community,
     required this.lost,
     required this.chat,
+    required this.adopt,
     required super.child,
   });
 
@@ -32,6 +34,7 @@ class AppScope extends InheritedWidget {
   final CommunityController community;
   final LostController lost;
   final ChatController chat;
+  final AdoptController adopt;
 
   static AppScope of(BuildContext context) {
     final scope = context.dependOnInheritedWidgetOfExactType<AppScope>();
@@ -51,5 +54,6 @@ class AppScope extends InheritedWidget {
       booking != old.booking ||
       community != old.community ||
       lost != old.lost ||
-      chat != old.chat;
+      chat != old.chat ||
+      adopt != old.adopt;
 }

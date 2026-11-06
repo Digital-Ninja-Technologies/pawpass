@@ -2,6 +2,7 @@ import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:pawpass/features/adopt/data/in_memory_adopt.dart';
 import 'package:pawpass/features/booking/data/in_memory_bookings.dart';
 import 'package:pawpass/features/community/data/in_memory_community.dart';
 import 'package:pawpass/app.dart';
@@ -41,6 +42,7 @@ class _Rig {
       bookings: InMemoryBookingsRepository(),
       payments: InMemoryPaymentsRepository(InMemoryBookingsRepository()),
       community: InMemoryCommunityRepository(),
+      adopt: InMemoryAdoptRepository(),
       now: () => _today,
     );
   }
@@ -378,7 +380,7 @@ void main() {
       await _tap(tester, 'Find a pet');
       expect(
         find.text(
-          'Meet verified breeders and shelters, and bring a pet home with its passport.',
+          'Every pet here comes with a verified passport, and payments are held in escrow.',
         ),
         findsOneWidget,
       );
@@ -1116,10 +1118,6 @@ void main() {
         await _tapLabel(tester, 'Notifications, 2 new');
         expect(find.text('TODAY'), findsOneWidget);
         await _back(tester);
-        for (final tab in ['Adopt']) {
-          await _tab(tester, tab);
-          expect(find.text('Coming soon'), findsOneWidget);
-        }
       },
     );
   });

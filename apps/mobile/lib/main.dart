@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 import 'app.dart';
+import 'features/adopt/data/supabase_adopt.dart';
 import 'features/booking/data/supabase_bookings.dart';
 import 'features/community/data/supabase_community.dart';
 import 'features/health/data/supabase_health.dart';
@@ -41,6 +42,7 @@ Future<void> main() async {
           bookings: SupabaseBookingsRepository(client),
           payments: SupabasePaymentsRepository(client),
           community: SupabaseCommunityRepository(client),
+          adopt: SupabaseAdoptRepository(client),
         ),
       ),
     );
@@ -67,6 +69,7 @@ Future<void> main() async {
           bookings: base.bookings,
           payments: base.payments,
           community: base.community,
+          adopt: base.adopt,
           demoHint: 'Demo mode: nothing is sent. Use the code 123456.',
         ),
       ),

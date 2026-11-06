@@ -70,4 +70,6 @@ Setup, once the `20261106200000_services_escrow` migration is applied:
 Money rules enforced in code: the amount always comes from the booking row; a payment only counts when
 Paystack says `success`, in `NGN`, for exactly that amount; the same payment can be reported any number of times
 and is recorded once; a payment for a time that was taken meanwhile is refunded in full.
+Puppy deposits (`pd_`) and balances (`pb_`) go through the same functions as bookings (`pp_`).
+The scheduled `process-refunds` run also releases puppy sales whose 72 hour vet check window ended with no problem.
 Tests: `pnpm --filter @pawpass/edge-functions test`.

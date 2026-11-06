@@ -2,6 +2,13 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
+import 'features/adopt/ui/adopt_screen.dart';
+import 'features/adopt/ui/apply_screen.dart';
+import 'features/adopt/ui/checkout_screen.dart';
+import 'features/adopt/ui/listing_screen.dart';
+import 'features/adopt/ui/order_screen.dart';
+import 'features/adopt/ui/problem_screen.dart';
+import 'features/adopt/ui/transfer_screen.dart';
 import 'features/booking/ui/booked_screen.dart';
 import 'features/community/domain/models.dart';
 import 'features/community/ui/chat_screen.dart';
@@ -149,17 +156,42 @@ GoRouter buildRouter({
           ),
           StatefulShellBranch(
             routes: [
-              GoRoute(
-                path: '/adopt',
-                builder: (_, _) => const ComingSoonScreen(
-                  title: 'Find a pet',
-                  body: 'Meet verified breeders and shelters, and bring a pet home with its passport.',
-                  icon: PawIconData.paw,
-                ),
-              ),
+              GoRoute(path: '/adopt', builder: (_, _) => const AdoptScreen()),
             ],
           ),
         ],
+      ),
+      GoRoute(
+        path: '/listing/:id',
+        builder: (_, state) =>
+            ListingScreen(listingId: state.pathParameters['id']!),
+      ),
+      GoRoute(
+        path: '/checkout/:id',
+        builder: (_, state) =>
+            CheckoutScreen(listingId: state.pathParameters['id']!),
+      ),
+      GoRoute(
+        path: '/orders/:id',
+        builder: (_, state) =>
+            OrderScreen(orderId: state.pathParameters['id']!),
+        routes: [
+          GoRoute(
+            path: 'problem',
+            builder: (_, state) =>
+                ProblemScreen(orderId: state.pathParameters['id']!),
+          ),
+        ],
+      ),
+      GoRoute(
+        path: '/apply/:id',
+        builder: (_, state) =>
+            ApplyScreen(listingId: state.pathParameters['id']!),
+      ),
+      GoRoute(
+        path: '/transfer/:id',
+        builder: (_, state) =>
+            TransferScreen(transferId: state.pathParameters['id']!),
       ),
       GoRoute(path: '/bookings', builder: (_, _) => const BookingsScreen()),
       GoRoute(

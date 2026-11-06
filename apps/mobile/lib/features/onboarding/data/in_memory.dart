@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import '../../adopt/data/in_memory_adopt.dart';
 import '../../booking/data/in_memory_bookings.dart';
 import '../../community/data/in_memory_community.dart';
 import '../../health/data/in_memory_health.dart';
@@ -201,10 +202,30 @@ AppServices inMemoryServices({
 }) {
   final profiles = InMemoryProfileRepository();
   final bookings = InMemoryBookingsRepository(now: now);
+  final pets = InMemoryPetRepository(profiles: profiles, now: now);
+  final adopt = InMemoryAdoptRepository(
+    now: now,
+    onPassport: (name, species, breed) {
+      // A passport accepted from a sale or adoption becomes one of the person's pets.
+      pets.createPassport(
+        pet: PetInput(
+          name: name,
+          species: Species.values.firstWhere(
+            (s) => s.value == species,
+            orElse: () => Species.other,
+          ),
+          breed: breed,
+          sex: PetSex.unknown,
+        ),
+        records: const [],
+        channels: {ReminderChannel.push},
+      );
+    },
+  );
   return AppServices(
     auth: InMemoryAuthRepository(validCode: validCode, signedInAs: signedInAs),
     profiles: profiles,
-    pets: InMemoryPetRepository(profiles: profiles, now: now),
+    pets: pets,
     photos: NoPhotoPicker(),
     emailApp: NoEmailApp(),
     health: InMemoryHealthRepository(now: now),
@@ -213,8 +234,9 @@ AppServices inMemoryServices({
     location: FakeLocationService(),
     links: FakeLinkLauncher(),
     bookings: bookings,
-    payments: InMemoryPaymentsRepository(bookings),
+    payments: InMemoryPaymentsRepository(bookings, others: [adopt.markPaid]),
     community: InMemoryCommunityRepository(now: now),
+    adopt: adopt,
     now: now ?? DateTime.now,
   );
 }
