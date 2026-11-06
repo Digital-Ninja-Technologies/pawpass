@@ -44,4 +44,4 @@ Work through these milestones in order. Start each one in a fresh Claude Code se
 
 ## Known gaps in the designs
 
-These screens are referenced but not designed yet; design them before building: QR tag ordering, privacy and sharing settings, help articles, partner calendar, shelter applications list, full audit log, empty and error states.
+Designed and listed in `design/README.md` under "Added later": QR tag ordering, privacy and sharing settings, help articles, partner calendar, shelter applications list, full audit log, and empty and error states. They are designs only; none is built yet. Build them as a follow up to milestone 8, and wire the entry points listed in that README.

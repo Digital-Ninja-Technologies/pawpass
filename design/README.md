@@ -93,6 +93,24 @@ Exported from the PawPass design canvas. One file per screen in `screens/`, phot
 | `screens/AdminSupport.dc.html` | Support inbox |
 | `screens/AdminSettings.dc.html` | Settings, team, audit log |
 
+## Added later (design gaps filled)
+
+These were missing from the first export and were drawn afterwards in the same style. Sample data and prices (for example the ₦3,500 tag) are placeholders. The existing screens were not edited, so wire these entry points when building:
+
+| File | Screen | Reached from |
+| --- | --- | --- |
+| `screens/QrTagOrder.dc.html` | Order a QR tag | Profile, "QR tags" (`#tags`) |
+| `screens/PrivacySharing.dc.html` | Privacy and sharing settings | Profile, "Privacy & sharing" (`#privacy`) |
+| `screens/HelpArticles.dc.html` | Help articles, by topic | HelpSupport, search and "Popular topics" |
+| `screens/HelpArticle.dc.html` | One help article | HelpArticles and HelpSupport topics |
+| `screens/PartnerCalendar.dc.html` | Partner calendar (provider) | Provider dashboard tab bar, "Calendar" (`#calendar`) |
+| `screens/ShelterApplications.dc.html` | Shelter applications list | Shelter dashboard tab bar, "Applications" |
+| `screens/AdminAuditLog.dc.html` | Full audit log (admin, 1440 wide) | AdminSettings, "View full log" (`#audit`) |
+| `screens/EmptyStates.dc.html` | Empty states reference sheet | Used by every list screen |
+| `screens/ErrorStates.dc.html` | Error states reference sheet | Used app wide |
+
+The two state files are reference sheets, not single screens: each card shows what replaces a list or page. Open questions for the team: the tag and delivery prices, whether the audit log is Full admin only (drawn that way), and whether a calendar is needed for groomer, trainer and boarding partners beyond the provider layout shown.
+
 ## Shared and reference
 
 | File | Screen |

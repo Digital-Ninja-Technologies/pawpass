@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Order a QR tag</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700&amp;family=Plus+Jakarta+Sans:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0}
+a{color:inherit}a:hover{color:inherit}
+</style>
+</helmet>
+<div style="width: 390px; height: 844px; position: relative; overflow: hidden; background: #FFF8F1; font-family: 'Plus Jakarta Sans', system-ui, sans-serif; color: #1F1A17">
+<main style="padding: 52px 20px 40px; display: flex; flex-direction: column; gap: 16px; box-sizing: border-box; height: 844px; overflow-y: auto">
+<header style="display: flex; align-items: center; gap: 12px">
+<a href="Profile.dc.html" aria-label="Back" style="width: 44px; height: 44px; border-radius: 22px; border: 1px solid #EDE3D9; background: #FFFFFF; display: flex; align-items: center; justify-content: center; flex-shrink: 0"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 6-6 6 6 6"></path></svg></a>
+<h1 style="margin: 0; flex: 1; font-family: 'Bricolage Grotesque', sans-serif; font-size: 22px; font-weight: 700">Order a QR tag</h1>
+</header>
+<p style="margin: 0; font-size: 14px; color: #4A433E; line-height: 1.5">A tough collar tag with a QR code. Anyone who scans it can message you, and your number stays hidden.</p>
+
+<section style="display: flex; flex-direction: column; gap: 8px">
+<h2 style="margin: 0; font-size: 14px; font-weight: 700">Which pet?</h2>
+<div style="display: flex; gap: 10px">
+<button aria-pressed="true" style="flex: 1; display: flex; align-items: center; gap: 10px; padding: 10px; border-radius: 18px; border: 2px solid {{accent}}; background: #FFFFFF; font: 700 14px 'Plus Jakarta Sans', sans-serif; color: #1F1A17"><img src="../assets/bingo.jpg" alt="" style="width: 40px; height: 40px; border-radius: 12px; object-fit: cover; display: block">Bingo</button>
+<button aria-pressed="false" style="flex: 1; display: flex; align-items: center; gap: 10px; padding: 10px; border-radius: 18px; border: 1px solid #EDE3D9; background: #FFFFFF; font: 700 14px 'Plus Jakarta Sans', sans-serif; color: #1F1A17"><img src="../assets/mimi.jpg" alt="" style="width: 40px; height: 40px; border-radius: 12px; object-fit: cover; display: block">Mimi</button>
+</div>
+</section>
+
+<section style="display: flex; flex-direction: column; gap: 8px">
+<h2 style="margin: 0; font-size: 14px; font-weight: 700">Tag colour</h2>
+<div style="display: flex; gap: 10px">
+<button aria-pressed="true" style="flex: 1; min-height: 88px; border-radius: 18px; border: 2px solid {{accent}}; background: #FFFFFF; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px; padding: 10px 0; font: 700 13px 'Plus Jakarta Sans', sans-serif; color: #1F1A17"><span aria-hidden="true" style="width: 36px; height: 36px; border-radius: 18px; background: #0E6B63; border: 3px solid #E3F1EE; display: block"></span>Teal</button>
+<button aria-pressed="false" style="flex: 1; min-height: 88px; border-radius: 18px; border: 1px solid #EDE3D9; background: #FFFFFF; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px; padding: 10px 0; font: 700 13px 'Plus Jakarta Sans', sans-serif; color: #1F1A17"><span aria-hidden="true" style="width: 36px; height: 36px; border-radius: 18px; background: #1F1A17; border: 3px solid #F3EBE2; display: block"></span>Black</button>
+<button aria-pressed="false" style="flex: 1; min-height: 88px; border-radius: 18px; border: 1px solid #EDE3D9; background: #FFFFFF; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px; padding: 10px 0; font: 700 13px 'Plus Jakarta Sans', sans-serif; color: #1F1A17"><span aria-hidden="true" style="width: 36px; height: 36px; border-radius: 18px; background: #B4501C; border: 3px solid #FFEBD9; display: block"></span>Orange</button>
+</div>
+</section>
+
+<section style="display: flex; flex-direction: column; gap: 8px">
+<h2 style="margin: 0; font-size: 14px; font-weight: 700">Deliver to</h2>
+<label style="display: flex; flex-direction: column; gap: 6px; font-size: 13px; font-weight: 600; color: #4A433E">Street address<input type="text" value="14 Admiralty Way, Lekki Phase 1" style="height: 52px; padding: 0 16px; border-radius: 16px; border: 1px solid #EDE3D9; background: #FFFFFF; font: 600 15px 'Plus Jakarta Sans', sans-serif; color: #1F1A17; min-width: 0; box-sizing: border-box"></label>
+<label style="display: flex; flex-direction: column; gap: 6px; font-size: 13px; font-weight: 600; color: #4A433E">Area<input type="text" value="Lekki, Lagos" style="height: 52px; padding: 0 16px; border-radius: 16px; border: 1px solid #EDE3D9; background: #FFFFFF; font: 600 15px 'Plus Jakarta Sans', sans-serif; color: #1F1A17; min-width: 0; box-sizing: border-box"></label>
+<p style="margin: 0; font-size: 12px; color: #6B625B">The courier gets a phone number from us to call you. We never show it to anyone else.</p>
+</section>
+
+<div style="background: #FFFFFF; border: 1px solid #EDE3D9; border-radius: 20px; padding: 16px; padding: 14px 16px"><div style="display: flex; justify-content: space-between; font-size: 14px"><span>QR tag for Bingo</span><span style="font-weight: 700">₦3,500</span></div>
+<div style="display: flex; justify-content: space-between; font-size: 14px; margin-top: 8px"><span>Delivery in Lagos · 2 to 4 days</span><span style="font-weight: 700">₦1,000</span></div>
+<div style="display: flex; justify-content: space-between; font-size: 16px; font-weight: 700; margin-top: 12px; padding-top: 12px; border-top: 1px solid #F3EBE2"><span>Total</span><span>₦4,500</span></div></div>
+
+<a href="#" style="height: 52px; border-radius: 26px; background: {{accent}}; color: #FFFFFF; border: none; display: flex; align-items: center; justify-content: center; font: 700 16px 'Plus Jakarta Sans', sans-serif; text-decoration: none; box-sizing: border-box">Pay ₦4,500 with Paystack</a>
+<p style="margin: -4px 0 0; text-align: center; font-size: 12px; color: #6B625B">Card, bank transfer or USSD. Prices here are sample figures.</p>
+</main>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"accent":{"editor":"color","default":"#0E6B63","options":["#0E6B63","#B4501C","#3346B8","#1F1A17"]},"$preview":{"width":390,"height":844}}'>
+class Component extends DCLogic {
+renderVals() {
+return { accent: this.props.accent ?? '#0E6B63' };
+}
+}
+</script>
+</body>
+</html>
