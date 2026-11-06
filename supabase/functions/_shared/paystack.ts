@@ -42,6 +42,14 @@ export function isBookingReference(ref: unknown): ref is string {
   return typeof ref === "string" && /^pp_[0-9a-f]{32}$/.test(ref);
 }
 
+/**
+ * Every reference we make: "pp_" a booking, "pd_" a puppy deposit, "pb_" a puppy balance, each followed by
+ * 32 hex characters. Anything else is not ours and is never looked up.
+ */
+export function isPaymentReference(ref: unknown): ref is string {
+  return typeof ref === "string" && /^(pp|pd|pb)_[0-9a-f]{32}$/.test(ref);
+}
+
 export interface Charge {
   reference: string;
   amountKobo: number;
@@ -60,7 +68,7 @@ export function parseChargeSuccess(raw: string): Charge | null {
   const e = event as { event?: unknown; data?: Record<string, unknown> };
   if (e.event !== "charge.success" || !e.data) return null;
   const { reference, amount, currency, status } = e.data;
-  if (status !== "success" || !isBookingReference(reference)) return null;
+  if (status !== "success" || !isPaymentReference(reference)) return null;
   if (typeof amount !== "number" || !Number.isInteger(amount) || amount <= 0) return null;
   return { reference, amountKobo: amount, currency: typeof currency === "string" ? currency : "" };
 }
@@ -96,7 +104,9 @@ export interface InitializeInput {
   amountKobo: number;
   reference: string;
   callbackUrl?: string;
+  /** The booking or order this payment is for. */
   bookingId: string;
+  product?: "pawpass_booking" | "pawpass_puppy";
 }
 
 export function buildInitializeBody(i: InitializeInput): Record<string, unknown> {
@@ -107,7 +117,7 @@ export function buildInitializeBody(i: InitializeInput): Record<string, unknown>
     reference: i.reference,
     channels: ["card", "bank", "bank_transfer", "ussd"],
     ...(i.callbackUrl ? { callback_url: i.callbackUrl } : {}),
-    metadata: { booking_id: i.bookingId, product: "pawpass_booking" },
+    metadata: { booking_id: i.bookingId, product: i.product ?? "pawpass_booking" },
   };
 }
 

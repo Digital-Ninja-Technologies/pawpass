@@ -4,6 +4,7 @@ import {
   buildInitializeBody,
   buildRefundBody,
   isBookingReference,
+  isPaymentReference,
   judgeRefund,
   judgeTransaction,
   parseChargeSuccess,
@@ -64,6 +65,50 @@ describe("references", () => {
     ]) {
       expect(isBookingReference(bad)).toBe(false);
     }
+  });
+});
+
+describe("payment references", () => {
+  it("accepts bookings, puppy deposits and puppy balances, and nothing else", () => {
+    for (const p of ["pp", "pd", "pb"]) {
+      expect(isPaymentReference(`${p}_${"a".repeat(32)}`)).toBe(true);
+    }
+    for (const bad of [
+      "px_" + "a".repeat(32),
+      "pd_" + "A".repeat(32),
+      "pd_" + "a".repeat(31),
+      "",
+      null,
+      5,
+      "pd_" + "a".repeat(32) + "0",
+    ]) {
+      expect(isPaymentReference(bad)).toBe(false);
+    }
+  });
+
+  it("a puppy deposit charge is understood like a booking charge", () => {
+    const ref = "pd_" + "c".repeat(32);
+    const raw = JSON.stringify({
+      event: "charge.success",
+      data: { status: "success", reference: ref, amount: 15750000, currency: "NGN" },
+    });
+    expect(parseChargeSuccess(raw)).toEqual({
+      reference: ref,
+      amountKobo: 15750000,
+      currency: "NGN",
+    });
+  });
+
+  it("the initialize body says which product it is for", () => {
+    expect(
+      buildInitializeBody({
+        email: "a@b.c",
+        amountKobo: 1,
+        reference: "pd_" + "a".repeat(32),
+        bookingId: "o1",
+        product: "pawpass_puppy",
+      }).metadata,
+    ).toEqual({ booking_id: "o1", product: "pawpass_puppy" });
   });
 });
 

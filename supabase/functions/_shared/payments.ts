@@ -3,7 +3,7 @@
 import {
   buildInitializeBody,
   buildRefundBody,
-  isBookingReference,
+  isPaymentReference,
   judgeRefund,
   judgeTransaction,
   parseChargeSuccess,
@@ -18,6 +18,10 @@ export interface BookingRow {
   /** Set once the money has been recorded (escrow row exists). */
   paid: boolean;
   createdAt: string;
+  /** False for a payment with no time limit (a puppy balance is paid at pick up). Default true. */
+  holds?: boolean;
+  /** "puppy" for puppy deposits and balances. Default "booking". */
+  product?: "booking" | "puppy";
 }
 
 export interface PaystackApi {
@@ -80,7 +84,7 @@ export async function initializePayment(
   user: { id: string; email: string | null },
   input: { reference?: unknown },
 ): Promise<{ authorization_url: string; reference: string }> {
-  if (!isBookingReference(input.reference)) throw new HttpError(400, "Invalid payment reference");
+  if (!isPaymentReference(input.reference)) throw new HttpError(400, "Invalid payment reference");
   if (!user.email) throw new HttpError(400, "Your account has no email address");
   const booking = await ctx.db.bookingForOwner(input.reference, user.id);
   if (!booking) throw new HttpError(404, "Booking not found");
@@ -89,7 +93,7 @@ export async function initializePayment(
   }
   const now = (ctx.now ?? Date.now)();
   const holdMs = (ctx.holdMinutes ?? 20) * 60_000;
-  if (now - Date.parse(booking.createdAt) > holdMs) {
+  if (booking.holds !== false && now - Date.parse(booking.createdAt) > holdMs) {
     throw new HttpError(409, "This booking timed out. Please pick the time again.");
   }
   const res = await ctx.paystack.initialize(
@@ -99,6 +103,7 @@ export async function initializePayment(
       reference: booking.reference,
       callbackUrl: ctx.callbackUrl,
       bookingId: booking.id,
+      product: booking.product === "puppy" ? "pawpass_puppy" : "pawpass_booking",
     }),
   );
   const url = res.data?.authorization_url;
@@ -114,7 +119,7 @@ export async function verifyPayment(
   user: { id: string },
   input: { reference?: unknown },
 ): Promise<{ status: "paid" | "pending" | "failed"; booking_status?: string }> {
-  if (!isBookingReference(input.reference)) throw new HttpError(400, "Invalid payment reference");
+  if (!isPaymentReference(input.reference)) throw new HttpError(400, "Invalid payment reference");
   const booking = await ctx.db.bookingForOwner(input.reference, user.id);
   if (!booking) throw new HttpError(404, "Booking not found");
   if (booking.paid) return { status: "paid", booking_status: booking.status };

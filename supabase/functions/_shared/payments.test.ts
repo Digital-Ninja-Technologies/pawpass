@@ -171,6 +171,32 @@ describe("initializePayment", () => {
     expect(await status(initializePayment(ctx, tolu, { reference: ref }))).toBe(409);
   });
 
+  it("a puppy balance has no time limit; a deposit has", async () => {
+    const bal = "pb_" + "b".repeat(32);
+    db.add(
+      "tolu",
+      booking({
+        reference: bal,
+        status: "pending_payment",
+        amountKobo: 30000000,
+        createdAt: "2026-10-01T00:00:00Z",
+        holds: false,
+        product: "puppy",
+      }),
+    );
+    const out = await initializePayment(ctx, tolu, { reference: bal });
+    expect(out.reference).toBe(bal);
+    expect(ps.initBodies[0]).toMatchObject({ amount: 30000000 });
+    expect((ps.initBodies[0].metadata as Record<string, unknown>).product).toBe("pawpass_puppy");
+
+    const dep = "pd_" + "d".repeat(32);
+    db.add(
+      "tolu",
+      booking({ reference: dep, createdAt: "2026-10-01T00:00:00Z", holds: true, product: "puppy" }),
+    );
+    expect(await status(initializePayment(ctx, tolu, { reference: dep }))).toBe(409);
+  });
+
   it("a Paystack failure is a 502", async () => {
     ps.initResult = { status: false, message: "Invalid key" };
     expect(await status(initializePayment(ctx, tolu, { reference: ref }))).toBe(502);

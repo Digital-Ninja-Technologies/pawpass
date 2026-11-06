@@ -65,7 +65,16 @@ function paystack(secret: string): PaystackApi {
 }
 
 function db(client: SupabaseClient): Db {
-  const row = (r: Record<string, unknown> | null): BookingRow | null =>
+  const must = <T>(res: { data: T; error: { message: string } | null }): T => {
+    if (res.error) throw new Error(res.error.message);
+    return res.data;
+  };
+  const bookingCols =
+    "id, status, amount_kobo, paystack_reference, escrow_transaction_id, created_at, owner_user_id";
+  const orderCols =
+    "id, status, deposit_kobo, protection_fee_kobo, balance_kobo, deposit_reference, balance_reference, deposit_escrow_id, balance_escrow_id, created_at, updated_at, buyer_user_id";
+
+  const bookingRow = (r: Record<string, unknown> | null): BookingRow | null =>
     r
       ? {
           id: r.id as string,
@@ -76,42 +85,63 @@ function db(client: SupabaseClient): Db {
           createdAt: r.created_at as string,
         }
       : null;
-  const cols =
-    "id, status, amount_kobo, paystack_reference, escrow_transaction_id, created_at, owner_user_id";
-  const must = <T>(res: { data: T; error: { message: string } | null }): T => {
-    if (res.error) throw new Error(res.error.message);
-    return res.data;
+
+  // A puppy deposit (pd_) is payable while the order waits for it; a balance (pb_) once the deposit is in.
+  const orderRow = (r: Record<string, unknown> | null, reference: string): BookingRow | null => {
+    if (!r) return null;
+    const deposit = r.deposit_reference === reference;
+    const status = r.status as string;
+    return {
+      id: r.id as string,
+      status: deposit
+        ? status === "pending_deposit"
+          ? "pending_payment"
+          : status
+        : status === "deposit_paid"
+          ? "pending_payment"
+          : status,
+      amountKobo: deposit
+        ? Number(r.deposit_kobo) + Number(r.protection_fee_kobo)
+        : Number(r.balance_kobo),
+      reference,
+      paid: deposit ? r.deposit_escrow_id !== null : r.balance_escrow_id !== null,
+      createdAt: r.created_at as string,
+      holds: deposit,
+      product: "puppy",
+    };
   };
+
+  const find = async (reference: string, userId?: string): Promise<BookingRow | null> => {
+    if (reference.startsWith("pp_")) {
+      let q = client.from("bookings").select(bookingCols).eq("paystack_reference", reference);
+      if (userId) q = q.eq("owner_user_id", userId);
+      return bookingRow(must(await q.maybeSingle()));
+    }
+    const column = reference.startsWith("pd_") ? "deposit_reference" : "balance_reference";
+    let q = client.from("puppy_orders").select(orderCols).eq(column, reference);
+    if (userId) q = q.eq("buyer_user_id", userId);
+    return orderRow(must(await q.maybeSingle()), reference);
+  };
+
   return {
-    async bookingForOwner(reference, userId) {
-      const r = must(
-        await client
-          .from("bookings")
-          .select(cols)
-          .eq("paystack_reference", reference)
-          .eq("owner_user_id", userId)
-          .maybeSingle(),
-      );
-      return row(r);
-    },
-    async bookingByReference(reference) {
-      return row(
-        must(
-          await client
-            .from("bookings")
-            .select(cols)
-            .eq("paystack_reference", reference)
-            .maybeSingle(),
-        ),
-      );
-    },
+    bookingForOwner: (reference, userId) => find(reference, userId),
+    bookingByReference: (reference) => find(reference),
     async confirmPayment(reference, amountKobo) {
-      return must(
-        await client.rpc("confirm_booking_payment", {
+      if (reference.startsWith("pp_")) {
+        return must(
+          await client.rpc("confirm_booking_payment", {
+            p_reference: reference,
+            p_amount_kobo: amountKobo,
+          }),
+        );
+      }
+      const r = must(
+        await client.rpc("confirm_order_payment", {
           p_reference: reference,
           p_amount_kobo: amountKobo,
         }),
-      );
+      ) as { result: string; order_id: string; order_status: string };
+      return { result: r.result, booking_id: r.order_id, booking_status: r.order_status };
     },
     async claimRefunds(limit) {
       return must(await client.rpc("claim_pending_refunds", { p_limit: limit })) ?? [];
@@ -127,7 +157,9 @@ function db(client: SupabaseClient): Db {
       );
     },
     async releaseDueBookings() {
-      return must(await client.rpc("release_due_bookings")) as number;
+      const bookings = must(await client.rpc("release_due_bookings")) as number;
+      const orders = must(await client.rpc("release_due_orders")) as number;
+      return bookings + orders;
     },
   };
 }
