@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
+import 'core/analytics.dart';
 import 'features/adopt/state/adopt_controller.dart';
 import 'features/booking/state/booking_controller.dart';
 import 'features/community/state/chat_controller.dart';
@@ -28,7 +29,7 @@ class PawPassApp extends StatefulWidget {
   State<PawPassApp> createState() => _PawPassAppState();
 }
 
-class _PawPassAppState extends State<PawPassApp> {
+class _PawPassAppState extends State<PawPassApp> with WidgetsBindingObserver {
   late final SessionController _session = SessionController(widget.services);
   late final OnboardingController _onboarding = OnboardingController(
     widget.services,
@@ -62,7 +63,22 @@ class _PawPassAppState extends State<PawPassApp> {
   );
 
   @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addObserver(this);
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    // Coming back to the app counts as using it (the database counts a person once per 30 minutes).
+    if (state == AppLifecycleState.resumed && _session.signedIn) {
+      widget.services.analytics.track(AppEvent.appOpen);
+    }
+  }
+
+  @override
   void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
     _router.dispose();
     _partner.dispose();
     _adopt.dispose();

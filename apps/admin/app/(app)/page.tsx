@@ -16,6 +16,7 @@ import {
 import { BarChart } from "@/components/BarChart";
 import { Badge, Notice, PageHeader, Stat, Tabs, href, type Tone } from "@/components/ui";
 import type { DisputeRow, EscrowRow, KycRow, LostRow, SettingsRow } from "@/lib/types";
+import { describeMetric, METRIC_ORDER, parseMetrics, progress } from "@/lib/metrics";
 
 export const metadata: Metadata = { title: "Overview" };
 
@@ -72,7 +73,7 @@ export default async function OverviewPage({
   const days = [7, 30, 90].includes(Number(sp.days)) ? Number(sp.days) : 30;
   const role = staff.role;
 
-  const [overview, settings, escrow, lost, kyc, disputes] = await Promise.all([
+  const [overview, settings, escrow, lost, kyc, disputes, launch] = await Promise.all([
     supabase.rpc("admin_overview", { p_days: days }),
     supabase.from("settings").select("*").maybeSingle<SettingsRow>(),
     supabase.from("admin_escrow_v").select("*").order("created_at", { ascending: false }).limit(4),
@@ -84,7 +85,9 @@ export default async function OverviewPage({
       .order("submitted_at", { ascending: false })
       .limit(3),
     supabase.from("admin_dispute_v").select("*").order("created_at", { ascending: false }).limit(3),
+    supabase.rpc("admin_launch_metrics"),
   ]);
+  const metrics = parseMetrics(launch.data);
 
   const o = (overview.data ?? {}) as Partial<Overview>;
   const s = settings.data;
@@ -283,6 +286,62 @@ export default async function OverviewPage({
               </tbody>
             </table>
           </div>
+        )}
+      </section>
+      <section className="card" aria-labelledby="metrics-heading">
+        <h2 id="metrics-heading" style={{ marginBottom: 4 }}>
+          Success metrics
+        </h2>
+        <p className="muted small" style={{ marginBottom: 12 }}>
+          Where PawPass stands against the twelve month targets in the product plan.
+        </p>
+        {Object.keys(metrics).length === 0 ? (
+          <p className="muted small">The metrics could not be loaded.</p>
+        ) : (
+          <ul className="list" style={{ listStyle: "none", padding: 0, margin: 0 }}>
+            {METRIC_ORDER.map(({ key, label, detail }) => {
+              const m = metrics[key];
+              if (!m) return null;
+              const d = describeMetric(m);
+              const pctDone = progress(m);
+              return (
+                <li key={key} className="item">
+                  <div className="row between">
+                    <span>
+                      <b>{label}</b>
+                      <span className="meta">{detail}</span>
+                    </span>
+                    <span style={{ textAlign: "right" }}>
+                      <b style={{ fontFamily: "var(--heading)", fontSize: 20 }}>{d.headline}</b>
+                      <span className="meta">{d.note}</span>
+                    </span>
+                  </div>
+                  <div
+                    role="progressbar"
+                    aria-label={`${label}: ${pctDone}% of target`}
+                    aria-valuenow={pctDone}
+                    aria-valuemin={0}
+                    aria-valuemax={100}
+                    style={{
+                      height: 6,
+                      borderRadius: 3,
+                      background: "var(--border)",
+                      marginTop: 8,
+                    }}
+                  >
+                    <div
+                      style={{
+                        width: `${pctDone}%`,
+                        height: "100%",
+                        borderRadius: 3,
+                        background: "var(--primary)",
+                      }}
+                    />
+                  </div>
+                </li>
+              );
+            })}
+          </ul>
         )}
       </section>
     </>

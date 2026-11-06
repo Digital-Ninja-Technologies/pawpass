@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import '../../../core/analytics.dart';
 import '../../../core/offline_cache.dart';
 import '../../adopt/data/in_memory_adopt.dart';
 import '../../booking/data/in_memory_bookings.dart';
@@ -202,6 +203,7 @@ AppServices inMemoryServices({
   String validCode = '123456',
   String? signedInAs,
   OfflineCache? cache,
+  Analytics analytics = const NoAnalytics(),
 }) {
   final profiles = InMemoryProfileRepository();
   final bookings = InMemoryBookingsRepository(now: now);
@@ -246,6 +248,7 @@ AppServices inMemoryServices({
       onCancelOrder: adopt.sellerCancel,
     ),
     cache: cache,
+    analytics: analytics,
     now: now ?? DateTime.now,
   );
 }

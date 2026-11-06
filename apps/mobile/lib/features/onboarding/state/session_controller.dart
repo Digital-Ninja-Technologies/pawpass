@@ -2,6 +2,8 @@ import 'dart:async';
 
 import 'package:flutter/foundation.dart';
 
+import '../../../core/analytics.dart';
+
 import '../data/repositories.dart';
 import '../domain/models.dart';
 
@@ -61,8 +63,12 @@ class SessionController extends ChangeNotifier {
       // The next person on this phone must never see the last one's saved passport.
       _services.cache?.clear();
     }
+    final wasSignedIn = status == SessionStatus.signedIn;
     status = s;
     profile = p;
+    if (s == SessionStatus.signedIn && !wasSignedIn) {
+      _services.analytics.track(AppEvent.appOpen);
+    }
     notifyListeners();
   }
 

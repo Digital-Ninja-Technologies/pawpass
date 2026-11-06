@@ -1,5 +1,7 @@
 import 'package:flutter/foundation.dart';
 
+import '../../../core/analytics.dart';
+
 import '../../onboarding/data/repositories.dart';
 import '../../onboarding/domain/models.dart';
 import '../../onboarding/state/session_controller.dart';
@@ -90,6 +92,7 @@ class PartnerController extends ChangeNotifier {
       return false;
     }
     return _act(() async {
+      _services.analytics.track(AppEvent.partnerStarted);
       await _services.partner.start(type: type, businessName: name, area: area);
       application = await _services.partner.application();
     });

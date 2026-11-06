@@ -1,5 +1,7 @@
 import 'package:flutter/foundation.dart';
 
+import '../../../core/analytics.dart';
+
 import '../../booking/domain/models.dart' show PaymentOutcome;
 import '../../booking/state/booking_controller.dart' show PayStage;
 import '../../onboarding/data/repositories.dart';
@@ -183,8 +185,10 @@ class AdoptController extends ChangeNotifier {
 
   bool get paying => stage != PayStage.idle;
 
-  Future<void> payDeposit(String listingId) =>
-      _start(() => _services.adopt.createOrder(listingId), balance: false);
+  Future<void> payDeposit(String listingId) {
+    _services.analytics.track(AppEvent.checkoutStarted);
+    return _start(() => _services.adopt.createOrder(listingId), balance: false);
+  }
 
   Future<void> payBalance(String orderId) =>
       _start(() => _services.adopt.balancePayment(orderId), balance: true);

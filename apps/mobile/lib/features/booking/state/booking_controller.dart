@@ -1,5 +1,7 @@
 import 'package:flutter/foundation.dart';
 
+import '../../../core/analytics.dart';
+
 import '../../onboarding/data/repositories.dart';
 import '../../onboarding/domain/models.dart';
 import '../../onboarding/state/session_controller.dart';
@@ -179,6 +181,7 @@ class BookingController extends ChangeNotifier {
     _notify();
     BookingIntent made;
     try {
+      _services.analytics.track(AppEvent.bookingStarted);
       made = await _services.bookings.createBooking(
         serviceId: s.id,
         petId: pet,

@@ -1,5 +1,6 @@
 import 'package:flutter/foundation.dart';
 
+import '../../../core/analytics.dart';
 import '../../../core/dates.dart';
 import '../../onboarding/data/repositories.dart';
 import '../../onboarding/domain/models.dart';
@@ -234,6 +235,7 @@ class HealthController extends ChangeNotifier {
     final pet = selected;
     if (pet == null) return null;
     ShareLink? link;
+    _services.analytics.track(AppEvent.shareStarted);
     await _run(() async {
       link = await _services.health.createShare(
         petId: pet.id,

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 import 'app.dart';
+import 'core/analytics.dart';
 import 'core/offline_cache.dart';
 import 'features/adopt/data/supabase_adopt.dart';
 import 'features/booking/data/supabase_bookings.dart';
@@ -48,6 +49,7 @@ Future<void> main() async {
           adopt: SupabaseAdoptRepository(client),
           partner: SupabasePartnerRepository(client),
           cache: cache,
+          analytics: SupabaseAnalytics(client),
         ),
       ),
     );

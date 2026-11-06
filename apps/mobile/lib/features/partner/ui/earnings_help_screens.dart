@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../../core/analytics.dart';
 import '../../../ui/ui.dart';
 import '../../adopt/domain/adopt_logic.dart' show shortDay;
 import '../../booking/domain/booking_logic.dart' show nairaFromKobo;
@@ -298,6 +299,7 @@ class _HelpScreenState extends State<HelpScreen> {
     final p = AppScope.of(context).partner;
     if (!_started) {
       _started = true;
+      AppScope.of(context).services.analytics.track(AppEvent.helpOpened);
       WidgetsBinding.instance.addPostFrameCallback((_) => p.loadTickets());
     }
     return ListenableBuilder(

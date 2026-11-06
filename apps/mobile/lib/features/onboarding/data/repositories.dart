@@ -1,3 +1,4 @@
+import '../../../core/analytics.dart';
 import '../../../core/offline_cache.dart';
 import '../../adopt/data/adopt_repository.dart';
 import '../../booking/data/booking_repositories.dart';
@@ -86,6 +87,7 @@ class AppServices {
     required this.adopt,
     required this.partner,
     this.cache,
+    this.analytics = const NoAnalytics(),
     this.shareBaseUrl = kShareBaseUrl,
     this.now = DateTime.now,
     this.demoHint,
@@ -109,6 +111,9 @@ class AppServices {
 
   /// Saved copies of the profile, pets, passport and reminders, for reading with no signal.
   final OfflineCache? cache;
+
+  /// Counts a few events (opening the app, starting a booking) for the success metrics.
+  final Analytics analytics;
 
   /// Where share links point. The token follows a `#`, so it is never sent to that server.
   final String shareBaseUrl;
