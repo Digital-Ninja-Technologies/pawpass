@@ -209,6 +209,32 @@ describe("initializePayment", () => {
   });
 });
 
+describe("QR tag orders", () => {
+  const tagRef = "pt_" + "d".repeat(32);
+  const tagRow = (over: Partial<BookingRow> = {}) =>
+    booking({ id: "t1", reference: tagRef, amountKobo: 450000, holds: false, product: "tag", ...over });
+
+  it("starts a payment for the order's own total, however old the order is", async () => {
+    db.add("tolu", tagRow({ createdAt: "2026-10-01T00:00:00Z" }));
+    const out = await initializePayment(ctx, tolu, { reference: tagRef });
+    expect(out.reference).toBe(tagRef);
+    const body = ps.initBodies[0] as { amount: number; metadata: { product: string } };
+    expect(body.amount).toBe(450000);
+    expect(body.metadata.product).toBe("pawpass_tag");
+  });
+
+  it("a signed webhook confirms a tag payment", async () => {
+    db.add("tolu", tagRow());
+    const raw = JSON.stringify({
+      event: "charge.success",
+      data: { reference: tagRef, amount: 450000, currency: "NGN", status: "success" },
+    });
+    const sig = createHmac("sha512", secret).update(raw).digest("hex");
+    expect((await handleWebhook(ctx, raw, sig)).status).toBe(200);
+    expect(db.confirmed).toEqual([{ reference: tagRef, amountKobo: 450000 }]);
+  });
+});
+
 describe("verifyPayment", () => {
   it("records the payment when Paystack says the exact amount arrived", async () => {
     expect(await verifyPayment(ctx, tolu, { reference: ref })).toEqual({

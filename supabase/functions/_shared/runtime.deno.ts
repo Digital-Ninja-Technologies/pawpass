@@ -112,7 +112,30 @@ function db(client: SupabaseClient): Db {
     };
   };
 
+  // A QR tag order (pt_) is a plain purchase: it waits for payment with no time limit, and no escrow is involved.
+  const tagRow = (r: Record<string, unknown> | null): BookingRow | null =>
+    r
+      ? {
+          id: r.id as string,
+          status: r.status as string,
+          amountKobo: Number(r.price_kobo) + Number(r.delivery_kobo),
+          reference: r.paystack_reference as string,
+          paid: r.status !== "pending_payment",
+          createdAt: r.created_at as string,
+          holds: false,
+          product: "tag",
+        }
+      : null;
+
   const find = async (reference: string, userId?: string): Promise<BookingRow | null> => {
+    if (reference.startsWith("pt_")) {
+      let q = client
+        .from("qr_tag_orders")
+        .select("id, status, price_kobo, delivery_kobo, paystack_reference, created_at, user_id")
+        .eq("paystack_reference", reference);
+      if (userId) q = q.eq("user_id", userId);
+      return tagRow(must(await q.maybeSingle()));
+    }
     if (reference.startsWith("pp_")) {
       let q = client.from("bookings").select(bookingCols).eq("paystack_reference", reference);
       if (userId) q = q.eq("owner_user_id", userId);
@@ -128,6 +151,15 @@ function db(client: SupabaseClient): Db {
     bookingForOwner: (reference, userId) => find(reference, userId),
     bookingByReference: (reference) => find(reference),
     async confirmPayment(reference, amountKobo) {
+      if (reference.startsWith("pt_")) {
+        const r = must(
+          await client.rpc("confirm_tag_payment", {
+            p_reference: reference,
+            p_amount_kobo: amountKobo,
+          }),
+        ) as { result: string; order_id: string; order_status: string };
+        return { result: r.result, booking_id: r.order_id, booking_status: r.order_status };
+      }
       if (reference.startsWith("pp_")) {
         return must(
           await client.rpc("confirm_booking_payment", {

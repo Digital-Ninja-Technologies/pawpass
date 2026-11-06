@@ -21,8 +21,8 @@ export interface BookingRow {
   createdAt: string;
   /** False for a payment with no time limit (a puppy balance is paid at pick up). Default true. */
   holds?: boolean;
-  /** "puppy" for puppy deposits and balances. Default "booking". */
-  product?: "booking" | "puppy";
+  /** "puppy" for puppy deposits and balances, "tag" for a QR tag order. Default "booking". */
+  product?: "booking" | "puppy" | "tag";
 }
 
 export interface PaystackApi {
@@ -106,7 +106,12 @@ export async function initializePayment(
       reference: booking.reference,
       callbackUrl: ctx.callbackUrl,
       bookingId: booking.id,
-      product: booking.product === "puppy" ? "pawpass_puppy" : "pawpass_booking",
+      product:
+        booking.product === "puppy"
+          ? "pawpass_puppy"
+          : booking.product === "tag"
+            ? "pawpass_tag"
+            : "pawpass_booking",
     }),
   );
   const url = res.data?.authorization_url;

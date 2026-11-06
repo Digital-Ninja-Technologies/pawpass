@@ -43,11 +43,11 @@ export function isBookingReference(ref: unknown): ref is string {
 }
 
 /**
- * Every reference we make: "pp_" a booking, "pd_" a puppy deposit, "pb_" a puppy balance, each followed by
+ * Every reference we make: "pp_" a booking, "pd_" a puppy deposit, "pb_" a puppy balance, "pt_" a QR tag order, each followed by
  * 32 hex characters. Anything else is not ours and is never looked up.
  */
 export function isPaymentReference(ref: unknown): ref is string {
-  return typeof ref === "string" && /^(pp|pd|pb)_[0-9a-f]{32}$/.test(ref);
+  return typeof ref === "string" && /^(pp|pd|pb|pt)_[0-9a-f]{32}$/.test(ref);
 }
 
 export interface Charge {
@@ -106,7 +106,7 @@ export interface InitializeInput {
   callbackUrl?: string;
   /** The booking or order this payment is for. */
   bookingId: string;
-  product?: "pawpass_booking" | "pawpass_puppy";
+  product?: "pawpass_booking" | "pawpass_puppy" | "pawpass_tag";
 }
 
 export function buildInitializeBody(i: InitializeInput): Record<string, unknown> {
