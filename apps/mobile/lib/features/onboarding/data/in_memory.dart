@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import '../../booking/data/in_memory_bookings.dart';
 import '../../health/data/in_memory_health.dart';
 import '../domain/models.dart';
 import '../domain/reminder_schedule.dart';
@@ -198,6 +199,7 @@ AppServices inMemoryServices({
   String? signedInAs,
 }) {
   final profiles = InMemoryProfileRepository();
+  final bookings = InMemoryBookingsRepository(now: now);
   return AppServices(
     auth: InMemoryAuthRepository(validCode: validCode, signedInAs: signedInAs),
     profiles: profiles,
@@ -209,6 +211,8 @@ AppServices inMemoryServices({
     vets: InMemoryVetsRepository(),
     location: FakeLocationService(),
     links: FakeLinkLauncher(),
+    bookings: bookings,
+    payments: InMemoryPaymentsRepository(bookings),
     now: now ?? DateTime.now,
   );
 }

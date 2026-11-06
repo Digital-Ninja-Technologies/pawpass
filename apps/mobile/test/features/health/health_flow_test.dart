@@ -2,6 +2,7 @@ import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:pawpass/features/booking/data/in_memory_bookings.dart';
 import 'package:pawpass/app.dart';
 import 'package:pawpass/features/health/data/in_memory_health.dart';
 import 'package:pawpass/features/health/domain/models.dart';
@@ -36,6 +37,8 @@ class _Rig {
       vets: vets,
       location: location,
       links: links,
+      bookings: InMemoryBookingsRepository(),
+      payments: InMemoryPaymentsRepository(InMemoryBookingsRepository()),
       now: () => _today,
     );
   }
@@ -368,7 +371,7 @@ void main() {
       await _pump(tester, _Rig());
       await _tap(tester, 'Vet');
       expect(find.text('Book care'), findsOneWidget);
-      expect(find.text('Coming soon'), findsOneWidget);
+      expect(find.text('Search services'), findsOneWidget);
       await _tab(tester, 'Home');
       await _tap(tester, 'Find a pet');
       expect(
@@ -1109,7 +1112,7 @@ void main() {
         await _tapLabel(tester, 'Notifications, 2 new');
         expect(find.text('TODAY'), findsOneWidget);
         await _back(tester);
-        for (final tab in ['Book', 'Community', 'Adopt']) {
+        for (final tab in ['Community', 'Adopt']) {
           await _tab(tester, tab);
           expect(find.text('Coming soon'), findsOneWidget);
         }

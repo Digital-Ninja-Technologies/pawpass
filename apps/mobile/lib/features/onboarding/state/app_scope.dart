@@ -1,5 +1,6 @@
 import 'package:flutter/widgets.dart';
 
+import '../../booking/state/booking_controller.dart';
 import '../../health/state/health_controller.dart';
 import '../data/repositories.dart';
 import 'onboarding_controller.dart';
@@ -13,6 +14,7 @@ class AppScope extends InheritedWidget {
     required this.session,
     required this.onboarding,
     required this.health,
+    required this.booking,
     required super.child,
   });
 
@@ -20,6 +22,7 @@ class AppScope extends InheritedWidget {
   final SessionController session;
   final OnboardingController onboarding;
   final HealthController health;
+  final BookingController booking;
 
   static AppScope of(BuildContext context) {
     final scope = context.dependOnInheritedWidgetOfExactType<AppScope>();
@@ -32,5 +35,6 @@ class AppScope extends InheritedWidget {
       services != old.services ||
       session != old.session ||
       onboarding != old.onboarding ||
-      health != old.health;
+      health != old.health ||
+      booking != old.booking;
 }

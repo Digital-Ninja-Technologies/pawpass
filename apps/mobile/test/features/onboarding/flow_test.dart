@@ -2,6 +2,7 @@ import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:pawpass/features/booking/data/in_memory_bookings.dart';
 import 'package:pawpass/app.dart';
 import 'package:pawpass/features/health/data/in_memory_health.dart';
 import 'package:pawpass/features/onboarding/data/in_memory.dart';
@@ -29,6 +30,8 @@ class _App {
       vets: InMemoryVetsRepository(),
       location: FakeLocationService(),
       links: FakeLinkLauncher(),
+      bookings: InMemoryBookingsRepository(),
+      payments: InMemoryPaymentsRepository(InMemoryBookingsRepository()),
       now: () => _today,
     );
   }

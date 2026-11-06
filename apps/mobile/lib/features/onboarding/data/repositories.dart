@@ -1,3 +1,4 @@
+import '../../booking/data/booking_repositories.dart';
 import '../../health/data/health_repositories.dart';
 import '../domain/models.dart';
 import '../domain/reminder_schedule.dart';
@@ -75,6 +76,8 @@ class AppServices {
     required this.vets,
     required this.location,
     required this.links,
+    required this.bookings,
+    required this.payments,
     this.shareBaseUrl = kShareBaseUrl,
     this.now = DateTime.now,
     this.demoHint,
@@ -90,6 +93,8 @@ class AppServices {
   final VetsRepository vets;
   final LocationService location;
   final LinkLauncher links;
+  final BookingsRepository bookings;
+  final PaymentsRepository payments;
 
   /// Where share links point. The token follows a `#`, so it is never sent to that server.
   final String shareBaseUrl;

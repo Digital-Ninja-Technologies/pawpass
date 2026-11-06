@@ -2,6 +2,12 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
+import 'features/booking/ui/booked_screen.dart';
+import 'features/booking/ui/bookings_screen.dart';
+import 'features/booking/ui/dispute_screen.dart';
+import 'features/booking/ui/provider_screen.dart';
+import 'features/booking/ui/review_screen.dart';
+import 'features/booking/ui/services_screen.dart';
 import 'features/health/ui/add_record_screen.dart';
 import 'features/health/ui/emergency_screen.dart';
 import 'features/health/ui/home_screen.dart';
@@ -122,14 +128,7 @@ GoRouter buildRouter({
           ),
           StatefulShellBranch(
             routes: [
-              GoRoute(
-                path: '/book',
-                builder: (_, _) => const ComingSoonScreen(
-                  title: 'Book care',
-                  body: 'Book verified vets, groomers, trainers and boarding, and pay safely in the app.',
-                  icon: PawIconData.calendar,
-                ),
-              ),
+              GoRoute(path: '/book', builder: (_, _) => const ServicesScreen()),
             ],
           ),
           StatefulShellBranch(
@@ -157,6 +156,23 @@ GoRouter buildRouter({
             ],
           ),
         ],
+      ),
+      GoRoute(path: '/bookings', builder: (_, _) => const BookingsScreen()),
+      GoRoute(
+        path: '/provider/:id',
+        builder: (_, state) =>
+            ProviderScreen(providerId: state.pathParameters['id']!),
+      ),
+      GoRoute(path: '/booked', builder: (_, _) => const BookedScreen()),
+      GoRoute(
+        path: '/review/:id',
+        builder: (_, state) =>
+            ReviewScreen(bookingId: state.pathParameters['id']!),
+      ),
+      GoRoute(
+        path: '/dispute/:id',
+        builder: (_, state) =>
+            DisputeScreen(bookingId: state.pathParameters['id']!),
       ),
       GoRoute(path: '/schedule', builder: (_, _) => const ScheduleScreen()),
       GoRoute(path: '/add-record', builder: (_, _) => const AddRecordScreen()),
