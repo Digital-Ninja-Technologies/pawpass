@@ -78,14 +78,17 @@ class PawBadge extends StatelessWidget {
                 ),
                 const SizedBox(width: 4),
               ],
-              Text(
-                label,
-                style: TextStyle(
-                  fontFamily: 'PlusJakartaSans',
-                  fontSize: 12,
-                  fontWeight: weight,
-                  height: 1.3,
-                  color: fg,
+              // Flexible so a long label wraps inside a narrow space instead of overflowing.
+              Flexible(
+                child: Text(
+                  label,
+                  style: TextStyle(
+                    fontFamily: 'PlusJakartaSans',
+                    fontSize: 12,
+                    fontWeight: weight,
+                    height: 1.3,
+                    color: fg,
+                  ),
                 ),
               ),
             ],

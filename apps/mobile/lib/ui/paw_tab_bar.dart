@@ -45,11 +45,14 @@ class PawTabBar extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
+                  // Equal shares of the width, so five tabs fit any phone.
                   for (final tab in PawTab.values)
-                    _TabItem(
-                      tab: tab,
-                      selected: tab == active,
-                      onTap: () => onSelected(tab),
+                    Expanded(
+                      child: _TabItem(
+                        tab: tab,
+                        selected: tab == active,
+                        onTap: () => onSelected(tab),
+                      ),
                     ),
                 ],
               ),
@@ -87,7 +90,7 @@ class _TabItem extends StatelessWidget {
         borderRadius: BorderRadius.circular(12),
         child: ConstrainedBox(
           constraints: const BoxConstraints(
-            minWidth: 64,
+            minWidth: PawSize.touch,
             minHeight: PawSize.touch,
           ),
           child: Column(
@@ -95,11 +98,16 @@ class _TabItem extends StatelessWidget {
             children: [
               PawIcon(tab.icon, color: color),
               const SizedBox(height: 4),
-              Text(
-                tab.label,
-                style: PawText.tab11.copyWith(
-                  color: color,
-                  fontWeight: selected ? FontWeight.w700 : FontWeight.w600,
+              // One line always: with large text the label shrinks a little instead of overflowing.
+              FittedBox(
+                fit: BoxFit.scaleDown,
+                child: Text(
+                  tab.label,
+                  maxLines: 1,
+                  style: PawText.tab11.copyWith(
+                    color: color,
+                    fontWeight: selected ? FontWeight.w700 : FontWeight.w600,
+                  ),
                 ),
               ),
             ],

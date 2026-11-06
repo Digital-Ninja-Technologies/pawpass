@@ -1,6 +1,7 @@
 import 'dart:typed_data';
 
 import 'package:flutter_test/flutter_test.dart';
+import 'package:pawpass/features/health/data/in_memory_health.dart';
 import 'package:pawpass/features/onboarding/data/in_memory.dart';
 import 'package:pawpass/features/onboarding/data/repositories.dart';
 import 'package:pawpass/features/onboarding/domain/models.dart';
@@ -19,6 +20,11 @@ class _Rig {
       pets: pets,
       photos: NoPhotoPicker(),
       emailApp: NoEmailApp(),
+      health: InMemoryHealthRepository(now: () => today),
+      notifications: InMemoryNotificationsRepository(),
+      vets: InMemoryVetsRepository(),
+      location: FakeLocationService(),
+      links: FakeLinkLauncher(),
       now: () => today,
     );
     session = SessionController(services);

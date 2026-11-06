@@ -219,6 +219,19 @@ class SupabasePetRepository implements PetRepository {
   }
 
   @override
+  Future<String?> photoUrl(Pet pet) async {
+    final path = pet.photoPath;
+    if (path == null) return null;
+    try {
+      return await _client.storage
+          .from('pet-photos')
+          .createSignedUrl(path, 3600);
+    } catch (_) {
+      return null;
+    }
+  }
+
+  @override
   Future<List<Pet>> myPets() async {
     try {
       final rows = await _client

@@ -12,6 +12,7 @@ export 'paw_chip.dart';
 export 'paw_icon.dart';
 export 'paw_list_row.dart';
 export 'paw_otp_input.dart';
+export 'paw_qr_code.dart';
 export 'paw_segmented.dart';
 export 'paw_step_progress.dart';
 export 'paw_sticky_footer.dart';

@@ -12,10 +12,12 @@ Database schema, row level security, storage rules and seed data for PawPass.
 | `migrations/20261105130000_storage_realtime.sql`   | Storage buckets and policies, realtime publication                                                        |
 | `migrations/20261105140000_admin_console.sql`      | Staff read views (`admin_*_v`) and audited write functions (`admin_*`) for the admin console              |
 | `migrations/20261105150000_waitlist.sql`           | Public waitlist table (no longer used by the landing page; kept)                                          |
+| `migrations/20261106100000_health.sql`             | Reminders from records, `complete_reminder`, notifications, `create_passport_share`, `emergency_vets`     |
 | `migrations/20261105180000_onboarding.sql`         | `profiles.account_types` and `onboarded_at`, `create_pet_passport()`, owners read their pet rows directly |
 | `seed.sql`                                         | Sample data from the designs (Tolu, Bingo, Mimi and the three partners). Local dev only                   |
 | `tests/rls.test.sql`                               | Plain SQL tests for the privacy and business rules                                                        |
 | `tests/admin.test.sql`                             | Tests for the admin functions: roles, state changes, audit trail, invites                                 |
+| `tests/health.test.sql`                            | Tests for reminders, mark done, notifications, share links and emergency vets                             |
 | `tests/onboarding.test.sql`                        | Tests for the account type fields and `create_pet_passport` (all or nothing, privacy, validation)         |
 
 ## How access works
@@ -50,6 +52,17 @@ Authentication, Sign In / Providers, Email: keep "Confirm email" on and the OTP 
 The built in email service is limited to a few emails an hour, which is fine for testing but not for launch: set up
 custom SMTP (Authentication, Emails, SMTP Settings) with a verified sending domain before real users arrive.
 
+## Reminders and notifications
+
+- Every health record with a `next_due_on` has one reminder (trigger `sync_record_reminder`), using the owner's
+  `profiles.reminder_channels`. No channels means reminders are off. Changing the channels rebuilds the open ones.
+- `complete_reminder(reminder, date)` marks one done and records the dose with the next due date a gap later.
+- `generate_my_reminder_notifications()` announces reminders that are due within 7 days, today or tomorrow, or
+  overdue, once each per stage. Verified records are announced by a trigger.
+- Clinics list `phone`, opening hours, `emergency_care` and `home_visits` for `emergency_vets()`. Phone numbers are
+  used to place calls and are not shown in the app.
+- Share links: `create_passport_share` returns the token once and stores only its SHA 256 hash.
+
 ## Creating a pet's passport
 
 The app calls `create_pet_passport(p_pet, p_records, p_channels)`. It runs as the signed in user (so RLS still applies),
@@ -75,7 +88,7 @@ removes everything `seed.sql` and the demo script created. Do not load either in
 
 - `status` transitions on `bookings` and `escrow_transactions` are not enforced in the database. The
   tested escrow state machine module (milestone 3) owns them.
-- Reminder generation from health records (milestone 2).
+- Sending reminders (push, WhatsApp, email): needs a scheduled job and providers. In app notifications exist.
 - `private.close_expired_lost_alerts()` exists but is not scheduled yet (pg_cron or an edge function cron).
 - Seed data is not applied to the hosted project.
 

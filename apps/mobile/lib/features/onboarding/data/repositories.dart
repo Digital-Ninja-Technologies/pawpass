@@ -1,3 +1,4 @@
+import '../../health/data/health_repositories.dart';
 import '../domain/models.dart';
 import '../domain/reminder_schedule.dart';
 
@@ -46,6 +47,9 @@ abstract class PetRepository {
   });
 
   Future<List<Pet>> myPets();
+
+  /// A short lived link to the pet's photo (the bucket is private), or null if there is none.
+  Future<String?> photoUrl(Pet pet);
 }
 
 abstract class PhotoPicker {
@@ -66,6 +70,12 @@ class AppServices {
     required this.pets,
     required this.photos,
     required this.emailApp,
+    required this.health,
+    required this.notifications,
+    required this.vets,
+    required this.location,
+    required this.links,
+    this.shareBaseUrl = kShareBaseUrl,
     this.now = DateTime.now,
     this.demoHint,
   });
@@ -75,6 +85,14 @@ class AppServices {
   final PetRepository pets;
   final PhotoPicker photos;
   final EmailAppLauncher emailApp;
+  final HealthRepository health;
+  final NotificationsRepository notifications;
+  final VetsRepository vets;
+  final LocationService location;
+  final LinkLauncher links;
+
+  /// Where share links point. The token follows a `#`, so it is never sent to that server.
+  final String shareBaseUrl;
 
   /// The clock, so tests can pin "today".
   final DateTime Function() now;
@@ -82,3 +100,10 @@ class AppServices {
   /// Set only by the debug demo build (no Supabase project): shown on the code screen.
   final String? demoHint;
 }
+
+/// Share links open this page (it explains that the link is for a vet using the PawPass app).
+/// Override with --dart-define=SHARE_BASE_URL=https://your.domain/s once the site has its own domain.
+const kShareBaseUrl = String.fromEnvironment(
+  'SHARE_BASE_URL',
+  defaultValue: 'https://pawpass-web-ten.vercel.app/s',
+);

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
+import 'features/health/state/health_controller.dart';
 import 'features/onboarding/data/repositories.dart';
 import 'features/onboarding/state/app_scope.dart';
 import 'features/onboarding/state/onboarding_controller.dart';
@@ -27,6 +28,10 @@ class _PawPassAppState extends State<PawPassApp> {
     widget.services,
     _session,
   );
+  late final HealthController _health = HealthController(
+    widget.services,
+    _session,
+  );
   late final GoRouter _router = buildRouter(
     session: _session,
     onboarding: _onboarding,
@@ -35,6 +40,7 @@ class _PawPassAppState extends State<PawPassApp> {
   @override
   void dispose() {
     _router.dispose();
+    _health.dispose();
     _onboarding.dispose();
     _session.dispose();
     super.dispose();
@@ -46,6 +52,7 @@ class _PawPassAppState extends State<PawPassApp> {
       services: widget.services,
       session: _session,
       onboarding: _onboarding,
+      health: _health,
       child: MaterialApp.router(
         title: 'PawPass',
         theme: buildAppTheme(),

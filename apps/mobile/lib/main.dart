@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 import 'app.dart';
+import 'features/health/data/supabase_health.dart';
 import 'features/onboarding/data/device_services.dart';
 import 'features/onboarding/data/in_memory.dart';
 import 'features/onboarding/data/repositories.dart';
@@ -30,6 +31,11 @@ Future<void> main() async {
           pets: SupabasePetRepository(client),
           photos: ImagePickerPhotoPicker(),
           emailApp: DeviceEmailAppLauncher(),
+          health: SupabaseHealthRepository(client),
+          notifications: SupabaseNotificationsRepository(client),
+          vets: SupabaseVetsRepository(client),
+          location: GeolocatorLocationService(),
+          links: UrlLinkLauncher(),
         ),
       ),
     );
@@ -48,6 +54,11 @@ Future<void> main() async {
           pets: base.pets,
           photos: ImagePickerPhotoPicker(),
           emailApp: DeviceEmailAppLauncher(),
+          health: base.health,
+          notifications: base.notifications,
+          vets: base.vets,
+          location: GeolocatorLocationService(),
+          links: UrlLinkLauncher(),
           demoHint: 'Demo mode: nothing is sent. Use the code 123456.',
         ),
       ),

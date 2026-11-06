@@ -93,13 +93,18 @@ class AllSetScreen extends StatelessWidget {
                     const SizedBox(height: 20),
                     PawButton(
                       label: 'Go to home',
-                      onPressed: () => context.go('/home'),
+                      onPressed: () {
+                        // Pick up the pet that was just created.
+                        AppScope.of(context).health.load();
+                        context.go('/home');
+                      },
                     ),
                     const SizedBox(height: 10),
                     PawButton(
                       label: 'Add another pet',
                       variant: PawButtonVariant.secondary,
                       onPressed: () {
+                        AppScope.of(context).health.load();
                         ob.startAnotherPet();
                         context.go('/add-pet');
                       },

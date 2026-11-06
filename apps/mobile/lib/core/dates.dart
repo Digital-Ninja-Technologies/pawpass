@@ -43,3 +43,38 @@ int daysBetween(DateTime from, DateTime to) {
   final b = DateTime.utc(to.year, to.month, to.day);
   return b.difference(a).inDays;
 }
+
+const _weekdays = [
+  'Monday',
+  'Tuesday',
+  'Wednesday',
+  'Thursday',
+  'Friday',
+  'Saturday',
+  'Sunday',
+];
+const _monthNames = [
+  'January',
+  'February',
+  'March',
+  'April',
+  'May',
+  'June',
+  'July',
+  'August',
+  'September',
+  'October',
+  'November',
+  'December',
+];
+
+/// "Thursday, 5 November"
+String formatLongDate(DateTime d) =>
+    '${_weekdays[d.weekday - 1]}, ${d.day} ${_monthNames[d.month - 1]}';
+
+/// "Good morning", "Good afternoon" or "Good evening" for the hour of day.
+String greetingFor(DateTime now) {
+  if (now.hour < 12) return 'Good morning';
+  if (now.hour < 17) return 'Good afternoon';
+  return 'Good evening';
+}

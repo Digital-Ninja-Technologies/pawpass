@@ -3,6 +3,7 @@ import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:pawpass/app.dart';
+import 'package:pawpass/features/health/data/in_memory_health.dart';
 import 'package:pawpass/features/onboarding/data/in_memory.dart';
 import 'package:pawpass/features/onboarding/data/repositories.dart';
 import 'package:pawpass/features/onboarding/domain/models.dart';
@@ -23,6 +24,11 @@ class _App {
       pets: pets,
       photos: photos,
       emailApp: mail,
+      health: InMemoryHealthRepository(now: () => _today),
+      notifications: InMemoryNotificationsRepository(),
+      vets: InMemoryVetsRepository(),
+      location: FakeLocationService(),
+      links: FakeLinkLauncher(),
       now: () => _today,
     );
   }
@@ -365,8 +371,8 @@ void main() {
       );
 
       await _tap(tester, 'Go to home');
-      expect(find.text('Hi Tolu'), findsOneWidget);
-      expect(find.text('Bingo'), findsOneWidget);
+      expect(find.text('Good morning, Tolu'), findsOneWidget);
+      expect(find.text('Bingo'), findsWidgets);
     });
   }
 
@@ -476,7 +482,7 @@ void main() {
       await app.profiles.save(firstName: 'Tolu');
       app.profiles.markOnboarded(_today);
       await _pump(tester, app);
-      expect(find.text('Hi Tolu'), findsOneWidget);
+      expect(find.text('Good morning, Tolu'), findsOneWidget);
       expect(find.text('Get started'), findsNothing);
     });
 
@@ -513,6 +519,8 @@ void main() {
       await app.profiles.save(firstName: 'Tolu');
       app.profiles.markOnboarded(_today);
       await _pump(tester, app);
+      await tester.tap(find.bySemanticsLabel('Your account'));
+      await tester.pumpAndSettle();
       await _tap(tester, 'Sign out');
       expect(find.text('Get started'), findsOneWidget);
       await _tap(tester, 'Get started');

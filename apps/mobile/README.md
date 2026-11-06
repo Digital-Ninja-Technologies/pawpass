@@ -82,3 +82,36 @@ Left out on purpose, until what they need exists:
 | Links on "Terms" and "Privacy Policy" | The pages do not exist yet. Shown as plain text | When the pages are published |
 
 Photos use the official `image_picker`; the mail app button uses `url_launcher` (iPhone) and `android_intent_plus` (Android).
+
+## Health (milestone 2)
+
+Five tabs (Home, Passport, Book, Community, Adopt) in `lib/features/health`, plus Schedule, Add record, Share with a
+vet, Emergency vets and Notifications. Book, Community and Adopt show "Coming soon" until their milestones.
+
+```
+lib/features/health/
+  domain/   pure Dart: models, schedule grouping, passport status, next due rules, weight chart,
+            share link and expiry text, vet and notification formatting (unit tested)
+  data/     one interface per concern (records and reminders, notifications, emergency vets, location,
+            links), Supabase versions, and in memory versions that follow the database rules
+  state/    HealthController: pets, selected pet, records, schedule, notifications
+  ui/       the screens
+```
+
+- **Reminders are made by the database** from each record's next due date (and the person's reminder channels), so
+  there is one rule for the app, the vet flow and the admin. "Mark done" records the dose and schedules the next
+  one with the same gap (`complete_reminder`).
+- **Notifications** for due and overdue reminders are created by the database when the app opens
+  (`generate_my_reminder_notifications`). Sending push, WhatsApp and email is not built yet: it needs a scheduled job
+  and providers, and will call the same function.
+- **Share with a vet** makes a link and QR code that expire (24 hours) through `create_passport_share`. Only a hash
+  of the token is stored. The link is `SHARE_BASE_URL` + `#` + token (default: the website's `/s` page). The token
+  is after the `#`, so a web server never sees it. Changing a switch makes a new link and stops the old one. The
+  vet side (scanning and opening a shared passport) arrives with partner mode in milestone 6.
+- **Emergency vets** asks for coarse location when opened (and works without it, just without distances). Phone
+  numbers are used to place the call and are never shown. Travel times ("about 12 min") need a routing service, so
+  only distances are shown.
+- The QR code is drawn by `PawQrCode` (the `qr` package) and was checked with a scanner.
+
+Left out on purpose: "Switch to partner mode" (milestone 6), the full account screen (the account circle offers sign
+out for now), attaching PDFs to records (photos only), and asking a clinic on PawPass to verify a record (partner mode).

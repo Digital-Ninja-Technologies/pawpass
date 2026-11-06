@@ -2,7 +2,14 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
-import 'features/home/home_screen.dart';
+import 'features/health/ui/add_record_screen.dart';
+import 'features/health/ui/emergency_screen.dart';
+import 'features/health/ui/home_screen.dart';
+import 'features/health/ui/main_shell.dart';
+import 'features/health/ui/notifications_screen.dart';
+import 'features/health/ui/passport_screen.dart';
+import 'features/health/ui/schedule_screen.dart';
+import 'features/health/ui/share_vet_screen.dart';
 import 'features/onboarding/state/onboarding_controller.dart';
 import 'features/onboarding/state/session_controller.dart';
 import 'features/onboarding/ui/account_type_screen.dart';
@@ -16,6 +23,7 @@ import 'features/onboarding/ui/verify_screen.dart';
 import 'features/onboarding/ui/welcome_screen.dart';
 import 'gallery/component_gallery_screen.dart';
 import 'theme/tokens.dart';
+import 'ui/ui.dart' show PawIconData;
 
 /// Screens a signed out person may see.
 const _signedOutRoutes = {'/welcome', '/sign-in', '/verify'};
@@ -51,16 +59,16 @@ String? redirectFor({
     if (location == '/all-set' && onboarding.createdPet == null) return '/home';
     return null;
   }
-  const beforeSetup = {
-    '/',
-    '/splash',
-    '/welcome',
-    '/sign-in',
-    '/verify',
-    '/home',
+  // Not finished yet: only the setup screens are open.
+  const setupRoutes = {
+    '/account-type',
+    '/profile',
+    '/add-pet',
+    '/pet-health',
+    '/reminders',
     '/all-set',
   };
-  return beforeSetup.contains(location) ? '/account-type' : null;
+  return setupRoutes.contains(location) ? null : '/account-type';
 }
 
 GoRouter buildRouter({
@@ -96,7 +104,77 @@ GoRouter buildRouter({
       GoRoute(path: '/pet-health', builder: (_, _) => const PetHealthScreen()),
       GoRoute(path: '/reminders', builder: (_, _) => const RemindersScreen()),
       GoRoute(path: '/all-set', builder: (_, _) => const AllSetScreen()),
-      GoRoute(path: '/home', builder: (_, _) => const HomeScreen()),
+      StatefulShellRoute.indexedStack(
+        builder: (_, _, shell) => MainShell(shell: shell),
+        branches: [
+          StatefulShellBranch(
+            routes: [
+              GoRoute(path: '/home', builder: (_, _) => const HomeScreen()),
+            ],
+          ),
+          StatefulShellBranch(
+            routes: [
+              GoRoute(
+                path: '/passport',
+                builder: (_, _) => const PassportScreen(),
+              ),
+            ],
+          ),
+          StatefulShellBranch(
+            routes: [
+              GoRoute(
+                path: '/book',
+                builder: (_, _) => const ComingSoonScreen(
+                  title: 'Book care',
+                  body: 'Book verified vets, groomers, trainers and boarding, and pay safely in the app.',
+                  icon: PawIconData.calendar,
+                ),
+              ),
+            ],
+          ),
+          StatefulShellBranch(
+            routes: [
+              GoRoute(
+                path: '/community',
+                builder: (_, _) => const ComingSoonScreen(
+                  title: 'Community',
+                  body: 'Share photos, follow pet friends nearby and help reunite lost pets with their families.',
+                  icon: PawIconData.community,
+                ),
+              ),
+            ],
+          ),
+          StatefulShellBranch(
+            routes: [
+              GoRoute(
+                path: '/adopt',
+                builder: (_, _) => const ComingSoonScreen(
+                  title: 'Find a pet',
+                  body: 'Meet verified breeders and shelters, and bring a pet home with its passport.',
+                  icon: PawIconData.paw,
+                ),
+              ),
+            ],
+          ),
+        ],
+      ),
+      GoRoute(path: '/schedule', builder: (_, _) => const ScheduleScreen()),
+      GoRoute(path: '/add-record', builder: (_, _) => const AddRecordScreen()),
+      GoRoute(path: '/share', builder: (_, _) => const ShareVetScreen()),
+      GoRoute(path: '/emergency', builder: (_, _) => const EmergencyScreen()),
+      GoRoute(
+        path: '/notifications',
+        builder: (_, _) => const NotificationsScreen(),
+      ),
+      GoRoute(
+        path: '/lost',
+        builder: (_, _) => const ComingSoonScreen(
+          title: 'Report a lost pet',
+          body: 'Alert people nearby within minutes, with a QR collar tag that lets finders reach you safely.',
+          icon: PawIconData.alertTriangle,
+          showBack: true,
+        ),
+      ),
       if (kDebugMode)
         GoRoute(
           path: '/gallery',

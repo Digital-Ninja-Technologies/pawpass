@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import '../../health/data/in_memory_health.dart';
 import '../domain/models.dart';
 import '../domain/reminder_schedule.dart';
 import '../domain/validators.dart';
@@ -161,6 +162,9 @@ class InMemoryPetRepository implements PetRepository {
 
   @override
   Future<List<Pet>> myPets() async => List.of(pets);
+
+  @override
+  Future<String?> photoUrl(Pet pet) async => null;
 }
 
 class NoPhotoPicker implements PhotoPicker {
@@ -200,6 +204,11 @@ AppServices inMemoryServices({
     pets: InMemoryPetRepository(profiles: profiles, now: now),
     photos: NoPhotoPicker(),
     emailApp: NoEmailApp(),
+    health: InMemoryHealthRepository(now: now),
+    notifications: InMemoryNotificationsRepository(),
+    vets: InMemoryVetsRepository(),
+    location: FakeLocationService(),
+    links: FakeLinkLauncher(),
     now: now ?? DateTime.now,
   );
 }
