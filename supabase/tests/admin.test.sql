@@ -242,7 +242,7 @@ do $$ begin
     'owners cannot create tag orders from the client (paid server side)';
 end $$;
 :server
-insert into public.qr_tag_orders (user_id, pet_id) values ('a0000000-0000-0000-0000-000000000001', 'c0000000-0000-0000-0000-000000000001');
+insert into public.qr_tag_orders (user_id, pet_id, status) values ('a0000000-0000-0000-0000-000000000001', 'c0000000-0000-0000-0000-000000000001', 'paid');
 :support
 do $$ declare a uuid; o uuid; begin
   select id into a from public.admin_lost_v where pet_name = 'Bingo';
