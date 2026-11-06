@@ -46,7 +46,13 @@ class FakeDb implements PayoutDb {
   async claim(limit: number) {
     return this.queue.splice(0, limit);
   }
-  async finish(itemId: string, ok: boolean, code: string | null, error: string | null, recipient: string | null) {
+  async finish(
+    itemId: string,
+    ok: boolean,
+    code: string | null,
+    error: string | null,
+    recipient: string | null,
+  ) {
     this.finished.push({ itemId, ok, code, error, recipient });
   }
 }
@@ -134,7 +140,10 @@ describe("judgeTransfer", () => {
       ok: false,
       error: "Your balance is not enough",
     });
-    expect(judgeTransfer({ status: false })).toEqual({ ok: false, error: "Paystack refused the transfer" });
+    expect(judgeTransfer({ status: false })).toEqual({
+      ok: false,
+      error: "Paystack refused the transfer",
+    });
   });
 
   it("a duplicate reference means an earlier try got through", () => {
@@ -184,7 +193,11 @@ describe("sendItem", () => {
     const { db, api, ctx } = rig();
     api.transferRes = { status: false, message: "Your balance is not enough" };
     expect(await sendItem(ctx, item())).toBe(false);
-    expect(db.finished[0]).toMatchObject({ ok: false, error: "Your balance is not enough", recipient: "RCP_new" });
+    expect(db.finished[0]).toMatchObject({
+      ok: false,
+      error: "Your balance is not enough",
+      recipient: "RCP_new",
+    });
   });
 
   it("a bad account is failed without calling Paystack at all", async () => {
@@ -229,13 +242,21 @@ describe("runPayouts", () => {
 describe("parseTransferEvent", () => {
   const ev = (event: string, data: object) => JSON.stringify({ event, data });
   it("reads failed, reversed and success", () => {
-    expect(parseTransferEvent(ev("transfer.failed", { transfer_code: "TRF_1", reason: "Account closed" }))).toEqual({
+    expect(
+      parseTransferEvent(
+        ev("transfer.failed", { transfer_code: "TRF_1", reason: "Account closed" }),
+      ),
+    ).toEqual({
       kind: "failed",
       transferCode: "TRF_1",
       reason: "Account closed",
     });
-    expect(parseTransferEvent(ev("transfer.reversed", { transfer_code: "TRF_1" }))?.kind).toBe("failed");
-    expect(parseTransferEvent(ev("transfer.success", { transfer_code: "TRF_1" }))?.kind).toBe("success");
+    expect(parseTransferEvent(ev("transfer.reversed", { transfer_code: "TRF_1" }))?.kind).toBe(
+      "failed",
+    );
+    expect(parseTransferEvent(ev("transfer.success", { transfer_code: "TRF_1" }))?.kind).toBe(
+      "success",
+    );
   });
 
   it("ignores anything else", () => {

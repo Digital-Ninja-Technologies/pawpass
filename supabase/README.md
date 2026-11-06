@@ -17,15 +17,17 @@ Database schema, row level security, storage rules and seed data for PawPass.
 | `migrations/20261106200000_services_escrow.sql`    | Escrow and booking state machines, `create_booking`, payment confirmation, cancel, disputes, refund queue, search                      |
 | `migrations/20261107100000_community.sql`          | Community feed, likes, pet profiles, lost pet alerts with nearby notifications, sightings, alert chats, reports and blocks             |
 | `migrations/20261108100000_adopt_transfer.sql`     | Listings feed, puppy orders (deposit and balance in escrow), handover, passport transfer, the 72 hour vet check, adoption applications |
-| `migrations/20261109100000_partner_mode.sql`       | Partner application and verification steps, payout account, dashboards, earnings, listings, adoption decisions, help tickets        |
-| `functions/`                                       | Paystack edge functions (initialize, verify, webhook, refunds) and their tested logic                                                  |
+| `migrations/20261109100000_partner_mode.sql`       | Partner application and verification steps, payout account, dashboards, earnings, listings, adoption decisions, help tickets           |
+| `migrations/20261110100000_payout_sending.sql`     | Weekly payout run linked to escrows, the scheduled draft, claiming and finishing transfers with retries                                |
+| `functions/`                                       | Paystack edge functions (initialize, verify, webhook, refunds, payout-run) and their tested logic                                      |
 | `seed.sql`                                         | Sample data from the designs (Tolu, Bingo, Mimi and the three partners). Local dev only                                                |
 | `tests/rls.test.sql`                               | Plain SQL tests for the privacy and business rules                                                                                     |
 | `tests/admin.test.sql`                             | Tests for the admin functions: roles, state changes, audit trail, invites                                                              |
 | `tests/health.test.sql`                            | Tests for reminders, mark done, notifications, share links and emergency vets                                                          |
 | `tests/community.test.sql`                         | Tests for the feed rules, lost alert fan out, sightings privacy, chat membership and blocking, reports                                 |
 | `tests/adopt.test.sql`                             | Tests for listings, orders, escrow amounts and rounding, handover, passport transfer, disputes, adoption                               |
-| `tests/partner.test.sql`                           | Tests for the application steps, documents and payout privacy, review notices, dashboards, earnings, listings, decisions, support    |
+| `tests/partner.test.sql`                           | Tests for the application steps, documents and payout privacy, review notices, dashboards, earnings, listings, decisions, support      |
+| `tests/payout.test.sql`                            | Tests for what a run pays, release before sending, retries, split remainders and who may send                                          |
 | `tests/onboarding.test.sql`                        | Tests for the account type fields and `create_pet_passport` (all or nothing, privacy, validation)                                      |
 
 ## How access works

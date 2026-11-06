@@ -74,6 +74,21 @@ Puppy deposits (`pd_`) and balances (`pb_`) go through the same functions as boo
 The scheduled `process-refunds` run also releases puppy sales whose 72 hour vet check window ended with no problem.
 Tests: `pnpm --filter @pawpass/edge-functions test`.
 
+### Weekly payouts
+
+A fifth function, `payout-run`, sends partners their money. Deploy it with JWT verification **off** (it only accepts the
+service role key, like `process-refunds`) and schedule it **every hour** with an HTTP `POST` and that key.
+
+- It keeps a draft run for the next payout day (`settings.payout_weekday`) up to date. Staff review and approve it in the
+  admin console under Escrow & payouts, Payout run. Nothing is sent from a draft.
+- Once a run is approved and its day has come, it releases each partner's escrow rows and asks Paystack for the transfers.
+  Partners with no payout account are held, and paid in a later run once they add one.
+- Transfers use Paystack **balance**, so keep enough in it, and turn **transfer OTP off** in the Paystack settings
+  (a transfer that asks for an OTP is recorded as failed). Add `transfer.failed` and `transfer.reversed` to the events
+  sent to the webhook so a bounced transfer shows up as Failed in the console.
+- A failed transfer is retried up to three times with the same reference, so it can never be paid twice. After that the
+  money has already left escrow: pay it by hand from the Paystack dashboard.
+
 ## Partner mode
 
 Becoming a partner needs no setup beyond the `20261109100000_partner_mode` migration. Things worth knowing:

@@ -303,7 +303,10 @@ describe("handleWebhook", () => {
     expect((await handleWebhook(ctx, failed, null)).status).toBe(401);
     expect(db.failedTransfers).toHaveLength(0);
     db.transferError = new Error("db down");
-    expect(await handleWebhook(ctx, failed, sign(failed))).toEqual({ status: 500, body: "try again" });
+    expect(await handleWebhook(ctx, failed, sign(failed))).toEqual({
+      status: 500,
+      body: "try again",
+    });
   });
 
   it("a forged body with a real signature for another body is rejected", async () => {

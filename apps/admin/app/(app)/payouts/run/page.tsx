@@ -13,8 +13,25 @@ interface Item {
   id: string;
   amount_kobo: number;
   status: string;
+  note: string | null;
+  attempts: number;
   partner: { business_name: string } | null;
 }
+
+const ITEM_TONE: Record<string, "good" | "warn" | "bad" | "neutral"> = {
+  sent: "good",
+  sending: "warn",
+  pending: "neutral",
+  held: "warn",
+  failed: "bad",
+};
+const ITEM_LABEL: Record<string, string> = {
+  sent: "Sent",
+  sending: "Sending",
+  pending: "Will be sent",
+  held: "Held",
+  failed: "Failed",
+};
 
 export default async function PayoutRunPage() {
   const { supabase, staff } = await requireSection("payouts");
@@ -30,7 +47,7 @@ export default async function PayoutRunPage() {
   const { data: items } = run
     ? await supabase
         .from("payout_items")
-        .select("id, amount_kobo, status, partner:partner_accounts(business_name)")
+        .select("id, amount_kobo, status, note, attempts, partner:partner_accounts(business_name)")
         .eq("payout_run_id", run.id)
         .order("amount_kobo", { ascending: false })
     : { data: [] };
@@ -41,6 +58,11 @@ export default async function PayoutRunPage() {
     .eq("status", "paused");
   const pausedTotal = (paused ?? []).reduce((s, r) => s + Number(r.amount_kobo), 0);
   const canRun = canDo(staff.role, "prepare_payout");
+  const toSend = list
+    .filter((i) => i.status !== "held")
+    .reduce((s, i) => s + Number(i.amount_kobo), 0);
+  const held = list.filter((i) => i.status === "held");
+  const failed = list.filter((i) => i.status === "failed");
 
   return (
     <>
@@ -63,8 +85,13 @@ export default async function PayoutRunPage() {
       <section className="grid stats">
         <Stat
           label="Total to pay"
-          value={formatKobo(run?.total_kobo ?? 0)}
-          note={`${list.length} partners, after fees`}
+          value={formatKobo(toSend)}
+          note={`${list.length - held.length} partner${list.length - held.length === 1 ? "" : "s"}, after fees`}
+        />
+        <Stat
+          label="Held: no payout account"
+          value={formatKobo(held.reduce((s, i) => s + Number(i.amount_kobo), 0))}
+          note={`${held.length} partner${held.length === 1 ? "" : "s"}. Paid once they add an account`}
         />
         <Stat
           label="Left out: paused by disputes"
@@ -86,10 +113,22 @@ export default async function PayoutRunPage() {
           ) : null}
         </section>
       ) : null}
-      {run && run.status !== "draft" ? (
+      {run && run.status === "approved" ? (
         <Notice tone="ok">
-          This run is {run.status}. Transfers are sent by the scheduled payout function (not built
-          yet), so nothing has been paid out.
+          This run is approved. The payout function sends it on {formatDate(run.run_on)}
+          {new Date(run.run_on) > new Date() ? "" : " (today or earlier, so it is being sent now)"}.
+          The money is released from escrow when each transfer is started, so a late dispute cannot
+          touch it.
+        </Notice>
+      ) : null}
+      {run && run.status === "sent" ? (
+        <Notice tone="ok">This run was sent. Partners were told their payout is on its way.</Notice>
+      ) : null}
+      {run && (run.status === "failed" || failed.length > 0) ? (
+        <Notice tone="err">
+          {failed.length} transfer{failed.length === 1 ? "" : "s"} failed after retries. The money
+          has already left escrow, so check the reason below and the Paystack balance, then pay it
+          by hand from the Paystack dashboard.
         </Notice>
       ) : null}
 
@@ -109,6 +148,7 @@ export default async function PayoutRunPage() {
                   <th>Partner</th>
                   <th className="num">Amount</th>
                   <th>Status</th>
+                  <th>Note</th>
                 </tr>
               </thead>
               <tbody>
@@ -117,7 +157,12 @@ export default async function PayoutRunPage() {
                     <td>{i.partner?.business_name ?? "Partner"}</td>
                     <td className="num">{formatKobo(i.amount_kobo)}</td>
                     <td>
-                      <Badge>{i.status}</Badge>
+                      <Badge tone={ITEM_TONE[i.status] ?? "neutral"}>
+                        {ITEM_LABEL[i.status] ?? i.status}
+                      </Badge>
+                    </td>
+                    <td className="small muted">
+                      {i.note ?? (i.attempts > 1 ? `Attempt ${i.attempts}` : "")}
                     </td>
                   </tr>
                 ))}

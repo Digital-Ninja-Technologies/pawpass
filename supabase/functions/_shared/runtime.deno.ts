@@ -227,22 +227,18 @@ function payoutDb(client: SupabaseClient): PayoutDb {
       return (must(await client.rpc("schedule_payout_run")) as string | null) ?? null;
     },
     async claim(limit) {
-      const rows = (must(await client.rpc("claim_payout_items", { p_limit: limit })) ?? []) as Record<
-        string,
-        unknown
-      >[];
-      return rows.map(
-        (r): PayoutItem => ({
-          itemId: r.item_id as string,
-          partnerId: r.partner_id as string,
-          amountKobo: Number(r.amount_kobo),
-          bankCode: r.bank_code as string,
-          accountNumber: r.account_number as string,
-          accountName: r.account_name as string,
-          recipientCode: (r.recipient_code as string | null) ?? null,
-          attempts: Number(r.attempts),
-        }),
-      );
+      const rows = (must(await client.rpc("claim_payout_items", { p_limit: limit })) ??
+        []) as Record<string, unknown>[];
+      return rows.map((r): PayoutItem => ({
+        itemId: r.item_id as string,
+        partnerId: r.partner_id as string,
+        amountKobo: Number(r.amount_kobo),
+        bankCode: r.bank_code as string,
+        accountNumber: r.account_number as string,
+        accountName: r.account_name as string,
+        recipientCode: (r.recipient_code as string | null) ?? null,
+        attempts: Number(r.attempts),
+      }));
     },
     async finish(itemId, ok, transferCode, error, recipientCode) {
       must(

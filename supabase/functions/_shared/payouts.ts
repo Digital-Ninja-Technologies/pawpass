@@ -18,9 +18,7 @@ export interface TransferApi {
   createRecipient(
     body: Record<string, unknown>,
   ): Promise<{ status?: boolean; message?: string; data?: { recipient_code?: string } | null }>;
-  transfer(
-    body: Record<string, unknown>,
-  ): Promise<{
+  transfer(body: Record<string, unknown>): Promise<{
     status?: boolean;
     message?: string;
     data?: { transfer_code?: string; status?: string } | null;
@@ -76,8 +74,7 @@ export function buildTransferBody(item: PayoutItem, recipient: string): Record<s
 }
 
 export type TransferVerdict =
-  | { ok: true; code: string | null; note?: string }
-  | { ok: false; error: string };
+  { ok: true; code: string | null; note?: string } | { ok: false; error: string };
 
 /** Paystack accepts a transfer as success, pending or received. Anything else is a failure to record. */
 export function judgeTransfer(res: {
@@ -89,14 +86,21 @@ export function judgeTransfer(res: {
   if (res.status !== true) {
     // The same reference twice means an earlier attempt did reach Paystack. Do not send again.
     if (/duplicate/i.test(message)) {
-      return { ok: true, code: null, note: "Paystack already had this transfer. Check it in the dashboard." };
+      return {
+        ok: true,
+        code: null,
+        note: "Paystack already had this transfer. Check it in the dashboard.",
+      };
     }
     return { ok: false, error: message || "Paystack refused the transfer" };
   }
   const state = res.data?.status;
   const code = typeof res.data?.transfer_code === "string" ? res.data.transfer_code : null;
   if (state === "otp") {
-    return { ok: false, error: "Paystack is asking for an OTP. Turn off transfer OTP in the Paystack settings." };
+    return {
+      ok: false,
+      error: "Paystack is asking for an OTP. Turn off transfer OTP in the Paystack settings.",
+    };
   }
   if (state === "failed" || state === "reversed" || state === "abandoned") {
     return { ok: false, error: `Paystack transfer status: ${String(state)}` };
@@ -185,7 +189,8 @@ export function parseTransferEvent(raw: string): TransferEvent | null {
   if (typeof event !== "object" || event === null) return null;
   const e = event as { event?: unknown; data?: Record<string, unknown> };
   const name = e.event;
-  if (name !== "transfer.failed" && name !== "transfer.reversed" && name !== "transfer.success") return null;
+  if (name !== "transfer.failed" && name !== "transfer.reversed" && name !== "transfer.success")
+    return null;
   const code = e.data?.transfer_code;
   if (typeof code !== "string" || !code) return null;
   const reason = e.data?.reason;

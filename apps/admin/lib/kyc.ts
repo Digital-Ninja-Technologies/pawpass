@@ -1,14 +1,17 @@
-/** Documents a partner must upload before review, by partner type (from the designs:
- * "5 of 5 documents" for breeders and vets, "4 of 4" for shelters). */
+/** Documents a partner must upload before review, by partner type. This is what the app collects: the payout
+ * account is not a file, it is shown separately from `partner_payout_accounts`. */
 export type DocKind =
   "owner_id" | "cac" | "licence" | "facility_photo" | "vet_reference" | "payout_account";
 
 export const REQUIRED_DOCS: Record<string, DocKind[]> = {
-  vet: ["owner_id", "licence", "facility_photo", "vet_reference", "payout_account"],
-  breeder: ["owner_id", "cac", "facility_photo", "vet_reference", "payout_account"],
-  shelter: ["owner_id", "cac", "facility_photo", "payout_account"],
-  service: ["owner_id", "cac", "facility_photo", "payout_account"],
+  vet: ["owner_id", "cac", "licence", "facility_photo"],
+  breeder: ["owner_id", "cac", "facility_photo"],
+  shelter: ["owner_id", "cac", "facility_photo"],
+  service: ["owner_id", "cac", "facility_photo"],
 };
+
+/** The app asks for at least this many facility photos. */
+export const MIN_FACILITY_PHOTOS = 3;
 
 export const DOC_LABELS: Record<DocKind, { group: string; label: string }> = {
   owner_id: { group: "ID document", label: "Owner ID" },

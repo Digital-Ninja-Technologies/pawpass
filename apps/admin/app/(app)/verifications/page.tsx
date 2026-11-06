@@ -3,7 +3,13 @@ import Link from "next/link";
 import { requireSection } from "@/lib/auth";
 import { canDo } from "@/lib/roles";
 import { describeTimeLeft, formatDateTime, hoursLeft, hoursSince } from "@/lib/format";
-import { DOC_LABELS, documentProgress, PARTNER_TYPE_LABELS, type DocKind } from "@/lib/kyc";
+import {
+  DOC_LABELS,
+  documentProgress,
+  MIN_FACILITY_PHOTOS,
+  PARTNER_TYPE_LABELS,
+  type DocKind,
+} from "@/lib/kyc";
 import { Badge, Empty, PageHeader, Tabs, href } from "@/components/ui";
 import type { KycRow, PartnerDocRow, SettingsRow } from "@/lib/types";
 import { ReviewPanel } from "./ReviewPanel";
@@ -80,6 +86,16 @@ export default async function VerificationsPage({
       return { doc: d, url: data?.signedUrl ?? null };
     }),
   );
+
+  // The payout account is a record, not a file. Staff see the bank, the name and the last four digits only.
+  const { data: payoutRow } = selected
+    ? await supabase
+        .from("partner_payout_accounts")
+        .select("bank_name, account_name, account_number")
+        .eq("partner_account_id", selected.id)
+        .maybeSingle<{ bank_name: string; account_name: string; account_number: string }>()
+    : { data: null };
+  const facilityPhotos = selectedDocs.filter((d) => d.kind === "facility_photo").length;
 
   const canReview =
     canDo(staff.role, "review_partner") &&
@@ -253,6 +269,29 @@ export default async function VerificationsPage({
                 <p className="tiny muted" style={{ marginTop: 8 }}>
                   Links to files expire after 5 minutes.
                 </p>
+              </section>
+
+              <section aria-label="Payout account">
+                <div className="overline" style={{ marginBottom: 8 }}>
+                  Payout account
+                </div>
+                {payoutRow ? (
+                  <p className="small">
+                    <b>{payoutRow.bank_name}</b> ending {payoutRow.account_number.slice(-4)} ·{" "}
+                    {payoutRow.account_name}
+                    <span className="muted"> · check the name matches the owner or business</span>
+                  </p>
+                ) : (
+                  <p className="small" style={{ color: "var(--warm-text)" }}>
+                    No payout account yet. Payouts are held until one is added.
+                  </p>
+                )}
+                {canSeeDocs && facilityPhotos > 0 && facilityPhotos < MIN_FACILITY_PHOTOS ? (
+                  <p className="small" style={{ marginTop: 8, color: "var(--warm-text)" }}>
+                    Only {facilityPhotos} facility photo{facilityPhotos === 1 ? "" : "s"}; the app
+                    asks for {MIN_FACILITY_PHOTOS}.
+                  </p>
+                ) : null}
               </section>
 
               {canReview ? (
