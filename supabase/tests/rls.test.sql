@@ -209,8 +209,18 @@ do $$ declare svc uuid; begin
   assert test_helpers.denied(format($q$ insert into public.bookings (owner_user_id, pet_id, partner_account_id, service_id, starts_at)
     values ('a0000000-0000-0000-0000-000000000001', 'c0000000-0000-0000-0000-000000000005', 'b0000000-0000-0000-0000-000000000001', %L, now() + interval '2 day') $q$, svc)),
     'cannot book with a pet you do not own';
-  insert into public.bookings (owner_user_id, pet_id, partner_account_id, service_id, starts_at)
-    values ('a0000000-0000-0000-0000-000000000001', 'c0000000-0000-0000-0000-000000000001', 'b0000000-0000-0000-0000-000000000001', svc, now() + interval '2 day');
+  assert test_helpers.denied(format($q$ insert into public.bookings (owner_user_id, pet_id, partner_account_id, service_id, starts_at)
+    values ('a0000000-0000-0000-0000-000000000001', 'c0000000-0000-0000-0000-000000000001', 'b0000000-0000-0000-0000-000000000001', %L, now() + interval '2 day') $q$, svc)),
+    'bookings are made through create_booking, never inserted from the client';
+end $$;
+
+-- A booking made by the server (as create_booking does), to check who can see and change it.
+:server
+insert into public.bookings (owner_user_id, pet_id, partner_account_id, service_id, starts_at)
+  select 'a0000000-0000-0000-0000-000000000001', 'c0000000-0000-0000-0000-000000000001', 'b0000000-0000-0000-0000-000000000001', s.id, now() + interval '2 day'
+    from public.services s where s.name = 'Vet consultation';
+:tolu
+do $$ begin
   assert test_helpers.affected($q$ update public.bookings set status = 'completed' $q$) = 0, 'owner cannot complete a booking from the client';
 end $$;
 

@@ -158,12 +158,17 @@ end $$;
 :finance
 do $$ declare r uuid; begin
   r := public.admin_prepare_payout_run(date '2026-11-09');
-  assert (select count(*) from public.payout_items where payout_run_id = r) = 1, 'one partner has ready money';
-  assert (select amount_kobo from public.payout_items where payout_run_id = r) = (1500000 - 180000) + (800000 - 96000), 'net of fees, summed';
-  assert (select total_kobo from public.payout_runs where id = r) = 2024000, 'run total matches';
+  assert (select count(*) from public.payout_items where payout_run_id = r) = 2,
+    'the clinic with ready money, and the kennel owed its half of the split puppy payment';
+  assert (select amount_kobo from public.payout_items where payout_run_id = r and partner_account_id = 'b0000000-0000-0000-0000-000000000001')
+    = (1500000 - 180000) + (800000 - 96000), 'net of fees, summed';
+  -- The split refunded 19,000,000 of 38,000,000: the kennel gets the other half, less half of the 1,900,000 fee.
+  assert (select amount_kobo from public.payout_items where payout_run_id = r and partner_account_id = 'b0000000-0000-0000-0000-000000000002')
+    = 19000000 - 950000, 'a split pays the provider the rest, with a proportional fee';
+  assert (select total_kobo from public.payout_runs where id = r) = 2024000 + 18050000, 'run total matches';
   -- preparing again replaces the draft instead of duplicating it
   assert public.admin_prepare_payout_run(date '2026-11-09') = r, 'same run id';
-  assert (select count(*) from public.payout_items where payout_run_id = r) = 1, 'no duplicate items';
+  assert (select count(*) from public.payout_items where payout_run_id = r) = 2, 'no duplicate items';
   perform public.admin_approve_payout_run(r);
   assert (select status from public.payout_runs where id = r) = 'approved', 'run approved';
   assert test_helpers.state($q$ select public.admin_prepare_payout_run(date '2026-11-09') $q$) = 'P0001', 'an approved run is frozen';

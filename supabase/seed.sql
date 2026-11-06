@@ -108,3 +108,24 @@ values
   ('b0000000-0000-0000-0000-0000000000a1', 'a0000000-0000-0000-0000-000000000002', 'vet', 'Lekki Animal Hospital', 'Lekki',
      extensions.st_point(3.4720, 6.4400, 4326)::extensions.geography, 'approved', now() - interval '45 days',
      '+2340000000002', true, true, false);
+
+-- ---------------------------------------------------------------------------
+-- Services and bookable times (milestone 3). Slots are relative to today so the demo always has some.
+-- ---------------------------------------------------------------------------
+update public.partner_accounts set address = 'Admiralty Way, Lekki' where id = 'b0000000-0000-0000-0000-000000000001';
+update public.partner_accounts set address = 'Lekki Phase 1'        where id = 'b0000000-0000-0000-0000-0000000000a1';
+update public.services set category = 'grooming' where name = 'Full groom';
+
+insert into public.services (partner_account_id, name, price_kobo, duration_min, category, description) values
+  ('b0000000-0000-0000-0000-000000000001', 'Full check-up',          2500000, 45, 'vet', 'Nose to tail examination with a vet.'),
+  ('b0000000-0000-0000-0000-0000000000a1', 'Consultation',           1200000, 30, 'vet', 'See a vet about anything worrying you.'),
+  ('b0000000-0000-0000-0000-0000000000a1', 'Emergency consultation', 2000000, 30, 'vet', 'Same day, walk in or call ahead.');
+
+insert into public.availability_slots (partner_account_id, starts_at, ends_at, capacity)
+select p.id,
+       ((current_date + d) + t) at time zone 'Africa/Lagos',
+       ((current_date + d) + t + interval '30 minutes') at time zone 'Africa/Lagos',
+       1
+  from (values ('b0000000-0000-0000-0000-000000000001'::uuid), ('b0000000-0000-0000-0000-0000000000a1'::uuid)) as p(id)
+ cross join generate_series(0, 13) as d
+ cross join (values (time '09:00'), (time '10:30'), (time '14:00'), (time '16:30'), (time '18:00')) as t(t);
