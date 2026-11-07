@@ -288,7 +288,7 @@ class _AddPetScreenState extends State<AddPetScreen> {
               value: ob.breed,
               hint: ob.species == Species.other
                   ? 'Type or choose'
-                  : 'Choose a breed',
+                  : 'Choose or type a breed',
               onTap: _pickBreed,
               trailing: const PawIcon(
                 PawIconData.chevronDown,
@@ -436,12 +436,24 @@ class _BreedSheetState extends State<_BreedSheet> {
               PawTextField(
                 label: 'Breed',
                 controller: _text,
-                hint: 'Type a breed',
+                hint: 'Choose below, or type your own',
+                helperText: 'Not in the list? Type it here and tap "Use".',
+                maxLength: 60,
                 textCapitalization: TextCapitalization.words,
                 textInputAction: TextInputAction.done,
                 onChanged: (_) => setState(() {}),
-                onSubmitted: (v) => Navigator.pop(context, v.trim()),
+                onSubmitted: (v) {
+                  final t = v.trim();
+                  if (t.isNotEmpty) Navigator.pop(context, t);
+                },
               ),
+              if (typed.isNotEmpty && !exact) ...[
+                const SizedBox(height: 4),
+                PawButton(
+                  label: 'Use "$typed"',
+                  onPressed: () => Navigator.pop(context, typed),
+                ),
+              ],
               const SizedBox(height: 12),
               ConstrainedBox(
                 constraints: BoxConstraints(
@@ -462,13 +474,6 @@ class _BreedSheetState extends State<_BreedSheet> {
                   ],
                 ),
               ),
-              if (typed.isNotEmpty && !exact) ...[
-                const SizedBox(height: 8),
-                PawButton(
-                  label: 'Use "$typed"',
-                  onPressed: () => Navigator.pop(context, typed),
-                ),
-              ],
             ],
           ),
         ),

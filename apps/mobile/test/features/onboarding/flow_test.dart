@@ -343,7 +343,7 @@ void main() {
       expect(find.text('Add your first pet'), findsOneWidget);
       await tester.enterText(find.byType(TextField).first, 'Bingo');
       await tester.pumpAndSettle();
-      await _tap(tester, 'Choose a breed');
+      await _tap(tester, 'Choose or type a breed');
       await _tap(tester, 'Boerboel');
       await _tap(tester, 'Male');
       await _tap(tester, 'Not sure? Enter approximate age');
@@ -384,6 +384,51 @@ void main() {
       expect(find.text('Bingo'), findsWidgets);
     });
   }
+
+  group('breed', () {
+    Future<void> toAddPet(WidgetTester tester, _App app) async {
+      await _pump(tester, app);
+      await _tap(tester, 'Continue');
+      await tester.enterText(find.byType(TextField).at(0), 'Tolu');
+      await tester.pumpAndSettle();
+      await _tap(tester, 'Continue');
+      await tester.enterText(find.byType(TextField).first, 'Kemal');
+      await tester.pumpAndSettle();
+    }
+
+    testWidgets('a breed that is not in the list can be typed and used', (
+      tester,
+    ) async {
+      final app = _App(signedInAs: 'tolu@example.com');
+      await toAddPet(tester, app);
+      await _tap(tester, 'Choose or type a breed');
+      expect(find.text('Not in the list? Type it here and tap "Use".'), findsOneWidget);
+      // Nothing typed yet: no Use button.
+      expect(find.textContaining('Use "'), findsNothing);
+      await tester.enterText(find.widgetWithText(TextField, ''), 'Kangal');
+      await tester.pumpAndSettle();
+      expect(find.text('Use "Kangal"'), findsOneWidget);
+      await _tap(tester, 'Use "Kangal"');
+      expect(find.text('Kangal'), findsOneWidget);
+      await _tap(tester, 'Continue');
+      await _tap(tester, 'Skip');
+      await _tap(tester, 'Turn on reminders');
+      expect(app.pets.pets.single.breed, 'Kangal');
+    });
+
+    testWidgets('a listed breed does not offer Use, and typing filters the list', (
+      tester,
+    ) async {
+      final app = _App(signedInAs: 'tolu@example.com');
+      await toAddPet(tester, app);
+      await _tap(tester, 'Choose or type a breed');
+      await tester.enterText(find.widgetWithText(TextField, ''), 'Boerboel');
+      await tester.pumpAndSettle();
+      expect(find.textContaining('Use "'), findsNothing);
+      expect(find.text('Rottweiler'), findsNothing);
+      expect(find.text('Boerboel'), findsWidgets);
+    });
+  });
 
   group('health history and reminders', () {
     Future<void> toHealth(WidgetTester tester, _App app) async {
