@@ -57,3 +57,21 @@ Uri mapsUri(double lat, double lng) => Uri.https(
   '/maps/search/',
   {'api': '1', 'query': '$lat,$lng'},
 );
+
+/// The text shared with a post: who posted, a short quote, and where to get the app.
+String postShareText({
+  required String authorName,
+  required String body,
+  required String url,
+  String? petName,
+}) {
+  final who = petName == null ? authorName : "$authorName's $petName";
+  final quote = body.trim().isEmpty
+      ? ''
+      : ': "${body.trim().length > 140 ? '${body.trim().substring(0, 137)}...' : body.trim()}"';
+  return 'See $who on PawPass$quote. Get the app: $url';
+}
+
+/// The comment count as a short label: "No comments", "1 comment", "12 comments".
+String commentsLabel(int n) =>
+    n == 0 ? 'No comments' : (n == 1 ? '1 comment' : '${countLabel(n)} comments');

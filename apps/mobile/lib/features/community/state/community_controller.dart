@@ -85,6 +85,13 @@ class CommunityController extends ChangeNotifier {
     profilePosts = [for (final p in profilePosts) p.id == id ? f(p) : p];
   }
 
+  /// Puts the latest copy of a post (from the comments screen) into the feed, so counts agree.
+  void syncPost(FeedPost post) {
+    if (!posts.any((p) => p.id == post.id)) return;
+    posts = [for (final p in posts) p.id == post.id ? post : p];
+    _notify();
+  }
+
   /// Shows the like at once and puts it back if the server says no.
   Future<void> toggleLike(FeedPost post) async {
     actionError = null;

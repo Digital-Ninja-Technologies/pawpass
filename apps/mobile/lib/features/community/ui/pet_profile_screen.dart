@@ -7,6 +7,7 @@ import '../../onboarding/state/app_scope.dart';
 import '../domain/community_logic.dart';
 import 'community_screen.dart' show PostCard;
 import 'community_widgets.dart';
+import 'post_actions.dart';
 
 /// A pet's public profile (design/screens/PetProfile.dc.html). Health records are never shown here.
 class PetProfileScreen extends StatefulWidget {
@@ -151,6 +152,19 @@ class _PetProfileScreenState extends State<PetProfileScreen> {
                             currentlyFollowing: p.isFollowing,
                           ),
                         ),
+                      if (!p.isMine) ...[
+                        const SizedBox(height: 10),
+                        PawButton(
+                          label: 'Message ${p.ownerName}',
+                          variant: PawButtonVariant.secondary,
+                          onPressed: () => showMessageRequestSheet(
+                            context,
+                            petId: p.id,
+                            ownerName: p.ownerName,
+                            petName: p.name,
+                          ),
+                        ),
+                      ],
                       if (c.actionError != null) ...[
                         const SizedBox(height: 10),
                         Text(

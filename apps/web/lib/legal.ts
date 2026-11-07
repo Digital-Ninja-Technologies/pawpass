@@ -19,6 +19,7 @@ export const PRIVACY: LegalSection[] = [
       "Your name, email address and phone number, for your account, bookings and receipts.",
       "Your pets' details and health records, for the Pet Passport.",
       "Photos you choose or take: pet photos, and identity documents if you apply as a partner.",
+      "What you write in the community: posts, comments and messages.",
       "Your approximate location, only while the app is open and only if you allow it, to sort emergency vets by distance. We do not store it.",
       "Six anonymous app events (app open, booking started, checkout started, share started, partner started, help opened). They carry no personal data and no advertising identifier.",
     ],
@@ -36,6 +37,7 @@ export const PRIVACY: LegalSection[] = [
       "Health records are private by default. A vet sees them only through a time limited link or QR code that you create.",
       "A partner you book sees your name, and only that.",
       "Pet photos are shown with a listing you create.",
+      "Comments are shown to anyone who can see the post. A message request goes to the pet's owner, who has to accept before you can chat. You can report or block anyone.",
       "Partner identity documents are seen only by PawPass staff who verify partners.",
       "Lost pet alerts never show your phone number. Finders reach you through in app chat.",
       "Paystack processes payments and payouts.",
@@ -108,7 +110,8 @@ export const TERMS: LegalSection[] = [
   {
     title: "Community and lost pet alerts",
     body: [
-      "Be kind and truthful. Do not post anything unlawful, abusive or misleading, and do not sell animals outside the verified listing flow. We can remove content and suspend accounts that break these rules. You can report a post, profile or listing and block an account.",
+      "Be kind and truthful. Do not post anything unlawful, abusive or misleading, and do not sell animals outside the verified listing flow. We can remove content and suspend accounts that break these rules. You can report a post, comment, profile or listing and block an account.",
+      "You can comment on posts and reply to comments. You can also ask a pet's owner to chat. The owner decides whether to accept, and can decline without giving a reason. Do not send spam or pressure anyone.",
       "Lost pet alerts reach people near the pet's last known place and close after 14 days. Do not use them for anything else.",
     ],
   },

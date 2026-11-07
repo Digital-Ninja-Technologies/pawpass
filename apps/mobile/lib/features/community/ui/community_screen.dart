@@ -10,6 +10,7 @@ import '../domain/models.dart';
 import '../state/community_controller.dart';
 import '../state/lost_controller.dart';
 import 'community_widgets.dart';
+import 'post_actions.dart';
 
 /// Community (design/screens/Community.dc.html): the feed, posts near you, and lost and found.
 class CommunityScreen extends StatefulWidget {
@@ -407,10 +408,22 @@ class PostCard extends StatelessWidget {
                       onSelected: (v) {
                         if (v == 'report') {
                           context.push('/report/post/${p.id}');
+                        } else if (v == 'message' && p.petId != null) {
+                          showMessageRequestSheet(
+                            context,
+                            petId: p.petId!,
+                            ownerName: p.authorName,
+                            petName: p.petName ?? 'their pet',
+                          );
                         }
                       },
-                      itemBuilder: (_) => const [
-                        PopupMenuItem(
+                      itemBuilder: (_) => [
+                        if (p.petId != null)
+                          PopupMenuItem(
+                            value: 'message',
+                            child: Text('Message ${p.authorName}'),
+                          ),
+                        const PopupMenuItem(
                           value: 'report',
                           child: Text('Report this post'),
                         ),
@@ -424,14 +437,12 @@ class PostCard extends StatelessWidget {
             ],
             for (final path in p.mediaPaths.take(1)) PostPhoto(path: path),
             const SizedBox(height: 4),
-            Row(
-              children: [
-                LikeButton(
-                  liked: p.likedByMe,
-                  count: p.likeCount,
-                  onTap: () => c.toggleLike(p),
-                ),
-              ],
+            PostActionRow(
+              post: p,
+              onLike: () => c.toggleLike(p),
+              onComment: () async {
+                await context.push('/posts/${p.id}');
+              },
             ),
           ],
         ),

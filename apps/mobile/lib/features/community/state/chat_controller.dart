@@ -28,6 +28,18 @@ class ChatController extends ChangeNotifier {
 
   int get unread => threads.fold(0, (n, t) => n + t.unread);
 
+  /// Message requests waiting for this person's answer.
+  List<ChatThread> get requests => [
+    for (final t in threads)
+      if (t.needsMyAnswer) t,
+  ];
+
+  /// Everything else, newest first.
+  List<ChatThread> get conversations => [
+    for (final t in threads)
+      if (!t.needsMyAnswer) t,
+  ];
+
   Future<void> loadThreads() async {
     loadingThreads = true;
     threadsError = null;
@@ -135,6 +147,61 @@ class ChatController extends ChangeNotifier {
       return false;
     } finally {
       sending = false;
+      _notify();
+    }
+  }
+
+  // ------------------------------------------------------------------ message requests
+
+  bool requesting = false;
+  String? requestError;
+
+  /// Asks a pet's owner to chat. Returns the conversation to open, or null if it did not go through.
+  Future<String?> requestChat(String petId, String message) async {
+    if (requesting) return null;
+    requesting = true;
+    requestError = null;
+    _notify();
+    try {
+      final id = await _services.community.requestChat(petId, message);
+      await loadThreads();
+      return id;
+    } on AppFailure catch (e) {
+      requestError = e.message;
+      return null;
+    } finally {
+      requesting = false;
+      _notify();
+    }
+  }
+
+  final _answering = <String>{};
+  String? answerError;
+
+  bool isAnswering(String requestId) => _answering.contains(requestId);
+
+  /// Accepts or declines a request. Declined requests disappear from both people's lists.
+  Future<bool> answerRequest(String requestId, {required bool accept}) async {
+    if (!_answering.add(requestId)) return false;
+    answerError = null;
+    _notify();
+    try {
+      await _services.community.answerChatRequest(requestId, accept: accept);
+      await loadThreads();
+      final id = openId;
+      if (id != null) {
+        try {
+          header = await _services.community.thread(id);
+        } on AppFailure {
+          // The chat may have gone (declined); the screen leaves on its own.
+        }
+      }
+      return true;
+    } on AppFailure catch (e) {
+      answerError = e.message;
+      return false;
+    } finally {
+      _answering.remove(requestId);
       _notify();
     }
   }

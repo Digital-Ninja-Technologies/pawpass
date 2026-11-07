@@ -67,6 +67,71 @@ class SupabaseCommunityRepository implements CommunityRepository {
   }
 
   @override
+  Future<FeedPost> post(String postId) async {
+    try {
+      final rows = await _rows('post_detail', {'p_post': postId});
+      if (rows.isEmpty) {
+        throw const AppFailure('That post is no longer there.');
+      }
+      return FeedPost.fromRow(rows.first);
+    } catch (e) {
+      throw _failure(e, 'We could not open that post.');
+    }
+  }
+
+  @override
+  Future<List<PostComment>> comments(String postId) async {
+    try {
+      final rows = await _rows('post_comments_list', {'p_post': postId});
+      return [for (final r in rows) PostComment.fromRow(r)];
+    } catch (e) {
+      throw _failure(e, 'We could not load the comments.');
+    }
+  }
+
+  @override
+  Future<String> addComment(
+    String postId,
+    String body, {
+    String? parentId,
+  }) async {
+    try {
+      return await _client.rpc(
+            'add_comment',
+            params: {'p_post': postId, 'p_body': body, 'p_parent': parentId},
+          )
+          as String;
+    } catch (e) {
+      throw _failure(e, 'We could not post your comment. Please try again.');
+    }
+  }
+
+  @override
+  Future<void> deleteComment(String commentId) async {
+    try {
+      await _client.rpc('delete_comment', params: {'p_comment': commentId});
+    } catch (e) {
+      throw _failure(e, 'We could not remove that comment.');
+    }
+  }
+
+  @override
+  Future<({bool liked, int count})> toggleCommentLike(String commentId) async {
+    try {
+      final r = Map<String, dynamic>.from(
+        await _client.rpc(
+              'toggle_comment_like',
+              params: {'p_comment': commentId},
+            )
+            as Map,
+      );
+      return (liked: r['liked'] == true, count: (r['count'] as num).toInt());
+    } catch (e) {
+      throw _failure(e, 'We could not save your like.');
+    }
+  }
+
+  @override
   Future<String> createPost({
     required String? petId,
     required String body,
@@ -139,6 +204,7 @@ class SupabaseCommunityRepository implements CommunityRepository {
             area: r['area'] as String?,
             likeCount: (r['like_count'] as num?)?.toInt() ?? 0,
             likedByMe: r['liked_by_me'] == true,
+            commentCount: (r['comment_count'] as num?)?.toInt() ?? 0,
             petId: petId,
           ),
       ];
@@ -292,6 +358,34 @@ class SupabaseCommunityRepository implements CommunityRepository {
           as String;
     } catch (e) {
       throw _failure(e, 'We could not open the chat. Please try again.');
+    }
+  }
+
+  @override
+  Future<String> requestChat(String petId, String message) async {
+    try {
+      return await _client.rpc(
+            'request_chat',
+            params: {'p_pet': petId, 'p_message': message},
+          )
+          as String;
+    } catch (e) {
+      throw _failure(e, 'We could not send your message. Please try again.');
+    }
+  }
+
+  @override
+  Future<void> answerChatRequest(
+    String requestId, {
+    required bool accept,
+  }) async {
+    try {
+      await _client.rpc(
+        'respond_to_chat_request',
+        params: {'p_request': requestId, 'p_accept': accept},
+      );
+    } catch (e) {
+      throw _failure(e, 'We could not save your answer. Please try again.');
     }
   }
 

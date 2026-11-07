@@ -39,6 +39,7 @@ class FeedPost {
     this.likedByMe = false,
     this.followingPet = false,
     this.isMine = false,
+    this.commentCount = 0,
   });
 
   final String id;
@@ -57,8 +58,14 @@ class FeedPost {
   final bool likedByMe;
   final bool followingPet;
   final bool isMine;
+  final int commentCount;
 
-  FeedPost copyWith({int? likeCount, bool? likedByMe, bool? followingPet}) =>
+  FeedPost copyWith({
+    int? likeCount,
+    bool? likedByMe,
+    bool? followingPet,
+    int? commentCount,
+  }) =>
       FeedPost(
         id: id,
         authorUserId: authorUserId,
@@ -76,6 +83,7 @@ class FeedPost {
         likedByMe: likedByMe ?? this.likedByMe,
         followingPet: followingPet ?? this.followingPet,
         isMine: isMine,
+        commentCount: commentCount ?? this.commentCount,
       );
 
   factory FeedPost.fromRow(Map<String, dynamic> r) => FeedPost(
@@ -97,7 +105,81 @@ class FeedPost {
     likedByMe: r['liked_by_me'] == true,
     followingPet: r['following_pet'] == true,
     isMine: r['is_mine'] == true,
+    commentCount: (r['comment_count'] as num?)?.toInt() ?? 0,
   );
+}
+
+/// A comment on a post. Replies sit one level under a comment.
+class PostComment {
+  const PostComment({
+    required this.id,
+    required this.authorUserId,
+    required this.authorName,
+    required this.body,
+    required this.createdAt,
+    this.parentId,
+    this.likeCount = 0,
+    this.likedByMe = false,
+    this.isMine = false,
+  });
+
+  final String id;
+  final String? parentId;
+  final String authorUserId;
+  final String authorName;
+  final String body;
+  final DateTime createdAt;
+  final int likeCount;
+  final bool likedByMe;
+  final bool isMine;
+
+  bool get isReply => parentId != null;
+
+  PostComment copyWith({int? likeCount, bool? likedByMe}) => PostComment(
+    id: id,
+    parentId: parentId,
+    authorUserId: authorUserId,
+    authorName: authorName,
+    body: body,
+    createdAt: createdAt,
+    likeCount: likeCount ?? this.likeCount,
+    likedByMe: likedByMe ?? this.likedByMe,
+    isMine: isMine,
+  );
+
+  factory PostComment.fromRow(Map<String, dynamic> r) => PostComment(
+    id: r['comment_id'] as String,
+    parentId: r['parent_id'] as String?,
+    authorUserId: r['author_user_id'] as String,
+    authorName: r['author_name'] as String,
+    body: (r['body'] as String?) ?? '',
+    createdAt: _time(r['created_at'])!,
+    likeCount: (r['like_count'] as num?)?.toInt() ?? 0,
+    likedByMe: r['liked_by_me'] == true,
+    isMine: r['is_mine'] == true,
+  );
+}
+
+/// A comment with its replies, oldest first.
+class CommentThread {
+  const CommentThread(this.comment, this.replies);
+  final PostComment comment;
+  final List<PostComment> replies;
+}
+
+/// Groups a flat list (oldest first) into comments with their replies. A reply whose comment is missing is dropped.
+List<CommentThread> threadComments(List<PostComment> all) {
+  final tops = [
+    for (final c in all)
+      if (!c.isReply) c,
+  ];
+  return [
+    for (final t in tops)
+      CommentThread(t, [
+        for (final c in all)
+          if (c.parentId == t.id) c,
+      ]),
+  ];
 }
 
 class PetProfileData {
@@ -304,6 +386,10 @@ class ChatThread {
     this.contextId,
     this.lastBody,
     this.unread = 0,
+    this.requestId,
+    this.requestStatus,
+    this.iRequested = false,
+    this.otherUserId,
   });
 
   final String id;
@@ -311,9 +397,28 @@ class ChatThread {
   final String? contextId;
   final String contextLabel;
   final String otherName;
+
+  /// For reporting or blocking the other person from the chat.
+  final String? otherUserId;
   final String? lastBody;
   final DateTime lastAt;
   final int unread;
+
+  /// For a message request (a chat a stranger started from the community): its id, state, and who asked.
+  final String? requestId;
+  final String? requestStatus;
+  final bool iRequested;
+
+  bool get isRequest => requestId != null;
+
+  /// A request that this person has to accept or decline.
+  bool get needsMyAnswer => isRequest && requestStatus == 'pending' && !iRequested;
+
+  /// A request this person sent that has not been accepted yet.
+  bool get waitingForThem => isRequest && requestStatus == 'pending' && iRequested;
+
+  /// Messages can be sent: not a request, or an accepted one.
+  bool get canSend => !isRequest || requestStatus == 'accepted';
 
   factory ChatThread.fromRow(Map<String, dynamic> r) => ChatThread(
     id: r['conversation_id'] as String,
@@ -324,6 +429,10 @@ class ChatThread {
     lastBody: r['last_body'] as String?,
     lastAt: _time(r['last_at'])!,
     unread: (r['unread'] as num?)?.toInt() ?? 0,
+    otherUserId: r['other_user_id'] as String?,
+    requestId: r['request_id'] as String?,
+    requestStatus: r['request_status'] as String?,
+    iRequested: r['i_requested'] == true,
   );
 
   factory ChatThread.fromHeader(Map<String, dynamic> r) => ChatThread(
@@ -333,6 +442,10 @@ class ChatThread {
     contextLabel: r['context_label'] as String,
     otherName: r['other_name'] as String,
     lastAt: DateTime.fromMillisecondsSinceEpoch(0, isUtc: true),
+    otherUserId: r['other_user_id'] as String?,
+    requestId: r['request_id'] as String?,
+    requestStatus: r['request_status'] as String?,
+    iRequested: r['i_requested'] == true,
   );
 }
 
@@ -386,6 +499,7 @@ enum ReportReason {
 /// What can be reported from the app.
 enum ReportTarget {
   post('post'),
+  comment('comment'),
   user('user'),
   lostAlert('lost_alert');
 

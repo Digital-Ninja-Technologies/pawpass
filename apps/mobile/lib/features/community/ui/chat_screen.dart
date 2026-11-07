@@ -89,7 +89,9 @@ class _ChatScreenState extends State<ChatScreen> {
                             ),
                             if (h != null)
                               Text(
-                                'About: ${h.contextLabel}',
+                                h.contextType == 'direct'
+                                    ? h.contextLabel
+                                    : 'About: ${h.contextLabel}',
                                 style: PawText.meta13.copyWith(
                                   color: PawColors.muted,
                                 ),
@@ -98,6 +100,25 @@ class _ChatScreenState extends State<ChatScreen> {
                           ],
                         ),
                       ),
+                      if (h != null && h.otherUserId != null)
+                        PopupMenuButton<String>(
+                          tooltip: 'More about this chat',
+                          icon: const Icon(
+                            Icons.more_horiz,
+                            color: PawColors.muted,
+                          ),
+                          onSelected: (v) {
+                            if (v == 'report') {
+                              context.push('/report/user/${h.otherUserId}');
+                            }
+                          },
+                          itemBuilder: (_) => [
+                            PopupMenuItem(
+                              value: 'report',
+                              child: Text('Report or block ${h.otherName}'),
+                            ),
+                          ],
+                        ),
                     ],
                   ),
                 ),
@@ -109,7 +130,9 @@ class _ChatScreenState extends State<ChatScreen> {
                     vertical: 10,
                   ),
                   child: Text(
-                    'Phone numbers stay hidden. Chat here, and share a location pin if it helps.',
+                    h != null && h.contextType == 'direct'
+                        ? 'Phone numbers stay hidden. You can report or block anyone from the menu above.'
+                        : 'Phone numbers stay hidden. Chat here, and share a location pin if it helps.',
                     style: PawText.meta13.copyWith(
                       color: PawColors.primaryText,
                     ),
@@ -128,7 +151,9 @@ class _ChatScreenState extends State<ChatScreen> {
                           child: Padding(
                             padding: const EdgeInsets.all(32),
                             child: Text(
-                              'Say hello. Tell ${h?.otherName ?? 'them'} what you saw.',
+                              h != null && h.contextType == 'direct'
+                                  ? 'Say hello to ${h.otherName}.'
+                                  : 'Say hello. Tell ${h?.otherName ?? 'them'} what you saw.',
                               textAlign: TextAlign.center,
                               style: PawText.body15.copyWith(
                                 color: PawColors.muted,
@@ -164,6 +189,28 @@ class _ChatScreenState extends State<ChatScreen> {
                       ),
                     ),
                   ),
+                if (h != null && h.needsMyAnswer)
+                  _RequestBar(thread: h, chat: chat)
+                else if (h != null && h.waitingForThem)
+                  Container(
+                    width: double.infinity,
+                    decoration: const BoxDecoration(
+                      color: PawColors.surface,
+                      border: Border(top: BorderSide(color: PawColors.border)),
+                    ),
+                    padding: const EdgeInsets.fromLTRB(
+                      PawSpace.screenSide,
+                      14,
+                      PawSpace.screenSide,
+                      18,
+                    ),
+                    child: Text(
+                      'Waiting for ${h.otherName} to accept. You can chat once they do.',
+                      textAlign: TextAlign.center,
+                      style: PawText.body14.copyWith(color: PawColors.ink2),
+                    ),
+                  )
+                else
                 Container(
                   decoration: const BoxDecoration(
                     color: PawColors.surface,
@@ -226,6 +273,81 @@ class _ChatScreenState extends State<ChatScreen> {
           ),
         );
       },
+    );
+  }
+}
+
+/// Under a message request: accept or decline before anything else can be sent.
+class _RequestBar extends StatelessWidget {
+  const _RequestBar({required this.thread, required this.chat});
+  final ChatThread thread;
+  final ChatController chat;
+
+  @override
+  Widget build(BuildContext context) {
+    final id = thread.requestId!;
+    final busy = chat.isAnswering(id);
+    return Container(
+      width: double.infinity,
+      decoration: const BoxDecoration(
+        color: PawColors.surface,
+        border: Border(top: BorderSide(color: PawColors.border)),
+      ),
+      padding: const EdgeInsets.fromLTRB(
+        PawSpace.screenSide,
+        14,
+        PawSpace.screenSide,
+        18,
+      ),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          Text(
+            '${thread.otherName} would like to chat. They cannot send more until you accept.',
+            style: PawText.body14.copyWith(color: PawColors.ink2),
+          ),
+          if (chat.answerError != null) ...[
+            const SizedBox(height: 6),
+            Semantics(
+              liveRegion: true,
+              child: Text(
+                chat.answerError!,
+                style: PawText.meta13.copyWith(color: PawColors.danger),
+              ),
+            ),
+          ],
+          const SizedBox(height: 12),
+          Row(
+            children: [
+              Expanded(
+                child: PawButton(
+                  label: 'Decline',
+                  variant: PawButtonVariant.secondary,
+                  height: 48,
+                  onPressed: busy
+                      ? null
+                      : () async {
+                          final ok = await chat.answerRequest(id, accept: false);
+                          if (ok && context.mounted && context.canPop()) {
+                            context.pop();
+                          }
+                        },
+                ),
+              ),
+              const SizedBox(width: 10),
+              Expanded(
+                child: PawButton(
+                  label: 'Accept',
+                  height: 48,
+                  loading: busy,
+                  onPressed: () => chat.answerRequest(id, accept: true),
+                ),
+              ),
+            ],
+          ),
+        ],
+      ),
     );
   }
 }
@@ -386,11 +508,20 @@ class _MessagesScreenState extends State<MessagesScreen> {
                   else if (chat.threads.isEmpty)
                     const InfoCard(
                       title: 'No messages yet',
-                      body: 'When you message about a lost pet, or someone messages you, it shows up here.',
+                      body: 'When you message a pet owner, ask about a lost pet, or someone messages you, it shows up here.',
                       icon: PawIconData.mail,
                     )
-                  else
-                    for (final t in chat.threads)
+                  else ...[
+                    if (chat.requests.isNotEmpty) ...[
+                      const SectionLabel('Message requests'),
+                      const SizedBox(height: 8),
+                      for (final t in chat.requests)
+                        _RequestCard(thread: t, chat: chat),
+                      const SizedBox(height: 10),
+                      const SectionLabel('Chats'),
+                      const SizedBox(height: 8),
+                    ],
+                    for (final t in chat.conversations)
                       Padding(
                         padding: const EdgeInsets.only(bottom: 10),
                         child: PawCard(
@@ -412,7 +543,9 @@ class _MessagesScreenState extends State<MessagesScreen> {
                                       style: PawText.body15Strong,
                                     ),
                                     Text(
-                                      t.contextLabel,
+                                      t.waitingForThem
+                                          ? '${t.contextLabel} · waiting for them to accept'
+                                          : t.contextLabel,
                                       style: PawText.meta13.copyWith(
                                         color: PawColors.muted,
                                       ),
@@ -446,12 +579,86 @@ class _MessagesScreenState extends State<MessagesScreen> {
                           ),
                         ),
                       ),
+                  ],
                 ],
               ),
             ),
           ),
         );
       },
+    );
+  }
+}
+
+/// A message request in the inbox, with Accept and Decline right there.
+class _RequestCard extends StatelessWidget {
+  const _RequestCard({required this.thread, required this.chat});
+  final ChatThread thread;
+  final ChatController chat;
+
+  @override
+  Widget build(BuildContext context) {
+    final t = thread;
+    final id = t.requestId!;
+    final busy = chat.isAnswering(id);
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 10),
+      child: PawCard(
+        radius: PawRadius.cardSmall,
+        color: PawColors.primarySoft,
+        onTap: () async {
+          await context.push('/chat/${t.id}');
+          await chat.loadThreads();
+        },
+        semanticLabel: '${t.otherName} wants to message you, ${t.contextLabel}',
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              '${t.otherName} wants to message you',
+              style: PawText.body15Strong,
+            ),
+            Text(
+              t.contextLabel,
+              style: PawText.meta13.copyWith(color: PawColors.ink2),
+            ),
+            if (t.lastBody != null)
+              Padding(
+                padding: const EdgeInsets.only(top: 6),
+                child: Text(
+                  t.lastBody!,
+                  maxLines: 3,
+                  overflow: TextOverflow.ellipsis,
+                  style: PawText.body14.copyWith(color: PawColors.ink2),
+                ),
+              ),
+            const SizedBox(height: 10),
+            Row(
+              children: [
+                Expanded(
+                  child: PawButton(
+                    label: 'Decline',
+                    variant: PawButtonVariant.secondary,
+                    height: 44,
+                    onPressed: busy
+                        ? null
+                        : () => chat.answerRequest(id, accept: false),
+                  ),
+                ),
+                const SizedBox(width: 8),
+                Expanded(
+                  child: PawButton(
+                    label: 'Accept',
+                    height: 44,
+                    loading: busy,
+                    onPressed: () => chat.answerRequest(id, accept: true),
+                  ),
+                ),
+              ],
+            ),
+          ],
+        ),
+      ),
     );
   }
 }

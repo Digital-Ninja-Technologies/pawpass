@@ -10,11 +10,12 @@ import { ReportActions } from "./ReportActions";
 
 export const metadata: Metadata = { title: "Reports" };
 
-const TYPES = ["all", "listing", "post", "review", "user"] as const;
+const TYPES = ["all", "listing", "post", "comment", "review", "user"] as const;
 const TYPE_LABEL: Record<string, string> = {
   all: "All",
   listing: "Listings",
   post: "Posts",
+  comment: "Comments",
   review: "Reviews",
   user: "Users",
 };

@@ -21,6 +21,7 @@ import 'features/community/ui/create_post_screen.dart';
 import 'features/community/ui/lost_alert_screen.dart';
 import 'features/community/ui/lost_pet_screen.dart';
 import 'features/community/ui/pet_profile_screen.dart';
+import 'features/community/ui/post_screen.dart';
 import 'features/community/ui/report_screen.dart';
 import 'features/booking/ui/bookings_screen.dart';
 import 'features/booking/ui/dispute_screen.dart';
@@ -324,6 +325,10 @@ GoRouter buildRouter({
         builder: (_, _) => const NotificationsScreen(),
       ),
       GoRoute(path: '/post/new', builder: (_, _) => const CreatePostScreen()),
+      GoRoute(
+        path: '/posts/:id',
+        builder: (_, state) => PostScreen(postId: state.pathParameters['id']!),
+      ),
       GoRoute(
         path: '/pet/:id',
         builder: (_, state) =>

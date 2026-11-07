@@ -6,7 +6,7 @@ What is built, what the stores will ask, and the manual steps that only you can 
 
 | Item | Where | Status |
 | --- | --- | --- |
-| Apply every migration to the hosted project (latest: `20261112100000_tags_shares_calendar.sql`, which adds QR tag payment, the active shares list and the partner calendar; it has not been run against a database yet) | `supabase/README.md` | you say "apply it" |
+| Apply every migration to the hosted project (latest: `20261113100000_community_interactions.sql`, which adds comments, replies, share, message requests and activity notifications; `20261112100000_tags_shares_calendar.sql` is already applied. The newest one has not been run against any database. `supabase/tests/community_interactions.test.sql` is written but also unrun) | `supabase/README.md` | you say "apply it" |
 | Deploy all edge functions. Redeploy `paystack-initialize`, `paystack-verify` and `paystack-webhook` after this change: they now accept QR tag payments (references starting `pt_`) | `docs/deployment.md` | done up to M7, redeploy for tags |
 | Check the QR tag price and delivery fee (sample ₦3,500 and ₦1,000 in `settings.qr_tag_price_kobo` and `qr_tag_delivery_kobo`; there is no admin form for them yet) | Supabase | you |
 | `PAYSTACK_SECRET_KEY` set in the Supabase dashboard | Edge Functions secrets | you |
@@ -44,7 +44,7 @@ PawPass keeps everything about your pet in one place.
 Partners (vets, service providers, breeders, shelters) can apply inside the app, get verified, and are paid out weekly.
 
 **Category:** Lifestyle (iOS), Lifestyle or Pets (Google Play)
-**Age rating:** 4+ / Everyone. User-to-user messages exist only between a buyer and a verified breeder or shelter about a listing.
+**Age rating:** decide with care. People can now post, comment publicly and message each other (after the pet's owner accepts a request), as well as chat about lost pets, bookings and listings. Stores treat user generated content as at least 12+ (iOS) or Teen (Google Play), and expect reporting, blocking and a way to remove content. Those exist: report a post, comment or person, block, and admin moderation. Do not submit as 4+.
 
 ## 4. Privacy and data safety answers
 

@@ -18,6 +18,21 @@ abstract class CommunityRepository {
     List<PickedPhoto> photos = const [],
   });
 
+  /// One post, for opening from a notification or the comments screen. Throws if it is gone or not visible.
+  Future<FeedPost> post(String postId);
+
+  // ----------------------------------------------------------------- comments
+  /// Comments and replies on a post, oldest first.
+  Future<List<PostComment>> comments(String postId);
+
+  /// Adds a comment, or a reply when [parentId] is given. Returns the new comment's id.
+  Future<String> addComment(String postId, String body, {String? parentId});
+
+  /// Removes a comment. The comment's author or the post's author may.
+  Future<void> deleteComment(String commentId);
+
+  Future<({bool liked, int count})> toggleCommentLike(String commentId);
+
   /// A short lived link to a post photo or a pet photo (the buckets are private).
   Future<String?> mediaUrl(String path, {bool pet = false});
 
@@ -61,6 +76,13 @@ abstract class CommunityRepository {
 
   // ----------------------------------------------------------------- chat
   Future<String> openAlertChat(String alertId);
+
+  /// Asks a pet's owner to chat, with a first message. Returns the conversation. The owner has to accept
+  /// before either of you can send more. If you already have a chat or request with them, returns that one.
+  Future<String> requestChat(String petId, String message);
+
+  /// Accepts or declines a message request sent to this person.
+  Future<void> answerChatRequest(String requestId, {required bool accept});
   Future<List<ChatThread>> threads();
   Future<ChatThread> thread(String conversationId);
   Future<List<ChatMessage>> messages(String conversationId);

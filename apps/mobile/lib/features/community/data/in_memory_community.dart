@@ -26,6 +26,26 @@ class _Post {
   final String? area;
   final List<String> media;
   final likes = <String>{};
+  final comments = <_Comment>[];
+}
+
+class _Comment {
+  _Comment({
+    required this.id,
+    required this.authorId,
+    required this.authorName,
+    required this.body,
+    required this.createdAt,
+    this.parentId,
+  });
+  final String id;
+  final String authorId;
+  final String authorName;
+  final String body;
+  final DateTime createdAt;
+  final String? parentId;
+  final likes = <String>{};
+  var status = 'published';
 }
 
 class _Pet {
@@ -70,10 +90,29 @@ class _Alert {
 }
 
 class _Thread {
-  _Thread(this.id, this.alert, this.otherName, this.createdAt);
+  _Thread(
+    this.id,
+    this.alert,
+    this.otherName,
+    this.createdAt, {
+    required this.otherId,
+    this.directPetId,
+    this.directPetName,
+    this.requestId,
+    this.requestStatus,
+    this.iRequested = false,
+  });
   final String id;
-  final _Alert alert;
+
+  /// The lost alert this chat is about, or null for a chat that started from the community.
+  final _Alert? alert;
   final String otherName;
+  final String otherId;
+  final String? directPetId;
+  final String? directPetName;
+  final String? requestId;
+  String? requestStatus;
+  final bool iRequested;
   final DateTime createdAt;
   final messages = <ChatMessage>[];
   final controller = StreamController<void>.broadcast();
@@ -197,6 +236,8 @@ class InMemoryCommunityRepository implements CommunityRepository {
   AppFailure? failNextLost;
   AppFailure? failNextSend;
   AppFailure? failNextReport;
+  AppFailure? failNextComment;
+  AppFailure? failNextRequest;
 
   final reports =
       <({ReportTarget target, String id, ReportReason reason, bool block})>[];
@@ -238,7 +279,139 @@ class InMemoryCommunityRepository implements CommunityRepository {
       likedByMe: p.likes.contains(meId),
       followingPet: p.petId != null && _following.contains(p.petId),
       isMine: p.authorId == meId,
+      commentCount: p.comments.where(_commentShown).length,
     );
+  }
+
+  bool _commentShown(_Comment c) => c.status == 'published';
+
+  _Post _visiblePost(String postId) => _posts.firstWhere(
+    (p) => p.id == postId && _visible(p),
+    orElse: () => throw const AppFailure(
+      'We could not find that. It may have been removed.',
+    ),
+  );
+
+  @override
+  Future<FeedPost> post(String postId) async => _card(_visiblePost(postId));
+
+  @override
+  Future<List<PostComment>> comments(String postId) async {
+    final p = _visiblePost(postId);
+    PostComment row(_Comment c) => PostComment(
+      id: c.id,
+      parentId: c.parentId,
+      authorUserId: c.authorId,
+      authorName: c.authorName,
+      body: c.body,
+      createdAt: c.createdAt,
+      likeCount: c.likes.length,
+      likedByMe: c.likes.contains(meId),
+      isMine: c.authorId == meId,
+    );
+    final byId = {for (final c in p.comments) c.id: c};
+    return [
+      for (final c in p.comments)
+        if (_commentShown(c) &&
+            !blocked.contains(c.authorId) &&
+            (c.parentId == null ||
+                (byId[c.parentId] != null && _commentShown(byId[c.parentId]!))))
+          row(c),
+    ]..sort((a, b) => a.createdAt.compareTo(b.createdAt));
+  }
+
+  @override
+  Future<String> addComment(
+    String postId,
+    String body, {
+    String? parentId,
+  }) async {
+    if (failNextComment != null) {
+      return _fail(failNextComment, () => failNextComment = null);
+    }
+    final p = _visiblePost(postId);
+    final text = body.trim();
+    if (text.isEmpty) throw const AppFailure('Write a comment first');
+    if (text.length > 1000) throw const AppFailure('That comment is too long');
+    String? parent = parentId;
+    if (parent != null) {
+      final c = p.comments.where((c) => c.id == parent).firstOrNull;
+      if (c == null || !_commentShown(c) || blocked.contains(c.authorId)) {
+        throw const AppFailure('That comment is no longer there');
+      }
+      // Replies stay one level deep.
+      parent = c.parentId ?? c.id;
+    }
+    final id = 'c${++_seq}';
+    p.comments.add(
+      _Comment(
+        id: id,
+        authorId: meId,
+        authorName: meName,
+        body: text,
+        createdAt: _t.add(Duration(seconds: _seq)),
+        parentId: parent,
+      ),
+    );
+    return id;
+  }
+
+  @override
+  Future<void> deleteComment(String commentId) async {
+    for (final p in _posts) {
+      final c = p.comments.where((c) => c.id == commentId).firstOrNull;
+      if (c == null) continue;
+      if (c.authorId != meId && p.authorId != meId) {
+        throw const AppFailure('You can only remove your own comments');
+      }
+      c.status = 'removed';
+      return;
+    }
+    throw const AppFailure('We could not find that. It may have been removed.');
+  }
+
+  @override
+  Future<({bool liked, int count})> toggleCommentLike(String commentId) async {
+    for (final p in _posts.where(_visible)) {
+      final c = p.comments.where((c) => c.id == commentId).firstOrNull;
+      if (c == null || !_commentShown(c)) continue;
+      final liked = !c.likes.remove(meId);
+      if (liked) c.likes.add(meId);
+      return (liked: liked, count: c.likes.length);
+    }
+    throw const AppFailure('We could not find that. It may have been removed.');
+  }
+
+  /// Test hook: how many comments a post shows.
+  int postCommentCount(String postId) =>
+      _posts.firstWhere((p) => p.id == postId).comments.where(_commentShown).length;
+
+  /// Test hook: the conversation made most recently.
+  String get lastConversationId => _threads.last.id;
+
+  /// Test and demo hook: someone else comments on a post (or replies to a comment).
+  String receiveComment(
+    String postId,
+    String body, {
+    String who = 'Kemi',
+    String? parentId,
+  }) {
+    final p = _posts.firstWhere((p) => p.id == postId);
+    final parent = parentId == null
+        ? null
+        : (p.comments.firstWhere((c) => c.id == parentId).parentId ?? parentId);
+    final id = 'c${++_seq}';
+    p.comments.add(
+      _Comment(
+        id: id,
+        authorId: 'u-${who.toLowerCase()}',
+        authorName: who,
+        body: body,
+        createdAt: _t.add(Duration(seconds: _seq)),
+        parentId: parent,
+      ),
+    );
+    return id;
   }
 
   @override
@@ -525,20 +698,123 @@ class InMemoryCommunityRepository implements CommunityRepository {
       ),
     );
     if (a.pet.ownerId == meId) throw const AppFailure('This is your own alert');
-    final existing = _threads.where((t) => t.alert.id == alertId).firstOrNull;
+    final existing = _threads.where((t) => t.alert?.id == alertId).firstOrNull;
     if (existing != null) return existing.id;
     if (a.status != 'active') {
       throw const AppFailure('This alert has been closed');
     }
-    final t = _Thread('conv-${++_seq}', a, a.pet.ownerName, _t);
+    final t = _Thread(
+      'conv-${++_seq}',
+      a,
+      a.pet.ownerName,
+      _t,
+      otherId: a.pet.ownerId,
+    );
     _threads.add(t);
     return t.id;
   }
 
   @override
+  Future<String> requestChat(String petId, String message) async {
+    if (failNextRequest != null) {
+      return _fail(failNextRequest, () => failNextRequest = null);
+    }
+    final pet = _petFor(petId);
+    if (pet.ownerId == meId) throw const AppFailure('That is your own pet');
+    if (blocked.contains(pet.ownerId)) {
+      throw const AppFailure(
+        'We could not find that. It may have been removed.',
+      );
+    }
+    final existing = _threads
+        .where((t) => t.requestId != null && t.otherId == pet.ownerId)
+        .firstOrNull;
+    if (existing != null) {
+      if (existing.requestStatus == 'declined') {
+        throw const AppFailure(
+          'This person is not taking messages from you right now',
+        );
+      }
+      return existing.id;
+    }
+    final text = message.trim();
+    if (text.isEmpty) throw const AppFailure('Write a short message first');
+    if (text.length > 500) {
+      throw const AppFailure('Keep the first message under 500 characters');
+    }
+    final t = _Thread(
+      'conv-${++_seq}',
+      null,
+      pet.ownerName,
+      _t,
+      otherId: pet.ownerId,
+      directPetId: pet.id,
+      directPetName: pet.name,
+      requestId: 'req-$_seq',
+      requestStatus: 'pending',
+      iRequested: true,
+    );
+    t.messages.add(
+      ChatMessage(
+        id: 'm${++_seq}',
+        mine: true,
+        body: text,
+        createdAt: _t.add(Duration(seconds: _seq)),
+      ),
+    );
+    t.lastRead = t.messages.last.createdAt;
+    _threads.add(t);
+    return t.id;
+  }
+
+  @override
+  Future<void> answerChatRequest(
+    String requestId, {
+    required bool accept,
+  }) async {
+    final t = _threads
+        .where((t) => t.requestId == requestId && !t.iRequested)
+        .firstOrNull;
+    if (t == null) throw const AppFailure('Request not found');
+    if (t.requestStatus != 'pending') {
+      throw const AppFailure('You already answered this request');
+    }
+    t.requestStatus = accept ? 'accepted' : 'declined';
+  }
+
+  /// Test and demo hook: someone asks to chat about one of this person's pets.
+  String incomingRequest(String who, String message, {String petName = 'Bingo'}) {
+    final t = _Thread(
+      'conv-${++_seq}',
+      null,
+      who,
+      _t,
+      otherId: 'u-${who.toLowerCase()}',
+      directPetName: petName,
+      requestId: 'req-$_seq',
+      requestStatus: 'pending',
+    );
+    t.messages.add(
+      ChatMessage(
+        id: 'm${++_seq}',
+        mine: false,
+        body: message,
+        createdAt: _t.add(Duration(seconds: _seq)),
+      ),
+    );
+    _threads.add(t);
+    return t.id;
+  }
+
+  /// Test and demo hook: the pet's owner answers a request this person sent.
+  void answerFromOther(String conversationId, {required bool accept}) {
+    _thread(conversationId).requestStatus = accept ? 'accepted' : 'declined';
+  }
+
+  @override
   Future<List<ChatThread>> threads() async => [
     for (final t in _threads.where(
-      (t) => !blocked.contains(t.alert.pet.ownerId),
+      (t) => !blocked.contains(t.otherId) && t.requestStatus != 'declined',
     ))
       _threadRow(t),
   ]..sort((a, b) => b.lastAt.compareTo(a.lastAt));
@@ -547,10 +823,16 @@ class InMemoryCommunityRepository implements CommunityRepository {
     final last = t.messages.lastOrNull;
     return ChatThread(
       id: t.id,
-      contextType: 'lost_alert',
-      contextId: t.alert.id,
-      contextLabel: 'Lost alert · ${t.alert.pet.name}',
+      contextType: t.alert == null ? 'direct' : 'lost_alert',
+      contextId: t.alert?.id ?? t.directPetId,
+      contextLabel: t.alert == null
+          ? 'About ${t.directPetName ?? 'a pet'}'
+          : 'Lost alert · ${t.alert!.pet.name}',
       otherName: t.otherName,
+      otherUserId: t.otherId,
+      requestId: t.requestId,
+      requestStatus: t.requestStatus,
+      iRequested: t.iRequested,
       lastBody: last == null
           ? null
           : (last.isLocation && last.body == null
@@ -589,7 +871,17 @@ class InMemoryCommunityRepository implements CommunityRepository {
     if ((text ?? '').length > 1000) {
       throw const AppFailure('That message is too long');
     }
-    if (blocked.contains(t.alert.pet.ownerId)) {
+    if (t.requestStatus == 'declined') {
+      throw const AppFailure('This chat is closed');
+    }
+    if (t.requestStatus == 'pending') {
+      throw AppFailure(
+        t.iRequested
+            ? 'Wait for them to accept your request before sending more'
+            : 'Accept the request to reply',
+      );
+    }
+    if (blocked.contains(t.otherId)) {
       throw const AppFailure('You can no longer message this person');
     }
     t.messages.add(
@@ -645,6 +937,11 @@ class InMemoryCommunityRepository implements CommunityRepository {
       final who = switch (target) {
         ReportTarget.post =>
           _posts.where((p) => p.id == id).firstOrNull?.authorId,
+        ReportTarget.comment => _posts
+            .expand((p) => p.comments)
+            .where((c) => c.id == id)
+            .firstOrNull
+            ?.authorId,
         ReportTarget.user => id,
         ReportTarget.lostAlert =>
           _alerts.where((a) => a.id == id).firstOrNull?.pet.ownerId,
