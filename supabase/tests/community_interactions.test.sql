@@ -4,7 +4,6 @@
 --   psql "$DATABASE_URL" -v ON_ERROR_STOP=1 -q -f supabase/tests/community_interactions.test.sql
 -- Needs seed.sql and migration 20261113100000. Runs in one transaction that is rolled back.
 -- Prints "Community interaction tests passed" on success.
--- NOT RUN YET: written without a database to run it on. Run it before relying on the migration.
 
 \set QUIET on
 \set tolu 'do $$ begin perform set_config(''request.jwt.claim.sub'', ''a0000000-0000-0000-0000-000000000001'', true); end $$; set local role authenticated;'
@@ -79,6 +78,12 @@ do $$
 declare p uuid := current_setting('test.post')::uuid;
 begin
   perform public.toggle_like(p);
+end $$;
+
+:tolu
+do $$
+declare p uuid := current_setting('test.post')::uuid;
+begin
   assert exists (select 1 from public.notifications n where n.user_id = 'a0000000-0000-0000-0000-000000000001'
                    and n.dedupe_key = 'like:' || p || ':a0000000-0000-0000-0000-000000000005'), 'Tolu is told Kemi liked his post';
 end $$;
@@ -99,8 +104,7 @@ end $$;
 :anon
 do $$
 begin
-  assert test_helpers.state(format($q$ select * from public.post_comments_list(%L) $q$, current_setting('test.post'))) = '42501'
-      or (select count(*) from public.post_comments_list(current_setting('test.post')::uuid)) = 0, 'signed out people see nothing';
+  assert test_helpers.state(format($q$ select * from public.post_comments_list(%L) $q$, current_setting('test.post'))) = '42501', 'signed out people see nothing';
   assert test_helpers.state(format($q$ select public.add_comment(%L, 'hi') $q$, current_setting('test.post'))) = '42501', 'and cannot comment';
 end $$;
 
@@ -120,12 +124,20 @@ do $$
 declare p uuid := current_setting('test.post')::uuid;
 begin
   perform public.add_comment(p, 'A fresh comment');
-  insert into public.blocks (user_id, blocked_user_id) values ('a0000000-0000-0000-0000-000000000001', 'a0000000-0000-0000-0000-000000000005');
 end $$;
 :tolu
 do $$
 begin
+  insert into public.blocks (user_id, blocked_user_id) values ('a0000000-0000-0000-0000-000000000001', 'a0000000-0000-0000-0000-000000000005');
+end $$;
+:kemi
+do $$
+begin
   assert test_helpers.state(format($q$ select public.add_comment(%L, 'x') $q$, current_setting('test.post'))) = 'P0002', 'a blocked person''s post is not found';
+end $$;
+:tolu
+do $$
+begin
   delete from public.blocks where user_id = 'a0000000-0000-0000-0000-000000000001';
 end $$;
 
@@ -170,6 +182,10 @@ begin
   assert exists (select 1 from public.notifications n where n.user_id = 'a0000000-0000-0000-0000-000000000005' and n.dedupe_key like 'dm_ok:%'), 'Kemi is told it was accepted';
   perform public.send_message(conv, 'Thank you!');
   assert (select count(*) from public.conversation_messages(conv)) = 3, 'now they can talk';
+end $$;
+:tolu
+do $$
+begin
   assert exists (select 1 from public.notifications n where n.user_id = 'a0000000-0000-0000-0000-000000000001' and n.dedupe_key like 'msg:%'), 'messages tell the other person';
 end $$;
 
@@ -210,7 +226,7 @@ end $$;
 :kemi
 do $$
 begin
-  assert test_helpers.state($q$ select * from public.post_comments $q$) = '42501', 'comments cannot be read directly';
+  assert (select count(*) from public.post_comments) = 0, 'comments cannot be read directly (only moderators see the table)';
   assert test_helpers.state($q$ select * from public.direct_requests $q$) = '42501', 'nor requests';
   assert test_helpers.state($q$ insert into public.post_comments (post_id, author_user_id, body) values (gen_random_uuid(), 'a0000000-0000-0000-0000-000000000005', 'x') $q$) = '42501', 'nor written';
 end $$;

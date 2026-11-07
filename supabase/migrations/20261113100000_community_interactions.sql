@@ -20,6 +20,11 @@ create index on public.post_comments (parent_id);
 create index on public.post_comments (author_user_id, created_at desc);
 alter table public.post_comments enable row level security;
 revoke all on public.post_comments from anon, authenticated;
+-- Moderators read comments (the reports view shows what was reported). Everyone else goes through the functions.
+grant select on public.post_comments to authenticated;
+create policy "moderators read comments" on public.post_comments
+  for select to authenticated
+  using (private.is_staff(array['support_reports', 'read_only']));
 
 create table public.comment_likes (
   comment_id uuid not null references public.post_comments (id) on delete cascade,
@@ -200,7 +205,8 @@ begin
   if c.author_user_id <> me and post_author is distinct from me then
     raise exception 'You can only remove your own comments' using errcode = '42501';
   end if;
-  update public.post_comments set status = 'removed', updated_at = now() where id = p_comment;
+  -- Replies go with their comment, so the counts and the list agree.
+  update public.post_comments set status = 'removed', updated_at = now() where id = p_comment or parent_id = p_comment;
 end;
 $$;
 revoke all on function public.delete_comment(uuid) from public, anon;
