@@ -2,6 +2,7 @@
 // everything it calls is covered by payments.test.ts and the SQL tests.
 import { createClient, type SupabaseClient } from "jsr:@supabase/supabase-js@2";
 import { HttpError, type BookingRow, type Ctx, type Db, type PaystackApi } from "./payments.ts";
+import { BlockedError, type AccountCtx } from "./accounts.ts";
 import { safeEqual } from "./paystack.ts";
 import type { PayoutCtx, PayoutDb, PayoutItem, TransferApi } from "./payouts.ts";
 
@@ -288,4 +289,73 @@ function payoutDb(client: SupabaseClient): PayoutDb {
 
 export function payoutContext(): PayoutCtx {
   return { api: transferApi(env("PAYSTACK_SECRET_KEY")), db: payoutDb(serviceClient()) };
+}
+
+// ---------------------------------------------------------------------------------------------------------------
+// Deleting an account
+// ---------------------------------------------------------------------------------------------------------------
+const FILE_BUCKETS = [
+  "avatars",
+  "chat-attachments",
+  "dispute-evidence",
+  "health-attachments",
+  "partner-documents",
+  "pet-photos",
+  "post-media",
+];
+
+/** Every file path under a folder, including files in folders inside it. */
+async function listFiles(client: SupabaseClient, bucket: string, prefix: string): Promise<string[]> {
+  const { data, error } = await client.storage.from(bucket).list(prefix, { limit: 1000 });
+  if (error) throw new Error(error.message);
+  const out: string[] = [];
+  for (const item of data ?? []) {
+    const path = `${prefix}/${item.name}`;
+    // A folder has no id; a file has one.
+    if (item.id === null || item.id === undefined) out.push(...(await listFiles(client, bucket, path)));
+    else out.push(path);
+  }
+  return out;
+}
+
+export function accountContext(): AccountCtx {
+  const client = serviceClient();
+  return {
+    db: {
+      async erase(userId) {
+        const { error } = await client.rpc("erase_account", { p_user: userId });
+        if (error) {
+          if ((error as { code?: string }).code === "P0001") throw new BlockedError(error.message);
+          throw new Error(error.message);
+        }
+      },
+    },
+    files: {
+      async removeAll(userId) {
+        let removed = 0;
+        const problems: string[] = [];
+        for (const bucket of FILE_BUCKETS) {
+          try {
+            const paths = await listFiles(client, bucket, userId);
+            for (let i = 0; i < paths.length; i += 100) {
+              const { error } = await client.storage.from(bucket).remove(paths.slice(i, i + 100));
+              if (error) throw new Error(error.message);
+            }
+            removed += paths.length;
+          } catch (e) {
+            problems.push(`${bucket}: ${e instanceof Error ? e.message : String(e)}`);
+          }
+        }
+        if (problems.length) throw new Error(problems.join("; "));
+        return removed;
+      },
+    },
+    auth: {
+      async softDelete(userId) {
+        // true = soft delete: keeps the row the payment records point at, wipes the email and phone.
+        const { error } = await client.auth.admin.deleteUser(userId, true);
+        if (error) throw new Error(error.message);
+      },
+    },
+  };
 }

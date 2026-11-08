@@ -22,6 +22,8 @@ class InMemoryAccountRepository implements AccountRepository {
   TagPrices prices;
 
   // Fixtures a test or the demo can set.
+  List<String> deletionBlockerList = [];
+  var deleted = false;
   List<ActiveShare> shares = [];
   List<BlockedAccount> blocked = [];
   AppFailure? failNext;
@@ -125,6 +127,21 @@ class InMemoryAccountRepository implements AccountRepository {
     for (final s in shares)
       if (s.id != id) s,
   ];
+
+  @override
+  Future<List<String>> deletionBlockers() async {
+    _maybeFail();
+    return List.of(deletionBlockerList);
+  }
+
+  @override
+  Future<void> deleteAccount() async {
+    _maybeFail();
+    if (deletionBlockerList.isNotEmpty) {
+      throw AppFailure(deletionBlockerList.join(' '));
+    }
+    deleted = true;
+  }
 
   @override
   Future<List<BlockedAccount>> blocks() async {

@@ -97,6 +97,42 @@ class SupabaseAccountRepository implements AccountRepository {
   }
 
   @override
+  Future<List<String>> deletionBlockers() async {
+    try {
+      final r = await _client.rpc('my_deletion_blockers');
+      return [
+        if (r is List)
+          for (final e in r)
+            if (e is String) e,
+      ];
+    } catch (e) {
+      throw _failure(e, 'We could not check your account. Please try again.');
+    }
+  }
+
+  @override
+  Future<void> deleteAccount() async {
+    try {
+      await _client.functions.invoke(
+        'delete-account',
+        body: {'confirm': 'DELETE'},
+      );
+    } on FunctionException catch (e) {
+      // A refusal (409) carries the reason in plain words.
+      final details = e.details;
+      final message = details is Map ? details['error'] : null;
+      if ((e.status == 409 || e.status == 400) && message is String) {
+        throw AppFailure(message);
+      }
+      throw const AppFailure(
+        'We could not delete your account. Please try again.',
+      );
+    } catch (e) {
+      throw _failure(e, 'We could not delete your account. Please try again.');
+    }
+  }
+
+  @override
   Future<List<BlockedAccount>> blocks() async {
     try {
       final r = await _client.rpc('my_blocks');

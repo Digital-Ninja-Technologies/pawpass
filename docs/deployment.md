@@ -56,6 +56,7 @@ Supabase project's function secrets; the app never sees it.
 | `paystack-verify`   | The app, after paying       | Asks Paystack whether the exact amount arrived, then records it with `confirm_booking_payment`                 |
 | `paystack-webhook`  | Paystack                    | Checks the HMAC SHA512 signature, then records `charge.success` the same way (safe if both run)               |
 | `process-refunds`   | A schedule (service role)   | Sends queued refunds to Paystack, and makes visits the owner never confirmed ready for payout                  |
+| `delete-account`    | The app (signed in person)  | Not about money: erases a person's data through `erase_account`, removes their files, then soft deletes the sign in. Refuses while a payment or handover is unfinished. Deploy with JWT verification off |
 
 Setup, once the `20261106200000_services_escrow` migration is applied:
 

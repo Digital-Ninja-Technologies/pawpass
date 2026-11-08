@@ -2,6 +2,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
+import 'features/account/ui/delete_account_screen.dart';
 import 'features/account/ui/help_article_screen.dart';
 import 'features/account/ui/help_articles_screen.dart';
 import 'features/account/ui/privacy_screen.dart';
@@ -187,6 +188,10 @@ GoRouter buildRouter({
       ),
       GoRoute(path: '/qr-tags', builder: (_, _) => const QrTagOrderScreen()),
       GoRoute(path: '/privacy', builder: (_, _) => const PrivacyScreen()),
+      GoRoute(
+        path: '/delete-account',
+        builder: (_, _) => const DeleteAccountScreen(),
+      ),
       GoRoute(
         path: '/soon/:title',
         builder: (_, state) =>

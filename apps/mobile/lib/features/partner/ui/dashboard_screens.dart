@@ -562,6 +562,8 @@ class _ApplicationCard extends StatelessWidget {
               Row(
                 children: [
                   Expanded(
+                    // Wider than Approve, so "Book home visit" is not cut off on a 390 wide phone.
+                    flex: 3,
                     child: PawButton(
                       label: visit ? 'Message' : 'Book home visit',
                       variant: PawButtonVariant.secondary,
@@ -582,6 +584,7 @@ class _ApplicationCard extends StatelessWidget {
                   ),
                   const SizedBox(width: 8),
                   Expanded(
+                    flex: 2,
                     child: PawButton(
                       label: 'Approve',
                       height: 44,
@@ -689,23 +692,17 @@ class _ApplicationsTabState extends State<ApplicationsTab> {
                     ),
                   )
                 else ...[
-                  SizedBox(
-                    height: 44,
-                    child: ListView(
-                      scrollDirection: Axis.horizontal,
-                      children: [
-                        for (final f in ApplicationFilter.values)
-                          Padding(
-                            padding: const EdgeInsets.only(right: 8),
-                            child: PawChip(
-                              label:
-                                  '${f.label} · ${applicationCount(all, f)}',
-                              selected: _filter == f,
-                              onTap: () => setState(() => _filter = f),
-                            ),
-                          ),
-                      ],
-                    ),
+                  Wrap(
+                    spacing: 8,
+                    runSpacing: 8,
+                    children: [
+                      for (final f in ApplicationFilter.values)
+                        PawChip(
+                          label: '${f.label} · ${applicationCount(all, f)}',
+                          selected: _filter == f,
+                          onTap: () => setState(() => _filter = f),
+                        ),
+                    ],
                   ),
                   const SizedBox(height: 12),
                   PawTextField(

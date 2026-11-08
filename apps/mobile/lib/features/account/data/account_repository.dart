@@ -21,4 +21,12 @@ abstract class AccountRepository {
 
   Future<List<BlockedAccount>> blocks();
   Future<void> unblock(String blockId);
+
+  /// Reasons the account cannot be deleted right now (a booking, a held payment, a transfer...), in plain words.
+  /// Empty means nothing is in the way.
+  Future<List<String>> deletionBlockers();
+
+  /// Erases everything personal and closes the sign in for good. Throws [AppFailure] with the reason if money or
+  /// a handover is still in flight. The caller signs the person out afterwards.
+  Future<void> deleteAccount();
 }

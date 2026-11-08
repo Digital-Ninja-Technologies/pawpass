@@ -191,27 +191,17 @@ class _PrivacyScreenState extends State<PrivacyScreen> {
                                 ),
                               ),
                               PawListRow(
-                                title: 'Ask us to delete my account',
+                                title: 'Delete my account',
                                 destructive: true,
                                 showDivider: false,
-                                onTap: () => _ask(
-                                  message:
-                                      'Please delete my PawPass account and my personal data.',
-                                  sent:
-                                      'Request sent. We will reply by email to confirm.',
-                                  confirmTitle: 'Delete your account?',
-                                  confirmBody:
-                                      'We will email you to confirm, then remove your details and your pets. '
-                                      'We keep payment records we must keep by law. This cannot be undone.',
-                                  confirmLabel: 'Ask us to delete it',
-                                ),
+                                onTap: () => context.push('/delete-account'),
                               ),
                             ],
                           ),
                         ),
                         const SizedBox(height: 8),
                         Text(
-                          'Deleting removes your details. We keep payment records we must keep by law.',
+                          'Deleting removes your details at once. We keep payment records we must keep by law, without your name.',
                           style: PawText.meta12.copyWith(
                             color: PawColors.muted,
                           ),

@@ -3,6 +3,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:pawpass/app.dart';
 import 'package:pawpass/features/account/data/in_memory_account.dart';
 import 'package:pawpass/features/account/domain/models.dart';
+import 'package:pawpass/features/account/state/delete_account_controller.dart';
 import 'package:pawpass/features/adopt/data/in_memory_adopt.dart';
 import 'package:pawpass/features/booking/data/in_memory_bookings.dart';
 import 'package:pawpass/features/community/data/in_memory_community.dart';
@@ -233,17 +234,80 @@ void main() {
       expect(rig.account.blocked, isEmpty);
     });
 
-    testWidgets('asking to delete the account sends a support request after confirming', (
+    testWidgets('deleting the account needs the word DELETE, then erases and signs out', (
       tester,
     ) async {
       final rig = _Rig();
       await _pump(tester, rig);
       await _openMe(tester);
       await _tap(tester, 'Privacy & sharing');
-      await _tap(tester, 'Ask us to delete my account');
-      expect(find.text('Delete your account?'), findsOneWidget);
-      await _tap(tester, 'Ask us to delete it');
-      expect(find.textContaining('Request sent'), findsOneWidget);
+      await _tap(tester, 'Delete my account');
+      expect(find.text('This cannot be undone. You will be signed out and can never sign in to this account again.'), findsOneWidget);
+      expect(find.text('WHAT IS DELETED'), findsOneWidget);
+      expect(find.text('WHAT WE HAVE TO KEEP'), findsOneWidget);
+      final button = find.widgetWithText(PawButton, 'Delete my account');
+      expect(tester.widget<PawButton>(button).onPressed, isNull, reason: 'needs the word first');
+
+      await tester.enterText(find.byType(TextField).last, 'delete me');
+      await tester.pump();
+      expect(tester.widget<PawButton>(button).onPressed, isNull, reason: 'the whole word, nothing else');
+      await tester.enterText(find.byType(TextField).last, 'delete');
+      await tester.pump();
+      expect(tester.widget<PawButton>(button).onPressed, isNotNull);
+      await tester.tap(button);
+      await tester.pumpAndSettle();
+
+      expect(rig.account.deleted, isTrue);
+      expect(find.text('Get started'), findsOneWidget, reason: 'signed out, back at Welcome');
+    });
+
+    testWidgets('anything in the way is listed first, and there is no delete button', (
+      tester,
+    ) async {
+      final rig = _Rig();
+      rig.account.deletionBlockerList = [
+        'You have a booking that is not finished. Confirm the visit or cancel it first.',
+        'A pet passport transfer is still waiting to be finished.',
+      ];
+      await _pump(tester, rig);
+      await _openMe(tester);
+      await _tap(tester, 'Privacy & sharing');
+      await _tap(tester, 'Delete my account');
+      expect(find.text('Finish these first'), findsOneWidget);
+      expect(find.textContaining('booking that is not finished'), findsOneWidget);
+      expect(find.textContaining('transfer is still waiting'), findsOneWidget);
+      expect(find.widgetWithText(PawButton, 'Delete my account'), findsNothing);
+      expect(find.text('Check again'), findsOneWidget);
+
+      // Settled: Check again brings back the confirmation.
+      rig.account.deletionBlockerList = [];
+      await _tap(tester, 'Check again');
+      expect(find.text('Finish these first'), findsNothing);
+      expect(find.widgetWithText(PawButton, 'Delete my account'), findsOneWidget);
+      expect(rig.account.deleted, isFalse);
+    });
+
+    testWidgets('a failure keeps the person signed in and says why', (tester) async {
+      final rig = _Rig();
+      await _pump(tester, rig);
+      await _openMe(tester);
+      await _tap(tester, 'Privacy & sharing');
+      await _tap(tester, 'Delete my account');
+      rig.account.failNext = const AppFailure('No connection. Check your internet and try again.');
+      await tester.enterText(find.byType(TextField).last, 'DELETE');
+      await tester.pump();
+      await tester.tap(find.widgetWithText(PawButton, 'Delete my account'));
+      await tester.pumpAndSettle();
+      expect(find.text('No connection. Check your internet and try again.'), findsOneWidget);
+      expect(rig.account.deleted, isFalse);
+      expect(find.text('Get started'), findsNothing);
+    });
+
+    test('the confirmation word', () {
+      expect(isDeleteConfirmed('DELETE'), isTrue);
+      expect(isDeleteConfirmed(' delete '), isTrue);
+      expect(isDeleteConfirmed('del'), isFalse);
+      expect(isDeleteConfirmed(''), isFalse);
     });
   });
 
