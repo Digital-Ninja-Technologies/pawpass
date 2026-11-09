@@ -35,7 +35,8 @@ select cron.schedule('send-reminders', '*/15 * * * *', $$
     headers := jsonb_build_object(
       'Content-Type', 'application/json',
       'Authorization', 'Bearer ' || (select decrypted_secret from vault.decrypted_secrets where name = 'service_role_key')),
-    body := '{}'::jsonb)
+    body := '{}'::jsonb,
+    timeout_milliseconds := 30000)
 $$);
 
 -- Check 1: both jobs listed and active.
