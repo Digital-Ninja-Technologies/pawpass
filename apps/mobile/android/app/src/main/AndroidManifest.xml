@@ -3,6 +3,8 @@
     <!-- Without this a release build has no network at all (Flutter only adds it for debug and profile builds). -->
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <!-- Android 13 and later ask before showing notifications (reminders and booking updates). -->
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
     <application
         android:label="PawPass"
         android:name="${applicationName}"

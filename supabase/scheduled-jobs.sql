@@ -39,6 +39,18 @@ select cron.schedule('send-reminders', '*/15 * * * *', $$
     timeout_milliseconds := 30000)
 $$);
 
+-- Push notifications: sends the notifications that are ready to people's phones (every minute).
+-- Needs the FCM_SERVICE_ACCOUNT secret on the send-push function. Safe to run on its own once the Vault key exists.
+select cron.schedule('send-push', '* * * * *', $$
+  select net.http_post(
+    url := 'https://ieslnhmxlfiymkqelbsl.supabase.co/functions/v1/send-push',
+    headers := jsonb_build_object(
+      'Content-Type', 'application/json',
+      'Authorization', 'Bearer ' || (select decrypted_secret from vault.decrypted_secrets where name = 'service_role_key')),
+    body := '{}'::jsonb,
+    timeout_milliseconds := 30000)
+$$);
+
 -- Check 1: both jobs listed and active.
 select jobname, schedule, active from cron.job order by jobname;
 

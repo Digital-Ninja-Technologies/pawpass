@@ -38,6 +38,12 @@ android {
     }
 }
 
+// Push notifications need Firebase's file for this app (android/app/google-services.json, from the Firebase console).
+// Without it the app still builds and runs, with push switched off.
+if (file("google-services.json").exists()) {
+    apply(plugin = "com.google.gms.google-services")
+}
+
 kotlin {
     compilerOptions {
         jvmTarget = org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_17

@@ -55,7 +55,13 @@ class SessionController extends ChangeNotifier {
     _set(SessionStatus.signedIn, loaded);
   }
 
-  Future<void> signOut() => _services.auth.signOut();
+  Future<void> signOut() async {
+    // While the server still knows who this is: stop sending this phone their news. Never blocks signing out.
+    try {
+      await _services.push.signingOut().timeout(const Duration(seconds: 4));
+    } catch (_) {}
+    await _services.auth.signOut();
+  }
 
   void _set(SessionStatus s, Profile? p) {
     if (_disposed) return;

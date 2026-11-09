@@ -5,6 +5,8 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 import 'app.dart';
 import 'core/analytics.dart';
 import 'core/offline_cache.dart';
+import 'core/push.dart';
+import 'core/push_firebase.dart';
 import 'features/account/data/supabase_account.dart';
 import 'features/adopt/data/supabase_adopt.dart';
 import 'features/booking/data/supabase_bookings.dart';
@@ -31,6 +33,8 @@ Future<void> main() async {
     );
     final client = Supabase.instance.client;
     final cache = OfflineCache(PrefsKeyValueStore());
+    // Push needs the Firebase files for this build; without them this is a platform that does nothing.
+    final pushPlatform = await FirebasePushPlatform.create();
     runApp(
       PawPassApp(
         services: AppServices(
@@ -52,6 +56,11 @@ Future<void> main() async {
           account: SupabaseAccountRepository(client),
           cache: cache,
           analytics: SupabaseAnalytics(client),
+          push: PushService(
+            platform: pushPlatform,
+            repository: SupabasePushRepository(client),
+            store: PrefsKeyValueStore(),
+          ),
         ),
       ),
     );

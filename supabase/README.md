@@ -29,6 +29,7 @@ Database schema, row level security, storage rules and seed data for PawPass.
 | `tests/partner.test.sql`                           | Tests for the application steps, documents and payout privacy, review notices, dashboards, earnings, listings, decisions, support      |
 | `tests/payout.test.sql`                            | Tests for what a run pays, release before sending, retries, split remainders and who may send                                          |
 | `tests/reminders_email.test.sql`                    | Tests for the scheduled reminder job and email claiming: who is announced, quiet hours, channels, retries, deleted and suspended accounts |
+| `tests/push.test.sql`                              | Tests for registering phones and what is claimed for pushing: likes left out, reminder channel and hours, old news, new phones, retries, dead tokens, deleted accounts |
 | `tests/onboarding.test.sql`                        | Tests for the account type fields and `create_pet_passport` (all or nothing, privacy, validation)                                      |
 
 ## How access works

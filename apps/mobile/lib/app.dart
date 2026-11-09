@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
@@ -7,6 +9,8 @@ import 'features/booking/state/booking_controller.dart';
 import 'features/community/state/chat_controller.dart';
 import 'features/community/state/community_controller.dart';
 import 'features/community/state/lost_controller.dart';
+import 'core/push.dart';
+import 'features/health/domain/health_logic.dart' show notificationRoute;
 import 'features/health/state/health_controller.dart';
 import 'features/onboarding/data/repositories.dart';
 import 'features/partner/state/partner_controller.dart';
@@ -62,10 +66,58 @@ class _PawPassAppState extends State<PawPassApp> with WidgetsBindingObserver {
     onboarding: _onboarding,
   );
 
+  StreamSubscription<PushTap>? _tapSub;
+  StreamSubscription<void>? _foregroundSub;
+
+  /// A notification that was tapped before the person was signed in and set up: opened once they are.
+  String? _pendingLink;
+  var _pushStarted = false;
+
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addObserver(this);
+    _session.addListener(_onSession);
+    final push = widget.services.push;
+    _tapSub = push.taps.listen((tap) => _openLink(tap.link));
+    _foregroundSub = push.foreground.listen((_) {
+      if (_session.signedIn) _health.refreshNotifications();
+    });
+    push.launchTap().then((tap) {
+      if (tap?.link != null) _openLink(tap!.link);
+    });
+  }
+
+  void _onSession() {
+    if (_session.signedIn && _session.onboarded) {
+      if (!_pushStarted) {
+        _pushStarted = true;
+        widget.services.push.signedIn();
+      }
+      final link = _pendingLink;
+      if (link != null) {
+        _pendingLink = null;
+        _openLink(link);
+      }
+    } else if (_session.status == SessionStatus.signedOut) {
+      _pushStarted = false;
+      _pendingLink = null;
+    }
+  }
+
+  /// Where a tapped notification goes (the same places as tapping it in the Notifications list).
+  void _openLink(String? link) {
+    if (!(_session.signedIn && _session.onboarded)) {
+      _pendingLink = link;
+      return;
+    }
+    final target = notificationRoute(link);
+    if (target == null) return;
+    if (target.root) {
+      _router.go(target.route);
+    } else {
+      _router.push(target.route);
+    }
   }
 
   @override
@@ -79,6 +131,10 @@ class _PawPassAppState extends State<PawPassApp> with WidgetsBindingObserver {
   @override
   void dispose() {
     WidgetsBinding.instance.removeObserver(this);
+    _session.removeListener(_onSession);
+    _tapSub?.cancel();
+    _foregroundSub?.cancel();
+    widget.services.push.dispose();
     _router.dispose();
     _partner.dispose();
     _adopt.dispose();

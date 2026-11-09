@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import '../../../core/analytics.dart';
+import '../../../core/push.dart';
 import '../../../core/offline_cache.dart';
 import '../../account/data/in_memory_account.dart';
 import '../../account/domain/models.dart';
@@ -206,6 +207,7 @@ AppServices inMemoryServices({
   String? signedInAs,
   OfflineCache? cache,
   Analytics analytics = const NoAnalytics(),
+  PushService? push,
 }) {
   final profiles = InMemoryProfileRepository();
   final bookings = InMemoryBookingsRepository(now: now);
@@ -280,6 +282,7 @@ AppServices inMemoryServices({
     account: account,
     cache: cache,
     analytics: analytics,
+    push: push,
     now: now ?? DateTime.now,
   );
 }

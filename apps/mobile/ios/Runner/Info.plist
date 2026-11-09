@@ -72,5 +72,9 @@
 	<string>PawPass uses your photos so you can choose a picture of your pet or yourself.</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string>PawPass uses your approximate location to show vets and clinics near you. It is only used while you look at the list.</string>
+	<key>UIBackgroundModes</key>
+	<array>
+		<string>remote-notification</string>
+	</array>
 </dict>
 </plist>

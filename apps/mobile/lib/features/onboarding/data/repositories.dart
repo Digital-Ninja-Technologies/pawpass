@@ -1,5 +1,6 @@
 import '../../../core/analytics.dart';
 import '../../../core/offline_cache.dart';
+import '../../../core/push.dart';
 import '../../account/data/account_repository.dart';
 import '../../account/data/in_memory_account.dart';
 import '../../adopt/data/adopt_repository.dart';
@@ -91,10 +92,12 @@ class AppServices {
     AccountRepository? account,
     this.cache,
     this.analytics = const NoAnalytics(),
+    PushService? push,
     this.shareBaseUrl = kShareBaseUrl,
     this.now = DateTime.now,
     this.demoHint,
-  }) : account = account ?? InMemoryAccountRepository();
+  }) : account = account ?? InMemoryAccountRepository(),
+       push = push ?? PushService.off();
 
   final AuthRepository auth;
   final ProfileRepository profiles;
@@ -120,6 +123,9 @@ class AppServices {
 
   /// Counts a few events (opening the app, starting a booking) for the success metrics.
   final Analytics analytics;
+
+  /// Push notifications: registers this phone, and removes it on sign out. Off in tests and demo builds.
+  final PushService push;
 
   /// Where share links point. The token follows a `#`, so it is never sent to that server.
   final String shareBaseUrl;
