@@ -207,6 +207,9 @@ end $$;
 -- ---------------------------------------------------------------------------
 -- The weekly schedule
 -- ---------------------------------------------------------------------------
+-- Earlier runs in this file may sit on today (on a payout day they would block the schedule), so move them away.
+reset role;
+update public.payout_runs set run_on = run_on - 60 where run_on >= (now() at time zone 'Africa/Lagos')::date;
 :payments
 select set_config('test.sched', public.schedule_payout_run()::text, true);
 do $$
