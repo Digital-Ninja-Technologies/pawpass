@@ -27,6 +27,17 @@ select cron.schedule('payout-run', '0 * * * *', $$
     body := '{}'::jsonb)
 $$);
 
+-- Reminders: announces due reminders in the app and emails people who chose email (8am to 8pm Lagos time).
+-- Needs the RESEND_API_KEY secret on the send-reminders function. Safe to run on its own once the Vault key exists.
+select cron.schedule('send-reminders', '*/15 * * * *', $$
+  select net.http_post(
+    url := 'https://ieslnhmxlfiymkqelbsl.supabase.co/functions/v1/send-reminders',
+    headers := jsonb_build_object(
+      'Content-Type', 'application/json',
+      'Authorization', 'Bearer ' || (select decrypted_secret from vault.decrypted_secrets where name = 'service_role_key')),
+    body := '{}'::jsonb)
+$$);
+
 -- Check 1: both jobs listed and active.
 select jobname, schedule, active from cron.job order by jobname;
 

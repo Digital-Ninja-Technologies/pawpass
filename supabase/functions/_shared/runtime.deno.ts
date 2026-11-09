@@ -3,6 +3,7 @@
 import { createClient, type SupabaseClient } from "jsr:@supabase/supabase-js@2";
 import { HttpError, type BookingRow, type Ctx, type Db, type PaystackApi } from "./payments.ts";
 import { BlockedError, type AccountCtx } from "./accounts.ts";
+import type { Mailer, ReminderCtx, ReminderDb, ReminderRow } from "./reminders.ts";
 import { safeEqual } from "./paystack.ts";
 import type { PayoutCtx, PayoutDb, PayoutItem, TransferApi } from "./payouts.ts";
 
@@ -357,5 +358,66 @@ export function accountContext(): AccountCtx {
         if (error) throw new Error(error.message);
       },
     },
+  };
+}
+
+// ---------------------------------------------------------------------------------------------------------------
+// Reminders (scheduled job and email)
+// ---------------------------------------------------------------------------------------------------------------
+function resendMailer(apiKey: string): Mailer {
+  return {
+    async send(message) {
+      const res = await fetch("https://api.resend.com/emails", {
+        method: "POST",
+        headers: { Authorization: `Bearer ${apiKey}`, "Content-Type": "application/json" },
+        body: JSON.stringify({
+          from: message.from,
+          to: [message.to],
+          subject: message.subject,
+          html: message.html,
+          text: message.text,
+        }),
+      });
+      if (res.ok) return { ok: true };
+      const detail = await res.text().catch(() => "");
+      return { ok: false, error: `Resend HTTP ${res.status} ${detail.slice(0, 200)}` };
+    },
+  };
+}
+
+function reminderDb(client: SupabaseClient): ReminderDb {
+  const must = <T>(res: { data: T; error: { message: string } | null }): T => {
+    if (res.error) throw new Error(res.error.message);
+    return res.data;
+  };
+  return {
+    async announce() {
+      return Number(must(await client.rpc("announce_all_reminders")) ?? 0);
+    },
+    async claim(limit) {
+      const rows = (must(await client.rpc("claim_reminder_emails", { p_limit: limit })) ??
+        []) as Record<string, unknown>[];
+      return rows.map((r): ReminderRow => ({
+        notificationId: r.notification_id as string,
+        email: r.email as string,
+        firstName: (r.first_name as string | null) ?? "",
+        title: r.title as string,
+        body: (r.body as string | null) ?? "",
+      }));
+    },
+    async finish(notificationId, ok) {
+      must(
+        await client.rpc("finish_reminder_email", { p_notification: notificationId, p_ok: ok }),
+      );
+    },
+  };
+}
+
+/** Needs the RESEND_API_KEY secret. REMINDER_FROM is optional (default: PawPass <reminders@ourpawpass.com>). */
+export function reminderContext(): ReminderCtx {
+  return {
+    db: reminderDb(serviceClient()),
+    mailer: resendMailer(env("RESEND_API_KEY")),
+    from: Deno.env.get("REMINDER_FROM") || "PawPass <reminders@ourpawpass.com>",
   };
 }

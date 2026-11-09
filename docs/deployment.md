@@ -57,6 +57,7 @@ Supabase project's function secrets; the app never sees it.
 | `paystack-webhook`  | Paystack                    | Checks the HMAC SHA512 signature, then records `charge.success` the same way (safe if both run)               |
 | `process-refunds`   | A schedule (service role)   | Sends queued refunds to Paystack, and makes visits the owner never confirmed ready for payout                  |
 | `delete-account`    | The app (signed in person)  | Not about money: erases a person's data through `erase_account`, removes their files, then soft deletes the sign in. Refuses while a payment or handover is unfinished. Deploy with JWT verification off |
+| `send-reminders`    | A schedule (service role)   | Announces due vaccine and treatment reminders in the app for everyone, and emails the people who chose email through Resend. Deploy with JWT verification off |
 
 Setup, once the `20261106200000_services_escrow` migration is applied:
 
@@ -103,3 +104,16 @@ Becoming a partner needs no setup beyond the `20261109100000_partner_mode` migra
   more info, rejected) reaches the partner as a notification.
 - Not designed yet, so shown as "coming soon": the vet and service Calendar tab, QR tags, and privacy and sharing.
   Vets still cannot open a shared passport or add a verified record from the dashboard; that stays on the share link.
+
+## Reminders and email
+
+`send-reminders` runs every 15 minutes (the third job in `supabase/scheduled-jobs.sql`).
+
+- It announces each reminder in the app once per stage (within 7 days, due today or tomorrow, overdue up to 30 days),
+  for every person, whether or not they open the app.
+- It emails only people who chose **email** as a reminder channel, once per announcement, between 8am and 8pm Lagos
+  time, one email per person per run, and never an announcement older than two days. A failed send is tried again, up
+  to three times.
+- Secrets on the function: `RESEND_API_KEY` (a Resend key with sending access for `ourpawpass.com`). Optional
+  `REMINDER_FROM` (default `PawPass <reminders@ourpawpass.com>`).
+- People turn the emails off in the app (Me, Notifications & reminders). Push and WhatsApp are not built yet.
