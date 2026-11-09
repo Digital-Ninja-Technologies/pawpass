@@ -3,7 +3,6 @@
 --   psql "$DATABASE_URL" -v ON_ERROR_STOP=1 -q -f supabase/tests/delete_account.test.sql
 -- Needs seed.sql and migration 20261114100000. Runs in one transaction that is rolled back.
 -- Prints "Delete account tests passed" on success.
--- NOT RUN YET: written without a database to run it on. Run it before relying on the migration.
 
 \set QUIET on
 \set kemi 'do $$ begin perform set_config(''request.jwt.claim.sub'', ''a0000000-0000-0000-0000-000000000005'', true); end $$; set local role authenticated;'
@@ -101,6 +100,25 @@ begin
 
   perform public.erase_account(bola);
   assert (select count(*) from public.account_deletions where user_id = bola) = 1, 'running it again changes nothing';
+end $$;
+
+-- A person who is on the team is refused, with a readable reason (this is the path that used to fail with
+-- "malformed array literal"), and nothing about them is erased.
+:server
+insert into public.staff_members (user_id, role) values ('a0000000-0000-0000-0000-000000000005', 'read_only');
+do $$
+declare reasons text[];
+begin
+  reasons := private.deletion_blockers('a0000000-0000-0000-0000-000000000005');
+  assert array_length(reasons, 1) = 1 and reasons[1] like '%PawPass team%', 'staff are told why, in words';
+  assert test_helpers.state($q$ select public.erase_account('a0000000-0000-0000-0000-000000000005') $q$) = 'P0001', 'and refused with the blocked code';
+  assert not exists (select 1 from public.account_deletions where user_id = 'a0000000-0000-0000-0000-000000000005'), 'nothing was erased';
+  assert (select first_name from public.profiles where user_id = 'a0000000-0000-0000-0000-000000000005') <> 'Deleted', 'the profile is untouched';
+end $$;
+:kemi
+do $$
+begin
+  assert 'You are on the PawPass team. Ask an admin to remove your access first.' = any(public.my_deletion_blockers()), 'the app can read the reasons';
 end $$;
 
 reset role;
