@@ -8,6 +8,11 @@ import 'repositories.dart';
 
 AppFailure _failure(Object e, {required String fallback}) {
   if (e is AppFailure) return e;
+  // The server answered with a fault of its own (for example it could not send the email). That is not the
+  // phone's connection, so do not tell the person to check their internet.
+  if (e is AuthException && (e.statusCode ?? '').startsWith('5')) {
+    return AppFailure(fallback);
+  }
   if (isNetworkError(e)) {
     return const AppFailure(
       'No connection. Check your internet and try again.',
