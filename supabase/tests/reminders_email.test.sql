@@ -50,6 +50,16 @@ begin
   assert exists (select 1 from public.notifications where user_id = 'a0000000-0000-0000-0000-000000000005' and title like '% in 3 days'), 'Kemi: in 3 days';
 end $$;
 
+-- A notification whose key has no uuid in the second place must not break the claim.
+:server
+insert into public.notifications (user_id, kind, title, dedupe_key)
+values ('a0000000-0000-0000-0000-000000000001', 'booking', 'Booked', 'booking:not-a-uuid:confirmed');
+do $$
+begin
+  assert (select count(*) from public.claim_reminder_emails(50, test_helpers.lagos_at(23))) = 0, 'odd keys do not break the claim';
+end $$;
+delete from public.notifications where dedupe_key = 'booking:not-a-uuid:confirmed';
+
 -- Only the service role may run the job.
 :tolu
 do $$

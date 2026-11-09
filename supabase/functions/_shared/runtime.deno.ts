@@ -4,6 +4,17 @@ import { createClient, type SupabaseClient } from "jsr:@supabase/supabase-js@2";
 import { HttpError, type BookingRow, type Ctx, type Db, type PaystackApi } from "./payments.ts";
 import { BlockedError, type AccountCtx } from "./accounts.ts";
 import type { Mailer, ReminderCtx, ReminderDb, ReminderRow } from "./reminders.ts";
+import {
+  buildMessage,
+  judgeFcmResponse,
+  parseServiceAccount,
+  signServiceJwt,
+  TOKEN_URL,
+  type Fcm,
+  type PushCtx,
+  type PushDb,
+  type PushRow,
+} from "./push.ts";
 import { safeEqual } from "./paystack.ts";
 import type { PayoutCtx, PayoutDb, PayoutItem, TransferApi } from "./payouts.ts";
 
@@ -420,4 +431,78 @@ export function reminderContext(): ReminderCtx {
     mailer: resendMailer(env("RESEND_API_KEY")),
     from: Deno.env.get("REMINDER_FROM") || "PawPass <reminders@ourpawpass.com>",
   };
+}
+
+// ---------------------------------------------------------------------------------------------------------------
+// Push notifications (Firebase Cloud Messaging)
+// ---------------------------------------------------------------------------------------------------------------
+function pushDb(client: SupabaseClient): PushDb {
+  const must = <T>(res: { data: T; error: { message: string } | null }): T => {
+    if (res.error) throw new Error(res.error.message);
+    return res.data;
+  };
+  return {
+    async claim(limit) {
+      const rows = (must(await client.rpc("claim_push_messages", { p_limit: limit })) ??
+        []) as Record<string, unknown>[];
+      return rows.map((r): PushRow => ({
+        notificationId: r.notification_id as string,
+        tokenId: r.token_id as string,
+        token: r.token as string,
+        platform: r.platform as string,
+        title: r.title as string,
+        body: (r.body as string | null) ?? null,
+        link: (r.link as string | null) ?? null,
+      }));
+    },
+    async finish(notificationId, ok, deadTokenIds) {
+      must(
+        await client.rpc("finish_push", {
+          p_notification: notificationId,
+          p_ok: ok,
+          p_dead_tokens: deadTokenIds,
+        }),
+      );
+    },
+  };
+}
+
+function fcmSender(rawServiceAccount: string): Fcm {
+  const sa = parseServiceAccount(rawServiceAccount);
+  let cached: { token: string; expiresAt: number } | null = null;
+
+  async function accessToken(): Promise<string> {
+    const now = Math.floor(Date.now() / 1000);
+    if (cached && cached.expiresAt - 60 > now) return cached.token;
+    const assertion = await signServiceJwt(sa, now);
+    const res = await fetch(TOKEN_URL, {
+      method: "POST",
+      headers: { "Content-Type": "application/x-www-form-urlencoded" },
+      body: new URLSearchParams({
+        grant_type: "urn:ietf:params:oauth:grant-type:jwt-bearer",
+        assertion,
+      }),
+    });
+    const body = (await res.json().catch(() => null)) as { access_token?: string; expires_in?: number } | null;
+    if (!res.ok || !body?.access_token) throw new Error(`Google sign in failed (HTTP ${res.status})`);
+    cached = { token: body.access_token, expiresAt: now + (body.expires_in ?? 3600) };
+    return cached.token;
+  }
+
+  return {
+    async send(row) {
+      const res = await fetch(`https://fcm.googleapis.com/v1/projects/${sa.project_id}/messages:send`, {
+        method: "POST",
+        headers: { Authorization: `Bearer ${await accessToken()}`, "Content-Type": "application/json" },
+        body: JSON.stringify(buildMessage(row)),
+      });
+      const body = await res.json().catch(() => null);
+      return judgeFcmResponse(res.status, body);
+    },
+  };
+}
+
+/** Needs the FCM_SERVICE_ACCOUNT secret (the Firebase service account key, as JSON). */
+export function pushContext(): PushCtx {
+  return { db: pushDb(serviceClient()), fcm: fcmSender(env("FCM_SERVICE_ACCOUNT")) };
 }

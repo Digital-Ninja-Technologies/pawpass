@@ -116,7 +116,9 @@ begin
   with picked as (
     select n.id
       from public.notifications n
-      join public.reminders r on r.id = split_part(n.dedupe_key, ':', 2)::uuid
+      join public.reminders r
+        on r.id = case when n.kind = 'reminder_due' and n.dedupe_key like 'reminder:%'
+                       then split_part(n.dedupe_key, ':', 2)::uuid end
       join public.profiles pr on pr.user_id = n.user_id
       join auth.users u on u.id = n.user_id
      where n.kind = 'reminder_due'
