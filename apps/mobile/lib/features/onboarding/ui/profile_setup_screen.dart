@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../ui/ui.dart';
+import '../domain/validators.dart';
 import '../state/app_scope.dart';
 import '../state/onboarding_controller.dart';
 import 'onboarding_page.dart';
@@ -93,6 +94,8 @@ class _ProfileSetupScreenState extends State<ProfileSetupScreen> {
                 child: PawTextField(
                   label: 'First name',
                   controller: _first,
+                  validator: (t) =>
+                      t.trim().isEmpty ? 'Enter your first name.' : null,
                   textCapitalization: TextCapitalization.words,
                   textInputAction: TextInputAction.next,
                   autofillHints: const [AutofillHints.givenName],
@@ -159,6 +162,9 @@ class _ProfileSetupScreenState extends State<ProfileSetupScreen> {
             keyboardType: TextInputType.phone,
             textInputAction: TextInputAction.done,
             autofillHints: const [AutofillHints.telephoneNumber],
+            validator: (t) => t.trim().isEmpty || normalisePhone(t) != null
+                ? null
+                : 'Use a number like 0803 123 4567, or start with + and the country code.',
             onChanged: (v) {
               ob.phone = v;
               ob.clearError();

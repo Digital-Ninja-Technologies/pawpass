@@ -272,6 +272,8 @@ class _AddPetScreenState extends State<AddPetScreen> {
                   child: PawTextField(
                     label: "Pet's name",
                     controller: _name,
+                    validator: (t) =>
+                        t.trim().isEmpty ? "Enter your pet's name." : null,
                     textCapitalization: TextCapitalization.words,
                     textInputAction: TextInputAction.next,
                     maxLength: 40,

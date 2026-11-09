@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -15,6 +17,7 @@ class PawTextField extends StatefulWidget {
     this.hint,
     this.helperText,
     this.errorText,
+    this.validator,
     this.keyboardType,
     this.textInputAction,
     this.textCapitalization = TextCapitalization.none,
@@ -38,6 +41,11 @@ class PawTextField extends StatefulWidget {
 
   /// When non null the field is in its error state and the text is shown below.
   final String? errorText;
+
+  /// Checks the text as the person types. Return a message when it is not right, or null when it is.
+  /// The message shows once they pause typing or leave the field, then updates on every key press, so the
+  /// error appears and disappears while they fix it. [errorText] (for example from a failed submit) wins.
+  final String? Function(String text)? validator;
   final TextInputType? keyboardType;
   final TextInputAction? textInputAction;
   final TextCapitalization textCapitalization;
@@ -64,10 +72,41 @@ class _PawTextFieldState extends State<PawTextField> {
   FocusNode get _node => widget.focusNode ?? (_ownNode ??= FocusNode());
   bool _focused = false;
 
+  /// Whether the live message may show yet: after a pause in typing, or after leaving the field.
+  bool _touched = false;
+  Timer? _pause;
+  String _typed = '';
+
+  /// How long to wait after the last key press before judging what was typed.
+  static const _pauseBeforeJudging = Duration(milliseconds: 700);
+
   @override
   void initState() {
     super.initState();
+    _typed = widget.controller?.text ?? '';
     _node.addListener(_onFocus);
+    widget.controller?.addListener(_onText);
+  }
+
+  void _onText() {
+    final t = widget.controller!.text;
+    if (t != _typed) {
+      _typed = t;
+      _restartPause();
+    }
+  }
+
+  void _restartPause() {
+    if (widget.validator == null) return;
+    _pause?.cancel();
+    if (_touched) {
+      setState(() {});
+      return;
+    }
+    _pause = Timer(_pauseBeforeJudging, () {
+      if (mounted) setState(() => _touched = true);
+    });
+    setState(() {});
   }
 
   @override
@@ -77,14 +116,43 @@ class _PawTextFieldState extends State<PawTextField> {
       (old.focusNode ?? _ownNode)?.removeListener(_onFocus);
       _node.addListener(_onFocus);
     }
+    if (old.controller != widget.controller) {
+      old.controller?.removeListener(_onText);
+      widget.controller?.addListener(_onText);
+      _typed = widget.controller?.text ?? _typed;
+    }
   }
 
   void _onFocus() {
-    if (_focused != _node.hasFocus) setState(() => _focused = _node.hasFocus);
+    final focused = _node.hasFocus;
+    if (_focused == focused) return;
+    setState(() {
+      _focused = focused;
+      // Leaving the field counts as "done typing", so the message shows even without a pause.
+      if (!focused && widget.validator != null) _touched = true;
+    });
+  }
+
+  void _typedChanged(String v) {
+    // Without a controller the field is the only place the text lives.
+    if (widget.controller == null) {
+      _typed = v;
+      _restartPause();
+    }
+    widget.onChanged?.call(v);
+  }
+
+  /// The message to show: a submit error first, then the live check once the person has had a go.
+  String? get _liveError {
+    final v = widget.validator;
+    if (v == null || !_touched) return null;
+    return v(_typed);
   }
 
   @override
   void dispose() {
+    _pause?.cancel();
+    widget.controller?.removeListener(_onText);
     _node.removeListener(_onFocus);
     _ownNode?.dispose();
     super.dispose();
@@ -92,14 +160,15 @@ class _PawTextFieldState extends State<PawTextField> {
 
   @override
   Widget build(BuildContext context) {
-    final hasError = widget.errorText != null;
+    final error = widget.errorText ?? _liveError;
+    final hasError = error != null;
     final border = hasError
         ? const BorderSide(color: PawColors.danger, width: 1.5)
         : _focused
         ? const BorderSide(color: PawColors.primary, width: 2)
         : const BorderSide(color: PawColors.border);
 
-    final message = widget.errorText ?? widget.helperText;
+    final message = error ?? widget.helperText;
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -142,7 +211,7 @@ class _PawTextFieldState extends State<PawTextField> {
                     maxLength: widget.maxLength,
                     inputFormatters: widget.inputFormatters,
                     autofillHints: widget.autofillHints,
-                    onChanged: widget.onChanged,
+                    onChanged: _typedChanged,
                     onSubmitted: widget.onSubmitted,
                     cursorColor: PawColors.primary,
                     style: PawText.body15Strong,
@@ -161,10 +230,13 @@ class _PawTextFieldState extends State<PawTextField> {
         ),
         if (message != null) ...[
           const SizedBox(height: 6),
-          Text(
-            message,
-            style: PawText.meta13.copyWith(
-              color: hasError ? PawColors.danger : PawColors.muted,
+          Semantics(
+            liveRegion: hasError,
+            child: Text(
+              message,
+              style: PawText.meta13.copyWith(
+                color: hasError ? PawColors.danger : PawColors.muted,
+              ),
             ),
           ),
         ],

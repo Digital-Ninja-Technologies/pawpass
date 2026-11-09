@@ -64,6 +64,11 @@ class _SignUpScreenState extends State<SignUpScreen> {
             textInputAction: TextInputAction.done,
             autofillHints: const [AutofillHints.email],
             errorText: _fieldError,
+            validator: (t) => t.trim().isEmpty
+                ? 'Enter your email address.'
+                : isValidEmail(t)
+                ? null
+                : 'That does not look right. Use an email like name@example.com.',
             prefix: const PawIcon(
               PawIconData.mail,
               size: 20,
