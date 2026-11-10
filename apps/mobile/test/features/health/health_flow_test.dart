@@ -821,7 +821,7 @@ void main() {
         final token = rig.health.shares.single.link.token;
         expect(
           rig.links.copied.single,
-          'https://pawpass-web-ten.vercel.app/s#$token',
+          'https://ourpawpass.com/s#$token',
         );
         expect(find.text('Link copied.'), findsOneWidget);
       },
@@ -897,7 +897,7 @@ void main() {
       final widget = tester.widget<PawQrCode>(find.byType(PawQrCode));
       expect(
         widget.data,
-        'https://pawpass-web-ten.vercel.app/s#${rig.health.shares.single.link.token}',
+        'https://ourpawpass.com/s#${rig.health.shares.single.link.token}',
       );
     });
   });

@@ -141,5 +141,5 @@ class AppServices {
 /// Override with --dart-define=SHARE_BASE_URL=https://your.domain/s once the site has its own domain.
 const kShareBaseUrl = String.fromEnvironment(
   'SHARE_BASE_URL',
-  defaultValue: 'https://pawpass-web-ten.vercel.app/s',
+  defaultValue: 'https://ourpawpass.com/s',
 );

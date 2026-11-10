@@ -115,7 +115,7 @@ Becoming a partner needs no setup beyond the `20261109100000_partner_mode` migra
   time, one email per person per run, and never an announcement older than two days. A failed send is tried again, up
   to three times.
 - Secrets on the function: `RESEND_API_KEY` (a Resend key with sending access for `ourpawpass.com`). Optional
-  `REMINDER_FROM` (default `PawPass <reminders@ourpawpass.com>`).
+  `REMINDER_FROM` (default `OurPawPass <reminders@ourpawpass.com>`).
 - People turn the emails off in the app (Me, Notifications & reminders). Push and WhatsApp are not built yet.
 
 ## Push notifications
