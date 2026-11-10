@@ -3,8 +3,8 @@ import { LegalPage } from "@/components/LegalPage";
 import { PRIVACY } from "@/lib/legal";
 
 export const metadata: Metadata = {
-  title: "Privacy policy · PawPass",
-  description: "What PawPass collects, why, and who can see it.",
+  title: "Privacy policy · OurPawPass",
+  description: "What OurPawPass collects, why, and who can see it.",
   alternates: { canonical: "/privacy" },
 };
 

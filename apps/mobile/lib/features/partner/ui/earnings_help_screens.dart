@@ -133,7 +133,7 @@ class _EarningsTabState extends State<EarningsTab> {
                       ),
                   const SizedBox(height: 4),
                   Text(
-                    'Amounts are after the PawPass fee. If an owner reports a problem, that payment pauses until the PawPass team decides.',
+                    'Amounts are after the OurPawPass fee. If an owner reports a problem, that payment pauses until the OurPawPass team decides.',
                     style: PawText.meta13.copyWith(color: PawColors.muted),
                   ),
                 ],
@@ -196,7 +196,7 @@ class HelpArticle {
 const helpArticles = <HelpArticle>[
   HelpArticle(
     'How escrow protects you',
-    'When you book or pay a deposit, the money goes to PawPass, not straight to the other person. We hold it until you confirm the visit, or until the check window after a handover has passed with no problem. If something is wrong, report it and the payment pauses until the PawPass team decides.',
+    'When you book or pay a deposit, the money goes to OurPawPass, not straight to the other person. We hold it until you confirm the visit, or until the check window after a handover has passed with no problem. If something is wrong, report it and the payment pauses until the OurPawPass team decides.',
   ),
   HelpArticle(
     'Refunds & cancellations',
@@ -208,7 +208,7 @@ const helpArticles = <HelpArticle>[
   ),
   HelpArticle(
     'Lost pet alerts & QR tags',
-    'If a pet goes missing, report it from Community. People near the area are told, without your phone number. A QR tag on the collar lets anyone who finds your pet reach you through PawPass.',
+    'If a pet goes missing, report it from Community. People near the area are told, without your phone number. A QR tag on the collar lets anyone who finds your pet reach you through OurPawPass.',
   ),
   HelpArticle(
     'Buying a puppy safely',
@@ -393,7 +393,7 @@ class _HelpScreenState extends State<HelpScreen> {
                       }, highlight: t.state == TicketState.replied),
                     ),
                 const SizedBox(height: 22),
-                const SectionLabel('Contact the PawPass team'),
+                const SectionLabel('Contact the OurPawPass team'),
                 const SizedBox(height: 10),
                 PickerField(
                   label: 'Topic',

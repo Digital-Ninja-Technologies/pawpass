@@ -487,7 +487,7 @@ end $$;
 :server
 do $$ begin
   assert (select count(*) from public.notifications where dedupe_key = 'disputed-p:' || current_setting('test.d1')) = 1, 'the provider is told';
-  assert (select body from public.notifications where dedupe_key = 'disputed-o:' || current_setting('test.d1')) = 'The payment stays on hold. PawPass decides within 72 hours.', 'the owner is told what happens next';
+  assert (select body from public.notifications where dedupe_key = 'disputed-o:' || current_setting('test.d1')) = 'The payment stays on hold. OurPawPass decides within 72 hours.', 'the owner is told what happens next';
 end $$;
 
 -- Staff decide. Each outcome moves the money and the booking together.

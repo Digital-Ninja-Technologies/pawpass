@@ -28,7 +28,7 @@ export default async function LoginPage({
     <div className="auth">
       <section
         className="auth-hero"
-        aria-label="PawPass admin"
+        aria-label="OurPawPass admin"
         style={{ backgroundImage: "url(/bingo.jpg)" }}
       >
         <div className="row" style={{ gap: 12 }}>
@@ -49,7 +49,7 @@ export default async function LoginPage({
         <div className="stack" style={{ gap: 12 }}>
           <h1>Keep every pet, payment and partner safe.</h1>
           <p style={{ fontSize: 16, opacity: 0.95, maxWidth: 460 }}>
-            Verifications, disputes, reports and payouts for the PawPass ops team.
+            Verifications, disputes, reports and payouts for the OurPawPass ops team.
           </p>
         </div>
       </section>

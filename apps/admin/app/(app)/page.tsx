@@ -293,7 +293,7 @@ export default async function OverviewPage({
           Success metrics
         </h2>
         <p className="muted small" style={{ marginBottom: 12 }}>
-          Where PawPass stands against the twelve month targets in the product plan.
+          Where OurPawPass stands against the twelve month targets in the product plan.
         </p>
         {Object.keys(metrics).length === 0 ? (
           <p className="muted small">The metrics could not be loaded.</p>

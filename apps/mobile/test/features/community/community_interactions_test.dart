@@ -277,7 +277,7 @@ void main() {
       await tester.tap(find.bySemanticsLabel('Share this post').first);
       await tester.pumpAndSettle();
       await _tap(tester, 'Copy');
-      expect(rig.links.copied.single, contains('on PawPass'));
+      expect(rig.links.copied.single, contains('on OurPawPass'));
     });
   });
 

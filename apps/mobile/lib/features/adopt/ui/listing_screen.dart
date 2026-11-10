@@ -149,7 +149,7 @@ class _ListingScreenState extends State<ListingScreen> {
                           Text(
                             sale
                                 ? 'ID, facility and vet reference checked'
-                                : 'Registered shelter. Checked by PawPass.',
+                                : 'Registered shelter. Checked by OurPawPass.',
                             style: PawText.meta13.copyWith(
                               color: PawColors.muted,
                             ),

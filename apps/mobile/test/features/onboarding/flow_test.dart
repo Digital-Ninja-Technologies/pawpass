@@ -157,7 +157,7 @@ void main() {
       final app = _App();
       await _pump(tester, app);
       await _signIn(tester);
-      expect(find.text('How will you use PawPass?'), findsOneWidget);
+      expect(find.text('How will you use OurPawPass?'), findsOneWidget);
       expect(app.auth.signedIn, isTrue);
     });
 
@@ -234,7 +234,7 @@ void main() {
       (tester) async {
         final app = _App(signedInAs: 'tolu@example.com');
         await _pump(tester, app);
-        expect(find.text('How will you use PawPass?'), findsOneWidget);
+        expect(find.text('How will you use OurPawPass?'), findsOneWidget);
         await _tap(tester, 'Breeder');
         await _tap(tester, 'Continue');
         expect(find.text('Tell us about you'), findsOneWidget);
@@ -250,7 +250,7 @@ void main() {
       await _tap(tester, 'Pet owner');
       await tester.tap(find.text('Continue'));
       await tester.pumpAndSettle();
-      expect(find.text('How will you use PawPass?'), findsOneWidget);
+      expect(find.text('How will you use OurPawPass?'), findsOneWidget);
     });
 
     testWidgets(
@@ -331,7 +331,7 @@ void main() {
       await _pump(tester, app, size: size, textScale: scale);
 
       await _signIn(tester);
-      expect(find.text('How will you use PawPass?'), findsOneWidget);
+      expect(find.text('How will you use OurPawPass?'), findsOneWidget);
       await _tap(tester, 'Continue');
 
       expect(find.text('Tell us about you'), findsOneWidget);
@@ -528,7 +528,7 @@ void main() {
       tester,
     ) async {
       await _pump(tester, _App(signedInAs: 'tolu@example.com'));
-      expect(find.text('How will you use PawPass?'), findsOneWidget);
+      expect(find.text('How will you use OurPawPass?'), findsOneWidget);
     });
 
     testWidgets('someone who finished goes straight home', (tester) async {

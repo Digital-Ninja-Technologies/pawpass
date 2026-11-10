@@ -79,17 +79,17 @@ export function buildEmail(
 ): { subject: string; html: string; text: string } {
   const name = firstName.trim();
   const hello = name ? `Hi ${name},` : "Hi there,";
-  const subject = items.length === 1 ? items[0].title : `${items.length} pet reminders from PawPass`;
+  const subject = items.length === 1 ? items[0].title : `${items.length} pet reminders from OurPawPass`;
 
   const text = [
     hello,
     "",
     ...items.flatMap((i) => [`${i.title}`, `${i.body}`, ""]),
-    "Open PawPass to book a vet or mark a reminder as done.",
+    "Open OurPawPass to book a vet or mark a reminder as done.",
     "",
     OFF_HINT,
     "",
-    "PawPass",
+    "OurPawPass",
   ].join("\n");
 
   const rows = items
@@ -111,7 +111,7 @@ export function buildEmail(
 <tr><td style="padding:12px 28px 0 28px;"><table role="presentation" width="100%" cellpadding="0" cellspacing="0">
 ${rows}
 </table></td></tr>
-<tr><td style="padding:16px 28px 0 28px;font-family:Arial,Helvetica,sans-serif;font-size:14px;line-height:1.6;color:${COLOURS.primaryText};">Open PawPass to book a vet or mark a reminder as done.</td></tr>
+<tr><td style="padding:16px 28px 0 28px;font-family:Arial,Helvetica,sans-serif;font-size:14px;line-height:1.6;color:${COLOURS.primaryText};">Open OurPawPass to book a vet or mark a reminder as done.</td></tr>
 <tr><td style="padding:16px 28px 28px 28px;font-family:Arial,Helvetica,sans-serif;font-size:12px;line-height:1.6;color:${COLOURS.muted};">${escapeHtml(OFF_HINT)}</td></tr>
 </table></td></tr></table></body></html>`;
 

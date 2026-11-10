@@ -41,7 +41,7 @@ export function DownloadModal({ open, onClose }: { open: boolean; onClose: () =>
             <path d="M6 6l12 12M18 6L6 18" />
           </svg>
         </button>
-        <h2 id="dl-title">Get PawPass</h2>
+        <h2 id="dl-title">Get OurPawPass</h2>
         <p id="dl-desc" className="dl-lead">
           Your pet&apos;s passport, reminders and lost pet alerts, in one free app.
         </p>
@@ -55,7 +55,7 @@ export function DownloadModal({ open, onClose }: { open: boolean; onClose: () =>
         </div>
         {STORES_LIVE ? null : (
           <p className="dl-note">
-            PawPass is not in the app stores yet. The download buttons will go live here at launch.
+            OurPawPass is not in the app stores yet. The download buttons will go live here at launch.
           </p>
         )}
       </div>

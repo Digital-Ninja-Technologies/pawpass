@@ -185,7 +185,7 @@ class _PrivacyScreenState extends State<PrivacyScreen> {
                                 title: 'Ask for a copy of my data',
                                 onTap: () => _ask(
                                   message:
-                                      'Please send me a copy of the data PawPass holds about me.',
+                                      'Please send me a copy of the data OurPawPass holds about me.',
                                   sent:
                                       'Request sent. We will reply by email within a day.',
                                 ),

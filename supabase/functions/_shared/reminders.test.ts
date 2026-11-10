@@ -28,7 +28,7 @@ function fakes(rows: ReminderRow[], send: Mailer["send"] = async () => ({ ok: tr
     }),
   };
   const mailer: Mailer = { send: vi.fn(send) };
-  const ctx: ReminderCtx = { db, mailer, from: "PawPass <reminders@ourpawpass.com>" };
+  const ctx: ReminderCtx = { db, mailer, from: "OurPawPass <reminders@ourpawpass.com>" };
   return { ctx, db, mailer, finished };
 }
 
@@ -58,7 +58,7 @@ describe("buildEmail", () => {
       { title: "A", body: "a" },
       { title: "B", body: "b" },
     ]);
-    expect(m.subject).toBe("2 pet reminders from PawPass");
+    expect(m.subject).toBe("2 pet reminders from OurPawPass");
     expect(m.html).toContain("here are your reminders");
   });
   it("says hello without a name", () => {
@@ -87,8 +87,8 @@ describe("runReminders", () => {
     expect(finished).toEqual([["1", true], ["2", true], ["3", true]]);
     const first = (mailer.send as ReturnType<typeof vi.fn>).mock.calls[0][0];
     expect(first.to).toBe("tolu@example.com");
-    expect(first.from).toBe("PawPass <reminders@ourpawpass.com>");
-    expect(first.subject).toBe("2 pet reminders from PawPass");
+    expect(first.from).toBe("OurPawPass <reminders@ourpawpass.com>");
+    expect(first.subject).toBe("2 pet reminders from OurPawPass");
   });
 
   it("records a refused send as failed so it is tried again, and still sends the others", async () => {

@@ -153,7 +153,7 @@ void main() {
       );
     });
 
-    test('report a problem only while the money is still with PawPass', () {
+    test('report a problem only while the money is still with OurPawPass', () {
       final started = _now.subtract(const Duration(hours: 1));
       expect(canReport(_b(), _now), isFalse, reason: 'not started');
       expect(canReport(_b(startsAt: started), _now), isTrue);
@@ -261,7 +261,7 @@ void main() {
           _b(status: BookingStatus.disputed, escrow: EscrowStatus.paused),
           _now,
         ),
-        '₦12,000 on hold while PawPass reviews',
+        '₦12,000 on hold while OurPawPass reviews',
       );
     });
   });

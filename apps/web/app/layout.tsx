@@ -22,7 +22,7 @@ const body = localFont({
 });
 
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://pawpass.example";
-const title = "PawPass · every pet's life, in one place";
+const title = "OurPawPass · every pet's life, in one place";
 const description =
   "Vaccine reminders, trusted vets and groomers, lost pet alerts and verified breeders. One free app for every dog, cat and furry family member. Made in Lagos, for pets everywhere.";
 
@@ -35,7 +35,7 @@ export const metadata: Metadata = {
     description,
     type: "website",
     locale: "en_NG",
-    siteName: "PawPass",
+    siteName: "OurPawPass",
     images: [
       {
         url: "/photos/bingo.jpg",

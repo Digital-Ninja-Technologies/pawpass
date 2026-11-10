@@ -1,4 +1,4 @@
-# PawPass launch checklist
+# OurPawPass launch checklist
 
 What is built, what the stores will ask, and the manual steps that only you can do.
 
@@ -33,7 +33,7 @@ What is built, what the stores will ask, and the manual steps that only you can 
 
 **Full description:**
 
-PawPass keeps everything about your pet in one place.
+OurPawPass keeps everything about your pet in one place.
 
 - Health passport: vaccines, treatments and vet records, ready to share with a vet, a groomer or a new owner.
 - Reminders before a vaccine or treatment is due.
@@ -53,7 +53,7 @@ Partners (vets, service providers, breeders, shelters) can apply inside the app,
 | --- | --- | --- | --- |
 | Name, email, phone | Yes | Account, bookings, receipts | Only with a partner you book, name only |
 | Approximate location | Only while the app is open and only if you allow it | Sort emergency vets by distance | No, not stored |
-| Photos | Only photos you pick or take | Pet photos, KYC documents for partners | Pet photos with a listing you create; KYC documents only with PawPass staff |
+| Photos | Only photos you pick or take | Pet photos, KYC documents for partners | Pet photos with a listing you create; KYC documents only with OurPawPass staff |
 | Pet health records | Yes | The passport | Only through a share link you create |
 | Payment | Handled by Paystack; the app never sees card numbers | Payments, payouts | Paystack |
 | Analytics events | Six anonymous event names | Measure monthly active users | No |

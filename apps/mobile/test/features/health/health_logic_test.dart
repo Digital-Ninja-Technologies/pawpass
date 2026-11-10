@@ -450,7 +450,7 @@ void main() {
         petName: 'Bingo',
         url: 'https://x.test/s#t',
       );
-      expect(text, contains("Bingo's PawPass passport"));
+      expect(text, contains("Bingo's OurPawPass passport"));
       expect(text, endsWith('https://x.test/s#t'));
       final uri = whatsAppUri(text);
       expect(uri.host, 'wa.me');

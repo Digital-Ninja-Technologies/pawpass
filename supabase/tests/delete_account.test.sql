@@ -110,7 +110,7 @@ do $$
 declare reasons text[];
 begin
   reasons := private.deletion_blockers('a0000000-0000-0000-0000-000000000005');
-  assert array_length(reasons, 1) = 1 and reasons[1] like '%PawPass team%', 'staff are told why, in words';
+  assert array_length(reasons, 1) = 1 and reasons[1] like '%OurPawPass team%', 'staff are told why, in words';
   assert test_helpers.state($q$ select public.erase_account('a0000000-0000-0000-0000-000000000005') $q$) = 'P0001', 'and refused with the blocked code';
   assert not exists (select 1 from public.account_deletions where user_id = 'a0000000-0000-0000-0000-000000000005'), 'nothing was erased';
   assert (select first_name from public.profiles where user_id = 'a0000000-0000-0000-0000-000000000005') <> 'Deleted', 'the profile is untouched';
@@ -118,7 +118,7 @@ end $$;
 :kemi
 do $$
 begin
-  assert 'You are on the PawPass team. Ask an admin to remove your access first.' = any(public.my_deletion_blockers()), 'the app can read the reasons';
+  assert 'You are on the OurPawPass team. Ask an admin to remove your access first.' = any(public.my_deletion_blockers()), 'the app can read the reasons';
 end $$;
 
 reset role;

@@ -232,7 +232,7 @@ class _BookingCard extends StatelessWidget {
                       if (b.status == BookingStatus.disputed &&
                           b.disputeDueAt != null)
                         Text(
-                          'PawPass decides by ${dayLabel(b.disputeDueAt!)}',
+                          'OurPawPass decides by ${dayLabel(b.disputeDueAt!)}',
                           style: PawText.meta13.copyWith(
                             color: PawColors.muted,
                           ),

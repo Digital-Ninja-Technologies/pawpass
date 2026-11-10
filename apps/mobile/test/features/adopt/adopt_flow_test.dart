@@ -366,12 +366,12 @@ void main() {
       await _refresh(tester);
       await _tap(tester, 'Report a problem');
       PawButton send() => tester.widget<PawButton>(
-        find.widgetWithText(PawButton, 'Send to PawPass'),
+        find.widgetWithText(PawButton, 'Send to OurPawPass'),
       );
       expect(send().onPressed, isNull);
       await _tap(tester, 'A vet found a health problem');
       await tester.enterText(find.byType(TextField), 'The vet found parvo.');
-      await _tap(tester, 'Send to PawPass');
+      await _tap(tester, 'Send to OurPawPass');
       expect(
         find.text('Problem reported. The payment is on hold.'),
         findsOneWidget,

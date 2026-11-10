@@ -483,7 +483,7 @@ enum ReportReason {
   scam(
     'scam',
     'Scam or fake seller',
-    'Asks to pay outside PawPass, fake photos',
+    'Asks to pay outside OurPawPass, fake photos',
   ),
   cruelty('cruelty', 'Animal cruelty or neglect', ''),
   unsafeAdvice('unsafe_advice', 'Unsafe health advice', ''),

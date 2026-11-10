@@ -67,7 +67,7 @@ class _ProblemScreenState extends State<ProblemScreen> {
                         color: PawColors.primarySoft,
                         radius: PawRadius.cardSmall,
                         child: Text(
-                          'Both payments stay on hold. The PawPass team reviews both sides and decides within 72 hours. You can report a problem only inside the 72 hour vet check window.',
+                          'Both payments stay on hold. The OurPawPass team reviews both sides and decides within 72 hours. You can report a problem only inside the 72 hour vet check window.',
                           style: PawText.meta13.copyWith(
                             color: PawColors.primaryText,
                             height: 1.5,
@@ -92,7 +92,7 @@ class _ProblemScreenState extends State<ProblemScreen> {
                 PawStickyFooter(
                   children: [
                     PawButton(
-                      label: 'Send to PawPass',
+                      label: 'Send to OurPawPass',
                       loading: c.reporting,
                       onPressed: _reason == null || c.reporting
                           ? null

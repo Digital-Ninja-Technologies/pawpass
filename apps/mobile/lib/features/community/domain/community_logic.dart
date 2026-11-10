@@ -69,7 +69,7 @@ String postShareText({
   final quote = body.trim().isEmpty
       ? ''
       : ': "${body.trim().length > 140 ? '${body.trim().substring(0, 137)}...' : body.trim()}"';
-  return 'See $who on PawPass$quote. Get the app: $url';
+  return 'See $who on OurPawPass$quote. Get the app: $url';
 }
 
 /// The comment count as a short label: "No comments", "1 comment", "12 comments".

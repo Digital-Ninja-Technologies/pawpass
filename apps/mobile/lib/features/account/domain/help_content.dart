@@ -62,11 +62,11 @@ const helpDocs = <HelpDoc>[
     summary: 'Why your money is held until you confirm',
     popular: true,
     intro:
-        'When you pay for a visit or a puppy, PawPass holds the money. The partner is paid only after you say it went well.',
+        'When you pay for a visit or a puppy, OurPawPass holds the money. The partner is paid only after you say it went well.',
     steps: [
       HelpStep(
         'You pay',
-        'Card, bank transfer or USSD. The money goes to PawPass, not the partner.',
+        'Card, bank transfer or USSD. The money goes to OurPawPass, not the partner.',
       ),
       HelpStep(
         'The visit happens',
@@ -141,7 +141,7 @@ const helpDocs = <HelpDoc>[
       HelpStep('Collect your puppy', 'The seller confirms the handover in the app.'),
       HelpStep(
         'See a vet within 72 hours',
-        'A vet found through PawPass can add the result to the passport with a Vet verified badge.',
+        'A vet found through OurPawPass can add the result to the passport with a Vet verified badge.',
       ),
       HelpStep(
         'Report a health problem',
@@ -260,7 +260,7 @@ const helpDocs = <HelpDoc>[
     title: 'How QR tags work',
     summary: 'A collar tag anyone can scan',
     intro:
-        'A QR tag goes on your pet\'s collar. Anyone who scans it can message you through PawPass, and your number stays hidden.',
+        'A QR tag goes on your pet\'s collar. Anyone who scans it can message you through OurPawPass, and your number stays hidden.',
     steps: [
       HelpStep('Order a tag', 'Open Me, then QR tags. Pick your pet, a colour and where to deliver it.'),
       HelpStep('We ship it', 'Delivery in Lagos takes 2 to 4 days. We tell you when it is on its way.'),
@@ -288,7 +288,7 @@ const helpDocs = <HelpDoc>[
     title: 'When partners are paid',
     summary: 'Payouts run every Monday',
     intro:
-        'Partners are paid every Monday for visits that owners have confirmed, minus the PawPass commission.',
+        'Partners are paid every Monday for visits that owners have confirmed, minus the OurPawPass commission.',
     steps: [
       HelpStep('Owner confirms', 'The money moves from held to ready.'),
       HelpStep('Monday payout', 'Ready money is sent to your bank account.'),

@@ -67,7 +67,7 @@ export function buildTransferBody(item: PayoutItem, recipient: string): Record<s
     source: "balance",
     amount: item.amountKobo,
     recipient,
-    reason: "PawPass weekly payout",
+    reason: "OurPawPass weekly payout",
     currency: "NGN",
     reference: transferReference(item.itemId),
   };

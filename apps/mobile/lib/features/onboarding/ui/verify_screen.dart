@@ -90,7 +90,7 @@ class _VerifyScreenState extends State<VerifyScreen> {
     final opened = await AppScope.of(context).services.emailApp.open();
     if (!opened && mounted) {
       setState(
-        () => _notice = 'Open your email app and look for the PawPass code.',
+        () => _notice = 'Open your email app and look for the OurPawPass code.',
       );
     }
   }

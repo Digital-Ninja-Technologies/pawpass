@@ -131,7 +131,7 @@ export default async function SupportPage({
                       {m.internal
                         ? "Internal note"
                         : m.author_staff_id
-                          ? "PawPass team"
+                          ? "OurPawPass team"
                           : selected.user_name || "User"}{" "}
                       · {formatDateTime(m.created_at)}
                     </div>

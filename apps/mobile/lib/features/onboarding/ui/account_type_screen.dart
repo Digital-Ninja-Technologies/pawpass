@@ -16,7 +16,7 @@ class AccountTypeScreen extends StatelessWidget {
       listenable: ob,
       builder: (context, _) => OnboardingPage(
         step: 3,
-        title: 'How will you use PawPass?',
+        title: 'How will you use OurPawPass?',
         subtitle: 'Pick all that apply. You can add more later.',
         error: ob.error,
         gap: 20,

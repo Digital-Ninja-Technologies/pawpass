@@ -19,8 +19,8 @@ const body = localFont({
 });
 
 export const metadata: Metadata = {
-  title: { default: "PawPass Admin", template: "%s · PawPass Admin" },
-  description: "Operations console for the PawPass team.",
+  title: { default: "OurPawPass Admin", template: "%s · OurPawPass Admin" },
+  description: "Operations console for the OurPawPass team.",
   robots: { index: false, follow: false },
 };
 

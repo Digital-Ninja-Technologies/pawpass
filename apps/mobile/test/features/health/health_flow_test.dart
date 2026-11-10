@@ -836,7 +836,7 @@ void main() {
       await _tap(tester, 'Send on WhatsApp');
       final uri = rig.links.opened.single;
       expect(uri.host, 'wa.me');
-      expect(uri.queryParameters['text'], contains("Bingo's PawPass passport"));
+      expect(uri.queryParameters['text'], contains("Bingo's OurPawPass passport"));
       expect(
         uri.queryParameters['text'],
         contains('#${rig.health.shares.single.link.token}'),

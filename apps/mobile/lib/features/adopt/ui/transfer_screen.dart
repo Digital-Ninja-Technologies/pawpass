@@ -81,7 +81,7 @@ class _TransferScreenState extends State<TransferScreen> {
                             Text(
                               t.completedAt != null
                                   ? 'The passport is yours.'
-                                  : '${t.partnerName} confirmed the handover. Accept the passport to make ${t.petName} yours in PawPass.',
+                                  : '${t.partnerName} confirmed the handover. Accept the passport to make ${t.petName} yours in OurPawPass.',
                               style: PawText.body15.copyWith(
                                 color: PawColors.muted,
                                 height: 1.45,

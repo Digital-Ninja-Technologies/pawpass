@@ -561,14 +561,14 @@ void main() {
         find.byType(TextField),
         'Mimi has a small cut near her ear.',
       );
-      await _tap(tester, 'Send to PawPass');
+      await _tap(tester, 'Send to OurPawPass');
       expect(find.text('My bookings'), findsOneWidget);
       expect(find.text('Under review'), findsOneWidget);
       expect(
-        find.textContaining('on hold while PawPass reviews'),
+        find.textContaining('on hold while OurPawPass reviews'),
         findsOneWidget,
       );
-      expect(find.textContaining('PawPass decides by'), findsOneWidget);
+      expect(find.textContaining('OurPawPass decides by'), findsOneWidget);
       expect(rig.bookings.disputes.single.reason, DisputeReason.hurtOrSick);
       expect(
         rig.bookings.disputes.single.details,
@@ -604,7 +604,7 @@ void main() {
       await tester.pumpAndSettle();
       expect(find.byKey(const Key('add-photo')), findsOneWidget);
       await _tap(tester, 'Something else');
-      await _tap(tester, 'Send to PawPass');
+      await _tap(tester, 'Send to OurPawPass');
       expect(rig.bookings.disputes.single.photos, 4);
     });
 
@@ -615,12 +615,12 @@ void main() {
         'No connection. Check your internet and try again.',
       );
       await _tap(tester, 'Something else');
-      await _tap(tester, 'Send to PawPass');
+      await _tap(tester, 'Send to OurPawPass');
       expect(
         find.text('No connection. Check your internet and try again.'),
         findsOneWidget,
       );
-      expect(find.text('Send to PawPass'), findsOneWidget);
+      expect(find.text('Send to OurPawPass'), findsOneWidget);
     });
 
     testWidgets('reachable from a booking card after the visit', (

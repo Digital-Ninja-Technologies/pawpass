@@ -307,7 +307,7 @@ String expiryText(DateTime expiresAt, DateTime now) {
 
 /// The message sent on WhatsApp.
 String whatsAppShareText({required String petName, required String url}) =>
-    "Here is $petName's PawPass passport. Open it in the PawPass app, or scan the QR code: $url";
+    "Here is $petName's OurPawPass passport. Open it in the OurPawPass app, or scan the QR code: $url";
 
 Uri whatsAppUri(String text) => Uri.https('wa.me', '/', {'text': text});
 

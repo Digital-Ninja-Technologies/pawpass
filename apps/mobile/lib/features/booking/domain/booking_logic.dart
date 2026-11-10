@@ -214,7 +214,7 @@ String escrowLine(Booking b, DateTime now) {
     case BookingStatus.completedAwaitingOwner:
       return '$amount waiting for your confirmation';
     case BookingStatus.disputed:
-      return '$amount on hold while PawPass reviews';
+      return '$amount on hold while OurPawPass reviews';
     case BookingStatus.completed:
       return b.rating != null
           ? 'You rated ${'★' * b.rating!}'

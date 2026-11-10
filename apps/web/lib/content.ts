@@ -92,20 +92,20 @@ export const TABS: { id: TabId; label: string; title: string; body: string; poin
 
 export const FAQS: { q: string; a: string }[] = [
   {
-    q: "Is PawPass free?",
+    q: "Is OurPawPass free?",
     a: "Yes. Records, reminders, community and lost pet alerts are free. You only pay for services you book, like a vet visit or grooming.",
   },
   {
     q: "Is my money safe when I book or buy a puppy?",
-    a: "Your payment is held by PawPass and only released when you confirm the visit, or after the 72 hour vet check for a puppy. If something goes wrong, report it and we step in.",
+    a: "Your payment is held by OurPawPass and only released when you confirm the visit, or after the 72 hour vet check for a puppy. If something goes wrong, report it and we step in.",
   },
   {
     q: "Who can see my pet's health records?",
     a: "Only you, unless you choose to share. Sharing with a vet uses a link or QR code that expires, and you pick what they can see.",
   },
   {
-    q: "Is PawPass only for Lagos?",
-    a: "No. PawPass is for pet owners wherever you are. Health records, reminders, the community and lost pet alerts work in any city. We started in Lagos and are adding vets, groomers, breeders and shelters in Abuja, Port Harcourt, Ibadan and more.",
+    q: "Is OurPawPass only for Lagos?",
+    a: "No. OurPawPass is for pet owners wherever you are. Health records, reminders, the community and lost pet alerts work in any city. We started in Lagos and are adding vets, groomers, breeders and shelters in Abuja, Port Harcourt, Ibadan and more.",
   },
   {
     q: "Does it work for cats and other pets?",

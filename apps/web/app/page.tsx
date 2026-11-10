@@ -32,7 +32,7 @@ const STEPS = [
   {
     n: "1",
     color: "#0e6b63",
-    t: "Download PawPass",
+    t: "Download OurPawPass",
     d: "Free on iPhone and Android. Sign in with your email, no password.",
   },
   {
@@ -50,7 +50,7 @@ const STEPS = [
 ];
 
 const PARTNER_STEPS = [
-  "Download PawPass and sign up with your email",
+  "Download OurPawPass and sign up with your email",
   "Go to Profile and tap “Become a partner”",
   "Add your business details and ID, and we verify you",
 ];
@@ -104,7 +104,7 @@ export default function Home() {
                 <h2 className="h2">If they ever wander off, the whole neighbourhood helps.</h2>
                 <p className="b">
                   Report a lost pet and everyone within 5 km gets an alert with a photo. Anyone who
-                  scans the PawPass collar tag can reach you in the app. Your phone number stays
+                  scans the OurPawPass collar tag can reach you in the app. Your phone number stays
                   private.
                 </p>
                 <p className="hint">Try it: tap the collar tag.</p>
@@ -174,7 +174,7 @@ export default function Home() {
                 </div>
                 {STORES_LIVE ? null : (
                   <p className="stores-note">
-                    PawPass is not in the app stores yet. The buttons will go live at launch.
+                    OurPawPass is not in the app stores yet. The buttons will go live at launch.
                   </p>
                 )}
               </div>

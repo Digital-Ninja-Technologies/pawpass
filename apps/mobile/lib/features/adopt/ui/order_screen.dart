@@ -259,7 +259,7 @@ class _OrderScreenState extends State<OrderScreen> with WidgetsBindingObserver {
                   sub: o.handedOverAt == null
                       ? '72 hours after handover'
                       : (o.status == OrderStatus.disputed
-                            ? 'Paused while PawPass reviews your report'
+                            ? 'Paused while OurPawPass reviews your report'
                             : (hours > 0
                                   ? '$hours hours left · book a vet visit'
                                   : 'No problem was reported')),
@@ -278,7 +278,7 @@ class _OrderScreenState extends State<OrderScreen> with WidgetsBindingObserver {
                     o.disputeDueAt != null) ...[
                   const SizedBox(height: 12),
                   Text(
-                    'PawPass decides by ${dayLabel(o.disputeDueAt!)}.',
+                    'OurPawPass decides by ${dayLabel(o.disputeDueAt!)}.',
                     style: PawText.meta13.copyWith(color: PawColors.muted),
                   ),
                 ],

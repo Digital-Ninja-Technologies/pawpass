@@ -34,7 +34,7 @@ class ImagePickerPhotoPicker implements PhotoPicker {
       return PickedPhoto(bytes, extension: ext);
     } catch (_) {
       throw const AppFailure(
-        'We could not open your photos. Check that PawPass is allowed to use the camera and photos.',
+        'We could not open your photos. Check that OurPawPass is allowed to use the camera and photos.',
       );
     }
   }

@@ -260,7 +260,7 @@ export function FeatureTabs() {
       <div ref={pinRef} className="wrap features fx-pin">
         <div className="features-copy">
           <span className="eyebrow">TAP TO EXPLORE</span>
-          <h2 className="h2">Four things PawPass does for you</h2>
+          <h2 className="h2">Four things OurPawPass does for you</h2>
           <div
             role="tablist"
             aria-label="Features"

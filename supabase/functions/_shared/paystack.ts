@@ -126,8 +126,8 @@ export function buildRefundBody(reference: string, amountKobo: number): Record<s
     transaction: reference,
     amount: amountKobo,
     currency: "NGN",
-    customer_note: "Refund from PawPass",
-    merchant_note: "PawPass booking refund",
+    customer_note: "Refund from OurPawPass",
+    merchant_note: "OurPawPass booking refund",
   };
 }
 

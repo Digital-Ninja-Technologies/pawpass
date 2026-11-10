@@ -43,7 +43,7 @@ export function AcceptForm({ token, email }: { token: string; email: string }) {
       </label>
       <label className="check">
         <input type="checkbox" name="ack" required />
-        I&apos;ll keep user data confidential and follow the PawPass staff policy.
+        I&apos;ll keep user data confidential and follow the OurPawPass staff policy.
       </label>
       {state ? (
         <div className={`notice ${state.ok ? "ok" : "err"}`} role={state.ok ? "status" : "alert"}>

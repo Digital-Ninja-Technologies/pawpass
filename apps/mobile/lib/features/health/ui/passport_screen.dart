@@ -447,7 +447,7 @@ class _OriginTab extends StatelessWidget {
               const SizedBox(height: 8),
               if (d.originName == null)
                 Text(
-                  'No breeder or shelter is linked to this passport. Pets bought or adopted through PawPass show where they came from here.',
+                  'No breeder or shelter is linked to this passport. Pets bought or adopted through OurPawPass show where they came from here.',
                   style: PawText.meta13.copyWith(
                     color: PawColors.muted,
                     height: 1.5,

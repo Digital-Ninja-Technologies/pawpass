@@ -325,7 +325,7 @@ void main() {
       expect(find.text('In review'), findsOneWidget);
       expect(find.textContaining('Decision within 48 hours'), findsOneWidget);
       expect(
-        find.textContaining('keep using PawPass as an owner'),
+        find.textContaining('keep using OurPawPass as an owner'),
         findsOneWidget,
       );
 
@@ -601,7 +601,7 @@ void main() {
       expect(find.textContaining('ready · in the next payout'), findsOneWidget);
       expect(find.text('Weekly payout'), findsOneWidget);
       expect(
-        find.textContaining('Amounts are after the PawPass fee'),
+        find.textContaining('Amounts are after the OurPawPass fee'),
         findsOneWidget,
       );
     });
@@ -1065,7 +1065,7 @@ void main() {
       expect(find.text('Popular topics'.toUpperCase()), findsOneWidget);
       expect(find.text('How escrow protects you'), findsOneWidget);
       await _tap(tester, 'How escrow protects you');
-      expect(find.textContaining('goes to PawPass'), findsOneWidget);
+      expect(find.textContaining('goes to OurPawPass'), findsOneWidget);
       await tester.tapAt(const Offset(200, 40));
       await tester.pumpAndSettle();
 

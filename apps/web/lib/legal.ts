@@ -9,7 +9,7 @@ export const PRIVACY: LegalSection[] = [
   {
     title: "Who we are",
     body: [
-      "PawPass is a product of Digital Ninja Technologies, based in Lagos, Nigeria. This policy explains what the PawPass app and this website collect, why, and who sees it.",
+      "OurPawPass is a product of Digital Ninja Technologies, based in Lagos, Nigeria. This policy explains what the OurPawPass app and this website collect, why, and who sees it.",
     ],
   },
   {
@@ -38,7 +38,7 @@ export const PRIVACY: LegalSection[] = [
       "A partner you book sees your name, and only that.",
       "Pet photos are shown with a listing you create.",
       "Comments are shown to anyone who can see the post. A message request goes to the pet's owner, who has to accept before you can chat. You can report or block anyone.",
-      "Partner identity documents are seen only by PawPass staff who verify partners.",
+      "Partner identity documents are seen only by OurPawPass staff who verify partners.",
       "Lost pet alerts never show your phone number. Finders reach you through in app chat.",
       "Paystack processes payments and payouts.",
       "When a pet changes hands, the passport moves to the new owner. The previous owner keeps a read only record.",
@@ -59,7 +59,7 @@ export const PRIVACY: LegalSection[] = [
   },
   {
     title: "Children",
-    body: ["PawPass is for adults. If you think a child has given us their details, tell us and we will delete them."],
+    body: ["OurPawPass is for adults. If you think a child has given us their details, tell us and we will delete them."],
   },
   {
     title: "Changes",
@@ -71,29 +71,29 @@ export const TERMS: LegalSection[] = [
   {
     title: "About these terms",
     body: [
-      "By using PawPass you agree to these terms. PawPass is a product of Digital Ninja Technologies, Lagos, Nigeria.",
+      "By using OurPawPass you agree to these terms. OurPawPass is a product of Digital Ninja Technologies, Lagos, Nigeria.",
     ],
   },
   {
     title: "Your account",
     body: [
-      "You sign in with a 6 digit code sent to your email. Keep your email secure and give us true details. You must be an adult to use PawPass.",
+      "You sign in with a 6 digit code sent to your email. Keep your email secure and give us true details. You must be an adult to use OurPawPass.",
     ],
   },
   {
     title: "Pet Passport and health records",
     body: [
-      "Your pet's passport and records are yours. Records added by a verified vet carry a Vet verified badge. PawPass stores records but does not give veterinary advice. In an emergency, call a vet.",
+      "Your pet's passport and records are yours. Records added by a verified vet carry a Vet verified badge. OurPawPass stores records but does not give veterinary advice. In an emergency, call a vet.",
     ],
   },
   {
     title: "Booking services and payment",
     body: [],
     list: [
-      "Vets, groomers, trainers and boarding providers are independent partners, not PawPass staff.",
+      "Vets, groomers, trainers and boarding providers are independent partners, not OurPawPass staff.",
       "You pay through the app. We hold the payment until you confirm the visit, then we pay the partner.",
       "You can cancel free of charge up to 2 hours before the visit.",
-      "PawPass takes a commission from the partner, set out in the partner terms.",
+      "OurPawPass takes a commission from the partner, set out in the partner terms.",
       "If something goes wrong, raise a dispute. The related payout pauses until our team decides: a full refund, a split, or release to the partner.",
     ],
   },
@@ -102,7 +102,7 @@ export const TERMS: LegalSection[] = [
     body: [],
     list: [
       "Puppies are sold only by verified breeders and shelters.",
-      "The deposit and balance are held in escrow. PawPass charges an escrow fee, shown before you pay.",
+      "The deposit and balance are held in escrow. OurPawPass charges an escrow fee, shown before you pay.",
       "After handover you have 72 hours to get a vet check. A health problem that a vet confirms in that time qualifies for a full refund.",
       "The passport moves to you when handover is confirmed.",
     ],
@@ -118,13 +118,13 @@ export const TERMS: LegalSection[] = [
   {
     title: "Partners",
     body: [
-      "Vets, service providers, breeders and shelters cannot go live until PawPass approves them. We aim to decide within 48 hours. We may ask for more information or decline an application. Partners are paid out every Monday.",
+      "Vets, service providers, breeders and shelters cannot go live until OurPawPass approves them. We aim to decide within 48 hours. We may ask for more information or decline an application. Partners are paid out every Monday.",
     ],
   },
   {
     title: "Our responsibility",
     body: [
-      "We work hard to keep PawPass running, but we cannot promise it will never be interrupted. Partners and breeders are responsible for the services and animals they provide. Nothing in these terms limits rights you have under Nigerian law.",
+      "We work hard to keep OurPawPass running, but we cannot promise it will never be interrupted. Partners and breeders are responsible for the services and animals they provide. Nothing in these terms limits rights you have under Nigerian law.",
     ],
   },
   {

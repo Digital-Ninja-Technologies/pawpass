@@ -210,7 +210,7 @@ class _DisputeScreenState extends State<DisputeScreen> {
                         color: PawColors.primarySoft,
                         radius: PawRadius.cardSmall,
                         child: Text(
-                          'The ${nairaFromKobo(b.amountKobo)} stays on hold. The PawPass team reviews both sides and decides within 72 hours.',
+                          'The ${nairaFromKobo(b.amountKobo)} stays on hold. The OurPawPass team reviews both sides and decides within 72 hours.',
                           style: PawText.meta13.copyWith(
                             color: PawColors.primaryText,
                             height: 1.5,
@@ -235,7 +235,7 @@ class _DisputeScreenState extends State<DisputeScreen> {
                 PawStickyFooter(
                   children: [
                     PawButton(
-                      label: 'Send to PawPass',
+                      label: 'Send to OurPawPass',
                       loading: busy,
                       onPressed: ready
                           ? () async {

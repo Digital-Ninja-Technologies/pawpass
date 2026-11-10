@@ -819,7 +819,7 @@ class _FacilityPayoutScreenState extends State<FacilityPayoutScreen> {
                         ),
                       ] else ...[
                         Text(
-                          'Owners pay PawPass. We send your money here every Monday after owners confirm their visits.',
+                          'Owners pay OurPawPass. We send your money here every Monday after owners confirm their visits.',
                           style: PawText.body14.copyWith(
                             color: PawColors.muted,
                           ),
@@ -1003,7 +1003,7 @@ class _PartnerReviewScreenState extends State<PartnerReviewScreen> {
                                 ),
                                 const SizedBox(height: 4),
                                 Text(
-                                  'PawPass team',
+                                  'OurPawPass team',
                                   style: PawText.meta13.copyWith(
                                     color: PawColors.muted,
                                   ),
@@ -1046,7 +1046,7 @@ class _PartnerReviewScreenState extends State<PartnerReviewScreen> {
                       Text(
                         approved
                             ? 'You are live. Switch between owner and partner mode any time from Me.'
-                            : "We'll notify you by push and email. You can keep using PawPass as an owner meanwhile.",
+                            : "We'll notify you by push and email. You can keep using OurPawPass as an owner meanwhile.",
                         style: PawText.body14.copyWith(color: PawColors.muted),
                       ),
                     ],

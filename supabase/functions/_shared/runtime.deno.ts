@@ -429,7 +429,7 @@ export function reminderContext(): ReminderCtx {
   return {
     db: reminderDb(serviceClient()),
     mailer: resendMailer(env("RESEND_API_KEY")),
-    from: Deno.env.get("REMINDER_FROM") || "PawPass <reminders@ourpawpass.com>",
+    from: Deno.env.get("REMINDER_FROM") || "OurPawPass <reminders@ourpawpass.com>",
   };
 }
 

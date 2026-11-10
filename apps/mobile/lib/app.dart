@@ -192,7 +192,7 @@ class MissingConfigApp extends StatelessWidget {
           child: Padding(
             padding: EdgeInsets.all(32),
             child: Text(
-              'PawPass is not set up yet. Please update the app or try again later.',
+              'OurPawPass is not set up yet. Please update the app or try again later.',
               textAlign: TextAlign.center,
               style: PawText.body15,
             ),

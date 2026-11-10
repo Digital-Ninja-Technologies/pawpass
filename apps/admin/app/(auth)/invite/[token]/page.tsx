@@ -41,7 +41,7 @@ export default async function AcceptInvitePage({ params }: { params: Promise<{ t
           {invite ? (
             <>
               <div className="stack" style={{ gap: 8 }}>
-                <h1>Join the PawPass team</h1>
+                <h1>Join the OurPawPass team</h1>
                 <p className="muted">
                   <b style={{ color: "var(--ink)" }}>{invite.inviter_name || "A team lead"}</b>{" "}
                   invited you as{" "}

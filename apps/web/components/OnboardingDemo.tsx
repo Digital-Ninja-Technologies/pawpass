@@ -45,7 +45,7 @@ function typed(text: string, lt: number, start: number) {
 }
 
 const SUMMARY =
-  "Animated preview of the PawPass setup: welcome, sign up with your email, confirm the code, choose an account type, add your profile, add your first pet, add health history, turn on reminders, and your pet's passport is ready.";
+  "Animated preview of the OurPawPass setup: welcome, sign up with your email, confirm the code, choose an account type, add your profile, add your first pet, add health history, turn on reminders, and your pet's passport is ready.";
 
 function Field({ label, value, active }: { label: string; value: string; active: boolean }) {
   return (
@@ -139,7 +139,7 @@ function Screen({ i, lt }: { i: number; lt: number }) {
     case 3:
       body = (
         <>
-          <h3 className="ob-h">How will you use PawPass?</h3>
+          <h3 className="ob-h">How will you use OurPawPass?</h3>
           <p className="ob-p">Pick all that apply. You can add more later.</p>
           <div className="ob-list">
             <Opt on={lt >= 8} title="Pet owner" sub="Track health, book care, join the community" />
@@ -349,7 +349,7 @@ export function OnboardingDemo() {
   const goTo = (n: number) => setT(STARTS[n] + SCENES[n].dur - 2);
 
   return (
-    <section ref={rootRef} className="ob" aria-label="PawPass setup preview" data-scene={i}>
+    <section ref={rootRef} className="ob" aria-label="OurPawPass setup preview" data-scene={i}>
       <p className="sr-only">{SUMMARY}</p>
       <div className="phone ob-phone" aria-hidden="true">
         <Screen i={i} lt={lt} />
