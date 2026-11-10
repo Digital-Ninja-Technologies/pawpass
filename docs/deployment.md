@@ -136,7 +136,7 @@ ready to people's phones through Firebase Cloud Messaging.
 Setting it up (one time):
 
 1. Firebase console: create a project (or use the one you have). Cloud Messaging API (V1) must be on (it is by default).
-2. Add an **Android app** with the package name `ng.pawpass.pawpass`. Download `google-services.json` and put it at
+2. Add an **Android app** with the package name `com.ourpawpass.app`. Download `google-services.json` and put it at
    `apps/mobile/android/app/google-services.json`.
 3. Add an **iOS app** with the bundle id from Xcode (Runner target, General). Download `GoogleService-Info.plist` and add it
    to the Runner target in Xcode.

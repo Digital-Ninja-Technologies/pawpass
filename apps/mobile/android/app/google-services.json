@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "511695538042",
+    "project_id": "ourpawpass",
+    "storage_bucket": "ourpawpass.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:511695538042:android:b05cdfd6bc9b6d92bd78c3",
+        "android_client_info": {
+          "package_name": "com.ourpawpass.app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBKC1v7uWdPUfnRhyVlruZIg2wYrIsN3C0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

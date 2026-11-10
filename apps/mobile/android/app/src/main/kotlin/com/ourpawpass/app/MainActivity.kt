@@ -1,4 +1,4 @@
-package ng.pawpass.pawpass
+package com.ourpawpass.app
 
 import io.flutter.embedding.android.FlutterActivity
 
