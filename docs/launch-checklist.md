@@ -28,7 +28,7 @@ What is built, what the stores will ask, and the manual steps that only you can 
 
 ## 3. Store listing copy
 
-**Name:** PawPass
+**Name:** OurPawPass
 **Subtitle / short description (80):** Your pet's health passport, vets, and trusted care in Nigeria.
 
 **Full description:**

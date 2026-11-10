@@ -32,7 +32,7 @@ export default async function AcceptInvitePage({ params }: { params: Promise<{ t
               <Icon name="paw" size={20} stroke="#fff" />
             </span>
             <span className="brand-name" style={{ color: "var(--ink)" }}>
-              PawPass
+              OurPawPass
               <span className="brand-sub" style={{ color: "var(--primary-text)" }}>
                 ADMIN
               </span>

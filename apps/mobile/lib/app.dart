@@ -162,7 +162,7 @@ class _PawPassAppState extends State<PawPassApp> with WidgetsBindingObserver {
       adopt: _adopt,
       partner: _partner,
       child: MaterialApp.router(
-        title: 'PawPass',
+        title: 'OurPawPass',
         theme: buildAppTheme(),
         routerConfig: _router,
         debugShowCheckedModeBanner: false,

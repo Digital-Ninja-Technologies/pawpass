@@ -93,7 +93,7 @@ void main() {
   group('welcome and sign in', () {
     testWidgets('welcome offers both ways in', (tester) async {
       await _pump(tester, _App());
-      expect(find.text('PawPass'), findsOneWidget);
+      expect(find.text('OurPawPass'), findsOneWidget);
       expect(find.text("Every pet's life,\nin one place."), findsOneWidget);
       expect(find.text('Get started'), findsOneWidget);
       expect(find.text('I already have an account'), findsOneWidget);

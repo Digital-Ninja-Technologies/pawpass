@@ -4,7 +4,7 @@ export function Footer() {
   return (
     <footer className="wrap footer">
       <span>
-        <b>PawPass</b> · a{" "}
+        <b>OurPawPass</b> · a{" "}
         {AGENCY_URL ? (
           <a href={AGENCY_URL} target="_blank" rel="noopener noreferrer">
             {AGENCY_NAME}

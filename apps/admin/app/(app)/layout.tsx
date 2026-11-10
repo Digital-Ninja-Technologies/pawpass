@@ -62,7 +62,7 @@ export default async function AppLayout({ children }: { children: ReactNode }) {
             <Icon name="paw" size={20} stroke="#fff" />
           </span>
           <span className="brand-name">
-            PawPass<span className="brand-sub">ADMIN</span>
+            OurPawPass<span className="brand-sub">ADMIN</span>
           </span>
         </div>
         <NavLinks items={items} />

@@ -19,11 +19,11 @@ export function Header({ base = "" }: { base?: "" | "/" }) {
     <>
       <div className="sticky-bar">
         <header className="wrap header">
-          <a href={`${base}#top`} className="logo" aria-label="PawPass home">
+          <a href={`${base}#top`} className="logo" aria-label="OurPawPass home">
             <span className="logo-mark" aria-hidden="true">
               <PawOutline />
             </span>
-            <span className="logo-name">PawPass</span>
+            <span className="logo-name">OurPawPass</span>
           </a>
           <nav className="navlinks" aria-label="Main">
             {LINKS.map(([href, label]) => (

@@ -37,7 +37,7 @@ class WelcomeScreen extends StatelessWidget {
                             crossAxisAlignment: CrossAxisAlignment.stretch,
                             children: [
                               Text(
-                                'PawPass',
+                                'OurPawPass',
                                 style: PawText.heading22.copyWith(
                                   color: Colors.white.withValues(alpha: 0.9),
                                   fontSize: 18,

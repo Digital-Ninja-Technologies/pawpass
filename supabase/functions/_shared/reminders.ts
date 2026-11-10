@@ -106,7 +106,7 @@ export function buildEmail(
 <body style="margin:0;padding:0;background:${COLOURS.ground};">
 <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:${COLOURS.ground};"><tr><td align="center" style="padding:32px 16px;">
 <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="max-width:480px;background:${COLOURS.surface};border:1px solid ${COLOURS.border};border-radius:24px;">
-<tr><td style="padding:28px 28px 4px 28px;font-family:Arial,Helvetica,sans-serif;font-size:22px;font-weight:700;color:${COLOURS.primary};">PawPass</td></tr>
+<tr><td style="padding:28px 28px 4px 28px;font-family:Arial,Helvetica,sans-serif;font-size:22px;font-weight:700;color:${COLOURS.primary};">OurPawPass</td></tr>
 <tr><td style="padding:8px 28px 0 28px;font-family:Arial,Helvetica,sans-serif;font-size:15px;line-height:1.6;color:${COLOURS.ink2};">${escapeHtml(hello)} here ${items.length === 1 ? "is a reminder" : "are your reminders"} for your pets.</td></tr>
 <tr><td style="padding:12px 28px 0 28px;"><table role="presentation" width="100%" cellpadding="0" cellspacing="0">
 ${rows}

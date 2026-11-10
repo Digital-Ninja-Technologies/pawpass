@@ -40,7 +40,7 @@ export default async function LoginPage({
             <Icon name="paw" size={24} stroke="#0e6b63" />
           </span>
           <span className="brand-name" style={{ fontSize: 22 }}>
-            PawPass
+            OurPawPass
             <span className="brand-sub" style={{ color: "#fff", opacity: 0.9 }}>
               ADMIN CONSOLE
             </span>
