@@ -5,6 +5,7 @@ import '../../booking/state/booking_controller.dart';
 import '../../community/state/chat_controller.dart';
 import '../../community/state/community_controller.dart';
 import '../../community/state/lost_controller.dart';
+import '../../courses/state/courses_controller.dart';
 import '../../health/state/health_controller.dart';
 import '../../partner/state/partner_controller.dart';
 import '../data/repositories.dart';
@@ -25,6 +26,7 @@ class AppScope extends InheritedWidget {
     required this.chat,
     required this.adopt,
     required this.partner,
+    required this.courses,
     required super.child,
   });
 
@@ -38,6 +40,7 @@ class AppScope extends InheritedWidget {
   final ChatController chat;
   final AdoptController adopt;
   final PartnerController partner;
+  final CoursesController courses;
 
   static AppScope of(BuildContext context) {
     final scope = context.dependOnInheritedWidgetOfExactType<AppScope>();
@@ -59,5 +62,6 @@ class AppScope extends InheritedWidget {
       lost != old.lost ||
       chat != old.chat ||
       adopt != old.adopt ||
-      partner != old.partner;
+      partner != old.partner ||
+      courses != old.courses;
 }

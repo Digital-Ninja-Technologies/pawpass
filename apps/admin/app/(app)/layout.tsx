@@ -22,6 +22,7 @@ const NAV: { section: Section; href: string; label: string; icon: IconName }[] =
   { section: "users", href: "/users", label: "Users & partners", icon: "users" },
   { section: "lost", href: "/lost-found", label: "Lost & found", icon: "lost" },
   { section: "support", href: "/support", label: "Support", icon: "support" },
+  { section: "courses", href: "/courses", label: "Courses", icon: "courses" },
   { section: "settings", href: "/settings", label: "Settings", icon: "settings" },
 ];
 

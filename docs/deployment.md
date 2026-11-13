@@ -118,6 +118,18 @@ Becoming a partner needs no setup beyond the `20261109100000_partner_mode` migra
   `REMINDER_FROM` (default `OurPawPass <reminders@ourpawpass.com>`).
 - People turn the emails off in the app (Me, Notifications & reminders). Push and WhatsApp are not built yet.
 
+## Courses
+
+Courses are read by the app and managed from the admin console (Courses).
+
+1. Apply `supabase/migrations/20261118100000_courses.sql`. It creates the tables, the audited admin functions, the public
+   `course-covers` storage bucket and the ten starter courses (published). It also updates `erase_account` so deleting an
+   account removes its course progress.
+2. Redeploy the admin app (the Courses section and the illustrations ship with it). The cover upload goes through a server
+   action, so `next.config.mjs` allows request bodies up to 6 MB.
+3. Build a new app version. The courses screens and illustrations ship inside the app.
+4. Only full admins can create, edit, publish and delete. Run `supabase/tests/courses.test.sql` after applying to check the rules.
+
 ## Push notifications
 
 `send-push` runs every minute (the fourth job in `supabase/scheduled-jobs.sql`) and sends the notifications that are

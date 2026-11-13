@@ -39,6 +39,7 @@ export const SECTIONS = [
   "users",
   "lost",
   "support",
+  "courses",
   "settings",
 ] as const;
 export type Section = (typeof SECTIONS)[number];
@@ -53,6 +54,7 @@ const SECTION_ACCESS: Record<Section, Role[]> = {
   users: ["support_reports", "verifications", "read_only"],
   lost: ["support_reports", "read_only"],
   support: ["support_reports", "read_only"],
+  courses: ["read_only"],
   settings: everyone,
 };
 
@@ -69,6 +71,7 @@ export const ACTIONS = [
   "suspend_user",
   "lost_alerts",
   "support_reply",
+  "manage_courses",
   "edit_settings",
   "manage_team",
 ] as const;
@@ -82,6 +85,7 @@ const ACTION_ROLES: Record<Action, Role[]> = {
   suspend_user: ["support_reports"],
   lost_alerts: ["support_reports"],
   support_reply: ["support_reports"],
+  manage_courses: [],
   edit_settings: [],
   manage_team: [],
 };
@@ -102,6 +106,7 @@ export function roleCapabilities(role: Role): { can: string[]; cannot: string[] 
     ["suspend_user", "Suspend and restore accounts"],
     ["lost_alerts", "Manage lost alerts and QR tag orders"],
     ["support_reply", "Reply to support tickets"],
+    ["manage_courses", "Create, edit, publish and delete the courses in the app"],
     ["edit_settings", "Change fees, policies and settings"],
     ["manage_team", "Invite and manage team members"],
   ];

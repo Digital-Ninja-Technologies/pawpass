@@ -24,6 +24,9 @@ import 'features/community/ui/lost_pet_screen.dart';
 import 'features/community/ui/pet_profile_screen.dart';
 import 'features/community/ui/post_screen.dart';
 import 'features/community/ui/report_screen.dart';
+import 'features/courses/ui/course_screen.dart';
+import 'features/courses/ui/courses_screen.dart';
+import 'features/courses/ui/lesson_screen.dart';
 import 'features/booking/ui/bookings_screen.dart';
 import 'features/booking/ui/dispute_screen.dart';
 import 'features/booking/ui/provider_screen.dart';
@@ -172,6 +175,19 @@ GoRouter buildRouter({
             ],
           ),
         ],
+      ),
+      GoRoute(path: '/courses', builder: (_, _) => const CoursesScreen()),
+      GoRoute(
+        path: '/courses/:id',
+        builder: (_, state) =>
+            CourseScreen(courseId: state.pathParameters['id']!),
+      ),
+      GoRoute(
+        path: '/courses/:id/lesson/:lessonId',
+        builder: (_, state) => LessonScreen(
+          courseId: state.pathParameters['id']!,
+          lessonId: state.pathParameters['lessonId']!,
+        ),
       ),
       GoRoute(path: '/me', builder: (_, _) => const MeScreen()),
       GoRoute(path: '/me/edit', builder: (_, _) => const EditProfileScreen()),

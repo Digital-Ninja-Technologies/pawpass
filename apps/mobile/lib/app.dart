@@ -9,6 +9,7 @@ import 'features/booking/state/booking_controller.dart';
 import 'features/community/state/chat_controller.dart';
 import 'features/community/state/community_controller.dart';
 import 'features/community/state/lost_controller.dart';
+import 'features/courses/state/courses_controller.dart';
 import 'core/push.dart';
 import 'features/health/domain/health_logic.dart' show notificationRoute;
 import 'features/health/state/health_controller.dart';
@@ -58,6 +59,10 @@ class _PawPassAppState extends State<PawPassApp> with WidgetsBindingObserver {
     _session,
   );
   late final PartnerController _partner = PartnerController(
+    widget.services,
+    _session,
+  );
+  late final CoursesController _courses = CoursesController(
     widget.services,
     _session,
   );
@@ -136,6 +141,7 @@ class _PawPassAppState extends State<PawPassApp> with WidgetsBindingObserver {
     _foregroundSub?.cancel();
     widget.services.push.dispose();
     _router.dispose();
+    _courses.dispose();
     _partner.dispose();
     _adopt.dispose();
     _chat.dispose();
@@ -161,6 +167,7 @@ class _PawPassAppState extends State<PawPassApp> with WidgetsBindingObserver {
       chat: _chat,
       adopt: _adopt,
       partner: _partner,
+      courses: _courses,
       child: MaterialApp.router(
         title: 'OurPawPass',
         theme: buildAppTheme(),

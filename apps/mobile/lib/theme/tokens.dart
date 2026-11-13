@@ -71,3 +71,87 @@ abstract final class PawSize {
   static const double chipLarge = 48;
   static const double tabBar = 80;
 }
+
+/// Course colours: one fun pair per course. [soft] is the card background, [strong] is for decoration only (stripes,
+/// progress, confetti) and [text] is the dark ink for words on [soft] (it passes WCAG AA).
+/// Mirrors `courseColors` in packages/shared/src/tokens.ts: keep the two in step.
+class PawCourseColor {
+  const PawCourseColor({
+    required this.key,
+    required this.label,
+    required this.soft,
+    required this.strong,
+    required this.text,
+  });
+
+  final String key;
+  final String label;
+  final Color soft;
+  final Color strong;
+  final Color text;
+}
+
+abstract final class PawCourseColors {
+  static const sunny = PawCourseColor(
+    key: 'sunny',
+    label: 'Sunny yellow',
+    soft: Color(0xFFFFE08A),
+    strong: Color(0xFFF5B300),
+    text: Color(0xFF5C3D00),
+  );
+  static const coral = PawCourseColor(
+    key: 'coral',
+    label: 'Coral',
+    soft: Color(0xFFFFD0C4),
+    strong: Color(0xFFF26B4F),
+    text: Color(0xFF8A2A14),
+  );
+  static const tangerine = PawCourseColor(
+    key: 'tangerine',
+    label: 'Tangerine',
+    soft: Color(0xFFFFD9B0),
+    strong: Color(0xFFF28C28),
+    text: Color(0xFF7A3E05),
+  );
+  static const mint = PawCourseColor(
+    key: 'mint',
+    label: 'Mint',
+    soft: Color(0xFFCFEFE0),
+    strong: Color(0xFF2FB48A),
+    text: Color(0xFF0B5040),
+  );
+  static const sky = PawCourseColor(
+    key: 'sky',
+    label: 'Sky blue',
+    soft: Color(0xFFCFE4FF),
+    strong: Color(0xFF3E86F5),
+    text: Color(0xFF123F86),
+  );
+  static const grape = PawCourseColor(
+    key: 'grape',
+    label: 'Grape',
+    soft: Color(0xFFE4D8FF),
+    strong: Color(0xFF8B5CF6),
+    text: Color(0xFF45228F),
+  );
+  static const lime = PawCourseColor(
+    key: 'lime',
+    label: 'Lime',
+    soft: Color(0xFFE1F2B0),
+    strong: Color(0xFF8DB81F),
+    text: Color(0xFF3A5208),
+  );
+  static const rose = PawCourseColor(
+    key: 'rose',
+    label: 'Bubblegum',
+    soft: Color(0xFFFFD1E3),
+    strong: Color(0xFFE8508C),
+    text: Color(0xFF8A1646),
+  );
+
+  static const all = [sunny, coral, tangerine, mint, sky, grape, lime, rose];
+
+  /// Looks a colour up by its key (unknown keys fall back to [sunny], so an old app never breaks on a new colour).
+  static PawCourseColor byKey(String key) =>
+      all.firstWhere((c) => c.key == key, orElse: () => sunny);
+}

@@ -8,6 +8,7 @@ import 'core/offline_cache.dart';
 import 'core/push.dart';
 import 'core/push_firebase.dart';
 import 'features/account/data/supabase_account.dart';
+import 'features/courses/data/supabase_courses.dart';
 import 'features/adopt/data/supabase_adopt.dart';
 import 'features/booking/data/supabase_bookings.dart';
 import 'features/community/data/supabase_community.dart';
@@ -54,6 +55,7 @@ Future<void> main() async {
           adopt: SupabaseAdoptRepository(client),
           partner: SupabasePartnerRepository(client),
           account: SupabaseAccountRepository(client),
+          courses: SupabaseCoursesRepository(client),
           cache: cache,
           analytics: SupabaseAnalytics(client),
           push: PushService(
@@ -90,6 +92,7 @@ Future<void> main() async {
           adopt: base.adopt,
           partner: base.partner,
           account: base.account,
+          courses: base.courses,
           demoHint: 'Demo mode: nothing is sent. Use the code 123456.',
         ),
       ),

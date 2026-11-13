@@ -179,3 +179,31 @@ export interface PartnerDocRow {
   storage_path: string;
   status: string;
 }
+
+/** A row of admin_course_v (see supabase/migrations/20261118100000_courses.sql). */
+export interface CourseRow {
+  id: string;
+  slug: string;
+  title: string;
+  summary: string;
+  audience: "puppy" | "dog" | "both";
+  level: "beginner" | "intermediate" | "advanced";
+  accent: string;
+  art: string;
+  cover_path: string | null;
+  status: "draft" | "published";
+  sort_order: number;
+  created_at: string;
+  updated_at: string;
+  lessons: number;
+  minutes: number;
+  learners: number;
+}
+export interface LessonRow {
+  id: string;
+  course_id: string;
+  position: number;
+  title: string;
+  body: string;
+  minutes: number;
+}

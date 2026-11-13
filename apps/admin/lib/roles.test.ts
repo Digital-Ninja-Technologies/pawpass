@@ -28,6 +28,18 @@ describe("roles", () => {
     }
   });
 
+  it("only full admins manage courses; read only can look, nobody else sees the page", () => {
+    expect(canView("full_admin", "courses")).toBe(true);
+    expect(canView("read_only", "courses")).toBe(true);
+    for (const r of ROLES.filter((r) => r !== "full_admin" && r !== "read_only")) {
+      expect(canView(r, "courses")).toBe(false);
+    }
+    for (const r of ROLES.filter((r) => r !== "full_admin")) {
+      expect(canDo(r, "manage_courses")).toBe(false);
+    }
+    expect(roleCapabilities("support_reports").cannot.join(" ")).toMatch(/courses/i);
+  });
+
   it("hides money pages from roles that cannot read escrow", () => {
     expect(canView("support_reports", "payouts")).toBe(false);
     expect(canView("verifications", "payouts")).toBe(false);

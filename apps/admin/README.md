@@ -29,6 +29,24 @@ Roles: `full_admin`, `payouts_disputes`, `support_reports`, `verifications`, `re
 4. Partners get a notification when their payout is sent. A transfer Paystack later reports as failed shows as
    **Failed** here with the reason, for staff to handle by hand.
 
+## Courses
+
+The **Courses** page manages the puppy and dog courses shown in the app (Home, then Courses).
+
+- **Who:** full admins create, edit, publish and delete courses. Read only staff can look. Everyone else does not see the page.
+- **A course** has a title, a short description, who it is for (puppies, dogs, both), a level, an order, a colour and an
+  illustration. A cover picture is optional (JPG, PNG or WebP, up to 5 MB) and replaces the illustration.
+- **Lessons** are written in the form: add, edit, move up or down and remove. Leave a blank line between paragraphs, start a
+  line with `- ` for a bullet and a paragraph with `Tip: ` for a tip card. Editing a lesson keeps its id, so people keep
+  their progress; removing a lesson removes the ticks on it.
+- **Draft or published:** drafts are hidden from the app. Publishing needs at least one lesson and takes effect at once.
+  Unpublish takes a course out without deleting it. Delete removes the course, its lessons, everyone's progress and its cover.
+- **Every change is written to the audit log** (`course.create`, `course.update`, `course.publish`, `course.unpublish`,
+  `course.delete`).
+- **Illustrations** come from `tools/make_course_art.py`, which writes the same files to the app and to
+  `apps/admin/public/course-art`. To add one, add it to the script, to the `art` check in
+  `supabase/migrations/20261118100000_courses.sql` (a new migration) and to `ART` in `lib/courses.ts`, then run the script.
+
 ## Develop
 
 ```bash

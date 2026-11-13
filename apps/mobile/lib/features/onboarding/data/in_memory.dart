@@ -5,6 +5,8 @@ import '../../../core/push.dart';
 import '../../../core/offline_cache.dart';
 import '../../account/data/in_memory_account.dart';
 import '../../account/domain/models.dart';
+import '../../courses/data/courses_repository.dart';
+import '../../courses/data/in_memory_courses.dart';
 import '../../adopt/data/in_memory_adopt.dart';
 import '../../booking/data/in_memory_bookings.dart';
 import '../../community/data/in_memory_community.dart';
@@ -208,6 +210,7 @@ AppServices inMemoryServices({
   OfflineCache? cache,
   Analytics analytics = const NoAnalytics(),
   PushService? push,
+  CoursesRepository? courses,
 }) {
   final profiles = InMemoryProfileRepository();
   final bookings = InMemoryBookingsRepository(now: now);
@@ -280,6 +283,7 @@ AppServices inMemoryServices({
       onCancelOrder: adopt.sellerCancel,
     ),
     account: account,
+    courses: courses ?? InMemoryCoursesRepository(),
     cache: cache,
     analytics: analytics,
     push: push,

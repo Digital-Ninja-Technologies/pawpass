@@ -10,6 +10,7 @@ import '../../partner/ui/partner_widgets.dart' show PartnerBar;
 import '../domain/health_logic.dart';
 import '../domain/models.dart';
 import 'health_widgets.dart';
+import '../../courses/ui/courses_widgets.dart';
 
 /// Home (design/screens/Main.dc.html): who needs what today.
 class HomeScreen extends StatelessWidget {
@@ -207,6 +208,8 @@ class _HomeBody extends StatelessWidget {
           _NextCard(pet: pet),
           const SizedBox(height: 18),
           const _QuickActions(),
+          const SizedBox(height: 18),
+          const _CoursesBanner(),
           const SizedBox(height: 18),
           const _EmergencyCard(),
         ],
@@ -740,6 +743,52 @@ class _EmergencyCard extends StatelessWidget {
             ),
           ),
         ),
+      ),
+    );
+  }
+}
+
+/// A colourful way in to the courses.
+class _CoursesBanner extends StatelessWidget {
+  const _CoursesBanner();
+
+  @override
+  Widget build(BuildContext context) {
+    final colors = PawCourseColors.sunny;
+    return PawCard(
+      color: colors.soft,
+      onTap: () => context.push('/courses'),
+      semanticLabel: 'Courses. Short, fun lessons for puppies and dogs, from potty training to tricks.',
+      child: Row(
+        children: [
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  'Courses for happy dogs',
+                  style: PawText.heading22.copyWith(color: colors.text),
+                ),
+                const SizedBox(height: 4),
+                Text(
+                  'Short, fun lessons, from potty training to tricks.',
+                  style: PawText.body14.copyWith(color: PawColors.ink),
+                ),
+              ],
+            ),
+          ),
+          const SizedBox(width: 8),
+          const SizedBox(
+            width: 96,
+            height: 80,
+            child: CourseArt(
+              accent: 'sunny',
+              art: 'sit',
+              height: 80,
+              padding: EdgeInsets.zero,
+            ),
+          ),
+        ],
       ),
     );
   }

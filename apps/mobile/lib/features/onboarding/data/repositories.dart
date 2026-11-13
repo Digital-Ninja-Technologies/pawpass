@@ -6,6 +6,8 @@ import '../../account/data/in_memory_account.dart';
 import '../../adopt/data/adopt_repository.dart';
 import '../../booking/data/booking_repositories.dart';
 import '../../community/data/community_repository.dart';
+import '../../courses/data/courses_repository.dart';
+import '../../courses/data/in_memory_courses.dart';
 import '../../health/data/health_repositories.dart';
 import '../../partner/data/partner_repository.dart';
 import '../domain/models.dart';
@@ -90,6 +92,7 @@ class AppServices {
     required this.adopt,
     required this.partner,
     AccountRepository? account,
+    CoursesRepository? courses,
     this.cache,
     this.analytics = const NoAnalytics(),
     PushService? push,
@@ -97,6 +100,7 @@ class AppServices {
     this.now = DateTime.now,
     this.demoHint,
   }) : account = account ?? InMemoryAccountRepository(),
+       courses = courses ?? InMemoryCoursesRepository(),
        push = push ?? PushService.off();
 
   final AuthRepository auth;
@@ -117,6 +121,9 @@ class AppServices {
 
   /// QR tag orders, active shares and blocked accounts. Tests that do not need it get a pretend one.
   final AccountRepository account;
+
+  /// Puppy and dog courses and the person's progress. Tests that do not need it get the starter courses in memory.
+  final CoursesRepository courses;
 
   /// Saved copies of the profile, pets, passport and reminders, for reading with no signal.
   final OfflineCache? cache;
