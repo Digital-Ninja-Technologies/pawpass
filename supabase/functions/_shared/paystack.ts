@@ -121,13 +121,17 @@ export function buildInitializeBody(i: InitializeInput): Record<string, unknown>
   };
 }
 
-export function buildRefundBody(reference: string, amountKobo: number): Record<string, unknown> {
+export function buildRefundBody(
+  reference: string,
+  amountKobo: number,
+  what: "booking" | "course" = "booking",
+): Record<string, unknown> {
   return {
     transaction: reference,
     amount: amountKobo,
     currency: "NGN",
     customer_note: "Refund from OurPawPass",
-    merchant_note: "OurPawPass booking refund",
+    merchant_note: `OurPawPass ${what} refund`,
   };
 }
 

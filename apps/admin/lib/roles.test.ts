@@ -28,16 +28,27 @@ describe("roles", () => {
     }
   });
 
-  it("only full admins manage courses; read only can look, nobody else sees the page", () => {
+  it("only full admins manage courses; money staff can see them to refund; read only can look", () => {
     expect(canView("full_admin", "courses")).toBe(true);
     expect(canView("read_only", "courses")).toBe(true);
-    for (const r of ROLES.filter((r) => r !== "full_admin" && r !== "read_only")) {
+    expect(canView("payouts_disputes", "courses")).toBe(true);
+    for (const r of ["support_reports", "verifications"] as const) {
       expect(canView(r, "courses")).toBe(false);
     }
     for (const r of ROLES.filter((r) => r !== "full_admin")) {
       expect(canDo(r, "manage_courses")).toBe(false);
     }
     expect(roleCapabilities("support_reports").cannot.join(" ")).toMatch(/courses/i);
+  });
+
+  it("refunding a course purchase is for payouts and disputes (and full admins), nobody else", () => {
+    expect(canDo("full_admin", "refund_course")).toBe(true);
+    expect(canDo("payouts_disputes", "refund_course")).toBe(true);
+    for (const r of ROLES.filter((r) => r !== "full_admin" && r !== "payouts_disputes")) {
+      expect(canDo(r, "refund_course")).toBe(false);
+    }
+    expect(roleCapabilities("payouts_disputes").can.join(" ")).toMatch(/Refund course purchases/);
+    expect(roleCapabilities("support_reports").cannot.join(" ")).toMatch(/Refund course purchases/);
   });
 
   it("hides money pages from roles that cannot read escrow", () => {

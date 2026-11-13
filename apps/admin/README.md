@@ -33,7 +33,7 @@ Roles: `full_admin`, `payouts_disputes`, `support_reports`, `verifications`, `re
 
 The **Courses** page manages the puppy and dog courses shown in the app (Home, then Courses).
 
-- **Who:** full admins create, edit, publish and delete courses. Read only staff can look. Everyone else does not see the page.
+- **Who:** full admins create, edit, publish and delete courses. Payouts & disputes staff can see the Buyers panel and refund. Read only staff can look. Everyone else does not see the page.
 - **A course** has a title, a short description, who it is for (puppies, dogs, both), a level, an order, a colour and an
   illustration. A cover picture is optional (JPG, PNG or WebP, up to 5 MB) and replaces the illustration.
 - **Lessons** are written in the form: add, edit, move up or down and remove. Leave a blank line between paragraphs, start a
@@ -47,6 +47,11 @@ The **Courses** page manages the puppy and dog courses shown in the app (Home, t
 - **Sales:** the list shows each paid course's buyers and what they paid, and the page header shows total course sales.
   Purchases are payment records: a course that people have paid for **cannot be deleted** (unpublish it instead), and
   making a paid course free opens it to everyone while keeping the payments on record.
+- **Refunds:** staff with the Payouts & disputes role (and full admins) see a **Buyers** panel on a course's page and can
+  refund a purchase there, with a reason (3 to 300 characters). A refund is always the full amount. The buyer loses the
+  course straight away, the money goes back on Paystack within a few minutes, and the buyer can buy the course again later.
+  If Paystack cannot send it, it is tried again; after five tries it shows as needing attention, with a button to try
+  again once the cause is fixed. Audit log entries: `course.refund`, `course.refund_retry`, `course.refunded`.
 - **Draft or published:** drafts are hidden from the app. Publishing needs at least one lesson and takes effect at once.
   Unpublish takes a course out without deleting it. Delete removes the course, its lessons, everyone's progress and its cover.
 - **Every change is written to the audit log** (`course.create`, `course.update`, `course.publish`, `course.unpublish`,

@@ -4,7 +4,8 @@ import { notFound } from "next/navigation";
 import { requireSection } from "@/lib/auth";
 import { canDo } from "@/lib/roles";
 import { Badge, PageHeader } from "@/components/ui";
-import type { CourseRow, LessonRow } from "@/lib/types";
+import type { CoursePurchaseRow, CourseRow, LessonRow } from "@/lib/types";
+import { CourseBuyers } from "../CourseBuyers";
 import { CourseForm } from "../CourseForm";
 import { DeleteButton, StatusButton } from "../CourseButtons";
 
@@ -33,13 +34,14 @@ export default async function EditCoursePage({ params }: { params: Promise<{ id:
   const { supabase, staff } = await requireSection("courses");
   const canManage = canDo(staff.role, "manage_courses");
 
-  const [course, lessons] = await Promise.all([
+  const [course, lessons, purchases] = await Promise.all([
     supabase.from("admin_course_v").select("*").eq("id", id).maybeSingle<CourseRow>(),
     supabase
       .from("course_lessons")
       .select("id, course_id, position, title, minutes, preview, course_lesson_text(body)")
       .eq("course_id", id)
       .order("position", { ascending: true }),
+    supabase.rpc("admin_course_purchases", { p_course: id }),
   ]);
   if (!course.data) notFound();
   const c = course.data;
@@ -70,6 +72,13 @@ export default async function EditCoursePage({ params }: { params: Promise<{ id:
           ) : null
         }
       />
+      {c.price_kobo > 0 || (purchases.data ?? []).length > 0 ? (
+        <CourseBuyers
+          courseId={c.id}
+          rows={(purchases.data ?? []) as CoursePurchaseRow[]}
+          canRefund={canDo(staff.role, "refund_course")}
+        />
+      ) : null}
       <CourseForm course={c} lessons={toLessons(lessons.data)} canEdit={canManage} />
     </>
   );

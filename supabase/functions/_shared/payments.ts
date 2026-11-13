@@ -56,6 +56,16 @@ export interface Db {
     error: string | null,
   ): Promise<void>;
   releaseDueBookings(): Promise<number>;
+  /** Course refunds that staff queued: claimed here, sent to Paystack, then reported with finishCourseRefund. */
+  claimCourseRefunds?(
+    limit: number,
+  ): Promise<{ purchase_id: string; paystack_reference: string; refund_kobo: number }[]>;
+  finishCourseRefund?(
+    purchaseId: string,
+    ok: boolean,
+    refundReference: string | null,
+    error: string | null,
+  ): Promise<void>;
   /** Paystack reported a payout transfer failed or was reversed: flag the payout item for staff. */
   markTransferFailed?(transferCode: string, reason: string | null): Promise<void>;
 }
@@ -208,13 +218,19 @@ export async function handleWebhook(
 // ---------------------------------------------------------------------------------------------
 // Send queued refunds to Paystack, and release visits the owner never confirmed.
 // ---------------------------------------------------------------------------------------------
+/** Sends the refunds that are waiting: escrow refunds (bookings, puppies) and course refunds. */
 export async function processRefunds(
   ctx: Ctx,
   limit = 20,
 ): Promise<{ sent: number; failed: number }> {
-  const queue = await ctx.db.claimRefunds(limit);
   let sent = 0;
   let failed = 0;
+  const tally = (ok: boolean) => {
+    if (ok) sent++;
+    else failed++;
+  };
+
+  const queue = await ctx.db.claimRefunds(limit);
   for (const item of queue) {
     try {
       const res = await ctx.paystack.refund(
@@ -227,12 +243,42 @@ export async function processRefunds(
         verdict.reference ?? null,
         verdict.error ?? null,
       );
-      if (verdict.ok) sent++;
-      else failed++;
+      tally(verdict.ok);
     } catch (e) {
-      // Network trouble: leave it marked as processing; it is picked up again after 15 minutes.
       console.error("refund call failed", item.escrow_id, e);
       failed++;
+    }
+  }
+
+  // Course refunds are claimed on their own, so a problem with one kind never holds up the other.
+  if (ctx.db.claimCourseRefunds && ctx.db.finishCourseRefund) {
+    let courseQueue: { purchase_id: string; paystack_reference: string; refund_kobo: number }[] = [];
+    try {
+      courseQueue = await ctx.db.claimCourseRefunds(limit);
+    } catch (e) {
+      console.error("course refunds could not be claimed", e);
+    }
+    for (const item of courseQueue) {
+      try {
+        const res = await ctx.paystack.refund(
+          buildRefundBody(item.paystack_reference, item.refund_kobo, "course"),
+        );
+        const verdict = judgeRefund(res);
+        await ctx.db.finishCourseRefund(
+          item.purchase_id,
+          verdict.ok,
+          verdict.reference ?? null,
+          verdict.error ?? null,
+        );
+        tally(verdict.ok);
+      } catch (e) {
+        console.error("course refund call failed", item.purchase_id, e);
+        failed++;
+        // Say so, so it is tried again and the console shows why (not left claimed for 15 minutes).
+        await ctx.db
+          .finishCourseRefund(item.purchase_id, false, null, "Could not reach Paystack")
+          .catch((err) => console.error("course refund result not recorded", err));
+      }
     }
   }
   return { sent, failed };

@@ -78,6 +78,18 @@ class FakeDb implements Db {
   async releaseDueBookings() {
     return this.released;
   }
+  courseRefunds: { purchase_id: string; paystack_reference: string; refund_kobo: number }[] = [];
+  courseFinished: { id: string; ok: boolean; ref: string | null; error: string | null }[] = [];
+  courseClaimError: Error | null = null;
+  async claimCourseRefunds() {
+    if (this.courseClaimError) throw this.courseClaimError;
+    const out = this.courseRefunds;
+    this.courseRefunds = [];
+    return out;
+  }
+  async finishCourseRefund(id: string, ok: boolean, ref: string | null, error: string | null) {
+    this.courseFinished.push({ id, ok, ref, error });
+  }
 }
 
 class FakePaystack implements PaystackApi {
@@ -277,6 +289,56 @@ describe("course purchases", () => {
     });
     const sig = createHmac("sha512", secret).update(raw).digest("hex");
     expect(await handleWebhook(ctx, raw, sig)).toEqual({ status: 200, body: "unknown reference" });
+  });
+});
+
+describe("course refunds", () => {
+  const cRef = "pc_" + "f".repeat(32);
+
+  it("sends a queued course refund for the full amount and says it went", async () => {
+    db.courseRefunds = [{ purchase_id: "p1", paystack_reference: cRef, refund_kobo: 250000 }];
+    expect(await processRefunds(ctx)).toEqual({ sent: 1, failed: 0 });
+    expect(ps.refundBodies[0]).toMatchObject({ transaction: cRef, amount: 250000, currency: "NGN" });
+    expect(ps.refundBodies[0].merchant_note).toBe("OurPawPass course refund");
+    expect(db.courseFinished).toEqual([{ id: "p1", ok: true, ref: "77", error: null }]);
+  });
+
+  it("does both kinds of refund in one run", async () => {
+    db.refunds = [{ escrow_id: "e1", paystack_reference: ref, refund_kobo: 1500000 }];
+    db.courseRefunds = [{ purchase_id: "p1", paystack_reference: cRef, refund_kobo: 250000 }];
+    expect(await processRefunds(ctx)).toEqual({ sent: 2, failed: 0 });
+    expect(ps.refundBodies.map((b) => b.merchant_note)).toEqual(["OurPawPass booking refund", "OurPawPass course refund"]);
+    expect(db.finished).toHaveLength(1);
+    expect(db.courseFinished).toHaveLength(1);
+  });
+
+  it("a refusal from Paystack is reported with its reason, so it is tried again", async () => {
+    db.courseRefunds = [{ purchase_id: "p1", paystack_reference: cRef, refund_kobo: 250000 }];
+    ps.refundResult = { status: false, message: "Insufficient balance" };
+    expect(await processRefunds(ctx)).toEqual({ sent: 0, failed: 1 });
+    expect(db.courseFinished).toEqual([{ id: "p1", ok: false, ref: null, error: "Insufficient balance" }]);
+  });
+
+  it("a network failure is reported too, instead of leaving the refund claimed", async () => {
+    db.courseRefunds = [{ purchase_id: "p1", paystack_reference: cRef, refund_kobo: 250000 }];
+    ps.refundThrows = true;
+    expect(await processRefunds(ctx)).toEqual({ sent: 0, failed: 1 });
+    expect(db.courseFinished).toEqual([{ id: "p1", ok: false, ref: null, error: "Could not reach Paystack" }]);
+  });
+
+  it("a problem claiming course refunds does not stop the other refunds", async () => {
+    db.refunds = [{ escrow_id: "e1", paystack_reference: ref, refund_kobo: 1500000 }];
+    db.courseClaimError = new Error("database down");
+    expect(await processRefunds(ctx)).toEqual({ sent: 1, failed: 0 });
+  });
+
+  it("does nothing extra when there are no course refunds", async () => {
+    expect(await processRefunds(ctx)).toEqual({ sent: 0, failed: 0 });
+  });
+
+  it("the scheduled run sends course refunds as well", async () => {
+    db.courseRefunds = [{ purchase_id: "p1", paystack_reference: cRef, refund_kobo: 250000 }];
+    expect(await runScheduledJobs(ctx)).toEqual({ released: 0, sent: 1, failed: 0 });
   });
 });
 

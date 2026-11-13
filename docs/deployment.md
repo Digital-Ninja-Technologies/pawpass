@@ -131,8 +131,13 @@ Courses are read by the app and managed from the admin console (Courses).
 4. **Paid courses go through Paystack like a QR tag.** The payment functions now know the `pc_` reference. After applying
    the migration, redeploy `paystack-initialize`, `paystack-verify` and `paystack-webhook` (and `process-refunds` and
    `payout-run` share the same code, so redeploy them too), then make one real test purchase: set a small price on a
-   draft course, publish it, buy it from the app, and check the course unlocks. There is no refund flow for courses yet:
-   if you need to refund someone, do it in the Paystack dashboard and tell support.
+   draft course, publish it, buy it from the app, and check the course unlocks.
+   **Refunds:** apply `supabase/migrations/20261119100000_course_refunds.sql` and redeploy the same payment functions
+   again (the refund job runs inside `process-refunds`). Staff with the Payouts & disputes role (and full admins) refund a
+   purchase from the Buyers panel on the course page, with a reason. It is always the full amount: the buyer loses the
+   course at once and the money goes back on Paystack within minutes. A refund Paystack keeps refusing (for example the
+   balance is too low) shows as needing attention after five tries, with a button to try again. Run
+   `supabase/tests/course_refunds.test.sql` after applying.
 5. The starter set has one paid course, "Your puppy's first year" (₦2,500), saved as a **draft**. Set its real price in the
    admin console, read it through, then publish it.
 6. Only full admins can create, edit, publish and delete. Run `supabase/tests/courses.test.sql` after applying to check the rules.

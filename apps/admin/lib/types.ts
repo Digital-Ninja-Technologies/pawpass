@@ -212,3 +212,18 @@ export interface LessonRow {
   minutes: number;
   preview: boolean;
 }
+
+/** A row of admin_course_purchases(): who bought a course and where a refund stands. */
+export interface CoursePurchaseRow {
+  id: string;
+  buyer_name: string;
+  amount_kobo: number;
+  status: "paid" | "refund_queued" | "refunded";
+  paid_at: string | null;
+  created_at: string;
+  refund_reason: string | null;
+  refund_requested_at: string | null;
+  refunded_at: string | null;
+  refund_error: string | null;
+  refund_attempts: number;
+}

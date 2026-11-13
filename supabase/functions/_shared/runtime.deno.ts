@@ -234,6 +234,19 @@ function db(client: SupabaseClient): Db {
         }),
       );
     },
+    async claimCourseRefunds(limit) {
+      return must(await client.rpc("claim_course_refunds", { p_limit: limit })) ?? [];
+    },
+    async finishCourseRefund(purchaseId, ok, refundReference, error) {
+      must(
+        await client.rpc("finish_course_refund", {
+          p_purchase: purchaseId,
+          p_ok: ok,
+          p_refund_reference: refundReference,
+          p_error: error,
+        }),
+      );
+    },
     async markTransferFailed(transferCode, reason) {
       must(
         await client.rpc("mark_transfer_failed", {

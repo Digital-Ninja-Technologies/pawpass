@@ -126,3 +126,29 @@ export async function deleteCourse(_prev: ActionState, form: FormData): Promise<
   if (text(form, "from") === "detail") redirect("/courses");
   return { ok: true, message: "Course deleted." };
 }
+
+/** Refunds a course purchase in full. The buyer loses the course now; the money goes back on Paystack within minutes. */
+export async function refundPurchase(_prev: ActionState, form: FormData): Promise<ActionState> {
+  const reason = text(form, "reason");
+  if (reason.length < 3) return { ok: false, message: "Give a reason of at least 3 characters." };
+  if (reason.length > 300) return { ok: false, message: "Keep the reason under 300 characters." };
+  return runRpc(
+    "refund_course",
+    "admin_refund_course_purchase",
+    { p_purchase: text(form, "purchase"), p_reason: reason },
+    {
+      paths: ["/courses", `/courses/${text(form, "course")}`],
+      success: "Refund started. The buyer loses the course now and the money goes back on Paystack within minutes.",
+    },
+  );
+}
+
+/** Sends a refund again that Paystack kept refusing, once the cause is fixed (for example the balance was topped up). */
+export async function retryRefund(_prev: ActionState, form: FormData): Promise<ActionState> {
+  return runRpc(
+    "refund_course",
+    "admin_retry_course_refund",
+    { p_purchase: text(form, "purchase") },
+    { paths: ["/courses", `/courses/${text(form, "course")}`], success: "Trying the refund again." },
+  );
+}
