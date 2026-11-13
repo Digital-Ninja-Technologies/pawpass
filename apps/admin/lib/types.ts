@@ -192,12 +192,16 @@ export interface CourseRow {
   art: string;
   cover_path: string | null;
   status: "draft" | "published";
+  price_kobo: number;
   sort_order: number;
   created_at: string;
   updated_at: string;
   lessons: number;
   minutes: number;
   learners: number;
+  /** People who have paid for it, and what they paid in kobo (always 0 for a free course). */
+  buyers: number;
+  revenue_kobo: number;
 }
 export interface LessonRow {
   id: string;
@@ -206,4 +210,5 @@ export interface LessonRow {
   title: string;
   body: string;
   minutes: number;
+  preview: boolean;
 }

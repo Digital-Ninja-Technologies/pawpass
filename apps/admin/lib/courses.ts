@@ -1,4 +1,5 @@
 import { courseColorKeys, courseColors, type CourseColorKey } from "@pawpass/shared";
+import { parseNairaToKobo } from "./format";
 
 /** The rules for a course, shared by the form and the server action. The database checks the same things again
  * (supabase/migrations/20261118100000_courses.sql): this file only gives good messages before anything is sent. */
@@ -48,6 +49,8 @@ export const LIMITS = {
   lessonBody: 4000,
   minutes: [1, 60],
   order: [0, 9999],
+  /** A paid course costs ₦100 to ₦1,000,000 (in kobo). 0 is free. */
+  priceKobo: [10_000, 100_000_000],
   coverBytes: 5 * 1024 * 1024,
 } as const;
 
@@ -62,6 +65,8 @@ export interface LessonInput {
   title: string;
   body: string;
   minutes: number;
+  /** A free preview: readable without buying the course. Only matters for a paid course. */
+  preview: boolean;
 }
 
 export type Parsed<T> = { ok: true; value: T } | { ok: false; error: string };
@@ -101,7 +106,7 @@ export function parseLessons(raw: string): Parsed<LessonInput[]> {
         error: `Lesson ${n} must take a whole number of minutes, ${LIMITS.minutes[0]} to ${LIMITS.minutes[1]}.`,
       };
     const id = typeof l.id === "string" && /^[0-9a-f-]{36}$/i.test(l.id) ? l.id : undefined;
-    out.push({ ...(id ? { id } : {}), title, body, minutes });
+    out.push({ ...(id ? { id } : {}), title, body, minutes, preview: l.preview === true });
   }
   return { ok: true, value: out };
 }
@@ -115,6 +120,20 @@ export interface CourseInput {
   art: string;
   status: "draft" | "published";
   sort_order: number;
+  /** In kobo. 0 is free. */
+  price_kobo: number;
+}
+
+/** Reads the price typed in naira. Blank or 0 means free. Returns kobo, or an error message. */
+export function parsePrice(input: string): Parsed<number> {
+  const text = input.trim();
+  if (text === "" || /^[₦\s,]*0+(\.0+)?[\s]*$/.test(text)) return { ok: true, value: 0 };
+  const kobo = parseNairaToKobo(text);
+  if (kobo === null)
+    return { ok: false, error: "The price must be an amount in naira, for example 2500." };
+  if (kobo < LIMITS.priceKobo[0] || kobo > LIMITS.priceKobo[1])
+    return { ok: false, error: "A paid course costs between ₦100 and ₦1,000,000. Leave it blank or 0 for a free course." };
+  return { ok: true, value: kobo };
 }
 
 export function parseCourse(f: {
@@ -126,6 +145,8 @@ export function parseCourse(f: {
   art: string;
   status: string;
   sort_order: string;
+  /** In naira, as typed. Blank is free. */
+  price?: string;
 }): Parsed<CourseInput> {
   const title = f.title.trim();
   const summary = f.summary.trim();
@@ -145,6 +166,8 @@ export function parseCourse(f: {
   const order = f.sort_order.trim() === "" ? 100 : Number(f.sort_order);
   if (!Number.isInteger(order) || order < LIMITS.order[0] || order > LIMITS.order[1])
     return { ok: false, error: `The order must be a whole number from ${LIMITS.order[0]} to ${LIMITS.order[1]}.` };
+  const price = parsePrice(f.price ?? "");
+  if (!price.ok) return price;
   return {
     ok: true,
     value: {
@@ -156,6 +179,7 @@ export function parseCourse(f: {
       art: f.art,
       status: f.status,
       sort_order: order,
+      price_kobo: price.value,
     },
   };
 }
@@ -187,6 +211,12 @@ export function coverUrl(supabaseUrl: string, path: string): string {
     .split("/")
     .map(encodeURIComponent)
     .join("/")}`;
+}
+
+/** "Free" or "₦2,500", for lists. */
+export function priceText(kobo: number | null | undefined): string {
+  const k = Number(kobo ?? 0);
+  return k === 0 ? "Free" : `₦${(k / 100).toLocaleString("en-NG", { maximumFractionDigits: 2 })}`;
 }
 
 export const AUDIENCE_LABEL: Record<string, string> = Object.fromEntries(AUDIENCES.map((a) => [a.value, a.label]));

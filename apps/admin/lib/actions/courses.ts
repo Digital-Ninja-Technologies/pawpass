@@ -41,6 +41,7 @@ export async function saveCourse(_prev: ActionState, form: FormData): Promise<Ac
     art: text(form, "art"),
     status: text(form, "status"),
     sort_order: text(form, "sort_order"),
+    price: text(form, "price"),
   });
   if (!course.ok) return { ok: false, message: course.error };
   const lessons = parseLessons(String(form.get("lessons") ?? "[]"));
@@ -68,7 +69,12 @@ export async function saveCourse(_prev: ActionState, form: FormData): Promise<Ac
 
   const { data, error } = await staff.supabase.rpc("admin_save_course", {
     p_id: id,
-    p_course: { ...course.value, sort_order: String(course.value.sort_order), ...(cover === undefined ? {} : { cover_path: cover }) },
+    p_course: {
+      ...course.value,
+      sort_order: String(course.value.sort_order),
+      price_kobo: String(course.value.price_kobo),
+      ...(cover === undefined ? {} : { cover_path: cover }),
+    },
     p_lessons: lessons.value,
   });
   if (error) {

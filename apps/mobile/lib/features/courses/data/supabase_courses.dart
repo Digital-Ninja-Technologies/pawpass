@@ -15,8 +15,16 @@ AppFailure _failure(Object e, String fallback) {
       'No connection. Check your internet and try again.',
     );
   }
-  if (e is PostgrestException && (e.code == 'P0002' || e.code == '42501')) {
-    return const AppFailure('That lesson is not available any more.');
+  if (e is PostgrestException) {
+    // Our own rules (already bought, free course, locked lesson) are written for people.
+    if (e.code == 'P0001' || e.code == '22023') {
+      return AppFailure(e.message);
+    }
+    if (e.code == 'P0002' || e.code == '42501') {
+      return const AppFailure(
+        'That course or lesson is not available any more.',
+      );
+    }
   }
   return AppFailure(fallback);
 }
@@ -33,8 +41,8 @@ class SupabaseCoursesRepository implements CoursesRepository {
       final rows = await _client
           .from('courses')
           .select(
-            'id, slug, title, summary, audience, level, accent, art, cover_path, sort_order, '
-            'course_lessons(id, position, title, body, minutes)',
+            'id, slug, title, summary, audience, level, accent, art, cover_path, price_kobo, sort_order, '
+            'course_lessons(id, position, title, minutes, preview, course_lesson_text(body))',
           )
           .eq('status', 'published')
           .order('sort_order')
@@ -67,17 +75,26 @@ class SupabaseCoursesRepository implements CoursesRepository {
           ? null
           : _client.storage.from(_bucket).getPublicUrl(cover),
       sortOrder: (r['sort_order'] as num?)?.toInt() ?? 100,
+      priceKobo: (r['price_kobo'] as num?)?.toInt() ?? 0,
       lessons: lessons,
     );
   }
 
-  Lesson _lesson(Map<String, dynamic> l) => Lesson(
-    id: l['id'] as String,
-    position: (l['position'] as num).toInt(),
-    title: l['title'] as String,
-    body: l['body'] as String,
-    minutes: (l['minutes'] as num?)?.toInt() ?? 2,
-  );
+  /// The text comes from a separate table that the database only shows for lessons the person may read (a free
+  /// course, a free preview, or a course they bought). Missing means locked.
+  Lesson _lesson(Map<String, dynamic> l) {
+    final text = l['course_lesson_text'];
+    final first = text is List ? (text.isEmpty ? null : text.first) : text;
+    final body = first is Map ? first['body'] as String? : null;
+    return Lesson(
+      id: l['id'] as String,
+      position: (l['position'] as num).toInt(),
+      title: l['title'] as String,
+      body: body,
+      minutes: (l['minutes'] as num?)?.toInt() ?? 2,
+      preview: l['preview'] as bool? ?? false,
+    );
+  }
 
   @override
   Future<Set<String>> doneLessonIds() async {
@@ -98,6 +115,41 @@ class SupabaseCoursesRepository implements CoursesRepository {
       );
     } catch (e) {
       throw _failure(e, 'We could not save that. Please try again.');
+    }
+  }
+
+  @override
+  Future<Set<String>> purchasedCourseIds() async {
+    try {
+      final rows = await _client
+          .from('course_purchases')
+          .select('course_id')
+          .eq('status', 'paid');
+      return {
+        for (final r in rows as List)
+          if ((r as Map)['course_id'] != null) r['course_id'] as String,
+      };
+    } catch (e) {
+      throw _failure(e, 'We could not load your courses. Please try again.');
+    }
+  }
+
+  @override
+  Future<CoursePurchase> startPurchase(String courseId) async {
+    try {
+      final r = Map<String, dynamic>.from(
+        await _client.rpc(
+          'create_course_purchase',
+          params: {'p_course': courseId},
+        ) as Map,
+      );
+      return CoursePurchase(
+        id: r['purchase_id'] as String,
+        reference: r['reference'] as String,
+        amountKobo: (r['amount_kobo'] as num).toInt(),
+      );
+    } catch (e) {
+      throw _failure(e, 'We could not start the payment. Please try again.');
     }
   }
 }

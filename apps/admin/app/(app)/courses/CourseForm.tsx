@@ -14,6 +14,7 @@ import {
   LEVEL_LABEL,
   LEVELS,
   LIMITS,
+  priceText,
   suggestMinutes,
 } from "@/lib/courses";
 import type { CourseRow, LessonRow } from "@/lib/types";
@@ -24,6 +25,7 @@ interface LessonDraft {
   title: string;
   body: string;
   minutes: string;
+  preview: boolean;
 }
 
 let counter = 0;
@@ -46,6 +48,8 @@ export function CourseForm({
   const [art, setArt] = useState(course?.art ?? "paw");
   const [status, setStatus] = useState<string>(course?.status ?? "draft");
   const [order, setOrder] = useState(String(course?.sort_order ?? 100));
+  const [pricing, setPricing] = useState<"free" | "paid">(course && course.price_kobo > 0 ? "paid" : "free");
+  const [price, setPrice] = useState(course && course.price_kobo > 0 ? String(course.price_kobo / 100) : "");
   const [items, setItems] = useState<LessonDraft[]>(
     (lessons ?? []).map((l) => ({
       key: nextKey(),
@@ -53,6 +57,7 @@ export function CourseForm({
       title: l.title,
       body: l.body,
       minutes: String(l.minutes),
+      preview: l.preview,
     })),
   );
   const [removeCover, setRemoveCover] = useState(false);
@@ -65,10 +70,17 @@ export function CourseForm({
   const lessonsJson = useMemo(
     () =>
       JSON.stringify(
-        items.map((l) => ({ ...(l.id ? { id: l.id } : {}), title: l.title, body: l.body, minutes: l.minutes })),
+        items.map((l) => ({
+          ...(l.id ? { id: l.id } : {}),
+          title: l.title,
+          body: l.body,
+          minutes: l.minutes,
+          preview: pricing === "paid" && l.preview,
+        })),
       ),
-    [items],
+    [items, pricing],
   );
+  const priceKobo = pricing === "paid" ? Math.round((Number(price.replace(/[₦,\s]/g, "")) || 0) * 100) : 0;
   const existingCover = removeCover ? null : (course?.cover_path ?? null);
 
   const update = (key: string, change: Partial<LessonDraft>) =>
@@ -188,6 +200,53 @@ export function CourseForm({
                 <span className="hint">Lowest number first. Leave gaps (10, 20, 30) so it is easy to slot one in.</span>
               </label>
             </div>
+          </section>
+
+          <section className="card stack" aria-labelledby="pricing">
+            <h2 id="pricing">Free or paid</h2>
+            <fieldset className="plain">
+              <legend className="field-label">Who pays</legend>
+              <label className="check">
+                <input type="radio" name="pricing" checked={pricing === "free"} onChange={() => setPricing("free")} />
+                <span>Free: everyone who has the app can read the whole course</span>
+              </label>
+              <label className="check">
+                <input type="radio" name="pricing" checked={pricing === "paid"} onChange={() => setPricing("paid")} />
+                <span>Paid: people pay once on Paystack and keep the course</span>
+              </label>
+            </fieldset>
+            <input type="hidden" name="price" value={pricing === "paid" ? price : "0"} />
+            {pricing === "paid" ? (
+              <>
+                <label className="field" style={{ maxWidth: 260 }}>
+                  Price in naira
+                  <input
+                    className="input"
+                    value={price}
+                    onChange={(e) => setPrice(e.target.value)}
+                    inputMode="decimal"
+                    placeholder="2500"
+                  />
+                  <span className="hint">Between ₦100 and ₦1,000,000.</span>
+                </label>
+                <p className="notice info">
+                  Lessons are locked until someone pays. Tick &quot;Free preview&quot; on a lesson below to let everyone
+                  read it first, so they can try before they buy. People who already paid keep what they paid when the price
+                  changes.
+                </p>
+                {course && course.buyers > 0 ? (
+                  <p className="notice info">
+                    {course.buyers} {course.buyers === 1 ? "person has" : "people have"} bought this course. It cannot be
+                    deleted, but you can unpublish it.
+                  </p>
+                ) : null}
+              </>
+            ) : course && course.buyers > 0 ? (
+              <p className="notice info">
+                {course.buyers} {course.buyers === 1 ? "person bought" : "people bought"} this course. Making it free lets
+                everyone read it. Their payments stay on record.
+              </p>
+            ) : null}
           </section>
 
           <section className="card stack" aria-labelledby="look">
@@ -336,6 +395,16 @@ export function CourseForm({
                       {l.body.length} of {LIMITS.lessonBody} characters
                     </span>
                   </label>
+                  {pricing === "paid" ? (
+                    <label className="check">
+                      <input
+                        type="checkbox"
+                        checked={l.preview}
+                        onChange={(e) => update(l.key, { preview: e.target.checked })}
+                      />
+                      <span>Free preview: anyone can read this lesson without paying</span>
+                    </label>
+                  ) : null}
                   <label className="field" style={{ maxWidth: 220 }}>
                     Minutes to read
                     <input
@@ -360,7 +429,7 @@ export function CourseForm({
                 type="button"
                 className="btn secondary"
                 disabled={items.length >= LIMITS.lessons}
-                onClick={() => setItems((all) => [...all, { key: nextKey(), title: "", body: "", minutes: "2" }])}
+                onClick={() => setItems((all) => [...all, { key: nextKey(), title: "", body: "", minutes: "2", preview: false }])}
               >
                 + Add a lesson
               </button>
@@ -381,6 +450,9 @@ export function CourseForm({
                   size={150}
                   wide
                 />
+                <span className="price-pill" style={{ color: colours.text }}>
+                  {priceText(priceKobo)}
+                </span>
               </div>
               <div className="app-body">
                 <span className="row" style={{ gap: 6 }}>
@@ -403,6 +475,7 @@ export function CourseForm({
                   {status === "published"
                     ? "This course is live in the app as soon as you save."
                     : "Drafts are hidden from the app."}
+                  {pricing === "paid" ? ` People pay ${priceText(priceKobo)} once on Paystack.` : ""}
                 </span>
               </>
             ) : (

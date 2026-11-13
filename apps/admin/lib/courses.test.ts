@@ -13,6 +13,8 @@ import {
   LIMITS,
   parseCourse,
   parseLessons,
+  parsePrice,
+  priceText,
   suggestMinutes,
 } from "./courses";
 
@@ -32,7 +34,7 @@ describe("parseCourse", () => {
     const r = parseCourse({ ...good, title: "  Rainy day games  " });
     expect(r).toEqual({
       ok: true,
-      value: { ...good, title: "Rainy day games", sort_order: 5 },
+      value: { ...good, title: "Rainy day games", sort_order: 5, price_kobo: 0 },
     });
   });
 
@@ -68,7 +70,10 @@ describe("parseLessons", () => {
   it("accepts lessons, keeps real ids and drops anything else", () => {
     const id = "123e4567-e89b-12d3-a456-426614174000";
     const r = parseLessons(JSON.stringify([{ ...lesson, id }, { ...lesson, id: "not-a-uuid" }]));
-    expect(r.ok && r.value).toEqual([{ ...lesson, id }, lesson]);
+    expect(r.ok && r.value).toEqual([
+      { ...lesson, id, preview: false },
+      { ...lesson, preview: false },
+    ]);
   });
 
   it("no lessons is fine (a draft)", () => {
@@ -145,6 +150,65 @@ describe("helpers", () => {
 
   it("the audiences are the three the app knows", () => {
     expect(AUDIENCES.map((a) => a.value)).toEqual(["puppy", "dog", "both"]);
+  });
+});
+
+describe("prices", () => {
+  it("blank, 0 and typed zeros are free", () => {
+    for (const t of ["", "  ", "0", "0.00", "₦0", "00"]) expect(parsePrice(t)).toEqual({ ok: true, value: 0 });
+  });
+
+  it("reads naira into kobo, with commas and the naira sign", () => {
+    expect(parsePrice("2500")).toEqual({ ok: true, value: 250_000 });
+    expect(parsePrice("₦2,500")).toEqual({ ok: true, value: 250_000 });
+    expect(parsePrice("1500.50")).toEqual({ ok: true, value: 150_050 });
+    expect(parsePrice("100")).toEqual({ ok: true, value: 10_000 });
+    expect(parsePrice("1000000")).toEqual({ ok: true, value: 100_000_000 });
+  });
+
+  it("rejects amounts that are not numbers, too small, or too big", () => {
+    for (const t of ["abc", "-5", "12.345", "1e5"]) {
+      const r = parsePrice(t);
+      expect(r.ok).toBe(false);
+    }
+    expect(parsePrice("99")).toMatchObject({ ok: false });
+    expect(parsePrice("1000001")).toMatchObject({ ok: false });
+  });
+
+  it("parseCourse carries the price in kobo", () => {
+    const r = parseCourse({ ...good, price: "2500" });
+    expect(r.ok && r.value.price_kobo).toBe(250_000);
+    const free = parseCourse({ ...good });
+    expect(free.ok && free.value.price_kobo).toBe(0);
+    const bad = parseCourse({ ...good, price: "50" });
+    expect(bad.ok).toBe(false);
+    if (!bad.ok) expect(bad.error).toMatch(/₦100/);
+  });
+
+  it("shows Free or the naira amount", () => {
+    expect(priceText(0)).toBe("Free");
+    expect(priceText(null)).toBe("Free");
+    expect(priceText(250_000)).toBe("₦2,500");
+    expect(priceText(150_050)).toBe("₦1,500.5");
+  });
+
+  it("the limits match the database", () => {
+    const sql = readFileSync(join(__dirname, "../../../supabase/migrations/20261118100000_courses.sql"), "utf8");
+    const m = /price_kobo = 0 or price_kobo between (\d+) and (\d+)/.exec(sql);
+    expect(m).not.toBeNull();
+    expect([Number(m![1]), Number(m![2])]).toEqual([LIMITS.priceKobo[0], LIMITS.priceKobo[1]]);
+  });
+});
+
+describe("lesson previews", () => {
+  it("keeps the free preview flag", () => {
+    const r = parseLessons(JSON.stringify([{ title: "Free taste", body: "Open", minutes: 2, preview: true }, { title: "Locked", body: "Closed", minutes: 2 }]));
+    expect(r.ok && r.value.map((l) => l.preview)).toEqual([true, false]);
+  });
+
+  it("anything but true is not a preview", () => {
+    const r = parseLessons(JSON.stringify([{ title: "Lesson", body: "Text", minutes: 2, preview: "yes" }]));
+    expect(r.ok && r.value[0].preview).toBe(false);
   });
 });
 

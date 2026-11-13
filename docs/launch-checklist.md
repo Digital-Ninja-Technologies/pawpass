@@ -10,6 +10,7 @@ What is built, what the stores will ask, and the manual steps that only you can 
 | Apply migration `20261114100000_delete_account.sql`, then deploy `delete-account` with JWT verification off (`supabase functions deploy delete-account --no-verify-jwt`), then run `supabase/tests/delete_account.test.sql` | Supabase | you |
 | Deploy all edge functions. Redeploy `paystack-initialize`, `paystack-verify` and `paystack-webhook` after this change: they now accept QR tag payments (references starting `pt_`) | `docs/deployment.md` | done up to M7, redeploy for tags |
 | Apply migration `20261118100000_courses.sql` (puppy and dog courses with ten starter courses and the admin Courses page), redeploy the admin app, and check Courses opens in the app from Home | `docs/deployment.md` | you say "apply it" |
+| Paid courses: after applying the courses migration, redeploy the payment functions (`paystack-initialize`, `paystack-verify`, `paystack-webhook`), set the real price on the draft paid course, and make one real test purchase. Decide a refund policy for courses (none is built) | `docs/deployment.md` | you |
 | Check the QR tag price and delivery fee (sample ₦3,500 and ₦1,000 in `settings.qr_tag_price_kobo` and `qr_tag_delivery_kobo`; there is no admin form for them yet) | Supabase | you |
 | `PAYSTACK_SECRET_KEY` set in the Supabase dashboard | Edge Functions secrets | you |
 | Paystack webhook URL `https://ieslnhmxlfiymkqelbsl.supabase.co/functions/v1/paystack-webhook`, events including `transfer.failed`, `transfer.reversed` | Paystack dashboard | you |
@@ -22,7 +23,7 @@ What is built, what the stores will ask, and the manual steps that only you can 
 ## 2. What the app ships with
 
 - **Offline:** passport, schedule, reminders and notifications show the last saved copy with a "saved at" banner when there is no connection. Nothing is queued or written offline.
-- **Courses:** ten puppy and dog courses (44 short lessons) with colourful illustrations, progress ticks and a celebration at the end, managed from the admin console. Lessons are friendly guides, not vet advice (the app says so); have your vet or a trainer read them before launch.
+- **Courses:** ten free puppy and dog courses (44 short lessons) and one paid course, with colourful illustrations, progress ticks and a celebration at the end. Courses can be free or paid (one payment on Paystack, with optional free preview lessons) and are managed from the admin console. Lessons are friendly guides, not vet advice (the app says so); have your vet or a trainer read them before launch.
 - **Honest states:** every list has loading, empty and error states. A failed load is never shown as "nothing here".
 - **Accessibility (WCAG 2.1 AA):** 44pt tap targets, labelled controls, text contrast, text scale to 1.3, tested at 320×568. Guideline tests live in `test/accessibility_test.dart`.
 - **Analytics:** six events only (`app_open`, `booking_started`, `checkout_started`, `share_started`, `partner_started`, `help_opened`). No personal data, no ad identifiers, no third party. Everything else in the success metrics is computed from the database (`admin_launch_metrics()`), shown on the admin dashboard.

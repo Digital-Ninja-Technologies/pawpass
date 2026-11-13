@@ -2,8 +2,8 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { requireSection } from "@/lib/auth";
 import { canDo } from "@/lib/roles";
-import { AUDIENCE_LABEL, LEVEL_LABEL } from "@/lib/courses";
-import { formatDate } from "@/lib/format";
+import { AUDIENCE_LABEL, LEVEL_LABEL, priceText } from "@/lib/courses";
+import { formatDate, formatKobo } from "@/lib/format";
 import { Badge, Empty, PageHeader, Stat } from "@/components/ui";
 import { CourseArt } from "@/components/CourseArt";
 import type { CourseRow } from "@/lib/types";
@@ -24,6 +24,9 @@ export default async function CoursesPage() {
   const drafts = rows.length - live.length;
   const liveLessons = live.reduce((n, r) => n + r.lessons, 0);
   const starts = rows.reduce((n, r) => n + r.learners, 0);
+  const paid = rows.filter((r) => r.price_kobo > 0);
+  const sales = rows.reduce((n, r) => n + Number(r.revenue_kobo ?? 0), 0);
+  const buyers = rows.reduce((n, r) => n + Number(r.buyers ?? 0), 0);
 
   return (
     <>
@@ -41,6 +44,11 @@ export default async function CoursesPage() {
       <section className="grid stats" aria-label="Summary">
         <Stat label="Live in the app" value={live.length} note={`${liveLessons} lessons`} />
         <Stat label="Drafts" value={drafts} note="Hidden from the app" />
+        <Stat
+          label="Course sales"
+          value={formatKobo(sales)}
+          note={`${buyers} ${buyers === 1 ? "purchase" : "purchases"} across ${paid.length} paid ${paid.length === 1 ? "course" : "courses"}`}
+        />
         <Stat
           label="Learner starts"
           value={starts.toLocaleString("en-NG")}
@@ -70,8 +78,10 @@ export default async function CoursesPage() {
                   <th>Course</th>
                   <th>For</th>
                   <th>Level</th>
+                  <th>Price</th>
                   <th className="num">Lessons</th>
                   <th className="num">Learners</th>
+                  <th className="num">Buyers</th>
                   <th>Status</th>
                   <th>Updated</th>
                   <th>
@@ -98,11 +108,24 @@ export default async function CoursesPage() {
                     </td>
                     <td className="muted">{AUDIENCE_LABEL[r.audience] ?? r.audience}</td>
                     <td className="muted">{LEVEL_LABEL[r.level] ?? r.level}</td>
+                    <td>
+                      {r.price_kobo > 0 ? <b>{priceText(r.price_kobo)}</b> : <span className="muted">Free</span>}
+                    </td>
                     <td className="num">
                       {r.lessons}
                       <span className="muted"> · {r.minutes} min</span>
                     </td>
                     <td className="num">{r.learners}</td>
+                    <td className="num">
+                      {r.price_kobo > 0 || r.buyers > 0 ? (
+                        <>
+                          {r.buyers}
+                          <span className="muted"> · {formatKobo(r.revenue_kobo)}</span>
+                        </>
+                      ) : (
+                        <span className="muted">-</span>
+                      )}
+                    </td>
                     <td>
                       {r.status === "published" ? (
                         <Badge tone="good">Live</Badge>
@@ -123,7 +146,7 @@ export default async function CoursesPage() {
                               published={r.status === "published"}
                               lessons={r.lessons}
                             />
-                            <DeleteButton courseId={r.id} title={r.title} learners={r.learners} />
+                            <DeleteButton courseId={r.id} title={r.title} learners={r.learners} buyers={r.buyers} />
                           </>
                         ) : null}
                       </span>

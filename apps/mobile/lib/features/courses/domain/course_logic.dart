@@ -1,3 +1,4 @@
+import '../../booking/domain/booking_logic.dart' show nairaFromKobo;
 import 'models.dart';
 
 /// A piece of a lesson, ready to draw.
@@ -84,18 +85,56 @@ enum CourseFilter {
   final String label;
 }
 
+/// Free or paid.
+enum PriceFilter {
+  all('Any price'),
+  free('Free'),
+  paid('Paid');
+
+  const PriceFilter(this.label);
+  final String label;
+}
+
 /// A course "for puppies" also suits a course for both, and the same for dogs.
-List<Course> filterCourses(List<Course> courses, CourseFilter filter) {
+List<Course> filterCourses(
+  List<Course> courses,
+  CourseFilter filter, {
+  PriceFilter price = PriceFilter.all,
+}) {
   return [
     for (final c in courses)
       if (switch (filter) {
-        CourseFilter.all => true,
-        CourseFilter.puppies => c.audience != CourseAudience.dog,
-        CourseFilter.dogs => c.audience != CourseAudience.puppy,
-      })
+            CourseFilter.all => true,
+            CourseFilter.puppies => c.audience != CourseAudience.dog,
+            CourseFilter.dogs => c.audience != CourseAudience.puppy,
+          } &&
+          switch (price) {
+            PriceFilter.all => true,
+            PriceFilter.free => c.isFree,
+            PriceFilter.paid => c.isPaid,
+          })
         c,
   ];
 }
+
+/// Whether the person can read the whole course: it is free, or they have bought it.
+bool hasAccess(Course course, Set<String> purchasedCourseIds) =>
+    course.isFree || purchasedCourseIds.contains(course.id);
+
+/// "Free", "₦2,500", or "Unlocked" for a paid course they own.
+String priceLabel(Course course, {required bool owned}) {
+  if (course.isFree) {
+    return 'Free';
+  }
+  if (owned) {
+    return 'Unlocked';
+  }
+  return nairaFromKobo(course.priceKobo);
+}
+
+/// How many lessons of a course the person cannot read yet.
+int lockedLessonCount(Course course) =>
+    course.lessons.where((l) => l.locked).length;
 
 /// How far through a course someone is. Lessons that were removed from the course never count.
 ({int done, int total}) courseProgress(
@@ -146,8 +185,13 @@ String lessonCountLabel(int count) =>
 /// the list that is started but not finished.
 Course? courseInProgress(List<Course> courses, Set<String> doneLessonIds) {
   for (final c in courses) {
-    if (isCourseStarted(c, doneLessonIds) &&
-        !isCourseComplete(c, doneLessonIds)) {
+    if (!isCourseStarted(c, doneLessonIds) ||
+        isCourseComplete(c, doneLessonIds)) {
+      continue;
+    }
+    // Only offer a course whose next lesson can be read (a paid course not bought yet stops at its previews).
+    final next = nextLesson(c, doneLessonIds);
+    if (next != null && !next.locked) {
       return c;
     }
   }

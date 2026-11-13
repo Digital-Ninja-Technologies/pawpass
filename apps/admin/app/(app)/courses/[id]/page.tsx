@@ -10,6 +10,23 @@ import { DeleteButton, StatusButton } from "../CourseButtons";
 
 export const metadata: Metadata = { title: "Edit course" };
 
+/** The lesson text lives in its own table: one row per lesson, joined here. */
+function toLessons(rows: unknown): LessonRow[] {
+  return ((rows ?? []) as Record<string, unknown>[]).map((r) => {
+    const t = r.course_lesson_text;
+    const first = Array.isArray(t) ? t[0] : t;
+    return {
+      id: r.id as string,
+      course_id: r.course_id as string,
+      position: r.position as number,
+      title: r.title as string,
+      minutes: r.minutes as number,
+      preview: r.preview === true,
+      body: ((first as { body?: string } | null | undefined)?.body ?? "") as string,
+    };
+  });
+}
+
 export default async function EditCoursePage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
   if (!/^[0-9a-f-]{36}$/i.test(id)) notFound();
@@ -20,7 +37,7 @@ export default async function EditCoursePage({ params }: { params: Promise<{ id:
     supabase.from("admin_course_v").select("*").eq("id", id).maybeSingle<CourseRow>(),
     supabase
       .from("course_lessons")
-      .select("id, course_id, position, title, body, minutes")
+      .select("id, course_id, position, title, minutes, preview, course_lesson_text(body)")
       .eq("course_id", id)
       .order("position", { ascending: true }),
   ]);
@@ -48,12 +65,12 @@ export default async function EditCoursePage({ params }: { params: Promise<{ id:
           canManage ? (
             <span className="row">
               <StatusButton courseId={c.id} published={c.status === "published"} lessons={c.lessons} />
-              <DeleteButton courseId={c.id} title={c.title} learners={c.learners} from="detail" />
+              <DeleteButton courseId={c.id} title={c.title} learners={c.learners} buyers={c.buyers} from="detail" />
             </span>
           ) : null
         }
       />
-      <CourseForm course={c} lessons={(lessons.data ?? []) as LessonRow[]} canEdit={canManage} />
+      <CourseForm course={c} lessons={toLessons(lessons.data)} canEdit={canManage} />
     </>
   );
 }

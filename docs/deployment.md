@@ -128,7 +128,14 @@ Courses are read by the app and managed from the admin console (Courses).
 2. Redeploy the admin app (the Courses section and the illustrations ship with it). The cover upload goes through a server
    action, so `next.config.mjs` allows request bodies up to 6 MB.
 3. Build a new app version. The courses screens and illustrations ship inside the app.
-4. Only full admins can create, edit, publish and delete. Run `supabase/tests/courses.test.sql` after applying to check the rules.
+4. **Paid courses go through Paystack like a QR tag.** The payment functions now know the `pc_` reference. After applying
+   the migration, redeploy `paystack-initialize`, `paystack-verify` and `paystack-webhook` (and `process-refunds` and
+   `payout-run` share the same code, so redeploy them too), then make one real test purchase: set a small price on a
+   draft course, publish it, buy it from the app, and check the course unlocks. There is no refund flow for courses yet:
+   if you need to refund someone, do it in the Paystack dashboard and tell support.
+5. The starter set has one paid course, "Your puppy's first year" (₦2,500), saved as a **draft**. Set its real price in the
+   admin console, read it through, then publish it.
+6. Only full admins can create, edit, publish and delete. Run `supabase/tests/courses.test.sql` after applying to check the rules.
 
 ## Push notifications
 

@@ -37,13 +37,22 @@ export function DeleteButton({
   courseId,
   title,
   learners,
+  buyers,
   from,
 }: {
   courseId: string;
   title: string;
   learners: number;
+  /** People who paid for it. A bought course cannot be deleted. */
+  buyers?: number;
   from?: "detail";
 }) {
+  if ((buyers ?? 0) > 0)
+    return (
+      <span className="muted" title="People have paid for this course, so it cannot be deleted. Unpublish it instead.">
+        Bought by {buyers}
+      </span>
+    );
   return (
     <ActionForm action={deleteCourse} className="row">
       <input type="hidden" name="course" value={courseId} />

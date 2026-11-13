@@ -235,6 +235,51 @@ describe("QR tag orders", () => {
   });
 });
 
+describe("course purchases", () => {
+  const courseRef = "pc_" + "e".repeat(32);
+  const courseRow = (over: Partial<BookingRow> = {}) =>
+    booking({ id: "c1", reference: courseRef, amountKobo: 250000, holds: false, product: "course", ...over });
+
+  it("starts a payment for the course's price, however old the open purchase is", async () => {
+    db.add("tolu", courseRow({ createdAt: "2026-10-01T00:00:00Z" }));
+    const out = await initializePayment(ctx, tolu, { reference: courseRef });
+    expect(out.reference).toBe(courseRef);
+    const body = ps.initBodies[0] as { amount: number; metadata: { product: string } };
+    expect(body.amount).toBe(250000);
+    expect(body.metadata.product).toBe("pawpass_course");
+  });
+
+  it("will not start a payment for a course that is already paid for", async () => {
+    db.add("tolu", courseRow({ paid: true, status: "paid" }));
+    expect(await status(initializePayment(ctx, tolu, { reference: courseRef }))).toBe(409);
+  });
+
+  it("will not start a payment for someone else's purchase", async () => {
+    db.add("kemi", courseRow());
+    expect(await status(initializePayment(ctx, tolu, { reference: courseRef }))).toBe(404);
+  });
+
+  it("a signed webhook confirms a course payment at the amount Paystack received", async () => {
+    db.add("tolu", courseRow());
+    const raw = JSON.stringify({
+      event: "charge.success",
+      data: { reference: courseRef, amount: 250000, currency: "NGN", status: "success" },
+    });
+    const sig = createHmac("sha512", secret).update(raw).digest("hex");
+    expect((await handleWebhook(ctx, raw, sig)).status).toBe(200);
+    expect(db.confirmed).toEqual([{ reference: courseRef, amountKobo: 250000 }]);
+  });
+
+  it("a webhook for a purchase we do not have is ignored, not an error", async () => {
+    const raw = JSON.stringify({
+      event: "charge.success",
+      data: { reference: courseRef, amount: 250000, currency: "NGN", status: "success" },
+    });
+    const sig = createHmac("sha512", secret).update(raw).digest("hex");
+    expect(await handleWebhook(ctx, raw, sig)).toEqual({ status: 200, body: "unknown reference" });
+  });
+});
+
 describe("verifyPayment", () => {
   it("records the payment when Paystack says the exact amount arrived", async () => {
     expect(await verifyPayment(ctx, tolu, { reference: ref })).toEqual({

@@ -38,13 +38,22 @@ class Lesson {
     required this.title,
     required this.body,
     required this.minutes,
+    this.preview = false,
   });
 
   final String id;
   final int position;
   final String title;
-  final String body;
+
+  /// The lesson text. Null means it is locked: it belongs to a paid course the person has not bought (the database
+  /// does not send it, so it cannot be read until they have).
+  final String? body;
   final int minutes;
+
+  /// A free preview: readable without buying the course.
+  final bool preview;
+
+  bool get locked => body == null;
 }
 
 /// A published course with its lessons, in order.
@@ -61,6 +70,7 @@ class Course {
     required this.lessons,
     this.coverUrl,
     this.sortOrder = 100,
+    this.priceKobo = 0,
   });
 
   final String id;
@@ -81,5 +91,24 @@ class Course {
   final int sortOrder;
   final List<Lesson> lessons;
 
+  /// What it costs in kobo. 0 is free.
+  final int priceKobo;
+
+  bool get isFree => priceKobo == 0;
+  bool get isPaid => priceKobo > 0;
+
   int get minutes => lessons.fold(0, (sum, l) => sum + l.minutes);
+}
+
+/// A purchase waiting for payment: what the app needs to open Paystack.
+class CoursePurchase {
+  const CoursePurchase({
+    required this.id,
+    required this.reference,
+    required this.amountKobo,
+  });
+
+  final String id;
+  final String reference;
+  final int amountKobo;
 }

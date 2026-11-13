@@ -39,10 +39,18 @@ The **Courses** page manages the puppy and dog courses shown in the app (Home, t
 - **Lessons** are written in the form: add, edit, move up or down and remove. Leave a blank line between paragraphs, start a
   line with `- ` for a bullet and a paragraph with `Tip: ` for a tip card. Editing a lesson keeps its id, so people keep
   their progress; removing a lesson removes the ticks on it.
+- **Free or paid:** a course is free (everyone with the app reads it all) or paid. A paid course has a price from ₦100 to
+  ₦1,000,000. People pay once on Paystack and keep the course (no subscription). Until they pay, its lessons stay locked,
+  and the database itself holds the text back, so it cannot be read by asking for it. Tick **Free preview** on any lesson to
+  let everyone read it first. Changing the price never changes what someone already paid, and a payment that is already
+  open keeps the price it started with.
+- **Sales:** the list shows each paid course's buyers and what they paid, and the page header shows total course sales.
+  Purchases are payment records: a course that people have paid for **cannot be deleted** (unpublish it instead), and
+  making a paid course free opens it to everyone while keeping the payments on record.
 - **Draft or published:** drafts are hidden from the app. Publishing needs at least one lesson and takes effect at once.
   Unpublish takes a course out without deleting it. Delete removes the course, its lessons, everyone's progress and its cover.
 - **Every change is written to the audit log** (`course.create`, `course.update`, `course.publish`, `course.unpublish`,
-  `course.delete`).
+  `course.delete`), and price changes record the old and new price.
 - **Illustrations** come from `tools/make_course_art.py`, which writes the same files to the app and to
   `apps/admin/public/course-art`. To add one, add it to the script, to the `art` check in
   `supabase/migrations/20261118100000_courses.sql` (a new migration) and to `ART` in `lib/courses.ts`, then run the script.

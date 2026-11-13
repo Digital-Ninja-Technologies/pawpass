@@ -19,7 +19,7 @@ Database schema, row level security, storage rules and seed data for PawPass.
 | `migrations/20261108100000_adopt_transfer.sql`     | Listings feed, puppy orders (deposit and balance in escrow), handover, passport transfer, the 72 hour vet check, adoption applications |
 | `migrations/20261109100000_partner_mode.sql`       | Partner application and verification steps, payout account, dashboards, earnings, listings, adoption decisions, help tickets           |
 | `migrations/20261110100000_payout_sending.sql`     | Weekly payout run linked to escrows, the scheduled draft, claiming and finishing transfers with retries                                |
-| `migrations/20261118100000_courses.sql`            | Puppy and dog courses: courses, lessons, progress, audited admin functions (full admin only), the public `course-covers` bucket, and the ten starter courses |
+| `migrations/20261118100000_courses.sql`            | Puppy and dog courses, free or paid: courses, lessons, locked lesson text, purchases, progress, audited admin functions (full admin only), the public `course-covers` bucket, and the starter courses |
 | `functions/`                                       | Paystack edge functions (initialize, verify, webhook, refunds, payout-run) and their tested logic                                      |
 | `seed.sql`                                         | Sample data from the designs (Tolu, Bingo, Mimi and the three partners). Local dev only                                                |
 | `tests/rls.test.sql`                               | Plain SQL tests for the privacy and business rules                                                                                     |
@@ -31,7 +31,7 @@ Database schema, row level security, storage rules and seed data for PawPass.
 | `tests/payout.test.sql`                            | Tests for what a run pays, release before sending, retries, split remainders and who may send                                          |
 | `tests/reminders_email.test.sql`                    | Tests for the scheduled reminder job and email claiming: who is announced, quiet hours, channels, retries, deleted and suspended accounts |
 | `tests/push.test.sql`                              | Tests for registering phones and what is claimed for pushing: likes left out, reminder channel and hours, old news, new phones, retries, dead tokens, deleted accounts |
-| `tests/courses.test.sql`                           | Tests for the courses: who reads what, drafts, saving and reordering lessons, progress, publish and delete, the audit trail, account deletion |
+| `tests/courses.test.sql`                           | Tests for the courses: who reads what, drafts, free and paid courses (locked text, previews, buying, confirming), saving and reordering lessons, progress, publish and delete, the audit trail, account deletion |
 | `tests/onboarding.test.sql`                        | Tests for the account type fields and `create_pet_passport` (all or nothing, privacy, validation)                                      |
 
 ## How access works

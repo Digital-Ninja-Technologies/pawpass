@@ -88,6 +88,19 @@ class _CoursesScreenState extends State<CoursesScreen> {
                         ),
                     ],
                   ),
+                  const SizedBox(height: 8),
+                  Wrap(
+                    spacing: 8,
+                    runSpacing: 8,
+                    children: [
+                      for (final f in PriceFilter.values)
+                        PawChip(
+                          label: f.label,
+                          selected: c.priceFilter == f,
+                          onTap: () => c.setPriceFilter(f),
+                        ),
+                    ],
+                  ),
                   const SizedBox(height: 16),
                   if (c.visible.isEmpty)
                     SizedBox(
@@ -112,6 +125,7 @@ class _CoursesScreenState extends State<CoursesScreen> {
                       CourseCard(
                         course: course,
                         progress: c.progressOf(course),
+                        owned: c.owns(course),
                         onTap: () => context.push('/courses/${course.id}'),
                       ),
                       const SizedBox(height: 16),
@@ -139,11 +153,12 @@ class _Hero extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final total = c.courses.fold<int>(0, (n, x) => n + x.lessons.length);
-    final doneCount = c.courses.fold<int>(
-      0,
-      (n, x) => n + courseProgress(x, c.done).done,
-    );
+    // Count what the person can actually read: free courses, previews, and paid courses they bought.
+    final readable = [
+      for (final x in c.courses) ...x.lessons.where((l) => !l.locked),
+    ];
+    final total = readable.length;
+    final doneCount = readable.where((l) => c.done.contains(l.id)).length;
     final colors = PawCourseColors.sunny;
     return Container(
       decoration: BoxDecoration(

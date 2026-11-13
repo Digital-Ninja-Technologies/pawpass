@@ -69,8 +69,8 @@ describe("references", () => {
 });
 
 describe("payment references", () => {
-  it("accepts bookings, puppy deposits, puppy balances and tag orders, and nothing else", () => {
-    for (const p of ["pp", "pd", "pb", "pt"]) {
+  it("accepts bookings, puppy deposits, puppy balances, tag orders and course purchases, and nothing else", () => {
+    for (const p of ["pp", "pd", "pb", "pt", "pc"]) {
       expect(isPaymentReference(`${p}_${"a".repeat(32)}`)).toBe(true);
     }
     for (const bad of [

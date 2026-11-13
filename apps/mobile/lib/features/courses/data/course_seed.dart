@@ -1,4 +1,4 @@
-// GENERATED from the same text as supabase/migrations/20261118100000_courses.sql: the ten starter courses.
+// GENERATED from the same text as supabase/migrations/20261118100000_courses.sql: the starter courses (ten free, one paid).
 // Used by the demo build and tests. Real courses come from the database and are managed in the admin console.
 import '../domain/models.dart';
 
@@ -439,6 +439,63 @@ const starterCourses = <Course>[
         position: 5,
         title: 'When to call the vet',
         body: 'Trust your instincts. You know your dog best. Call a vet quickly if you see:\n\n- Repeated vomiting or diarrhoea, or blood in either\n- A swollen, hard tummy\n- Not eating or drinking for a day\n- Trouble breathing, collapse or a seizure\n- Pale gums or severe pain\n\nUse Emergency vets in the OurPawPass app to find the nearest clinic. These courses are friendly guides, not a replacement for your vet.',
+        minutes: 1,
+      ),
+    ],
+  ),
+  Course(
+    id: 'course-first-year',
+    slug: 'first-year',
+    title: 'Your puppy\'s first year',
+    summary: 'A plan from eight weeks to twelve months: health, training, food and growing up.',
+    audience: CourseAudience.puppy,
+    level: CourseLevel.intermediate,
+    accent: 'tangerine',
+    art: 'ball',
+    sortOrder: 110,
+    priceKobo: 250000,
+    lessons: [
+      Lesson(
+        id: 'lesson-first-year-1',
+        position: 1,
+        title: 'How the first year flows',
+        body: 'The first year has three big stages, and each one asks something different of you.\n\n- Eight to sixteen weeks: learning about the world, vaccines, toilet habits and routine.\n- Four to six months: new teeth, fast growth and the first real rules.\n- Six to twelve months: the teenage phase, when training is tested.\n\nEvery puppy is different, and size matters. Small breeds grow up faster than large ones. Your vet can tell you what to expect for your puppy\'s breed.\n\nTip: keep a simple note of dates in your puppy\'s OurPawPass passport, so you always know what comes next.',
+        minutes: 1,
+        preview: true,
+      ),
+      Lesson(
+        id: 'lesson-first-year-2',
+        position: 2,
+        title: 'Eight to sixteen weeks: the foundations',
+        body: 'This is the most important learning window. Your puppy soaks up everything, good and bad.\n\n- Follow your vet\'s plan for vaccines and worming, and add each one to the passport.\n- Meet new people, sounds and surfaces gently, with treats, as your vet says it is safe.\n- Start toilet training, name teaching and calm time in a crate or pen.\n- Keep training to a few minutes at a time, several times a day.\n\nTip: tired puppies learn badly. Short sessions and long naps beat long lessons.',
+        minutes: 1,
+      ),
+      Lesson(
+        id: 'lesson-first-year-3',
+        position: 3,
+        title: 'Four to six months: teeth, growth and rules',
+        body: 'Baby teeth fall out and adult teeth arrive, so chewing gets worse before it gets better. Keep safe chew toys close and keep shoes out of reach.\n\nPuppies grow fast now, and their joints are still soft. Avoid long runs, hard jumping and slippery stairs. Several short walks are better than one long one.\n\nThis is also the time to make rules clear and keep them the same for everyone at home. If sit, down and stay are solid in the house, practise them outside, with distance and distractions.\n\nAsk your vet about the right time to spay or neuter, because it depends on the breed and size.',
+        minutes: 1,
+      ),
+      Lesson(
+        id: 'lesson-first-year-4',
+        position: 4,
+        title: 'Six to twelve months: the teenage phase',
+        body: 'Many puppies suddenly act as if they have never heard a word you said. This is normal. It is not a sign that you did anything wrong.\n\n- Keep training every day, in small doses. Make it fun and rewarding.\n- Go back to a long line for recall in open spaces until it is reliable again.\n- Give plenty of exercise and sniffing time, plus brain games, to use up energy.\n- Expect fear moments. If your dog is scared of something new, stay calm and give space.\n\nTip: a bored teenager makes its own entertainment, and you will not like the choices.',
+        minutes: 1,
+      ),
+      Lesson(
+        id: 'lesson-first-year-5',
+        position: 5,
+        title: 'Feeding as they grow',
+        body: 'Puppies need food made for growing dogs, in several small meals a day. Ask your vet how much to give and when to move to adult food. Small breeds often switch at around ten to twelve months and large breeds later.\n\n- Change foods slowly over about a week, mixing a little more of the new food each day.\n- Weigh your puppy once a month and write it down.\n- Keep treats to a small part of the day\'s food.\n- Always leave fresh water out, especially in the heat.\n\nA puppy that is too heavy puts extra strain on growing joints, so keep them lean.',
+        minutes: 1,
+      ),
+      Lesson(
+        id: 'lesson-first-year-6',
+        position: 6,
+        title: 'Your first year checklist',
+        body: 'Use this list at each vet visit and tick things off in the passport.\n\n- Core vaccines and the rabies vaccine, with the boosters your vet recommends\n- Regular worming, tick and flea treatment\n- A decision on spaying or neutering, made with your vet\n- Teeth cleaning at home and a quick mouth check\n- Grooming and nail trims, to suit the coat\n- A weight and growth check\n- Training: sit, down, stay, recall and walking nicely on the lead\n\nAt one year, book a check up and plan the adult routine: food, exercise, boosters and yearly visits. Well done on getting this far.',
         minutes: 1,
       ),
     ],

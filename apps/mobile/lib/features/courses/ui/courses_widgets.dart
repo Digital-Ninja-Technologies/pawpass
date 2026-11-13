@@ -130,6 +130,56 @@ class CoursePill extends StatelessWidget {
   }
 }
 
+/// "Free", "₦2,500" or "Unlocked", with a lock for a paid course that is still locked. White so it reads on any colour.
+class PricePill extends StatelessWidget {
+  const PricePill({super.key, required this.course, required this.owned});
+
+  final Course course;
+  final bool owned;
+
+  @override
+  Widget build(BuildContext context) {
+    final colors = PawCourseColors.byKey(course.accent);
+    final locked = course.isPaid && !owned;
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+      decoration: BoxDecoration(
+        color: Colors.white.withValues(alpha: 0.94),
+        borderRadius: BorderRadius.circular(16),
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          if (locked) ...[
+            PawIcon(
+              PawIconData.lock,
+              size: 14,
+              color: colors.text,
+              strokeWidth: 2.2,
+            ),
+            const SizedBox(width: 4),
+          ] else if (course.isPaid) ...[
+            PawIcon(
+              PawIconData.check,
+              size: 14,
+              color: colors.text,
+              strokeWidth: 2.6,
+            ),
+            const SizedBox(width: 4),
+          ],
+          Text(
+            priceLabel(course, owned: owned),
+            style: PawText.meta13.copyWith(
+              color: colors.text,
+              fontWeight: FontWeight.w700,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
 /// A chunky progress bar in the course's strong colour.
 class CourseProgressBar extends StatelessWidget {
   const CourseProgressBar({
@@ -170,18 +220,27 @@ class CourseCard extends StatelessWidget {
     required this.course,
     required this.progress,
     required this.onTap,
+    this.owned = true,
   });
 
   final Course course;
   final ({int done, int total}) progress;
+
+  /// False for a paid course the person has not bought.
+  final bool owned;
   final VoidCallback onTap;
 
   @override
   Widget build(BuildContext context) {
     final colors = PawCourseColors.byKey(course.accent);
-    final finished = progress.total > 0 && progress.done == progress.total;
-    final started = progress.done > 0;
-    final status = finished
+    final locked = course.isPaid && !owned;
+    final finished =
+        !locked && progress.total > 0 && progress.done == progress.total;
+    final started = !locked && progress.done > 0;
+    final previews = course.lessons.where((l) => l.preview).length;
+    final status = locked
+        ? (previews > 0 ? 'Try a free lesson before you buy' : 'Paid course')
+        : finished
         ? 'Finished'
         : started
         ? '${progress.done} of ${progress.total} lessons done'
@@ -190,12 +249,21 @@ class CourseCard extends StatelessWidget {
       padding: EdgeInsets.zero,
       onTap: onTap,
       semanticLabel:
-          '${course.title}. ${course.summary} ${lessonCountLabel(course.lessons.length)}, '
-          '${minutesLabel(course.minutes)}. $status.',
+          '${course.title}. ${priceLabel(course, owned: owned)}. ${course.summary} '
+          '${lessonCountLabel(course.lessons.length)}, ${minutesLabel(course.minutes)}. $status.',
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          CourseArt.of(course, height: 150),
+          Stack(
+            children: [
+              CourseArt.of(course, height: 150),
+              Positioned(
+                top: 10,
+                right: 10,
+                child: PricePill(course: course, owned: owned),
+              ),
+            ],
+          ),
           Padding(
             padding: const EdgeInsets.fromLTRB(16, 14, 16, 16),
             child: Column(
@@ -233,6 +301,16 @@ class CourseCard extends StatelessWidget {
                     ),
                   ],
                 ),
+                if (locked) ...[
+                  const SizedBox(height: 10),
+                  Text(
+                    status,
+                    style: PawText.meta13.copyWith(
+                      color: colors.text,
+                      fontWeight: FontWeight.w700,
+                    ),
+                  ),
+                ],
                 if (started) ...[
                   const SizedBox(height: 12),
                   CourseProgressBar(

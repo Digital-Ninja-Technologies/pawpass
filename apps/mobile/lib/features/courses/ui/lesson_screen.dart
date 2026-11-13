@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../ui/ui.dart';
+import '../../booking/domain/booking_logic.dart' show nairaFromKobo;
 import '../../onboarding/state/app_scope.dart';
 import '../domain/course_logic.dart';
 import '../domain/models.dart';
@@ -125,9 +126,13 @@ class _LessonScreenState extends State<LessonScreen> {
           );
         }
         final colors = PawCourseColors.byKey(course.accent);
+        final text = lesson.body;
+        if (text == null) {
+          return _LockedLesson(course: course, lesson: lesson, colors: colors);
+        }
         final done = c.isDone(lesson.id);
         final next = lessonAfter(course, lesson);
-        final blocks = parseLessonBody(lesson.body);
+        final blocks = parseLessonBody(text);
         return Scaffold(
           backgroundColor: PawColors.ground,
           body: Column(
@@ -416,6 +421,104 @@ class _Celebration extends StatelessWidget {
             PawButton(label: 'Lovely', onPressed: () => Navigator.pop(context)),
           ],
         ),
+      ),
+    );
+  }
+}
+
+/// A lesson of a paid course that has not been bought: the title, and a way to the unlock button.
+class _LockedLesson extends StatelessWidget {
+  const _LockedLesson({
+    required this.course,
+    required this.lesson,
+    required this.colors,
+  });
+
+  final Course course;
+  final Lesson lesson;
+  final PawCourseColor colors;
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: PawColors.ground,
+      body: Column(
+        children: [
+          Expanded(
+            child: ListView(
+              padding: EdgeInsets.zero,
+              children: [
+                Container(
+                  color: colors.soft,
+                  child: SafeArea(
+                    bottom: false,
+                    child: Padding(
+                      padding: const EdgeInsets.fromLTRB(
+                        PawSpace.screenSide,
+                        12,
+                        PawSpace.screenSide,
+                        18,
+                      ),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          const PawBackButton(),
+                          const SizedBox(height: 14),
+                          Text(
+                            'LESSON ${lesson.position} OF ${course.lessons.length}',
+                            style: PawText.overline12.copyWith(
+                              color: colors.text,
+                            ),
+                          ),
+                          const SizedBox(height: 6),
+                          Semantics(
+                            header: true,
+                            child: Text(lesson.title, style: PawText.title28),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(PawSpace.screenSide),
+                  child: Container(
+                    padding: const EdgeInsets.all(18),
+                    decoration: BoxDecoration(
+                      color: colors.soft,
+                      borderRadius: BorderRadius.circular(PawRadius.card),
+                    ),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        PawIcon(PawIconData.lock, color: colors.text, size: 26),
+                        const SizedBox(height: 10),
+                        Text(
+                          'This lesson is part of ${course.title}',
+                          style: PawText.heading22.copyWith(color: colors.text),
+                        ),
+                        const SizedBox(height: 6),
+                        Text(
+                          'Unlock the course for ${nairaFromKobo(course.priceKobo)} to read it. One payment, yours to keep.',
+                          style: PawText.body14.copyWith(color: PawColors.ink),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+          PawStickyFooter(
+            children: [
+              PawButton(
+                label: 'Unlock for ${nairaFromKobo(course.priceKobo)}',
+                onPressed: () =>
+                    context.pushReplacement('/courses/${course.id}'),
+              ),
+            ],
+          ),
+        ],
       ),
     );
   }

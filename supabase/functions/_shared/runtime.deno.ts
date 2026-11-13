@@ -140,7 +140,30 @@ function db(client: SupabaseClient): Db {
         }
       : null;
 
+  // A course purchase (pc_) is the same kind of plain purchase: no time limit, no escrow.
+  const courseRow = (r: Record<string, unknown> | null): BookingRow | null =>
+    r
+      ? {
+          id: r.id as string,
+          status: r.status as string,
+          amountKobo: Number(r.amount_kobo),
+          reference: r.paystack_reference as string,
+          paid: r.status === "paid",
+          createdAt: r.created_at as string,
+          holds: false,
+          product: "course",
+        }
+      : null;
+
   const find = async (reference: string, userId?: string): Promise<BookingRow | null> => {
+    if (reference.startsWith("pc_")) {
+      let q = client
+        .from("course_purchases")
+        .select("id, status, amount_kobo, paystack_reference, created_at, user_id")
+        .eq("paystack_reference", reference);
+      if (userId) q = q.eq("user_id", userId);
+      return courseRow(must(await q.maybeSingle()));
+    }
     if (reference.startsWith("pt_")) {
       let q = client
         .from("qr_tag_orders")
@@ -164,6 +187,15 @@ function db(client: SupabaseClient): Db {
     bookingForOwner: (reference, userId) => find(reference, userId),
     bookingByReference: (reference) => find(reference),
     async confirmPayment(reference, amountKobo) {
+      if (reference.startsWith("pc_")) {
+        const r = must(
+          await client.rpc("confirm_course_payment", {
+            p_reference: reference,
+            p_amount_kobo: amountKobo,
+          }),
+        ) as { result: string; order_id: string; order_status: string };
+        return { result: r.result, booking_id: r.order_id, booking_status: r.order_status };
+      }
       if (reference.startsWith("pt_")) {
         const r = must(
           await client.rpc("confirm_tag_payment", {

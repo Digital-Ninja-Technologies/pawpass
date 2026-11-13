@@ -3,10 +3,13 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:pawpass/app.dart';
 import 'package:pawpass/features/adopt/data/in_memory_adopt.dart';
 import 'package:pawpass/features/booking/data/in_memory_bookings.dart';
+import 'package:pawpass/features/booking/domain/models.dart'
+    show PaymentOutcome;
 import 'package:pawpass/features/community/data/in_memory_community.dart';
 import 'package:pawpass/features/courses/data/course_seed.dart';
 import 'package:pawpass/features/courses/data/in_memory_courses.dart';
 import 'package:pawpass/features/courses/domain/models.dart';
+import 'package:go_router/go_router.dart';
 import 'package:pawpass/features/health/data/in_memory_health.dart';
 import 'package:pawpass/features/onboarding/data/in_memory.dart';
 import 'package:pawpass/features/onboarding/data/repositories.dart';
@@ -20,12 +23,21 @@ import 'package:pawpass/ui/ui.dart';
 final _today = DateTime.utc(2026, 11, 5, 8);
 
 class _Rig {
-  _Rig({List<Course>? courses, Set<String>? done}) {
+  _Rig({List<Course>? courses, Set<String>? done, Set<String>? purchased}) {
     profiles = InMemoryProfileRepository();
     pets = InMemoryPetRepository(profiles: profiles, now: () => _today);
     bookings = InMemoryBookingsRepository(now: () => _today);
     adopt = InMemoryAdoptRepository(now: () => _today);
-    this.courses = InMemoryCoursesRepository(courses: courses, done: done);
+    this.courses = InMemoryCoursesRepository(
+      courses: courses,
+      done: done,
+      purchased: purchased,
+    );
+    payments = InMemoryPaymentsRepository(
+      bookings,
+      others: [adopt.markPaid, this.courses.markPaid],
+    );
+    links = FakeLinkLauncher();
     services = AppServices(
       auth: InMemoryAuthRepository(signedInAs: 'tolu@example.com'),
       profiles: profiles,
@@ -36,9 +48,9 @@ class _Rig {
       notifications: InMemoryNotificationsRepository(),
       vets: InMemoryVetsRepository(),
       location: FakeLocationService(),
-      links: FakeLinkLauncher(),
+      links: links,
       bookings: bookings,
-      payments: InMemoryPaymentsRepository(bookings, others: [adopt.markPaid]),
+      payments: payments,
       community: InMemoryCommunityRepository(now: () => _today),
       adopt: adopt,
       partner: InMemoryPartnerRepository(now: () => _today),
@@ -52,6 +64,8 @@ class _Rig {
   late final InMemoryBookingsRepository bookings;
   late final InMemoryAdoptRepository adopt;
   late final InMemoryCoursesRepository courses;
+  late final InMemoryPaymentsRepository payments;
+  late final FakeLinkLauncher links;
   late final AppServices services;
 
   Future<void> seed() async {
@@ -163,6 +177,42 @@ Course _course(
             'Body $i.\n\n- First point\n- Second point\n\nTip: a helpful tip $i.',
         minutes: 3,
       ),
+  ],
+);
+
+Course _paid(String id, String title, {int price = 250000}) => Course(
+  id: id,
+  slug: id,
+  title: title,
+  summary: 'About $title',
+  audience: CourseAudience.both,
+  level: CourseLevel.intermediate,
+  accent: 'tangerine',
+  art: 'ball',
+  priceKobo: price,
+  lessons: [
+    Lesson(
+      id: '$id-l1',
+      position: 1,
+      title: '$title free taste',
+      body: 'Free text.\n\nTip: a free tip.',
+      minutes: 2,
+      preview: true,
+    ),
+    Lesson(
+      id: '$id-l2',
+      position: 2,
+      title: '$title secret lesson',
+      body: 'Secret text for buyers.',
+      minutes: 3,
+    ),
+    Lesson(
+      id: '$id-l3',
+      position: 3,
+      title: '$title last lesson',
+      body: 'More secret text.',
+      minutes: 3,
+    ),
   ],
 );
 
@@ -383,6 +433,240 @@ void main() {
         }
         await _back(tester);
       }
+    });
+  });
+
+  group('Free and paid courses', () {
+    testWidgets('the list shows Free and the price, and the filters work', (
+      tester,
+    ) async {
+      final rig = _Rig(
+        courses: [_course('a', 'Sit and stay'), _paid('p', 'Pro recall')],
+      );
+      await _pump(tester, rig);
+      await _openCourses(tester);
+      expect(find.text('Free'), findsWidgets);
+      expect(find.text('₦2,500'), findsWidgets);
+      expect(find.text('Try a free lesson before you buy'), findsOneWidget);
+
+      await _tap(tester, 'Paid');
+      expect(find.text('Sit and stay'), findsNothing);
+      expect(find.text('Pro recall'), findsOneWidget);
+      await _tap(tester, 'Free');
+      expect(find.text('Sit and stay'), findsOneWidget);
+      expect(find.text('Pro recall'), findsNothing);
+      await _tap(tester, 'Any price');
+      expect(find.text('Pro recall'), findsOneWidget);
+    });
+
+    testWidgets(
+      'a paid course shows its price, free preview and locked lessons',
+      (tester) async {
+        final rig = _Rig(courses: [_paid('p', 'Pro recall')]);
+        await _pump(tester, rig);
+        await _openCourses(tester);
+        await _openCourse(tester, 'Pro recall');
+        expect(find.text('Unlock this course for ₦2,500'), findsOneWidget);
+        expect(
+          find.textContaining('1 lesson is free to try first.'),
+          findsOneWidget,
+        );
+        expect(find.text('Unlock for ₦2,500'), findsOneWidget);
+        expect(find.text('Try the free lesson'), findsOneWidget);
+        expect(find.text('Free preview'), findsOneWidget);
+        expect(find.text('Pro recall secret lesson'), findsOneWidget);
+        // A locked lesson does not open.
+        await _tap(tester, 'Pro recall secret lesson');
+        expect(
+          find.text('Unlock this course to read this lesson.'),
+          findsOneWidget,
+        );
+        expect(find.text('LESSON 2 OF 3'), findsNothing);
+      },
+    );
+
+    testWidgets('the free lesson can be read and done before buying', (
+      tester,
+    ) async {
+      final rig = _Rig(courses: [_paid('p', 'Pro recall')]);
+      await _pump(tester, rig);
+      await _openCourses(tester);
+      await _openCourse(tester, 'Pro recall');
+      await _tap(tester, 'Try the free lesson');
+      expect(find.text('Free text.'), findsOneWidget);
+      expect(find.text('Secret text for buyers.'), findsNothing);
+      await _tap(tester, 'Done, next lesson');
+      // The next lesson is locked: its text never arrives, and the screen asks to unlock.
+      expect(rig.courses.done, {'p-l1'});
+      expect(find.text('This lesson is part of Pro recall'), findsOneWidget);
+      expect(find.text('Secret text for buyers.'), findsNothing);
+      await _tap(tester, 'Unlock for ₦2,500');
+      expect(find.text('Unlock this course for ₦2,500'), findsOneWidget);
+    });
+
+    testWidgets(
+      'unlocking: opens Paystack, then checking unlocks the whole course',
+      (tester) async {
+        final rig = _Rig(courses: [_paid('p', 'Pro recall')]);
+        await _pump(tester, rig);
+        await _openCourses(tester);
+        await _openCourse(tester, 'Pro recall');
+        await _tap(tester, 'Unlock for ₦2,500');
+        expect(rig.links.opened.single.toString(), contains('pc_'));
+        expect(rig.courses.started.single.amountKobo, 250000);
+        expect(find.text('I have paid, check now'), findsOneWidget);
+
+        await _tap(tester, 'I have paid, check now');
+        expect(rig.courses.purchased, {'p'});
+        expect(find.text('Unlocked! Enjoy the course.'), findsOneWidget);
+        expect(find.text('Unlock this course for ₦2,500'), findsNothing);
+        expect(find.text('Start course'), findsOneWidget);
+        expect(find.text('Unlocked'), findsWidgets);
+
+        await _tap(tester, 'Start course');
+        expect(find.text('LESSON 1 OF 3'), findsOneWidget);
+        await _tap(tester, 'Done, next lesson');
+        expect(find.text('Secret text for buyers.'), findsOneWidget);
+        expect(rig.courses.done, {'p-l1'});
+      },
+    );
+
+    testWidgets(
+      'a payment Paystack has not received yet says so and can be checked again',
+      (tester) async {
+        final rig = _Rig(courses: [_paid('p', 'Pro recall')]);
+        rig.payments.outcome = PaymentOutcome.pending;
+        await _pump(tester, rig);
+        await _openCourses(tester);
+        await _openCourse(tester, 'Pro recall');
+        await _tap(tester, 'Unlock for ₦2,500');
+        await _tap(tester, 'I have paid, check now');
+        expect(
+          find.textContaining('We have not received your payment yet'),
+          findsOneWidget,
+        );
+        expect(rig.courses.purchased, isEmpty);
+        rig.payments.outcome = PaymentOutcome.paid;
+        await _tap(tester, 'I have paid, check now');
+        expect(rig.courses.purchased, {'p'});
+      },
+    );
+
+    testWidgets('a failed payment says so and nothing unlocks', (tester) async {
+      final rig = _Rig(courses: [_paid('p', 'Pro recall')]);
+      rig.payments.outcome = PaymentOutcome.failed;
+      await _pump(tester, rig);
+      await _openCourses(tester);
+      await _openCourse(tester, 'Pro recall');
+      await _tap(tester, 'Unlock for ₦2,500');
+      await _tap(tester, 'I have paid, check now');
+      expect(
+        find.text('The payment did not go through. You have not been charged.'),
+        findsOneWidget,
+      );
+      expect(rig.courses.purchased, isEmpty);
+      expect(find.text('Unlock for ₦2,500'), findsOneWidget);
+    });
+
+    testWidgets(
+      'a purchase that cannot start shows why, and Not now goes back',
+      (tester) async {
+        final rig = _Rig(courses: [_paid('p', 'Pro recall')]);
+        rig.courses.failNextStart =
+            'No connection. Check your internet and try again.';
+        await _pump(tester, rig);
+        await _openCourses(tester);
+        await _openCourse(tester, 'Pro recall');
+        await _tap(tester, 'Unlock for ₦2,500');
+        expect(
+          find.text('No connection. Check your internet and try again.'),
+          findsOneWidget,
+        );
+        expect(rig.links.opened, isEmpty);
+        // Try again, then give up waiting.
+        await _tap(tester, 'Unlock for ₦2,500');
+        expect(find.text('Not now'), findsOneWidget);
+        await _tap(tester, 'Not now');
+        expect(find.text('Unlock for ₦2,500'), findsOneWidget);
+      },
+    );
+
+    testWidgets(
+      'tapping Unlock again after giving up reuses the same payment',
+      (tester) async {
+        final rig = _Rig(courses: [_paid('p', 'Pro recall')]);
+        await _pump(tester, rig);
+        await _openCourses(tester);
+        await _openCourse(tester, 'Pro recall');
+        await _tap(tester, 'Unlock for ₦2,500');
+        await _tap(tester, 'Not now');
+        await _tap(tester, 'Unlock for ₦2,500');
+        expect(rig.courses.started, hasLength(1));
+        expect(rig.links.opened, hasLength(2));
+      },
+    );
+
+    testWidgets('a course already bought opens like a free one', (
+      tester,
+    ) async {
+      final rig = _Rig(courses: [_paid('p', 'Pro recall')], purchased: {'p'});
+      await _pump(tester, rig);
+      await _openCourses(tester);
+      expect(find.text('Unlocked'), findsOneWidget);
+      await _openCourse(tester, 'Pro recall');
+      expect(find.text('Unlock this course for ₦2,500'), findsNothing);
+      expect(find.text('Start course'), findsOneWidget);
+      expect(find.text('Pro recall secret lesson'), findsOneWidget);
+      await _tap(tester, 'Pro recall secret lesson');
+      expect(find.text('Secret text for buyers.'), findsOneWidget);
+    });
+
+    testWidgets(
+      'a locked lesson opened directly asks to unlock instead of showing text',
+      (tester) async {
+        final rig = _Rig(courses: [_paid('p', 'Pro recall')]);
+        await _pump(tester, rig);
+        await _openCourses(tester);
+        GoRouter.of(tester.element(find.byType(Scaffold).first))
+            .push('/courses/p/lesson/p-l2');
+        await tester.pumpAndSettle();
+        expect(find.text('This lesson is part of Pro recall'), findsOneWidget);
+        expect(find.text('Secret text for buyers.'), findsNothing);
+        expect(find.text('Unlock for ₦2,500'), findsOneWidget);
+      },
+    );
+
+    testWidgets(
+      'the demo starter courses include a paid one that behaves the same',
+      (tester) async {
+        final rig = _Rig(courses: starterCourses);
+        await _pump(tester, rig);
+        await _openCourses(tester);
+        await _tap(tester, 'Paid');
+        expect(find.text("Your puppy's first year"), findsOneWidget);
+        await _openCourse(tester, "Your puppy's first year");
+        expect(find.text('Unlock for ₦2,500'), findsOneWidget);
+        expect(find.text('Try the free lesson'), findsOneWidget);
+      },
+    );
+  });
+
+  group('small phone with large text, paid', () {
+    testWidgets('the unlock card, locked list and locked lesson fit', (
+      tester,
+    ) async {
+      final rig = _Rig(courses: [_paid('p', 'Pro recall')]);
+      await _pump(tester, rig, size: const Size(320, 568), scale: 1.3);
+      await _openCourses(tester);
+      expect(tester.takeException(), isNull);
+      await _openCourse(tester, 'Pro recall');
+      expect(tester.takeException(), isNull);
+      await _tap(tester, 'Unlock for ₦2,500');
+      expect(tester.takeException(), isNull);
+      GoRouter.of(tester.element(find.byType(Scaffold).first))
+          .push('/courses/p/lesson/p-l2');
+      await tester.pumpAndSettle();
+      expect(tester.takeException(), isNull);
     });
   });
 }

@@ -66,7 +66,7 @@ void main() {
     test('every starter lesson parses into something readable', () {
       for (final c in starterCourses) {
         for (final l in c.lessons) {
-          expect(parseLessonBody(l.body), isNotEmpty, reason: l.title);
+          expect(parseLessonBody(l.body!), isNotEmpty, reason: l.title);
         }
       }
     });
@@ -163,12 +163,12 @@ void main() {
   });
 
   group('starter courses', () {
-    test('there are ten, each with lessons, in a set order', () {
-      expect(starterCourses, hasLength(10));
+    test('there are eleven, each with lessons, in a set order', () {
+      expect(starterCourses, hasLength(11));
       expect(starterCourses.every((c) => c.lessons.isNotEmpty), isTrue);
       final orders = starterCourses.map((c) => c.sortOrder).toList();
       expect(orders, [...orders]..sort());
-      expect(orders.toSet(), hasLength(10));
+      expect(orders.toSet(), hasLength(11));
     });
 
     test('there are courses for puppies and for grown dogs', () {
@@ -199,6 +199,127 @@ void main() {
           expect('${l.title}${l.body}'.contains('—'), isFalse, reason: l.title);
         }
       }
+    });
+  });
+
+  group('free and paid', () {
+    Course paid({List<Lesson>? lessons}) => Course(
+      id: 'paid',
+      slug: 'paid',
+      title: 'Paid course',
+      summary: 'A paid course',
+      audience: CourseAudience.both,
+      level: CourseLevel.beginner,
+      accent: 'sky',
+      art: 'paw',
+      priceKobo: 250000,
+      lessons:
+          lessons ??
+          [
+            const Lesson(
+              id: 'p1',
+              position: 1,
+              title: 'Free taste',
+              body: 'Open',
+              minutes: 2,
+              preview: true,
+            ),
+            const Lesson(
+              id: 'p2',
+              position: 2,
+              title: 'Locked',
+              body: null,
+              minutes: 2,
+            ),
+          ],
+    );
+
+    test('a course with no price is free', () {
+      expect(_course().isFree, isTrue);
+      expect(_course().isPaid, isFalse);
+      expect(paid().isPaid, isTrue);
+      expect(paid().isFree, isFalse);
+    });
+
+    test('a lesson with no text is locked', () {
+      final c = paid();
+      expect(c.lessons[0].locked, isFalse);
+      expect(c.lessons[1].locked, isTrue);
+      expect(lockedLessonCount(c), 1);
+      expect(lockedLessonCount(_course()), 0);
+    });
+
+    test('access: free courses always, paid courses once bought', () {
+      expect(hasAccess(_course(), {}), isTrue);
+      expect(hasAccess(paid(), {}), isFalse);
+      expect(hasAccess(paid(), {'other'}), isFalse);
+      expect(hasAccess(paid(), {'paid'}), isTrue);
+    });
+
+    test('price labels', () {
+      expect(priceLabel(_course(), owned: true), 'Free');
+      expect(priceLabel(paid(), owned: false), '₦2,500');
+      expect(priceLabel(paid(), owned: true), 'Unlocked');
+    });
+
+    test(
+      'the price filter keeps free or paid, alongside the audience filter',
+      () {
+        final free = _course(id: 'f');
+        final dogPaid = Course(
+          id: 'dp',
+          slug: 'dp',
+          title: 'Dog paid',
+          summary: 'x',
+          audience: CourseAudience.dog,
+          level: CourseLevel.beginner,
+          accent: 'sky',
+          art: 'paw',
+          priceKobo: 100000,
+          lessons: const [],
+        );
+        final all = [free, paid(), dogPaid];
+        expect(filterCourses(all, CourseFilter.all), hasLength(3));
+        expect(filterCourses(all, CourseFilter.all, price: PriceFilter.free), [
+          free,
+        ]);
+        expect(
+          filterCourses(
+            all,
+            CourseFilter.all,
+            price: PriceFilter.paid,
+          ).map((c) => c.id),
+          ['paid', 'dp'],
+        );
+        expect(
+          filterCourses(
+            all,
+            CourseFilter.puppies,
+            price: PriceFilter.paid,
+          ).map((c) => c.id),
+          ['paid'],
+        );
+      },
+    );
+
+    test('keep going never offers a lesson that is still locked', () {
+      final c = paid();
+      // Only the free preview is done: the next lesson is locked, so there is nothing to continue.
+      expect(courseInProgress([c], {'p1'}), isNull);
+      // Once the lesson text is there (bought), it is offered.
+      final bought = paid(
+        lessons: [
+          c.lessons[0],
+          const Lesson(
+            id: 'p2',
+            position: 2,
+            title: 'Now open',
+            body: 'Open',
+            minutes: 2,
+          ),
+        ],
+      );
+      expect(courseInProgress([bought], {'p1'}), bought);
     });
   });
 }

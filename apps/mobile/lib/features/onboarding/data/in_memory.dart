@@ -240,6 +240,9 @@ AppServices inMemoryServices({
           ),
     ],
   );
+  final coursesRepo = courses is InMemoryCoursesRepository
+      ? courses
+      : InMemoryCoursesRepository();
   final adopt = InMemoryAdoptRepository(
     now: now,
     onPassport: (name, species, breed) {
@@ -273,7 +276,7 @@ AppServices inMemoryServices({
     bookings: bookings,
     payments: InMemoryPaymentsRepository(
       bookings,
-      others: [adopt.markPaid, account.markPaid],
+      others: [adopt.markPaid, account.markPaid, coursesRepo.markPaid],
     ),
     community: InMemoryCommunityRepository(now: now),
     adopt: adopt,
@@ -283,7 +286,7 @@ AppServices inMemoryServices({
       onCancelOrder: adopt.sellerCancel,
     ),
     account: account,
-    courses: courses ?? InMemoryCoursesRepository(),
+    courses: courses ?? coursesRepo,
     cache: cache,
     analytics: analytics,
     push: push,
