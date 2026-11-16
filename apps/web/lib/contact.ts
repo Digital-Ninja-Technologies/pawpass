@@ -1,8 +1,6 @@
-/** Support email shown on the legal pages. Set NEXT_PUBLIC_CONTACT_EMAIL; until then the pages point to Help in the app. */
-const raw = process.env.NEXT_PUBLIC_CONTACT_EMAIL ?? "";
+/** The public support email, shown on the legal pages. It is the same address as on the Google Play listing. */
+export const CONTACT_EMAIL = "thedigitalninjatechnologies@gmail.com";
 
 export function safeEmail(value: string): string {
   return /^[^\s@<>"]+@[^\s@<>"]+\.[^\s@<>"]+$/.test(value) ? value : "";
 }
-
-export const CONTACT_EMAIL = safeEmail(raw);

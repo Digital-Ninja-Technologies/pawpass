@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { PRIVACY, TERMS } from "./legal";
-import { safeEmail } from "./contact";
+import { CONTACT_EMAIL, safeEmail } from "./contact";
 
 describe("legal copy", () => {
   const text = JSON.stringify({ PRIVACY, TERMS });
@@ -17,5 +17,9 @@ describe("legal copy", () => {
   it("validates the contact email", () => {
     expect(safeEmail("help@pawpass.ng")).toBe("help@pawpass.ng");
     expect(safeEmail("not an email")).toBe("");
+  });
+  it("shows the same support email as the Google Play listing", () => {
+    expect(CONTACT_EMAIL).toBe("thedigitalninjatechnologies@gmail.com");
+    expect(safeEmail(CONTACT_EMAIL)).toBe(CONTACT_EMAIL);
   });
 });
