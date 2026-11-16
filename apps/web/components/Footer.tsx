@@ -16,7 +16,7 @@ export function Footer() {
         product · Lagos, Nigeria
       </span>
       <span>
-        <a href="/privacy">Privacy</a> · <a href="/terms">Terms</a>
+        <a href="/privacy">Privacy</a> · <a href="/terms">Terms</a> · <a href="/delete-account">Delete account</a>
       </span>
     </footer>
   );

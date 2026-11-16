@@ -1,7 +1,7 @@
 /** Draft privacy policy and terms. Facts come from docs/launch-checklist.md and the business rules in CLAUDE.md.
  * Have a Nigerian lawyer review both (including NDPA 2023 duties) before the app goes to the stores. */
 
-export const LEGAL_UPDATED = "6 November 2026";
+export const LEGAL_UPDATED = "16 November 2026";
 
 export type LegalSection = { title: string; body: string[]; list?: string[] };
 
@@ -20,8 +20,9 @@ export const PRIVACY: LegalSection[] = [
       "Your pets' details and health records, for the Pet Passport.",
       "Photos you choose or take: pet photos, and identity documents if you apply as a partner.",
       "What you write in the community: posts, comments and messages.",
-      "Your approximate location, only while the app is open and only if you allow it, to sort emergency vets by distance. We do not store it.",
-      "Six anonymous app events (app open, booking started, checkout started, share started, partner started, help opened). They carry no personal data and no advertising identifier.",
+      "Your approximate location, only if you allow it. The app uses it to sort emergency vets by distance and to tell you about lost pet alerts near you. We store your last known approximate location and use it for 30 days at most for those alerts. We also store the place you mark on a lost pet alert or a sighting you report. You can turn location off in your phone settings.",
+      "A notification token from your phone, so we can send reminders and booking updates. If you choose email reminders, we use your email address to send them.",
+      "Six app events (app open, booking started, checkout started, share started, partner started, help opened). They are linked to your account so we can count monthly active people. They carry no screen contents, no text you typed, no location and no advertising identifier.",
     ],
   },
   {
@@ -41,6 +42,7 @@ export const PRIVACY: LegalSection[] = [
       "Partner identity documents are seen only by OurPawPass staff who verify partners.",
       "Lost pet alerts never show your phone number. Finders reach you through in app chat.",
       "Paystack processes payments and payouts.",
+      "Supabase stores our database and files, Firebase (Google) delivers app notifications, and Resend sends reminder emails. They work only for us and may not use your data for anything else.",
       "When a pet changes hands, the passport moves to the new owner. The previous owner keeps a read only record.",
     ],
   },
@@ -53,7 +55,7 @@ export const PRIVACY: LegalSection[] = [
   {
     title: "Your choices",
     body: [
-      "You can edit your details in Settings, delete your account yourself from Privacy and sharing in the app, and turn off location or notifications in your phone settings. To ask for a copy of your data or a correction, contact us using the details below.",
+      "You can edit your details in Settings, delete your account yourself from Privacy and sharing in the app (or ask us at ourpawpass.com/delete-account), and turn off location or notifications in your phone settings. To ask for a copy of your data or a correction, contact us using the details below.",
       "Data is encrypted in transit.",
     ],
   },
@@ -64,6 +66,52 @@ export const PRIVACY: LegalSection[] = [
   {
     title: "Changes",
     body: ["If we change this policy in a way that matters, we will tell you in the app before it starts."],
+  },
+];
+
+/** The account deletion page. Google Play needs a web page where people can ask for their account to be deleted. */
+export const DELETE_ACCOUNT: LegalSection[] = [
+  {
+    title: "Delete it in the app",
+    body: ["This is the fastest way, and it takes about a minute."],
+    list: [
+      "Open OurPawPass and sign in.",
+      "Tap Me, then Privacy and sharing.",
+      "Tap Delete my account, read what happens, then type DELETE to confirm.",
+    ],
+  },
+  {
+    title: "If you cannot open the app",
+    body: [
+      "Email us from the address on your account, with the subject Delete my OurPawPass account. We may ask you to confirm it is you. We will confirm by email and finish within 30 days.",
+    ],
+  },
+  {
+    title: "What is deleted",
+    body: [],
+    list: [
+      "Your name, area, phone number and photo.",
+      "Your pets, their health records and photos, where nothing else depends on them. Where a booking or sale still points at a pet, the pet is emptied of everything about it.",
+      "Your posts, comments, likes and follows.",
+      "Your messages (the other person keeps their copy).",
+      "Your saved location, notification tokens and sign in.",
+    ],
+  },
+  {
+    title: "What we have to keep",
+    body: [
+      "Payment, booking and order records stay, because the law and other people's money depend on them. Your name is replaced with Deleted user, and your phone number, email address and address are removed.",
+    ],
+  },
+  {
+    title: "When it cannot be done yet",
+    body: [
+      "We cannot delete an account while a booking, puppy purchase, held payment, problem report or passport transfer is unfinished. The app tells you which one. Finish or cancel it, then try again.",
+    ],
+  },
+  {
+    title: "After you delete",
+    body: ["You are signed out and can never sign in to that account again. This cannot be undone. You can make a new account at any time."],
   },
 ];
 
