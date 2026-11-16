@@ -53,6 +53,8 @@ Partners (vets, service providers, breeders, shelters) can apply inside the app,
 
 ## 4. Privacy and data safety answers
 
+The full Google Play form is in `docs/play-data-safety.md`. The table below is the short version. **Location is stored, not just used** (see the gaps listed there).
+
 | Data | Collected | Why | Shared |
 | --- | --- | --- | --- |
 | Name, email, phone | Yes | Account, bookings, receipts | Only with a partner you book, name only |
