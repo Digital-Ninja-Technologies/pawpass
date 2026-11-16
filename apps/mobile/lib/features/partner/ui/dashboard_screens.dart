@@ -684,8 +684,7 @@ class _ApplicationsTabState extends State<ApplicationsTab> {
                       icon: PawIconData.passport,
                       tone: PawStateTone.teal,
                       title: 'No applications yet',
-                      message:
-                          'When someone applies to adopt, you will see them here. Sharing a pet to the community helps.',
+                      message: 'When someone applies to adopt, you will see them here. Sharing a pet to the community helps.',
                       actionLabel: 'See your pets',
                       onAction: () =>
                           StatefulNavigationShell.of(context).goBranch(1),
@@ -1160,7 +1159,11 @@ class _DayButton extends StatelessWidget {
       button: true,
       selected: selected,
       label:
-          '${dayHeading(day)}, ${dots == 0 ? 'no visits' : dots == 1 ? '1 visit' : '$dots visits'}',
+          '${dayHeading(day)}, ${dots == 0
+              ? 'no visits'
+              : dots == 1
+              ? '1 visit'
+              : '$dots visits'}',
       excludeSemantics: true,
       onTap: onTap,
       child: GestureDetector(
@@ -1185,10 +1188,10 @@ class _DayButton extends StatelessWidget {
                   fontSize: 11,
                 ),
               ),
-              Text('${dayNumber(day)}', style: PawText.heading22.copyWith(
-                fontSize: 18,
-                color: fg,
-              )),
+              Text(
+                '${dayNumber(day)}',
+                style: PawText.heading22.copyWith(fontSize: 18, color: fg),
+              ),
               SizedBox(
                 height: 6,
                 child: Row(
@@ -1239,7 +1242,10 @@ class _VisitTile extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text('${v.service} · ${v.petName}', style: PawText.body14Strong),
+                Text(
+                  '${v.service} · ${v.petName}',
+                  style: PawText.body14Strong,
+                ),
                 Text(
                   [v.ownerName, if (v.breed != null) v.breed!].join(' · '),
                   style: PawText.meta12.copyWith(color: PawColors.muted),

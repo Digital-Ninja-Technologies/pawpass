@@ -345,7 +345,10 @@ class SupabasePartnerRepository implements PartnerRepository {
         ],
       );
     } catch (e) {
-      throw _failure(e, 'We could not load your calendar. Pull down to try again.');
+      throw _failure(
+        e,
+        'We could not load your calendar. Pull down to try again.',
+      );
     }
   }
 

@@ -81,9 +81,7 @@ class _QrTagOrderScreenState extends State<QrTagOrderScreen>
                       Expanded(
                         child: PawErrorState(
                           title: 'We could not load the price',
-                          message:
-                              ctl.loadError ??
-                              'Something went wrong on our side. Please try again.',
+                          message: ctl.loadError ?? 'Something went wrong on our side. Please try again.',
                           onAction: ctl.load,
                         ),
                       ),

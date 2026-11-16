@@ -60,8 +60,7 @@ class _HelpArticlesScreenState extends State<HelpArticlesScreen> {
                         icon: PawIconData.search,
                         tone: PawStateTone.neutral,
                         title: 'We found nothing for that',
-                        message:
-                            'Try a shorter word, or check the spelling. You can also browse by topic.',
+                        message: 'Try a shorter word, or check the spelling. You can also browse by topic.',
                         actionLabel: 'Clear search',
                         onAction: _search.clear,
                       ),
@@ -100,7 +99,10 @@ class _HelpArticlesScreenState extends State<HelpArticlesScreen> {
                   Builder(
                     builder: (context) {
                       final list = _topic == null
-                          ? [for (final d in helpDocs) if (d.popular) d]
+                          ? [
+                              for (final d in helpDocs)
+                                if (d.popular) d,
+                            ]
                           : helpForTopic(_topic!);
                       return Column(
                         children: [

@@ -110,10 +110,8 @@ class CommentsController extends ChangeNotifier {
     final was = c.likedByMe;
     _replaceComment(
       c.id,
-      (x) => x.copyWith(
-        likedByMe: !was,
-        likeCount: x.likeCount + (was ? -1 : 1),
-      ),
+      (x) =>
+          x.copyWith(likedByMe: !was, likeCount: x.likeCount + (was ? -1 : 1)),
     );
     _notify();
     try {
@@ -137,10 +135,7 @@ class CommentsController extends ChangeNotifier {
     if (p == null) return;
     actionError = null;
     final was = p.likedByMe;
-    post = p.copyWith(
-      likedByMe: !was,
-      likeCount: p.likeCount + (was ? -1 : 1),
-    );
+    post = p.copyWith(likedByMe: !was, likeCount: p.likeCount + (was ? -1 : 1));
     _notify();
     try {
       final r = await _services.community.toggleLike(postId);

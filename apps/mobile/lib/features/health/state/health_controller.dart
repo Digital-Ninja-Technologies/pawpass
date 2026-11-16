@@ -277,6 +277,28 @@ class HealthController extends ChangeNotifier {
     }
   }
 
+  /// Takes a pet off the account, then reloads so the next pet (or the empty state) shows.
+  /// Returns null when done, or the reason in plain words when it could not be.
+  Future<String?> removePet(String petId) async {
+    busy = true;
+    _notify();
+    try {
+      await _services.pets.removePet(petId);
+      if (selectedId == petId) selectedId = null;
+      _records.remove(petId);
+      _details.remove(petId);
+      _photoUrls.remove(petId);
+      busy = false;
+      await load();
+      return null;
+    } on AppFailure catch (e) {
+      return e.message;
+    } finally {
+      busy = false;
+      _notify();
+    }
+  }
+
   void clearError() {
     if (error != null) {
       error = null;

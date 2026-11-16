@@ -402,7 +402,10 @@ void main() {
       final app = _App(signedInAs: 'tolu@example.com');
       await toAddPet(tester, app);
       await _tap(tester, 'Choose or type a breed');
-      expect(find.text('Not in the list? Type it here and tap "Use".'), findsOneWidget);
+      expect(
+        find.text('Not in the list? Type it here and tap "Use".'),
+        findsOneWidget,
+      );
       // Nothing typed yet: no Use button.
       expect(find.textContaining('Use "'), findsNothing);
       await tester.enterText(find.widgetWithText(TextField, ''), 'Kangal');
@@ -416,18 +419,19 @@ void main() {
       expect(app.pets.pets.single.breed, 'Kangal');
     });
 
-    testWidgets('a listed breed does not offer Use, and typing filters the list', (
-      tester,
-    ) async {
-      final app = _App(signedInAs: 'tolu@example.com');
-      await toAddPet(tester, app);
-      await _tap(tester, 'Choose or type a breed');
-      await tester.enterText(find.widgetWithText(TextField, ''), 'Boerboel');
-      await tester.pumpAndSettle();
-      expect(find.textContaining('Use "'), findsNothing);
-      expect(find.text('Rottweiler'), findsNothing);
-      expect(find.text('Boerboel'), findsWidgets);
-    });
+    testWidgets(
+      'a listed breed does not offer Use, and typing filters the list',
+      (tester) async {
+        final app = _App(signedInAs: 'tolu@example.com');
+        await toAddPet(tester, app);
+        await _tap(tester, 'Choose or type a breed');
+        await tester.enterText(find.widgetWithText(TextField, ''), 'Boerboel');
+        await tester.pumpAndSettle();
+        expect(find.textContaining('Use "'), findsNothing);
+        expect(find.text('Rottweiler'), findsNothing);
+        expect(find.text('Boerboel'), findsWidgets);
+      },
+    );
   });
 
   group('health history and reminders', () {

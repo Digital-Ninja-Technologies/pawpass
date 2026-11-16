@@ -14,10 +14,8 @@ enum TagColour {
   final Color colour;
   final Color ring;
 
-  static TagColour fromValue(String? v) => values.firstWhere(
-    (c) => c.value == v,
-    orElse: () => TagColour.teal,
-  );
+  static TagColour fromValue(String? v) =>
+      values.firstWhere((c) => c.value == v, orElse: () => TagColour.teal);
 }
 
 /// What a tag and its delivery cost. Set by the team in settings, never in the app.

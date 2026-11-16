@@ -162,9 +162,8 @@ class _ProfileSetupScreenState extends State<ProfileSetupScreen> {
             keyboardType: TextInputType.phone,
             textInputAction: TextInputAction.done,
             autofillHints: const [AutofillHints.telephoneNumber],
-            validator: (t) => t.trim().isEmpty || normalisePhone(t) != null
-                ? null
-                : 'Use a number like 0803 123 4567, or start with + and the country code.',
+            validator: (t) =>
+                t.trim().isEmpty || normalisePhone(t) != null ? null : 'Use a number like 0803 123 4567, or start with + and the country code.',
             onChanged: (v) {
               ob.phone = v;
               ob.clearError();

@@ -73,5 +73,6 @@ String postShareText({
 }
 
 /// The comment count as a short label: "No comments", "1 comment", "12 comments".
-String commentsLabel(int n) =>
-    n == 0 ? 'No comments' : (n == 1 ? '1 comment' : '${countLabel(n)} comments');
+String commentsLabel(int n) => n == 0
+    ? 'No comments'
+    : (n == 1 ? '1 comment' : '${countLabel(n)} comments');

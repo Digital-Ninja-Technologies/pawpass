@@ -65,26 +65,25 @@ class FeedPost {
     bool? likedByMe,
     bool? followingPet,
     int? commentCount,
-  }) =>
-      FeedPost(
-        id: id,
-        authorUserId: authorUserId,
-        authorName: authorName,
-        body: body,
-        createdAt: createdAt,
-        petId: petId,
-        petName: petName,
-        petSpecies: petSpecies,
-        petBreed: petBreed,
-        petPhotoPath: petPhotoPath,
-        mediaPaths: mediaPaths,
-        area: area,
-        likeCount: likeCount ?? this.likeCount,
-        likedByMe: likedByMe ?? this.likedByMe,
-        followingPet: followingPet ?? this.followingPet,
-        isMine: isMine,
-        commentCount: commentCount ?? this.commentCount,
-      );
+  }) => FeedPost(
+    id: id,
+    authorUserId: authorUserId,
+    authorName: authorName,
+    body: body,
+    createdAt: createdAt,
+    petId: petId,
+    petName: petName,
+    petSpecies: petSpecies,
+    petBreed: petBreed,
+    petPhotoPath: petPhotoPath,
+    mediaPaths: mediaPaths,
+    area: area,
+    likeCount: likeCount ?? this.likeCount,
+    likedByMe: likedByMe ?? this.likedByMe,
+    followingPet: followingPet ?? this.followingPet,
+    isMine: isMine,
+    commentCount: commentCount ?? this.commentCount,
+  );
 
   factory FeedPost.fromRow(Map<String, dynamic> r) => FeedPost(
     id: r['post_id'] as String,
@@ -412,10 +411,12 @@ class ChatThread {
   bool get isRequest => requestId != null;
 
   /// A request that this person has to accept or decline.
-  bool get needsMyAnswer => isRequest && requestStatus == 'pending' && !iRequested;
+  bool get needsMyAnswer =>
+      isRequest && requestStatus == 'pending' && !iRequested;
 
   /// A request this person sent that has not been accepted yet.
-  bool get waitingForThem => isRequest && requestStatus == 'pending' && iRequested;
+  bool get waitingForThem =>
+      isRequest && requestStatus == 'pending' && iRequested;
 
   /// Messages can be sent: not a request, or an accepted one.
   bool get canSend => !isRequest || requestStatus == 'accepted';

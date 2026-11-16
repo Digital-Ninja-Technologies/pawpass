@@ -434,4 +434,49 @@ void main() {
       expect(r.notifications.loads, before + 1);
     });
   });
+
+  group('removing a pet', () {
+    test('takes it off the list and selects the next one', () async {
+      final r = _Rig();
+      final bingo = await r.addPet('Bingo');
+      await r.addPet('Duke');
+      await r.reload();
+      r.controller.select(bingo.id);
+
+      final problem = await r.controller.removePet(bingo.id);
+      await r.settle();
+
+      expect(problem, isNull);
+      expect(r.controller.pets.map((p) => p.name), ['Duke']);
+      expect(r.controller.selected?.name, 'Duke');
+    });
+
+    test('shows the empty state after the last pet goes', () async {
+      final r = _Rig();
+      final bingo = await r.addPet('Bingo');
+      await r.reload();
+
+      await r.controller.removePet(bingo.id);
+      await r.settle();
+
+      expect(r.controller.pets, isEmpty);
+      expect(r.controller.selected, isNull);
+    });
+
+    test(
+      'keeps the pet and says why when something unfinished depends on it',
+      () async {
+        final r = _Rig();
+        final bingo = await r.addPet('Bingo');
+        await r.reload();
+        r.pets.removeBlocked[bingo.id] =
+            'This pet has a booking that is not finished.';
+
+        final problem = await r.controller.removePet(bingo.id);
+
+        expect(problem, 'This pet has a booking that is not finished.');
+        expect(r.controller.pets.map((p) => p.name), ['Bingo']);
+      },
+    );
+  });
 }

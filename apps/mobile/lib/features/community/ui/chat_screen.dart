@@ -211,63 +211,63 @@ class _ChatScreenState extends State<ChatScreen> {
                     ),
                   )
                 else
-                Container(
-                  decoration: const BoxDecoration(
-                    color: PawColors.surface,
-                    border: Border(top: BorderSide(color: PawColors.border)),
-                  ),
-                  padding: const EdgeInsets.fromLTRB(12, 8, 12, 12),
-                  child: Row(
-                    children: [
-                      RoundIconButton(
-                        icon: PawIconData.mapPin,
-                        semanticLabel: 'Share my location',
-                        onPressed: chat.sending ? () {} : chat.shareLocation,
-                      ),
-                      const SizedBox(width: 8),
-                      Expanded(
-                        child: TextField(
-                          controller: _text,
-                          minLines: 1,
-                          maxLines: 4,
-                          maxLength: 1000,
-                          textCapitalization: TextCapitalization.sentences,
-                          style: PawText.body15,
-                          decoration: InputDecoration(
-                            hintText: 'Message',
-                            counterText: '',
-                            filled: true,
-                            fillColor: PawColors.subtle,
-                            contentPadding: const EdgeInsets.symmetric(
-                              horizontal: 16,
-                              vertical: 12,
-                            ),
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(24),
-                              borderSide: BorderSide.none,
+                  Container(
+                    decoration: const BoxDecoration(
+                      color: PawColors.surface,
+                      border: Border(top: BorderSide(color: PawColors.border)),
+                    ),
+                    padding: const EdgeInsets.fromLTRB(12, 8, 12, 12),
+                    child: Row(
+                      children: [
+                        RoundIconButton(
+                          icon: PawIconData.mapPin,
+                          semanticLabel: 'Share my location',
+                          onPressed: chat.sending ? () {} : chat.shareLocation,
+                        ),
+                        const SizedBox(width: 8),
+                        Expanded(
+                          child: TextField(
+                            controller: _text,
+                            minLines: 1,
+                            maxLines: 4,
+                            maxLength: 1000,
+                            textCapitalization: TextCapitalization.sentences,
+                            style: PawText.body15,
+                            decoration: InputDecoration(
+                              hintText: 'Message',
+                              counterText: '',
+                              filled: true,
+                              fillColor: PawColors.subtle,
+                              contentPadding: const EdgeInsets.symmetric(
+                                horizontal: 16,
+                                vertical: 12,
+                              ),
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(24),
+                                borderSide: BorderSide.none,
+                              ),
                             ),
                           ),
                         ),
-                      ),
-                      const SizedBox(width: 8),
-                      RoundIconButton(
-                        icon: PawIconData.chevronRight,
-                        filled: true,
-                        semanticLabel: 'Send message',
-                        onPressed: () async {
-                          final text = _text.text;
-                          if (text.trim().isEmpty) {
-                            return;
-                          }
-                          final ok = await chat.send(text);
-                          if (ok) {
-                            _text.clear();
-                          }
-                        },
-                      ),
-                    ],
+                        const SizedBox(width: 8),
+                        RoundIconButton(
+                          icon: PawIconData.chevronRight,
+                          filled: true,
+                          semanticLabel: 'Send message',
+                          onPressed: () async {
+                            final text = _text.text;
+                            if (text.trim().isEmpty) {
+                              return;
+                            }
+                            final ok = await chat.send(text);
+                            if (ok) {
+                              _text.clear();
+                            }
+                          },
+                        ),
+                      ],
+                    ),
                   ),
-                ),
               ],
             ),
           ),
@@ -328,7 +328,10 @@ class _RequestBar extends StatelessWidget {
                   onPressed: busy
                       ? null
                       : () async {
-                          final ok = await chat.answerRequest(id, accept: false);
+                          final ok = await chat.answerRequest(
+                            id,
+                            accept: false,
+                          );
                           if (ok && context.mounted && context.canPop()) {
                             context.pop();
                           }

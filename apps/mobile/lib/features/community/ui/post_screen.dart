@@ -70,9 +70,7 @@ class _PostScreenState extends State<PostScreen> {
                       : post == null
                       ? PawErrorState(
                           title: 'We could not open this post',
-                          message:
-                              ctl.error ??
-                              'It may have been removed. Go back and try another.',
+                          message: ctl.error ?? 'It may have been removed. Go back and try another.',
                           onAction: () {
                             ctl.loading = false;
                             ctl.load();
@@ -161,7 +159,8 @@ class _PostScreenState extends State<PostScreen> {
                           ),
                         ),
                 ),
-                if (post != null) _Composer(ctl: ctl, text: _text, focus: _focus),
+                if (post != null)
+                  _Composer(ctl: ctl, text: _text, focus: _focus),
               ],
             ),
           ),
@@ -191,7 +190,9 @@ class _PostBody extends StatelessWidget {
         children: [
           InkWell(
             borderRadius: BorderRadius.circular(12),
-            onTap: p.petId == null ? null : () => context.push('/pet/${p.petId}'),
+            onTap: p.petId == null
+                ? null
+                : () => context.push('/pet/${p.petId}'),
             child: Row(
               children: [
                 PetMark(

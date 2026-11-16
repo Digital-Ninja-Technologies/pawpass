@@ -174,6 +174,16 @@ class InMemoryPetRepository implements PetRepository {
   @override
   Future<List<Pet>> myPets() async => List.of(pets);
 
+  /// Ids that cannot be removed yet, with the reason to show.
+  final removeBlocked = <String, String>{};
+
+  @override
+  Future<void> removePet(String petId) async {
+    final why = removeBlocked[petId];
+    if (why != null) throw AppFailure(why);
+    pets.removeWhere((p) => p.id == petId);
+  }
+
   @override
   Future<String?> photoUrl(Pet pet) async => null;
 }

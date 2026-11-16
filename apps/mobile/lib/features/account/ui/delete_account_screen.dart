@@ -145,7 +145,8 @@ class _DeleteAccountScreenState extends State<DeleteAccountScreen> {
                           label: 'Delete my account',
                           variant: PawButtonVariant.danger,
                           loading: ctl.deleting,
-                          onPressed: isDeleteConfirmed(_word.text) && ctl.canDelete
+                          onPressed:
+                              isDeleteConfirmed(_word.text) && ctl.canDelete
                               ? () async {
                                   final ok = await ctl.delete(_word.text);
                                   if (ok) await ctl.finish();

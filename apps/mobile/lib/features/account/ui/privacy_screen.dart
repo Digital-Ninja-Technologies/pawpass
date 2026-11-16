@@ -76,7 +76,8 @@ class _PrivacyScreenState extends State<PrivacyScreen> {
     _say(
       done
           ? sent
-          : (partner.ticketError ?? 'We could not send that. Please try again.'),
+          : (partner.ticketError ??
+                'We could not send that. Please try again.'),
     );
   }
 
@@ -184,10 +185,8 @@ class _PrivacyScreenState extends State<PrivacyScreen> {
                               PawListRow(
                                 title: 'Ask for a copy of my data',
                                 onTap: () => _ask(
-                                  message:
-                                      'Please send me a copy of the data OurPawPass holds about me.',
-                                  sent:
-                                      'Request sent. We will reply by email within a day.',
+                                  message: 'Please send me a copy of the data OurPawPass holds about me.',
+                                  sent: 'Request sent. We will reply by email within a day.',
                                 ),
                               ),
                               PawListRow(

@@ -251,6 +251,7 @@ class SupabasePetRepository implements PetRepository {
             .from('pets')
             .select()
             .eq('owner_user_id', _uid)
+            .filter('removed_at', 'is', null)
             .order('created_at'),
         (j) => [
           for (final r in (j as List))
@@ -259,6 +260,18 @@ class SupabasePetRepository implements PetRepository {
       );
     } catch (e) {
       throw _failure(e, fallback: 'We could not load your pets.');
+    }
+  }
+
+  @override
+  Future<void> removePet(String petId) async {
+    try {
+      await _client.rpc('remove_pet', params: {'p_pet': petId});
+    } catch (e) {
+      if (e is PostgrestException && e.code == 'P0001') {
+        throw AppFailure(e.message);
+      }
+      throw _failure(e, fallback: 'We could not remove this pet. Try again.');
     }
   }
 }

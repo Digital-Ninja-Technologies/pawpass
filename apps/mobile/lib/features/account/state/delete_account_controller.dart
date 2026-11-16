@@ -6,7 +6,8 @@ import '../../onboarding/domain/models.dart';
 /// What a person types to confirm. Matches the server.
 const deleteWord = 'DELETE';
 
-bool isDeleteConfirmed(String typed) => typed.trim().toUpperCase() == deleteWord;
+bool isDeleteConfirmed(String typed) =>
+    typed.trim().toUpperCase() == deleteWord;
 
 /// Deleting the account: shows what is in the way first, asks for the word DELETE, then erases and signs out.
 class DeleteAccountController extends ChangeNotifier {

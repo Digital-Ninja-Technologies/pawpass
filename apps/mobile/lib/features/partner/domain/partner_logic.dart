@@ -257,7 +257,11 @@ const _dayShort = ['MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT', 'SUN'];
 /// The instant of 00:00 Lagos time on the day [t] falls on.
 DateTime lagosDayStart(DateTime t) {
   final l = lagos(t);
-  return DateTime.utc(l.year, l.month, l.day).subtract(const Duration(hours: 1));
+  return DateTime.utc(
+    l.year,
+    l.month,
+    l.day,
+  ).subtract(const Duration(hours: 1));
 }
 
 /// The instant of 00:00 Lagos time on the Monday of the week [t] falls in.

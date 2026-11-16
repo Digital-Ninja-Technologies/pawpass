@@ -239,11 +239,8 @@ Future<void> showMessageRequestSheet(
     isScrollControlled: true,
     backgroundColor: PawColors.surface,
     showDragHandle: true,
-    builder: (ctx) => _RequestSheet(
-      petId: petId,
-      ownerName: ownerName,
-      petName: petName,
-    ),
+    builder: (ctx) =>
+        _RequestSheet(petId: petId, ownerName: ownerName, petName: petName),
   );
   if (id != null) {
     await router.push('/chat/$id');

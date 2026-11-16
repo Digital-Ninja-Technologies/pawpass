@@ -50,10 +50,16 @@ void main() {
 
   for (final c in PawCourseColors.all) {
     test('course colour ${c.key}: text on its card meets WCAG AA', () {
-      expect(contrastRatio(c.text, c.soft), greaterThanOrEqualTo(wcagAaNormalText));
+      expect(
+        contrastRatio(c.text, c.soft),
+        greaterThanOrEqualTo(wcagAaNormalText),
+      );
     });
     test('course colour ${c.key}: ink on its card meets WCAG AA', () {
-      expect(contrastRatio(PawColors.ink, c.soft), greaterThanOrEqualTo(wcagAaNormalText));
+      expect(
+        contrastRatio(PawColors.ink, c.soft),
+        greaterThanOrEqualTo(wcagAaNormalText),
+      );
     });
   }
 }

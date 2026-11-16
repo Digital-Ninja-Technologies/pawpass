@@ -147,12 +147,21 @@ void main() {
       tester,
     ) async {
       final rig = _Rig();
-      rig.community.receiveComment('post-luna', 'She is gorgeous!', who: 'Femi');
+      rig.community.receiveComment(
+        'post-luna',
+        'She is gorgeous!',
+        who: 'Femi',
+      );
       await _pump(tester, rig);
       await _toCommunity(tester);
-      expect(find.bySemanticsLabel('Comments, 1. Open to read and reply'), findsOneWidget);
+      expect(
+        find.bySemanticsLabel('Comments, 1. Open to read and reply'),
+        findsOneWidget,
+      );
       expect(find.bySemanticsLabel('Comment on this post'), findsWidgets);
-      await tester.tap(find.bySemanticsLabel('Comments, 1. Open to read and reply'));
+      await tester.tap(
+        find.bySemanticsLabel('Comments, 1. Open to read and reply'),
+      );
       await tester.pumpAndSettle();
       expect(find.text('1 comment'), findsOneWidget);
       expect(find.text('She is gorgeous!'), findsOneWidget);
@@ -170,7 +179,10 @@ void main() {
       expect(find.text('No comments'), findsOneWidget);
       expect(find.text('Be the first to comment.'), findsOneWidget);
 
-      await tester.enterText(find.widgetWithText(TextField, '').last, 'Lovely photo');
+      await tester.enterText(
+        find.widgetWithText(TextField, '').last,
+        'Lovely photo',
+      );
       await tester.tap(find.bySemanticsLabel('Post comment'));
       await tester.pumpAndSettle();
       expect(find.text('1 comment'), findsOneWidget);
@@ -180,7 +192,10 @@ void main() {
       // Reply
       await _tap(tester, 'Reply');
       expect(find.text('Replying to Tolu'), findsOneWidget);
-      await tester.enterText(find.widgetWithText(TextField, '').last, 'Thank you');
+      await tester.enterText(
+        find.widgetWithText(TextField, '').last,
+        'Thank you',
+      );
       await tester.tap(find.bySemanticsLabel('Post reply'));
       await tester.pumpAndSettle();
       expect(find.text('2 comments'), findsOneWidget);
@@ -208,26 +223,34 @@ void main() {
       expect(find.bySemanticsLabel('Comment on this post'), findsWidgets);
     });
 
-    testWidgets('an empty or too long comment is not sent, and a failure keeps the text', (
-      tester,
-    ) async {
-      final rig = _Rig();
-      await _pump(tester, rig);
-      await _toCommunity(tester);
-      await tester.tap(find.bySemanticsLabel('Comment on this post').first);
-      await tester.pumpAndSettle();
-      await tester.tap(find.bySemanticsLabel('Post comment'));
-      await tester.pumpAndSettle();
-      expect(find.text('Write a comment first.'), findsOneWidget);
-      expect(rig.community.postCommentCount('post-luna'), 0);
+    testWidgets(
+      'an empty or too long comment is not sent, and a failure keeps the text',
+      (tester) async {
+        final rig = _Rig();
+        await _pump(tester, rig);
+        await _toCommunity(tester);
+        await tester.tap(find.bySemanticsLabel('Comment on this post').first);
+        await tester.pumpAndSettle();
+        await tester.tap(find.bySemanticsLabel('Post comment'));
+        await tester.pumpAndSettle();
+        expect(find.text('Write a comment first.'), findsOneWidget);
+        expect(rig.community.postCommentCount('post-luna'), 0);
 
-      rig.community.failNextComment = const AppFailure('No connection.');
-      await tester.enterText(find.widgetWithText(TextField, '').last, 'Hello there');
-      await tester.tap(find.bySemanticsLabel('Post comment'));
-      await tester.pumpAndSettle();
-      expect(find.text('No connection.'), findsOneWidget);
-      expect(find.text('Hello there'), findsOneWidget, reason: 'the text stays');
-    });
+        rig.community.failNextComment = const AppFailure('No connection.');
+        await tester.enterText(
+          find.widgetWithText(TextField, '').last,
+          'Hello there',
+        );
+        await tester.tap(find.bySemanticsLabel('Post comment'));
+        await tester.pumpAndSettle();
+        expect(find.text('No connection.'), findsOneWidget);
+        expect(
+          find.text('Hello there'),
+          findsOneWidget,
+          reason: 'the text stays',
+        );
+      },
+    );
 
     testWidgets('someone else\'s comment can be reported, not removed', (
       tester,
@@ -236,7 +259,9 @@ void main() {
       rig.community.receiveComment('post-luna', 'Buy my stuff', who: 'Spammer');
       await _pump(tester, rig);
       await _toCommunity(tester);
-      await tester.tap(find.bySemanticsLabel('Comments, 1. Open to read and reply'));
+      await tester.tap(
+        find.bySemanticsLabel('Comments, 1. Open to read and reply'),
+      );
       await tester.pumpAndSettle();
       await tester.tap(find.byTooltip('More about this comment').first);
       await tester.pumpAndSettle();
@@ -258,66 +283,77 @@ void main() {
   });
 
   group('Share', () {
-    testWidgets('share on WhatsApp opens a message with the app link, and copy works', (
-      tester,
-    ) async {
-      final rig = _Rig();
-      await _pump(tester, rig);
-      await _toCommunity(tester);
-      await tester.tap(find.bySemanticsLabel('Share this post').first);
-      await tester.pumpAndSettle();
-      expect(find.text('Share this post'), findsOneWidget);
-      await _tap(tester, 'Share on WhatsApp');
-      final uri = rig.links.opened.single;
-      expect(uri.host, 'wa.me');
-      expect(uri.queryParameters['text'], contains('Luna'));
-      expect(uri.queryParameters['text'], contains('Get the app'));
-      expect(uri.queryParameters['text'], isNot(contains('health')));
+    testWidgets(
+      'share on WhatsApp opens a message with the app link, and copy works',
+      (tester) async {
+        final rig = _Rig();
+        await _pump(tester, rig);
+        await _toCommunity(tester);
+        await tester.tap(find.bySemanticsLabel('Share this post').first);
+        await tester.pumpAndSettle();
+        expect(find.text('Share this post'), findsOneWidget);
+        await _tap(tester, 'Share on WhatsApp');
+        final uri = rig.links.opened.single;
+        expect(uri.host, 'wa.me');
+        expect(uri.queryParameters['text'], contains('Luna'));
+        expect(uri.queryParameters['text'], contains('Get the app'));
+        expect(uri.queryParameters['text'], isNot(contains('health')));
 
-      await tester.tap(find.bySemanticsLabel('Share this post').first);
-      await tester.pumpAndSettle();
-      await _tap(tester, 'Copy');
-      expect(rig.links.copied.single, contains('on OurPawPass'));
-    });
+        await tester.tap(find.bySemanticsLabel('Share this post').first);
+        await tester.pumpAndSettle();
+        await _tap(tester, 'Copy');
+        expect(rig.links.copied.single, contains('on OurPawPass'));
+      },
+    );
   });
 
   group('Message requests', () {
-    testWidgets('ask an owner to chat from their post, then wait for them to accept', (
-      tester,
-    ) async {
-      final rig = _Rig();
-      await _pump(tester, rig);
-      await _toCommunity(tester);
-      await tester.tap(find.byTooltip('More about this post').first);
-      await tester.pumpAndSettle();
-      await _tap(tester, 'Message Kemi');
-      expect(find.text('Message Kemi'), findsOneWidget);
-      expect(find.textContaining('has to accept before you can chat'), findsOneWidget);
-      // Nothing to send until something is written.
-      final send = find.widgetWithText(PawButton, 'Send request');
-      expect(tester.widget<PawButton>(send).onPressed, isNull);
-      await tester.enterText(find.widgetWithText(TextField, '').last, 'Hi Kemi, where did you get Luna?');
-      await tester.pump();
-      await tester.tap(send);
-      await tester.pumpAndSettle();
+    testWidgets(
+      'ask an owner to chat from their post, then wait for them to accept',
+      (tester) async {
+        final rig = _Rig();
+        await _pump(tester, rig);
+        await _toCommunity(tester);
+        await tester.tap(find.byTooltip('More about this post').first);
+        await tester.pumpAndSettle();
+        await _tap(tester, 'Message Kemi');
+        expect(find.text('Message Kemi'), findsOneWidget);
+        expect(
+          find.textContaining('has to accept before you can chat'),
+          findsOneWidget,
+        );
+        // Nothing to send until something is written.
+        final send = find.widgetWithText(PawButton, 'Send request');
+        expect(tester.widget<PawButton>(send).onPressed, isNull);
+        await tester.enterText(
+          find.widgetWithText(TextField, '').last,
+          'Hi Kemi, where did you get Luna?',
+        );
+        await tester.pump();
+        await tester.tap(send);
+        await tester.pumpAndSettle();
 
-      // We are in the chat: our message is there, but we cannot send more yet.
-      expect(find.text('Hi Kemi, where did you get Luna?'), findsOneWidget);
-      expect(find.text('About Luna'), findsOneWidget);
-      expect(find.textContaining('About: About'), findsNothing);
-      expect(find.textContaining('Waiting for Kemi to accept'), findsOneWidget);
-      expect(find.bySemanticsLabel('Send message'), findsNothing);
+        // We are in the chat: our message is there, but we cannot send more yet.
+        expect(find.text('Hi Kemi, where did you get Luna?'), findsOneWidget);
+        expect(find.text('About Luna'), findsOneWidget);
+        expect(find.textContaining('About: About'), findsNothing);
+        expect(
+          find.textContaining('Waiting for Kemi to accept'),
+          findsOneWidget,
+        );
+        expect(find.bySemanticsLabel('Send message'), findsNothing);
 
-      // Kemi accepts: the composer appears.
-      final conv = rig.community.lastConversationId;
-      rig.community.answerFromOther(conv, accept: true);
-      await _back(tester);
-      await _tapIcon(tester, 'Messages');
-      await tester.tap(find.text('Kemi').first);
-      await tester.pumpAndSettle();
-      expect(find.bySemanticsLabel('Send message'), findsOneWidget);
-      expect(find.textContaining('Waiting for Kemi'), findsNothing);
-    });
+        // Kemi accepts: the composer appears.
+        final conv = rig.community.lastConversationId;
+        rig.community.answerFromOther(conv, accept: true);
+        await _back(tester);
+        await _tapIcon(tester, 'Messages');
+        await tester.tap(find.text('Kemi').first);
+        await tester.pumpAndSettle();
+        expect(find.bySemanticsLabel('Send message'), findsOneWidget);
+        expect(find.textContaining('Waiting for Kemi'), findsNothing);
+      },
+    );
 
     testWidgets('from a pet profile, and a second tap reuses the same chat', (
       tester,
@@ -333,24 +369,28 @@ void main() {
       expect(find.text('Message Kemi'), findsOneWidget);
     });
 
-    testWidgets('a request sent to you can be accepted, and then you can reply', (
-      tester,
-    ) async {
-      final rig = _Rig();
-      await _pump(tester, rig);
-      final conv = rig.community.incomingRequest('Amaka', 'Is Bingo for adoption?');
-      await _openMessages(tester);
-      expect(find.text('MESSAGE REQUESTS'), findsOneWidget);
-      expect(find.text('Amaka wants to message you'), findsOneWidget);
-      expect(find.text('Is Bingo for adoption?'), findsOneWidget);
-      await tester.tap(find.widgetWithText(PawButton, 'Accept'));
-      await tester.pumpAndSettle();
-      expect(find.text('MESSAGE REQUESTS'), findsNothing);
-      expect(find.text('Amaka'), findsOneWidget);
-      await _tap(tester, 'Amaka');
-      expect(find.bySemanticsLabel('Send message'), findsOneWidget);
-      expect(conv, isNotEmpty);
-    });
+    testWidgets(
+      'a request sent to you can be accepted, and then you can reply',
+      (tester) async {
+        final rig = _Rig();
+        await _pump(tester, rig);
+        final conv = rig.community.incomingRequest(
+          'Amaka',
+          'Is Bingo for adoption?',
+        );
+        await _openMessages(tester);
+        expect(find.text('MESSAGE REQUESTS'), findsOneWidget);
+        expect(find.text('Amaka wants to message you'), findsOneWidget);
+        expect(find.text('Is Bingo for adoption?'), findsOneWidget);
+        await tester.tap(find.widgetWithText(PawButton, 'Accept'));
+        await tester.pumpAndSettle();
+        expect(find.text('MESSAGE REQUESTS'), findsNothing);
+        expect(find.text('Amaka'), findsOneWidget);
+        await _tap(tester, 'Amaka');
+        expect(find.bySemanticsLabel('Send message'), findsOneWidget);
+        expect(conv, isNotEmpty);
+      },
+    );
 
     testWidgets('you cannot reply before accepting, and declining removes it', (
       tester,
@@ -360,7 +400,10 @@ void main() {
       rig.community.incomingRequest('Amaka', 'Is Bingo for adoption?');
       await _openMessages(tester);
       await _tap(tester, 'Amaka wants to message you');
-      expect(find.textContaining('They cannot send more until you accept'), findsOneWidget);
+      expect(
+        find.textContaining('They cannot send more until you accept'),
+        findsOneWidget,
+      );
       expect(find.bySemanticsLabel('Send message'), findsNothing);
       await tester.tap(find.widgetWithText(PawButton, 'Decline'));
       await tester.pumpAndSettle();
@@ -384,20 +427,21 @@ void main() {
       );
     });
 
-    testWidgets('you cannot message your own pet, or use an empty first message', (
-      tester,
-    ) async {
-      final rig = _Rig();
-      await _pump(tester, rig);
-      final bingo = (await rig.pets.myPets()).first;
-      expect(
-        () => rig.community.requestChat(bingo.id, 'Hello'),
-        throwsA(isA<AppFailure>()),
-      );
-      expect(
-        () => rig.community.requestChat('pet-luna', '   '),
-        throwsA(isA<AppFailure>()),
-      );
-    });
+    testWidgets(
+      'you cannot message your own pet, or use an empty first message',
+      (tester) async {
+        final rig = _Rig();
+        await _pump(tester, rig);
+        final bingo = (await rig.pets.myPets()).first;
+        expect(
+          () => rig.community.requestChat(bingo.id, 'Hello'),
+          throwsA(isA<AppFailure>()),
+        );
+        expect(
+          () => rig.community.requestChat('pet-luna', '   '),
+          throwsA(isA<AppFailure>()),
+        );
+      },
+    );
   });
 }

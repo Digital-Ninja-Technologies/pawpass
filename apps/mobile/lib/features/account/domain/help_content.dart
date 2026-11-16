@@ -61,8 +61,7 @@ const helpDocs = <HelpDoc>[
     title: 'How escrow protects you',
     summary: 'Why your money is held until you confirm',
     popular: true,
-    intro:
-        'When you pay for a visit or a puppy, OurPawPass holds the money. The partner is paid only after you say it went well.',
+    intro: 'When you pay for a visit or a puppy, OurPawPass holds the money. The partner is paid only after you say it went well.',
     steps: [
       HelpStep(
         'You pay',
@@ -78,8 +77,7 @@ const helpDocs = <HelpDoc>[
       ),
       HelpStep('The partner is paid', 'Payouts run every Monday.'),
     ],
-    callout:
-        'Something wrong? Report a problem before you confirm. The payout waits until our team decides.',
+    callout: 'Something wrong? Report a problem before you confirm. The payout waits until our team decides.',
     related: ['refunds', 'dispute'],
   ),
   HelpDoc(
@@ -88,8 +86,7 @@ const helpDocs = <HelpDoc>[
     title: 'Cancelling and refunds',
     summary: 'Free up to 2 hours before a visit',
     popular: true,
-    intro:
-        'You can cancel a booking for free up to 2 hours before it starts. If a provider or seller cancels, you are refunded in full.',
+    intro: 'You can cancel a booking for free up to 2 hours before it starts. If a provider or seller cancels, you are refunded in full.',
     steps: [
       HelpStep(
         'Cancel in time',
@@ -111,8 +108,7 @@ const helpDocs = <HelpDoc>[
     topic: HelpTopic.payments,
     title: 'Reporting a problem with a booking',
     summary: 'How disputes are decided',
-    intro:
-        'If a visit did not go as agreed, report it from My bookings before you confirm. Nobody is paid while we look into it.',
+    intro: 'If a visit did not go as agreed, report it from My bookings before you confirm. Nobody is paid while we look into it.',
     steps: [
       HelpStep(
         'Tell us what happened',
@@ -135,10 +131,12 @@ const helpDocs = <HelpDoc>[
     title: 'The 72 hour vet check after a puppy sale',
     summary: 'What qualifies for a full refund',
     popular: true,
-    intro:
-        'After you collect a puppy, you have 72 hours to get a vet to check them. The seller is paid after that window, if there is no problem.',
+    intro: 'After you collect a puppy, you have 72 hours to get a vet to check them. The seller is paid after that window, if there is no problem.',
     steps: [
-      HelpStep('Collect your puppy', 'The seller confirms the handover in the app.'),
+      HelpStep(
+        'Collect your puppy',
+        'The seller confirms the handover in the app.',
+      ),
       HelpStep(
         'See a vet within 72 hours',
         'A vet found through OurPawPass can add the result to the passport with a Vet verified badge.',
@@ -148,8 +146,7 @@ const helpDocs = <HelpDoc>[
         'A health problem confirmed by a vet in that time qualifies for a full refund.',
       ),
     ],
-    callout:
-        'Report the problem inside the 72 hours. After that, the seller is paid.',
+    callout: 'Report the problem inside the 72 hours. After that, the seller is paid.',
     related: ['buying', 'escrow'],
   ),
   HelpDoc(
@@ -157,14 +154,16 @@ const helpDocs = <HelpDoc>[
     topic: HelpTopic.buying,
     title: 'Buying a puppy safely',
     summary: 'Deposit, balance and the passport',
-    intro:
-        'Puppies are sold only by verified breeders and shelters. Your money stays in escrow until the check window has passed.',
+    intro: 'Puppies are sold only by verified breeders and shelters. Your money stays in escrow until the check window has passed.',
     steps: [
       HelpStep(
         'Pay the deposit',
         'A third of the price, plus a small protection fee. It is held in escrow.',
       ),
-      HelpStep('Collect and pay the balance', 'You pay the rest when you meet your puppy.'),
+      HelpStep(
+        'Collect and pay the balance',
+        'You pay the rest when you meet your puppy.',
+      ),
       HelpStep(
         'Accept the passport',
         'The passport moves to you. The previous owner keeps a read only record.',
@@ -177,8 +176,7 @@ const helpDocs = <HelpDoc>[
     topic: HelpTopic.buying,
     title: 'Adopting from a shelter',
     summary: 'Applications, home visits and handover',
-    intro:
-        'Shelters check that a home is right before they approve an adoption. You apply in the app and the shelter replies there.',
+    intro: 'Shelters check that a home is right before they approve an adoption. You apply in the app and the shelter replies there.',
     steps: [
       HelpStep(
         'Apply',
@@ -200,12 +198,20 @@ const helpDocs = <HelpDoc>[
     topic: HelpTopic.passport,
     title: 'What is a Pet Passport?',
     summary: 'Identity, health records and history in one place',
-    intro:
-        'Every pet gets one Pet Passport. It holds their identity, vaccines and treatments, vet visits, origin and ownership history.',
+    intro: 'Every pet gets one Pet Passport. It holds their identity, vaccines and treatments, vet visits, origin and ownership history.',
     steps: [
-      HelpStep('Add records', 'Photograph or type in vaccines and treatments. We set reminders for the next ones.'),
-      HelpStep('Records from vets', 'A record added by a verified vet gets a Vet verified badge.'),
-      HelpStep('Keep it private', 'Records are private by default. Only you see them unless you share.'),
+      HelpStep(
+        'Add records',
+        'Photograph or type in vaccines and treatments. We set reminders for the next ones.',
+      ),
+      HelpStep(
+        'Records from vets',
+        'A record added by a verified vet gets a Vet verified badge.',
+      ),
+      HelpStep(
+        'Keep it private',
+        'Records are private by default. Only you see them unless you share.',
+      ),
     ],
     related: ['sharing'],
   ),
@@ -215,12 +221,20 @@ const helpDocs = <HelpDoc>[
     title: "Sharing your pet's passport safely",
     summary: 'Links and QR codes that expire',
     popular: true,
-    intro:
-        "Open your pet's passport and choose Share with vet. You get a link and a QR code that stop working after the time you choose.",
+    intro: "Open your pet's passport and choose Share with vet. You get a link and a QR code that stop working after the time you choose.",
     steps: [
-      HelpStep('Choose what a vet sees', 'Health records, origin and parents, and whether the vet may add records.'),
-      HelpStep('Choose how long', 'From 1 hour to 7 days. After that the link stops working.'),
-      HelpStep('Stop early', 'Open Privacy and sharing, then Stop sharing. The link stops working at once.'),
+      HelpStep(
+        'Choose what a vet sees',
+        'Health records, origin and parents, and whether the vet may add records.',
+      ),
+      HelpStep(
+        'Choose how long',
+        'From 1 hour to 7 days. After that the link stops working.',
+      ),
+      HelpStep(
+        'Stop early',
+        'Open Privacy and sharing, then Stop sharing. The link stops working at once.',
+      ),
     ],
     related: ['passport'],
   ),
@@ -229,12 +243,17 @@ const helpDocs = <HelpDoc>[
     topic: HelpTopic.booking,
     title: 'Booking a vet, groomer, trainer or boarding',
     summary: 'Pick a time, pay, and the passport is shared',
-    intro:
-        'Choose a verified provider, pick a free time and pay. Your payment is held until you confirm the visit.',
+    intro: 'Choose a verified provider, pick a free time and pay. Your payment is held until you confirm the visit.',
     steps: [
-      HelpStep('Pick a time', 'Only free times are shown. If someone books it first, we show you what is free now.'),
+      HelpStep(
+        'Pick a time',
+        'Only free times are shown. If someone books it first, we show you what is free now.',
+      ),
       HelpStep('Pay', 'Card, bank transfer or USSD on Paystack.'),
-      HelpStep('Go to the visit', 'After the visit, confirm it. Then the provider is paid.'),
+      HelpStep(
+        'Go to the visit',
+        'After the visit, confirm it. Then the provider is paid.',
+      ),
     ],
     related: ['escrow', 'refunds'],
   ),
@@ -244,12 +263,20 @@ const helpDocs = <HelpDoc>[
     title: 'What to do if your pet is lost',
     summary: 'Alerts, chat and Lost mode',
     popular: true,
-    intro:
-        'Report your pet as lost from Community. People near where your pet was last seen are told, without your phone number.',
+    intro: 'Report your pet as lost from Community. People near where your pet was last seen are told, without your phone number.',
     steps: [
-      HelpStep('Report them lost', 'Add a photo, where and when, and anything that helps.'),
-      HelpStep('People nearby are told', 'The alert reaches people within 5 km by default, and closes after 14 days.'),
-      HelpStep('Chat safely', 'Finders message you in the app. Your number stays hidden.'),
+      HelpStep(
+        'Report them lost',
+        'Add a photo, where and when, and anything that helps.',
+      ),
+      HelpStep(
+        'People nearby are told',
+        'The alert reaches people within 5 km by default, and closes after 14 days.',
+      ),
+      HelpStep(
+        'Chat safely',
+        'Finders message you in the app. Your number stays hidden.',
+      ),
     ],
     callout: 'If your pet has a QR tag, it switches to Lost mode when you report them.',
     related: ['qr-tags'],
@@ -259,12 +286,20 @@ const helpDocs = <HelpDoc>[
     topic: HelpTopic.lost,
     title: 'How QR tags work',
     summary: 'A collar tag anyone can scan',
-    intro:
-        'A QR tag goes on your pet\'s collar. Anyone who scans it can message you through OurPawPass, and your number stays hidden.',
+    intro: 'A QR tag goes on your pet\'s collar. Anyone who scans it can message you through OurPawPass, and your number stays hidden.',
     steps: [
-      HelpStep('Order a tag', 'Open Me, then QR tags. Pick your pet, a colour and where to deliver it.'),
-      HelpStep('We ship it', 'Delivery in Lagos takes 2 to 4 days. We tell you when it is on its way.'),
-      HelpStep('Put it on the collar', 'If your pet is ever lost, report them and the tag switches to Lost mode.'),
+      HelpStep(
+        'Order a tag',
+        'Open Me, then QR tags. Pick your pet, a colour and where to deliver it.',
+      ),
+      HelpStep(
+        'We ship it',
+        'Delivery in Lagos takes 2 to 4 days. We tell you when it is on its way.',
+      ),
+      HelpStep(
+        'Put it on the collar',
+        'If your pet is ever lost, report them and the tag switches to Lost mode.',
+      ),
     ],
     related: ['lost'],
   ),
@@ -273,12 +308,20 @@ const helpDocs = <HelpDoc>[
     topic: HelpTopic.partners,
     title: 'Becoming a partner',
     summary: 'Verify your business in about ten minutes',
-    intro:
-        'Vets, groomers, trainers, boarding, breeders and shelters can apply in the app. You cannot go live until we approve you.',
+    intro: 'Vets, groomers, trainers, boarding, breeders and shelters can apply in the app. You cannot go live until we approve you.',
     steps: [
-      HelpStep('Apply', 'Open Me, then Become a partner. Tell us about your business.'),
-      HelpStep('Upload your documents', 'We check your business and, for vets, your licence.'),
-      HelpStep('We review', 'We aim to decide within 48 hours. We may ask for more information.'),
+      HelpStep(
+        'Apply',
+        'Open Me, then Become a partner. Tell us about your business.',
+      ),
+      HelpStep(
+        'Upload your documents',
+        'We check your business and, for vets, your licence.',
+      ),
+      HelpStep(
+        'We review',
+        'We aim to decide within 48 hours. We may ask for more information.',
+      ),
     ],
     related: ['payouts'],
   ),
@@ -287,12 +330,14 @@ const helpDocs = <HelpDoc>[
     topic: HelpTopic.partners,
     title: 'When partners are paid',
     summary: 'Payouts run every Monday',
-    intro:
-        'Partners are paid every Monday for visits that owners have confirmed, minus the OurPawPass commission.',
+    intro: 'Partners are paid every Monday for visits that owners have confirmed, minus the OurPawPass commission.',
     steps: [
       HelpStep('Owner confirms', 'The money moves from held to ready.'),
       HelpStep('Monday payout', 'Ready money is sent to your bank account.'),
-      HelpStep('Disputes', 'If an owner reports a problem, that payment waits until our team decides.'),
+      HelpStep(
+        'Disputes',
+        'If an owner reports a problem, that payment waits until our team decides.',
+      ),
     ],
     related: ['become-partner'],
   ),

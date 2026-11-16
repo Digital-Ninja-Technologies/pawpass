@@ -1017,15 +1017,19 @@ void main() {
     ) async {
       final rig = _Rig();
       _approve(rig, PartnerType.shelter, 'Lagos Paws Rescue');
-      ShelterApplication app(String id, String who, String pet, ApplicationState s) =>
-          ShelterApplication(
-            id: id,
-            listingId: 'l$id',
-            petName: pet,
-            applicantName: who,
-            state: s,
-            createdAt: _today,
-          );
+      ShelterApplication app(
+        String id,
+        String who,
+        String pet,
+        ApplicationState s,
+      ) => ShelterApplication(
+        id: id,
+        listingId: 'l$id',
+        petName: pet,
+        applicantName: who,
+        state: s,
+        createdAt: _today,
+      );
       rig.partner.applications = [
         app('1', 'Tolu', 'Ada', ApplicationState.submitted),
         app('2', 'Seun', 'Kofi', ApplicationState.homeVisit),

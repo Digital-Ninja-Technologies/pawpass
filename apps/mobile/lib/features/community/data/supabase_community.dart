@@ -97,10 +97,9 @@ class SupabaseCommunityRepository implements CommunityRepository {
   }) async {
     try {
       return await _client.rpc(
-            'add_comment',
-            params: {'p_post': postId, 'p_body': body, 'p_parent': parentId},
-          )
-          as String;
+        'add_comment',
+        params: {'p_post': postId, 'p_body': body, 'p_parent': parentId},
+      ) as String;
     } catch (e) {
       throw _failure(e, 'We could not post your comment. Please try again.');
     }
@@ -120,10 +119,9 @@ class SupabaseCommunityRepository implements CommunityRepository {
     try {
       final r = Map<String, dynamic>.from(
         await _client.rpc(
-              'toggle_comment_like',
-              params: {'p_comment': commentId},
-            )
-            as Map,
+          'toggle_comment_like',
+          params: {'p_comment': commentId},
+        ) as Map,
       );
       return (liked: r['liked'] == true, count: (r['count'] as num).toInt());
     } catch (e) {
@@ -365,10 +363,9 @@ class SupabaseCommunityRepository implements CommunityRepository {
   Future<String> requestChat(String petId, String message) async {
     try {
       return await _client.rpc(
-            'request_chat',
-            params: {'p_pet': petId, 'p_message': message},
-          )
-          as String;
+        'request_chat',
+        params: {'p_pet': petId, 'p_message': message},
+      ) as String;
     } catch (e) {
       throw _failure(e, 'We could not send your message. Please try again.');
     }

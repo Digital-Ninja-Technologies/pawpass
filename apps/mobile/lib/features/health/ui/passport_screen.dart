@@ -76,6 +76,15 @@ class _PassportScreenState extends State<PassportScreen> {
                       icon: PawIconData.calendar,
                     ),
                   },
+                  const SizedBox(height: 24),
+                  Center(
+                    child: TextLinkButton(
+                      label: 'Remove ${pet.name} from my account',
+                      color: PawColors.danger,
+                      alignment: Alignment.center,
+                      onPressed: () => _confirmRemove(context, pet),
+                    ),
+                  ),
                 ],
               ],
             ),
@@ -84,6 +93,43 @@ class _PassportScreenState extends State<PassportScreen> {
       },
     );
   }
+}
+
+Future<void> _confirmRemove(BuildContext context, Pet pet) async {
+  final health = AppScope.of(context).health;
+  final messenger = ScaffoldMessenger.of(context);
+  final yes = await showDialog<bool>(
+    context: context,
+    builder: (ctx) => AlertDialog(
+      backgroundColor: PawColors.surface,
+      title: Text('Remove ${pet.name}?', style: PawText.heading22),
+      content: Text(
+        'This takes ${pet.name} and their health records off your account. Anyone you shared the passport with loses access. You cannot undo this.',
+        style: PawText.body15,
+      ),
+      actions: [
+        TextButton(
+          onPressed: () => Navigator.pop(ctx, false),
+          child: Text('Keep ${pet.name}'),
+        ),
+        TextButton(
+          onPressed: () => Navigator.pop(ctx, true),
+          child: Text(
+            'Remove',
+            style: TextStyle(
+              color: PawColors.danger,
+              fontWeight: FontWeight.w700,
+            ),
+          ),
+        ),
+      ],
+    ),
+  );
+  if (yes != true) return;
+  final problem = await health.removePet(pet.id);
+  messenger.showSnackBar(
+    SnackBar(content: Text(problem ?? '${pet.name} was removed.')),
+  );
 }
 
 class _TopBar extends StatelessWidget {

@@ -59,6 +59,10 @@ abstract class PetRepository {
 
   Future<List<Pet>> myPets();
 
+  /// Takes the pet off the person's account (see the `remove_pet` database function). Throws an
+  /// [AppFailure] in plain words when something unfinished, like a booking, still depends on it.
+  Future<void> removePet(String petId);
+
   /// A short lived link to the pet's photo (the bucket is private), or null if there is none.
   Future<String?> photoUrl(Pet pet);
 }

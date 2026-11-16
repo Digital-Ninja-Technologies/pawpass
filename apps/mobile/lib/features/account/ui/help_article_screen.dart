@@ -34,7 +34,8 @@ class _HelpArticleScreenState extends State<HelpArticleScreen> {
               Expanded(
                 child: PawErrorState(
                   title: 'We could not find that article',
-                  message: 'It may have moved. Browse the help articles instead.',
+                  message:
+                      'It may have moved. Browse the help articles instead.',
                   actionLabel: 'Browse help articles',
                   onAction: () => context.go('/help/articles'),
                 ),
@@ -44,9 +45,7 @@ class _HelpArticleScreenState extends State<HelpArticleScreen> {
         ),
       );
     }
-    final related = [
-      for (final id in doc.related) ?helpDocById(id),
-    ];
+    final related = [for (final id in doc.related) ?helpDocById(id)];
     return Scaffold(
       backgroundColor: PawColors.ground,
       body: SafeArea(

@@ -159,8 +159,7 @@ class TagOrderController extends ChangeNotifier {
           intent = null;
         case PaymentOutcome.pending:
           stage = TagStage.waiting;
-          payNotice =
-              'We have not received your payment yet. If you have paid, wait a moment and check again.';
+          payNotice = 'We have not received your payment yet. If you have paid, wait a moment and check again.';
         case PaymentOutcome.failed:
           stage = TagStage.idle;
           intent = null;

@@ -383,8 +383,11 @@ class InMemoryCommunityRepository implements CommunityRepository {
   }
 
   /// Test hook: how many comments a post shows.
-  int postCommentCount(String postId) =>
-      _posts.firstWhere((p) => p.id == postId).comments.where(_commentShown).length;
+  int postCommentCount(String postId) => _posts
+      .firstWhere((p) => p.id == postId)
+      .comments
+      .where(_commentShown)
+      .length;
 
   /// Test hook: the conversation made most recently.
   String get lastConversationId => _threads.last.id;
@@ -783,7 +786,11 @@ class InMemoryCommunityRepository implements CommunityRepository {
   }
 
   /// Test and demo hook: someone asks to chat about one of this person's pets.
-  String incomingRequest(String who, String message, {String petName = 'Bingo'}) {
+  String incomingRequest(
+    String who,
+    String message, {
+    String petName = 'Bingo',
+  }) {
     final t = _Thread(
       'conv-${++_seq}',
       null,
@@ -937,11 +944,12 @@ class InMemoryCommunityRepository implements CommunityRepository {
       final who = switch (target) {
         ReportTarget.post =>
           _posts.where((p) => p.id == id).firstOrNull?.authorId,
-        ReportTarget.comment => _posts
-            .expand((p) => p.comments)
-            .where((c) => c.id == id)
-            .firstOrNull
-            ?.authorId,
+        ReportTarget.comment =>
+          _posts
+              .expand((p) => p.comments)
+              .where((c) => c.id == id)
+              .firstOrNull
+              ?.authorId,
         ReportTarget.user => id,
         ReportTarget.lostAlert =>
           _alerts.where((a) => a.id == id).firstOrNull?.pet.ownerId,

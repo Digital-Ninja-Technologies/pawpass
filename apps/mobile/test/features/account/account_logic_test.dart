@@ -27,11 +27,26 @@ void main() {
   group('shares', () {
     final now = DateTime.utc(2026, 11, 5, 8);
     test('end labels are plain words', () {
-      expect(shareEndsLabel(now.add(const Duration(minutes: 30)), now), 'ends in 30 minutes');
-      expect(shareEndsLabel(now.add(const Duration(hours: 2)), now), 'ends in 2 hours');
-      expect(shareEndsLabel(now.add(const Duration(hours: 30)), now), 'ends tomorrow');
-      expect(shareEndsLabel(now.add(const Duration(days: 3)), now), 'ends in 3 days');
-      expect(shareEndsLabel(now.subtract(const Duration(minutes: 1)), now), 'ending now');
+      expect(
+        shareEndsLabel(now.add(const Duration(minutes: 30)), now),
+        'ends in 30 minutes',
+      );
+      expect(
+        shareEndsLabel(now.add(const Duration(hours: 2)), now),
+        'ends in 2 hours',
+      );
+      expect(
+        shareEndsLabel(now.add(const Duration(hours: 30)), now),
+        'ends tomorrow',
+      );
+      expect(
+        shareEndsLabel(now.add(const Duration(days: 3)), now),
+        'ends in 3 days',
+      );
+      expect(
+        shareEndsLabel(now.subtract(const Duration(minutes: 1)), now),
+        'ending now',
+      );
     });
     test('summary says whether a vet can add records', () {
       final ro = ActiveShare(
@@ -71,13 +86,16 @@ void main() {
       expect(text, isNot(contains('—')));
       expect(text, isNot(contains(r'$')));
     });
-    test('search finds by words, title matches first, empty matches nothing', () {
-      expect(searchHelp(''), isEmpty);
-      expect(searchHelp('zzzz'), isEmpty);
-      final r = searchHelp('escrow');
-      expect(r, isNotEmpty);
-      expect(r.first.id, 'escrow');
-    });
+    test(
+      'search finds by words, title matches first, empty matches nothing',
+      () {
+        expect(searchHelp(''), isEmpty);
+        expect(searchHelp('zzzz'), isEmpty);
+        final r = searchHelp('escrow');
+        expect(r, isNotEmpty);
+        expect(r.first.id, 'escrow');
+      },
+    );
   });
 
   group('calendar logic (Lagos time)', () {
@@ -135,21 +153,29 @@ void main() {
         ],
       );
       final list = entriesForDay(cal, day);
-      expect(list.map((e) => e.visit?.bookingId ?? e.slot!.slotId), ['b', 's1', 's2']);
+      expect(list.map((e) => e.visit?.bookingId ?? e.slot!.slotId), [
+        'b',
+        's1',
+        's2',
+      ]);
       expect(visitsOn(cal, day), 1);
     });
   });
 
   group('application filters', () {
-    ShelterApplication app(String id, String who, String pet, ApplicationState s) =>
-        ShelterApplication(
-          id: id,
-          listingId: 'l$id',
-          petName: pet,
-          applicantName: who,
-          state: s,
-          createdAt: DateTime.utc(2026, 11, 5),
-        );
+    ShelterApplication app(
+      String id,
+      String who,
+      String pet,
+      ApplicationState s,
+    ) => ShelterApplication(
+      id: id,
+      listingId: 'l$id',
+      petName: pet,
+      applicantName: who,
+      state: s,
+      createdAt: DateTime.utc(2026, 11, 5),
+    );
     final all = [
       app('1', 'Tolu', 'Ada', ApplicationState.submitted),
       app('2', 'Seun', 'Kofi', ApplicationState.homeVisit),
@@ -158,12 +184,24 @@ void main() {
     test('tabs and counts', () {
       expect(applicationCount(all, ApplicationFilter.all), 3);
       expect(applicationCount(all, ApplicationFilter.fresh), 1);
-      expect(filterApplications(all, ApplicationFilter.homeVisit).single.id, '2');
+      expect(
+        filterApplications(all, ApplicationFilter.homeVisit).single.id,
+        '2',
+      );
     });
     test('search matches applicant or pet', () {
-      expect(filterApplications(all, ApplicationFilter.all, query: 'kofi').single.id, '2');
-      expect(filterApplications(all, ApplicationFilter.all, query: 'KEMI').single.id, '3');
-      expect(filterApplications(all, ApplicationFilter.fresh, query: 'kemi'), isEmpty);
+      expect(
+        filterApplications(all, ApplicationFilter.all, query: 'kofi').single.id,
+        '2',
+      );
+      expect(
+        filterApplications(all, ApplicationFilter.all, query: 'KEMI').single.id,
+        '3',
+      );
+      expect(
+        filterApplications(all, ApplicationFilter.fresh, query: 'kemi'),
+        isEmpty,
+      );
     });
   });
 }
