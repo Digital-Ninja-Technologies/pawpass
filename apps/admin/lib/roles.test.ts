@@ -51,6 +51,15 @@ describe("roles", () => {
     expect(roleCapabilities("support_reports").cannot.join(" ")).toMatch(/Refund course purchases/);
   });
 
+  it("only full admins delete accounts", () => {
+    expect(canDo("full_admin", "delete_account")).toBe(true);
+    for (const r of ROLES.filter((r) => r !== "full_admin")) {
+      expect(canDo(r, "delete_account")).toBe(false);
+      expect(roleCapabilities(r).cannot.join(" ")).toMatch(/Delete a person's account/);
+    }
+    expect(roleCapabilities("full_admin").can.join(" ")).toMatch(/Delete a person's account/);
+  });
+
   it("hides money pages from roles that cannot read escrow", () => {
     expect(canView("support_reports", "payouts")).toBe(false);
     expect(canView("verifications", "payouts")).toBe(false);

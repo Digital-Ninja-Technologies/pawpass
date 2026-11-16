@@ -5,6 +5,7 @@ import { canDo } from "@/lib/roles";
 import { formatDate, formatKobo, initials, sentence } from "@/lib/format";
 import { Badge, DisabledAction, Empty, PageHeader, Tabs, href, type Tone } from "@/components/ui";
 import type { DirectoryRow } from "@/lib/types";
+import { DeleteAccountForm } from "./DeleteAccountForm";
 import { SuspendForm } from "./SuspendForm";
 
 export const metadata: Metadata = { title: "Users & partners" };
@@ -80,6 +81,14 @@ export default async function UsersPage({
   if (selected && ["full_admin", "support_reports", "verifications"].includes(staff.role)) {
     const res = await supabase.rpc("admin_user_email", { p_user: selected.user_id });
     email = (res.data as string | null) ?? null;
+  }
+
+  // Deleting is for full admins only. Ask the database what is in the way before showing the button.
+  let deletion: { deleted: boolean; blockers: string[] } | null = null;
+  if (selected && canDo(staff.role, "delete_account")) {
+    const res = await supabase.rpc("admin_account_deletion_check", { p_user: selected.user_id });
+    const d = res.data as { deleted?: boolean; blockers?: string[] } | null;
+    deletion = d ? { deleted: d.deleted === true, blockers: d.blockers ?? [] } : null;
   }
 
   const params = (extra: Record<string, string | undefined>) => ({
@@ -247,6 +256,18 @@ export default async function UsersPage({
                 userId={selected.user_id}
                 suspended={selected.status === "suspended"}
               />
+            ) : null}
+            {selected && deletion ? (
+              deletion.deleted ? (
+                <p className="small muted">This account has been deleted.</p>
+              ) : (
+                <DeleteAccountForm
+                  key={selected.id}
+                  userId={selected.user_id}
+                  email={email}
+                  blockers={deletion.blockers}
+                />
+              )
             ) : null}
           </aside>
         ) : null}

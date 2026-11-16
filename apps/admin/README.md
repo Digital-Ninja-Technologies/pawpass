@@ -60,6 +60,24 @@ The **Courses** page manages the puppy and dog courses shown in the app (Home, t
   `apps/admin/public/course-art`. To add one, add it to the script, to the `art` check in
   `supabase/migrations/20261118100000_courses.sql` (a new migration) and to `ART` in `lib/courses.ts`, then run the script.
 
+## Deleting an account on request
+
+For people who ask by email (the account deletion page on the website) and cannot use the app. **Full admins only.**
+
+1. Open the person in **Users & partners**. The details panel shows a **Delete this account** section.
+2. If something is in the way (an unfinished booking, puppy purchase, held payment, problem report or passport
+   transfer), the section lists it and there is no button. Ask the person to finish or cancel it, then check again.
+3. Otherwise give a **reason** (kept in the audit log, 3 to 300 characters) and **type the account's email** to confirm,
+   then confirm in the pop up. You cannot delete your own account here, or a team member's.
+4. The console calls the `admin-delete-account` edge function with your own sign in. The function checks you are an
+   active full admin, then does what the in-app deletion does: erases the personal data, removes their files and removes
+   the sign in. Payment and booking records stay with the name replaced by Deleted user.
+5. The audit log records `account.delete` with the reason and your name. Reply to the person by email to say it is done
+   (the website promises a reply within 30 days).
+
+The console never holds the service key. Deploy the function (JWT verification off, it checks the token itself) and apply
+`20261122100000_admin_delete_account.sql` before using this.
+
 ## Develop
 
 ```bash

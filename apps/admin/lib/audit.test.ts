@@ -16,6 +16,12 @@ describe("describeAudit", () => {
       describeAudit(row("partner.needs_info", { note: "Clearer CAC please" }), { t1: "Glam Paws" }),
     ).toBe('asked Glam Paws for more information: "Clearer CAC please"');
   });
+  it("describes an account deletion with its reason", () => {
+    expect(describeAudit(row("account.delete", { reason: "Asked by email" }), { t1: "Deleted user" })).toBe(
+      'deleted Deleted user at their request: "Asked by email"',
+    );
+    expect(describeAudit(row("account.delete"), {})).toBe("deleted an account at their request");
+  });
   it("describes money decisions with amounts", () => {
     expect(
       describeAudit(row("dispute.refund", { amount_kobo: 38_000_000 }), { t1: "D-1042" }),

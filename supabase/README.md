@@ -23,6 +23,7 @@ Database schema, row level security, storage rules and seed data for PawPass.
 | `migrations/20261119100000_course_refunds.sql`     | Refunding a course purchase: refund states, audited admin functions (Payouts & disputes), and the claim and finish functions the scheduled job uses |
 | `migrations/20261120100000_remove_pet.sql`         | `remove_pet`: an owner removes a pet (deleted, or emptied and hidden when settled history still points at it) |
 | `migrations/20261121100000_remove_pet_hardening.sql` | Removal fixes: vet verified records go with the pet, a live listing blocks removal, removed pets are hidden and read only, no direct deletes |
+| `migrations/20261122100000_admin_delete_account.sql` | Admin account deletion: `admin_account_deletion_check` (full admins) and the server only audit helper |
 | `functions/`                                       | Paystack edge functions (initialize, verify, webhook, refunds, payout-run) and their tested logic                                      |
 | `seed.sql`                                         | Sample data from the designs (Tolu, Bingo, Mimi and the three partners). Local dev only                                                |
 | `tests/rls.test.sql`                               | Plain SQL tests for the privacy and business rules                                                                                     |
@@ -35,6 +36,7 @@ Database schema, row level security, storage rules and seed data for PawPass.
 | `tests/reminders_email.test.sql`                    | Tests for the scheduled reminder job and email claiming: who is announced, quiet hours, channels, retries, deleted and suspended accounts |
 | `tests/push.test.sql`                              | Tests for registering phones and what is claimed for pushing: likes left out, reminder channel and hours, old news, new phones, retries, dead tokens, deleted accounts |
 | `tests/remove_pet.test.sql`                        | Tests for pet removal: who may remove, what blocks it, what is cleaned up, history kept, vet verified records |
+| `tests/admin_delete_account.test.sql`              | Tests for admin account deletion: who may check, what blocks it, the audit row |
 | `tests/course_refunds.test.sql`                    | Tests for course refunds: who may refund, access removed, late payment messages, the claim and retry job, buying again |
 | `tests/courses.test.sql`                           | Tests for the courses: who reads what, drafts, free and paid courses (locked text, previews, buying, confirming), saving and reordering lessons, progress, publish and delete, the audit trail, account deletion |
 | `tests/onboarding.test.sql`                        | Tests for the account type fields and `create_pet_passport` (all or nothing, privacy, validation)                                      |

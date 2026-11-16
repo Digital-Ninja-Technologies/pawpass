@@ -77,6 +77,8 @@ export function describeAudit(
       return `suspended ${who ?? "an account"}${typeof d.reason === "string" ? `: "${d.reason}"` : ""}`;
     case "user.unsuspend":
       return `restored ${who ?? "an account"}`;
+    case "account.delete":
+      return `deleted ${who ?? "an account"} at their request${typeof d.reason === "string" ? `: "${d.reason}"` : ""}`;
     case "user.view_email":
       return `viewed the email address of ${who ?? "a user"}`;
     case "payout_run.prepare":

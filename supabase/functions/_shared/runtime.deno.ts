@@ -2,7 +2,7 @@
 // everything it calls is covered by payments.test.ts and the SQL tests.
 import { createClient, type SupabaseClient } from "jsr:@supabase/supabase-js@2";
 import { HttpError, type BookingRow, type Ctx, type Db, type PaystackApi } from "./payments.ts";
-import { BlockedError, type AccountCtx } from "./accounts.ts";
+import { BlockedError, type AccountCtx, type AdminAccountCtx } from "./accounts.ts";
 import type { Mailer, ReminderCtx, ReminderDb, ReminderRow } from "./reminders.ts";
 import {
   buildMessage,
@@ -411,6 +411,43 @@ export function accountContext(): AccountCtx {
       async softDelete(userId) {
         // true = soft delete: keeps the row the payment records point at, wipes the email and phone.
         const { error } = await client.auth.admin.deleteUser(userId, true);
+        if (error) throw new Error(error.message);
+      },
+    },
+  };
+}
+
+/** For the admin-delete-account function: the same steps as accountContext, plus who may call it and the audit row. */
+export function adminAccountContext(): AdminAccountCtx {
+  const client = serviceClient();
+  return {
+    ...accountContext(),
+    admins: {
+      async fullAdminStaffId(userId) {
+        const { data, error } = await client
+          .from("staff_members")
+          .select("id, role, status")
+          .eq("user_id", userId)
+          .maybeSingle();
+        if (error) throw new Error(error.message);
+        return data && data.status === "active" && data.role === "full_admin" ? (data.id as string) : null;
+      },
+      async accountState(userId) {
+        const { data, error } = await client
+          .from("profiles")
+          .select("deleted_at")
+          .eq("user_id", userId)
+          .maybeSingle();
+        if (error) throw new Error(error.message);
+        if (!data) return "missing";
+        return data.deleted_at ? "deleted" : "active";
+      },
+      async audit(staffId, userId, reason) {
+        const { error } = await client.rpc("log_admin_account_deletion", {
+          p_staff: staffId,
+          p_user: userId,
+          p_reason: reason,
+        });
         if (error) throw new Error(error.message);
       },
     },

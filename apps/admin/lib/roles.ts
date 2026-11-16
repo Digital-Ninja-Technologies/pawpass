@@ -73,6 +73,7 @@ export const ACTIONS = [
   "support_reply",
   "manage_courses",
   "refund_course",
+  "delete_account",
   "edit_settings",
   "manage_team",
 ] as const;
@@ -88,6 +89,7 @@ const ACTION_ROLES: Record<Action, Role[]> = {
   support_reply: ["support_reports"],
   manage_courses: [],
   refund_course: ["payouts_disputes"],
+  delete_account: [],
   edit_settings: [],
   manage_team: [],
 };
@@ -110,6 +112,7 @@ export function roleCapabilities(role: Role): { can: string[]; cannot: string[] 
     ["support_reply", "Reply to support tickets"],
     ["manage_courses", "Create, edit, publish and delete the courses in the app"],
     ["refund_course", "Refund course purchases"],
+    ["delete_account", "Delete a person's account when they ask"],
     ["edit_settings", "Change fees, policies and settings"],
     ["manage_team", "Invite and manage team members"],
   ];
