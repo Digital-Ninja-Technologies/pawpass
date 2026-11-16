@@ -8,7 +8,7 @@ import { OnboardingDemo } from "@/components/OnboardingDemo";
 import { StoreButtons } from "@/components/StoreButtons";
 import { PawFilled } from "@/components/icons";
 import { CITIES } from "@/lib/content";
-import { STORES_LIVE } from "@/lib/stores";
+import { storesNote } from "@/lib/stores";
 
 const PAINS = [
   {
@@ -172,11 +172,7 @@ export default function Home() {
                 <div className="stores">
                   <StoreButtons light />
                 </div>
-                {STORES_LIVE ? null : (
-                  <p className="stores-note">
-                    OurPawPass is not in the app stores yet. The buttons will go live at launch.
-                  </p>
-                )}
+                {storesNote() ? <p className="stores-note">{storesNote()}</p> : null}
               </div>
               <div className="download-demo">
                 <OnboardingDemo />

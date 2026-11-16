@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef } from "react";
-import { STORES_LIVE } from "@/lib/stores";
+import { storesNote } from "@/lib/stores";
 import { StoreButtons } from "./StoreButtons";
 
 /** "Get the app" pop up. Uses a native dialog, so focus is trapped, Escape closes it and the page behind is inert. */
@@ -53,11 +53,7 @@ export function DownloadModal({ open, onClose }: { open: boolean; onClose: () =>
         <div className="stores dl-stores">
           <StoreButtons />
         </div>
-        {STORES_LIVE ? null : (
-          <p className="dl-note">
-            OurPawPass is not in the app stores yet. The download buttons will go live here at launch.
-          </p>
-        )}
+        {storesNote() ? <p className="dl-note">{storesNote()}</p> : null}
       </div>
     </dialog>
   );

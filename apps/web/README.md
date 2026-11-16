@@ -12,9 +12,10 @@ pnpm --filter @pawpass/web dev
 ## Store links and the "Get the app" pop up
 
 - "Get the app" in the header opens a pop up with the download buttons (the download section and the hero use
-  the same buttons). The app is not in the stores yet, so the iPhone and Android buttons show "Coming soon" and
-  are not links. When the apps are live, set `NEXT_PUBLIC_APP_STORE_URL` and `NEXT_PUBLIC_PLAY_STORE_URL` (both)
-  and the buttons link out and the "not in the stores yet" notes disappear.
+  the same buttons). The Android app is live, so its button links to Google Play (the default in `lib/stores.ts`,
+  or `NEXT_PUBLIC_PLAY_STORE_URL`). The iPhone app is not live yet, so its button shows "Coming soon" and is not a
+  link. Each store is handled on its own. When the iPhone app is live, set `NEXT_PUBLIC_APP_STORE_URL` and its button
+  links out and the "coming soon" notes disappear.
 - There is no email form. The `waitlist_signups` table and its policies still exist in Supabase, unused by this site.
 - The design has a QR code. A real one needs the final store link, so it is left out until then.
 

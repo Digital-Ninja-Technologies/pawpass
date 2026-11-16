@@ -3,7 +3,7 @@
 import Image from "next/image";
 import { useState } from "react";
 import { PET_INFO, PET_OPTIONS, type PetId } from "@/lib/content";
-import { STORES_LIVE } from "@/lib/stores";
+import { heroStoresLine } from "@/lib/stores";
 import { arrowKeys } from "./arrowKeys";
 import { PawFilled } from "./icons";
 import { StoreButtons } from "./StoreButtons";
@@ -60,7 +60,7 @@ export function Hero() {
         <div className="stores">
           <StoreButtons />
           <span className="stores-note">
-            {STORES_LIVE ? "Free · iOS and Android" : "Free · iOS and Android · coming soon"}
+            {heroStoresLine()}
           </span>
         </div>
       </div>

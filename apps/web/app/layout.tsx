@@ -21,7 +21,7 @@ const body = localFont({
   display: "swap",
 });
 
-const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://pawpass.example";
+const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://ourpawpass.com";
 const title = "OurPawPass · every pet's life, in one place";
 const description =
   "Vaccine reminders, trusted vets and groomers, lost pet alerts and verified breeders. One free app for every dog, cat and furry family member. Made in Lagos, for pets everywhere.";

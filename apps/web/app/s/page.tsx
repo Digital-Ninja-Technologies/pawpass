@@ -18,8 +18,7 @@ export default function ShareLinkPage() {
         </h1>
         <p style={{ fontSize: 17, lineHeight: 1.6, color: "var(--ink2)", marginTop: 16 }}>
           A pet owner shared their pet&apos;s OurPawPass passport with your clinic. Clinics open these
-          links and QR codes in the OurPawPass partner app, which is coming soon, so there is nothing
-          to see in a browser.
+          links and QR codes in the OurPawPass app, so there is nothing to see in a browser.
         </p>
         <p style={{ fontSize: 17, lineHeight: 1.6, color: "var(--ink2)", marginTop: 12 }}>
           The link stops working by itself, and the owner can stop it at any time.

@@ -1,9 +1,9 @@
-import { APP_STORE_URL, PLAY_STORE_URL, STORES_LIVE } from "@/lib/stores";
+import { APP_STORE_URL, PLAY_STORE_URL } from "@/lib/stores";
 import { PhoneIcon, PlayIcon } from "./icons";
 
 /**
- * App store buttons. Until the real store links are set they are shown as "coming soon" and are
- * not links, so nothing leads to a dead end.
+ * App store buttons. A store with a link is a real link; one without is shown as "coming soon" and is not a
+ * link, so nothing leads to a dead end.
  */
 export function StoreButtons({ light = false }: { light?: boolean }) {
   const cls = `store${light ? " light" : ""}`;
@@ -18,12 +18,12 @@ export function StoreButtons({ light = false }: { light?: boolean }) {
           <>
             {s.icon}
             <span className="t">
-              <small>{STORES_LIVE ? s.small : "Coming soon"}</small>
+              <small>{s.url ? s.small : "Coming soon"}</small>
               <b>{s.name}</b>
             </span>
           </>
         );
-        return STORES_LIVE ? (
+        return s.url ? (
           <a key={s.name} href={s.url} className={cls} target="_blank" rel="noopener noreferrer">
             {inner}
             <span className="sr-only"> (opens in a new tab)</span>
