@@ -15,8 +15,11 @@ delete from public.sightings where reporter_user_id::text like 'a0000000-0000-00
 delete from public.lost_alerts where pet_id in (select id from public.pets where owner_user_id::text like 'a0000000-0000-0000-0000-0000000000%');
 delete from public.qr_tag_orders where user_id::text like 'a0000000-0000-0000-0000-0000000000%';
 delete from public.disputes where opened_by_user_id::text like 'a0000000-0000-0000-0000-0000000000%';
-delete from public.ownership_transfers where to_user_id::text like 'a0000000-0000-0000-0000-0000000000%';
+delete from public.ownership_transfers where to_user_id::text like 'a0000000-0000-0000-0000-0000000000%'
+  or from_user_id::text like 'a0000000-0000-0000-0000-0000000000%'
+  or pet_id in (select id from public.pets where owner_user_id::text like 'a0000000-0000-0000-0000-0000000000%');
 delete from public.bookings where owner_user_id::text like 'a0000000-0000-0000-0000-0000000000%';
+delete from public.payout_item_escrows where escrow_id in (select id from public.escrow_transactions where payer_user_id::text like 'a0000000-0000-0000-0000-0000000000%');
 delete from public.escrow_transactions where payer_user_id::text like 'a0000000-0000-0000-0000-0000000000%';
 delete from public.payout_items where partner_account_id in (select id from public.partner_accounts where owner_user_id::text like 'a0000000-0000-0000-0000-0000000000%');
 delete from public.payout_runs where id not in (select payout_run_id from public.payout_items);
